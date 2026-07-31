@@ -3,196 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IBGP — Coleta de Dados de Aplicação</title>
+  <title>IBGP — Formulário de Aplicação de Prova</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #F2F2F2; color: #393939; }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #F2F2F2;
-      color: #393939;
-      min-height: 100vh;
-    }
-
-    /* ── Cabeçalho ── */
-    .header {
-      background: #393939;
-      padding: 14px 28px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
+    .header { background: #393939; padding: 14px 28px; display: flex; align-items: center; gap: 18px; }
     .header img { height: 46px; }
     .header-text h1 { color: #FFF; font-size: 15px; font-weight: 700; }
-    .header-text p  { color: #BBBBBB; font-size: 12px; margin-top: 3px; }
+    .header-text p  { color: #BBB; font-size: 12px; margin-top: 3px; }
     .red-bar { height: 4px; background: #CF3432; }
 
-    /* ── Layout ── */
-    .container {
-      max-width: 880px;
-      margin: 30px auto;
-      padding: 0 16px 60px;
-    }
+    .container { max-width: 900px; margin: 28px auto; padding: 0 16px 60px; }
 
-    /* ── Card ── */
-    .card {
-      background: #FFF;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-      padding: 28px;
-      margin-bottom: 20px;
-    }
-    .card-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #393939;
-      border-left: 4px solid #CF3432;
-      padding-left: 12px;
-      margin-bottom: 22px;
-    }
+    .card { background: #FFF; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); padding: 24px 28px; margin-bottom: 18px; }
+    .card-title { font-size: 14px; font-weight: 700; color: #FFF; background: #7A1A1A; padding: 8px 14px; margin: -24px -28px 20px; border-radius: 8px 8px 0 0; letter-spacing: .4px; text-transform: uppercase; }
+    .card-title.manha { background: #1F3A6E; }
+    .card-title.tarde  { background: #CF3432; }
+    .card-title.neutra { background: #393939; }
 
-    /* ── Formulário ── */
-    label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      color: #555;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: .4px;
+    label { display: block; font-size: 11px; font-weight: 700; color: #666; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .4px; }
+    select, input[type="text"], input[type="time"], textarea {
+      width: 100%; padding: 9px 12px; border: 1px solid #CCC; border-radius: 6px;
+      font-size: 13px; color: #393939; background: #FAFAFA; transition: border-color .2s;
     }
-    select, input[type="text"], textarea {
-      width: 100%;
-      padding: 10px 13px;
-      border: 1px solid #CCCCCC;
-      border-radius: 6px;
-      font-size: 14px;
-      color: #393939;
-      background: #FAFAFA;
-      transition: border-color .2s, background .2s;
-    }
-    select:focus, input:focus, textarea:focus {
-      outline: none;
-      border-color: #CF3432;
-      background: #FFF;
-    }
-    .form-row { display: flex; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
-    .form-group { flex: 1; min-width: 200px; }
+    select:focus, input:focus, textarea:focus { outline: none; border-color: #CF3432; background: #FFF; }
+    .form-row  { display: flex; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+    .form-group { flex: 1; min-width: 160px; }
 
-    /* ── Tabela de resultados ── */
-    .table-wrap { overflow-x: auto; margin-top: 8px; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    thead th {
-      background: #393939;
-      color: #FFF;
-      padding: 10px 9px;
-      text-align: center;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    thead th:nth-child(1),
-    thead th:nth-child(2) { text-align: left; }
-    tbody td {
-      padding: 7px 9px;
-      border-bottom: 1px solid #EEEEEE;
-      vertical-align: middle;
-    }
-    tbody tr:nth-child(even) td { background: #F8F8F8; }
-    tbody tr.manha td { border-left: 3px solid #1F3A6E; }
-    tbody tr.tarde  td { border-left: 3px solid #CF3432; }
+    .horarios-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 8px; }
+    @media(max-width:600px){ .horarios-grid { grid-template-columns: repeat(2,1fr); } }
 
-    input[type="number"] {
-      width: 72px;
-      padding: 6px 7px;
-      text-align: center;
-      border: 1px solid #CCCCCC;
-      border-radius: 5px;
-      font-size: 13px;
-      background: #FAFAFA;
-    }
-    input[type="number"]:focus {
-      outline: none;
-      border-color: #CF3432;
-      background: #FFF;
-    }
-    .badge {
-      display: inline-block;
-      padding: 2px 9px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-    .badge.manha { background: #E8EDF5; color: #1F3A6E; }
-    .badge.tarde { background: #FFF0F0; color: #CF3432; }
+    .test-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+    .test-table th { background: #555; color: #FFF; padding: 7px 10px; text-align: left; font-size: 12px; }
+    .test-table td { padding: 6px 4px; }
+    .test-table .cpf-col { width: 160px; }
 
-    /* ── Radios ── */
-    .radio-group { display: flex; gap: 24px; margin-top: 5px; flex-wrap: wrap; }
-    .radio-group label {
-      display: flex; align-items: center; gap: 7px;
-      font-weight: normal; text-transform: none;
-      letter-spacing: 0; cursor: pointer; font-size: 14px;
-    }
-    input[type="radio"] { accent-color: #CF3432; width: 16px; height: 16px; }
+    .stat-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+    .stat-table th { background: #393939; color: #FFF; padding: 9px 8px; text-align: center; }
+    .stat-table th:first-child { text-align: left; }
+    .stat-table td { padding: 7px 8px; border-bottom: 1px solid #EEE; vertical-align: middle; }
+    .stat-table tr:nth-child(even) td { background: #F8F8F8; }
+    .stat-table input[type="number"] { width: 68px; padding: 5px 6px; text-align: center; border: 1px solid #CCC; border-radius: 4px; font-size: 13px; }
 
-    /* ── Aviso ── */
-    .aviso {
-      background: #FFFBEA;
-      border: 1px solid #F0D060;
-      border-radius: 6px;
-      padding: 12px 16px;
-      font-size: 13px;
-      color: #6B5600;
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
+    .ocorr-block { border: 1px solid #EEE; border-radius: 6px; padding: 14px; margin-bottom: 12px; }
+    .ocorr-block h4 { font-size: 13px; color: #CF3432; margin-bottom: 10px; font-weight: 700; }
+    .radio-row { display: flex; gap: 20px; margin-bottom: 8px; flex-wrap: wrap; }
+    .radio-row label { display: flex; align-items: center; gap: 6px; font-weight: normal; text-transform: none; letter-spacing: 0; font-size: 13px; cursor: pointer; }
+    input[type="radio"] { accent-color: #CF3432; width: 15px; height: 15px; }
 
-    /* ── Botão ── */
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 15px;
-      background: #CF3432;
-      color: #FFF;
-      border: none;
-      border-radius: 7px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background .2s;
-      letter-spacing: .3px;
-    }
-    .btn:hover   { background: #B02C2A; }
-    .btn:disabled { background: #CCCCCC; cursor: not-allowed; }
+    .aviso { background: #FFFBEA; border: 1px solid #F0D060; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #6B5600; margin-bottom: 16px; }
 
-    /* ── Sucesso ── */
-    .success-box {
-      text-align: center;
-      padding: 52px 24px;
-    }
-    .check-circle {
-      width: 68px; height: 68px;
-      background: #1E6B3B;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 20px;
-      font-size: 34px; color: #FFF;
-    }
+    .btn { display: block; width: 100%; padding: 15px; background: #CF3432; color: #FFF; border: none; border-radius: 7px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .2s; }
+    .btn:hover { background: #B02C2A; }
+    .btn:disabled { background: #CCC; cursor: not-allowed; }
+
+    .success-box { text-align: center; padding: 52px 24px; }
+    .check-circle { width: 68px; height: 68px; background: #1E6B3B; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 34px; color: #FFF; }
     .success-box h2 { color: #1E6B3B; font-size: 20px; margin-bottom: 10px; }
     .success-box p  { color: #555; font-size: 14px; line-height: 1.6; }
 
-    /* ── Utilitários ── */
     .hidden { display: none !important; }
-    .mt-16  { margin-top: 16px; }
-
-    @media (max-width: 600px) {
-      .header { flex-direction: column; align-items: flex-start; gap: 10px; }
-      .header img { height: 36px; }
-      .card { padding: 18px; }
-    }
+    .sec-label { font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .5px; margin: 16px 0 8px; border-top: 1px solid #EEE; padding-top: 12px; }
   </style>
 </head>
 <body>
@@ -200,7 +72,7 @@
 <div class="header">
   <img src="IBGP.png" alt="IBGP" onerror="this.style.display='none'">
   <div class="header-text">
-    <h1>IBGP — Coleta de Dados de Aplicação de Prova</h1>
+    <h1>IBGP — Formulário de Aplicação de Prova</h1>
     <p id="headerSub">Carregando...</p>
   </div>
 </div>
@@ -208,81 +80,209 @@
 
 <div class="container">
 
-  <!-- PASSO 1: Seleção da escola -->
-  <div class="card" id="cardEscola">
-    <div class="card-title">Identificação do Local</div>
-    <div class="form-group" style="margin-bottom:18px;">
-      <label for="selEscola">Local / Escola</label>
-      <select id="selEscola" onchange="onEscolaChange()">
-        <option value="">— Selecione seu local de aplicação —</option>
-      </select>
+  <!-- 1. IDENTIFICAÇÃO -->
+  <div class="card">
+    <div class="card-title neutra">1. Identificação</div>
+    <div class="form-row">
+      <div class="form-group" style="flex:2;">
+        <label>Local / Escola</label>
+        <select id="selEscola" onchange="onEscolaChange()">
+          <option value="">— Selecione seu local de aplicação —</option>
+        </select>
+      </div>
     </div>
-    <div class="form-row hidden" id="rowCoord">
-      <div class="form-group">
-        <label for="inputCoord">Coordenador(a) Local</label>
+    <div class="form-row hidden" id="rowIdent2">
+      <div class="form-group" style="flex:2;">
+        <label>Coordenação Local</label>
         <input type="text" id="inputCoord" placeholder="Nome completo">
       </div>
+      <div class="form-group">
+        <label>Houve apoio?</label>
+        <div class="radio-row" style="margin-top:8px;">
+          <label><input type="radio" name="apoio" value="Não" checked onchange="toggleApoio()"> Não</label>
+          <label><input type="radio" name="apoio" value="Sim" onchange="toggleApoio()"> Sim</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-row hidden" id="rowApoioNome">
+      <div class="form-group">
+        <label>Nome do Apoio</label>
+        <input type="text" id="inputApoio" placeholder="Nome completo">
+      </div>
     </div>
   </div>
 
-  <!-- PASSO 2: Tabela de resultados -->
-  <div class="card hidden" id="cardResultados">
-    <div class="card-title">Resultados por Sala e Cargo</div>
-    <div class="aviso">
-      Preencha <strong>Presentes</strong>, <strong>Ausentes</strong> e <strong>Eliminados</strong> para cada cargo.
-      O campo <strong>Inscritos</strong> está pré-preenchido com a alocação prevista — corrija se necessário.
-    </div>
-    <div class="table-wrap" id="wrapTabela"></div>
-  </div>
+  <!-- TURNO MANHÃ -->
+  <div class="hidden" id="secManha">
 
-  <!-- PASSO 3: Andamento -->
-  <div class="card hidden" id="cardAndamento">
-    <div class="card-title">Andamento e Ocorrências</div>
-
-    <div class="form-group" style="margin-bottom:20px;">
-      <label>Andamento Geral da Aplicação</label>
-      <div class="radio-group">
-        <label><input type="radio" name="andamento" value="Tranquilo, sem intercorrências relevantes" checked> Tranquilo, sem intercorrências</label>
-        <label><input type="radio" name="andamento" value="Com intercorrências"> Com intercorrências</label>
+    <div class="card">
+      <div class="card-title manha">2. Turno Manhã — Horários</div>
+      <div class="horarios-grid">
+        <div class="form-group"><label>Chegada da equipe</label><input type="time" id="m_chegada"></div>
+        <div class="form-group"><label>Abertura do portão</label><input type="time" id="m_ab_portao"></div>
+        <div class="form-group"><label>Fechamento do portão</label><input type="time" id="m_fch_portao"></div>
+        <div class="form-group"><label>Distribuição dos pacotes</label><input type="time" id="m_distrib"></div>
+        <div class="form-group"><label>Início da aplicação</label><input type="time" id="m_inicio"></div>
+        <div class="form-group"><label>Encerramento</label><input type="time" id="m_encerr"></div>
+        <div class="form-group"><label>Fechamento do malote</label><input type="time" id="m_fch_malote"></div>
+        <div class="form-group"><label>Abertura do malote</label><input type="time" id="m_ab_malote"></div>
       </div>
     </div>
 
-    <div class="form-group" style="margin-bottom:20px;">
-      <label>Houve toque de celular em sala?</label>
-      <div class="radio-group">
-        <label><input type="radio" name="toque" value="Não consta" checked> Não</label>
-        <label><input type="radio" name="toque" value="Sim"> Sim</label>
+    <div class="card">
+      <div class="card-title manha">3. Turno Manhã — Testemunhas</div>
+      <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Portão</p>
+      <table class="test-table">
+        <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
+        <tbody>
+          <tr><td><input type="text" id="m_t1_portao_nome" placeholder="Nome"></td><td><input type="text" id="m_t1_portao_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="m_t2_portao_nome" placeholder="Nome"></td><td><input type="text" id="m_t2_portao_cpf" placeholder="000.000.000-00"></td></tr>
+        </tbody>
+      </table>
+      <p class="sec-label">Abertura do Malote</p>
+      <table class="test-table">
+        <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
+        <tbody>
+          <tr><td><input type="text" id="m_t1_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t1_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="m_t2_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t2_malote_cpf" placeholder="000.000.000-00"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title manha">4. Turno Manhã — Estatística por Cargo</div>
+      <div class="aviso">Inscritos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
+      <div style="overflow-x:auto;"><table class="stat-table" id="tabelaManha">
+        <thead><tr><th>Cargo / Função</th><th>Inscritos</th><th>Presentes</th><th>Ausentes</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title manha">5. Turno Manhã — Ocorrências</div>
+      <div class="ocorr-block">
+        <h4>Ocorrências em sala</h4>
+        <div class="radio-row"><label><input type="radio" name="m_ocorr_sala" value="Não" checked> Não</label><label><input type="radio" name="m_ocorr_sala" value="Sim"> Sim</label></div>
+        <label>Descrição (se sim):</label><textarea id="m_ocorr_sala_desc" rows="2" placeholder="Descreva..."></textarea>
+      </div>
+      <div class="ocorr-block">
+        <h4>Prova condicional</h4>
+        <div class="radio-row"><label><input type="radio" name="m_cond" value="Não" checked> Não</label><label><input type="radio" name="m_cond" value="Sim"> Sim</label></div>
+        <label>Descrição (se sim):</label><textarea id="m_cond_desc" rows="2" placeholder="Descreva..."></textarea>
+      </div>
+      <div class="ocorr-block">
+        <h4>Toque de celular</h4>
+        <div class="radio-row"><label><input type="radio" name="m_toque" value="Não" checked> Não</label><label><input type="radio" name="m_toque" value="Sim"> Sim</label></div>
+        <label>Descrição (se sim):</label><textarea id="m_toque_desc" rows="2" placeholder="Descreva..."></textarea>
+      </div>
+      <div class="ocorr-block">
+        <h4>Declaração de comparecimento</h4>
+        <div class="radio-row"><label><input type="radio" name="m_decl" value="Não" checked> Não</label><label><input type="radio" name="m_decl" value="Sim"> Sim</label></div>
+        <label>Descrição (se sim):</label><textarea id="m_decl_desc" rows="2" placeholder="Descreva..."></textarea>
       </div>
     </div>
 
+  </div><!-- /secManha -->
+
+  <!-- TURNO TARDE -->
+  <div class="hidden" id="secTarde">
+
+    <div class="card">
+      <div class="card-title tarde">6. Turno Tarde — Horários</div>
+      <div class="horarios-grid">
+        <div class="form-group"><label>Chegada da equipe</label><input type="time" id="t_chegada"></div>
+        <div class="form-group"><label>Abertura do portão</label><input type="time" id="t_ab_portao"></div>
+        <div class="form-group"><label>Fechamento do portão</label><input type="time" id="t_fch_portao"></div>
+        <div class="form-group"><label>Distribuição dos pacotes</label><input type="time" id="t_distrib"></div>
+        <div class="form-group"><label>Início da aplicação</label><input type="time" id="t_inicio"></div>
+        <div class="form-group"><label>Encerramento</label><input type="time" id="t_encerr"></div>
+        <div class="form-group"><label>Fechamento do malote</label><input type="time" id="t_fch_malote"></div>
+        <div class="form-group"><label>Abertura do malote</label><input type="time" id="t_ab_malote"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title tarde">7. Turno Tarde — Testemunhas</div>
+      <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Portão</p>
+      <table class="test-table">
+        <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
+        <tbody>
+          <tr><td><input type="text" id="t_t1_portao_nome" placeholder="Nome"></td><td><input type="text" id="t_t1_portao_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="t_t2_portao_nome" placeholder="Nome"></td><td><input type="text" id="t_t2_portao_cpf" placeholder="000.000.000-00"></td></tr>
+        </tbody>
+      </table>
+      <p class="sec-label">Abertura do Malote</p>
+      <table class="test-table">
+        <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
+        <tbody>
+          <tr><td><input type="text" id="t_t1_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t1_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="t_t2_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t2_malote_cpf" placeholder="000.000.000-00"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title tarde">8. Turno Tarde — Estatística por Cargo</div>
+      <div class="aviso">Inscritos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
+      <div style="overflow-x:auto;"><table class="stat-table" id="tabelaTarde">
+        <thead><tr><th>Cargo / Função</th><th>Inscritos</th><th>Presentes</th><th>Ausentes</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title tarde">9. Turno Tarde — Ocorrências</div>
+      <div class="ocorr-block">
+        <h4>Ocorrências em sala</h4>
+        <div class="radio-row"><label><input type="radio" name="t_ocorr_sala" value="Não" checked> Não</label><label><input type="radio" name="t_ocorr_sala" value="Sim"> Sim</label></div>
+        <label>Descrição (se sim):</label><textarea id="t_ocorr_sala_desc" rows="2" placeholder="Descreva..."></textarea>
+      </div>
+      <div class="ocorr-block">
+        <h4>Prova condicional</h4>
+        <div class="radio-row"><label><input type="radio" name="t_cond" value="Não" checked> Não</label><label><input type="radio" name="t_cond" value="Sim"> Sim</label></div>
+        <label>Descrição (se sim):</label><textarea id="t_cond_desc" rows="2" placeholder="Descreva..."></textarea>
+      </div>
+      <div class="ocorr-block">
+        <h4>Toque de celular</h4>
+        <div class="radio-row"><label><input type="radio" name="t_toque" value="Não" checked> Não</label><label><input type="radio" name="t_toque" value="Sim"> Sim</label></div>
+        <label>Descrição (se sim):</label><textarea id="t_toque_desc" rows="2" placeholder="Descreva..."></textarea>
+      </div>
+      <div class="ocorr-block">
+        <h4>Declaração de comparecimento</h4>
+        <div class="radio-row"><label><input type="radio" name="t_decl" value="Não" checked> Não</label><label><input type="radio" name="t_decl" value="Sim"> Sim</label></div>
+        <label>Descrição (se sim):</label><textarea id="t_decl_desc" rows="2" placeholder="Descreva..."></textarea>
+      </div>
+    </div>
+
+  </div><!-- /secTarde -->
+
+  <!-- OBSERVAÇÕES GERAIS -->
+  <div class="card hidden" id="cardObs">
+    <div class="card-title neutra">10. Observações Gerais</div>
     <div class="form-group">
-      <label for="textOcorr">Ocorrências / Intercorrências</label>
-      <textarea id="textOcorr" rows="4"
-        placeholder="Descreva qualquer ocorrência relevante. Se não houver, deixe em branco."></textarea>
+      <label>Informações adicionais relevantes</label>
+      <textarea id="textObs" rows="4" placeholder="Descreva qualquer informação adicional. Se não houver, deixe em branco."></textarea>
     </div>
   </div>
 
-  <!-- Botão enviar -->
   <div class="hidden" id="divBtn">
-    <button class="btn" id="btnEnviar" onclick="enviar()">Enviar Dados</button>
+    <button class="btn" id="btnEnviar" onclick="enviar()">Enviar Formulário</button>
   </div>
 
-  <!-- Sucesso -->
   <div class="card success-box hidden" id="cardSucesso">
     <div class="check-circle">✓</div>
-    <h2>Dados enviados com sucesso!</h2>
+    <h2>Formulário enviado com sucesso!</h2>
     <p>Os dados de <strong id="nomeEscolaSucesso"></strong><br>foram registrados. Obrigado!</p>
   </div>
 
-</div><!-- /container -->
+</div>
 
 <script>
 // ════════════════════════════════════════════════════════════════
-//  CONFIGURAÇÃO — altere aqui para cada novo concurso
+//  CONFIGURAÇÃO — substitua pela URL do seu Apps Script
 // ════════════════════════════════════════════════════════════════
 
-// URL do Google Apps Script (obter após deploy — ver SETUP.md)
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwepGDrzaqsFmsHKph6ULsk_zWok9Tu3N8uEYUU6bSY1BybuKCqZJnwCRoCgmDODn5yVg/exec";
+const SCRIPT_URL = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
 
 const CONCURSO = {
   titulo: "Concurso Público do Município de Alto Rio Doce / MG",
@@ -290,199 +290,221 @@ const CONCURSO = {
   data:   "26 de julho de 2026",
   escolas: [
     {
-      nome:        "Secretaria Municipal de Educação - ARD",
-      coord_local: "Natália Cristina Matias",
-      salas: 5,
+      nome: "Secretaria Municipal de Educação - ARD",
+      coord_local: "Natália Cristina Matias", salas: 5,
       cargos: [
-        { sala:"Sala 01", turno:"Manhã", cargo:"01 Agente de Combate a Endemias",    inscr:12 },
-        { sala:"Sala 01", turno:"Manhã", cargo:"01 Agente de Controle de Vetores",    inscr:8  },
-        { sala:"Sala 02", turno:"Manhã", cargo:"01 Assistente Administrativo",        inscr:15 },
-        { sala:"Sala 02", turno:"Manhã", cargo:"01 Assistente Social",                inscr:6  },
-        { sala:"Sala 03", turno:"Manhã", cargo:"01 Auxiliar de Serviços Gerais",      inscr:18 },
-        { sala:"Sala 04", turno:"Tarde", cargo:"01 Enfermeiro",                       inscr:10 },
-        { sala:"Sala 04", turno:"Tarde", cargo:"01 Farmacêutico",                     inscr:5  },
-        { sala:"Sala 05", turno:"Tarde", cargo:"01 Fisioterapeuta",                   inscr:7  },
-        { sala:"Sala 05", turno:"Tarde", cargo:"01 Médico Clínico Geral",             inscr:4  },
+        {sala:"Sala 01",turno:"Manhã",cargo:"01 Agente de Combate a Endemias",    inscr:12},
+        {sala:"Sala 01",turno:"Manhã",cargo:"01 Agente de Controle de Vetores",   inscr:8 },
+        {sala:"Sala 02",turno:"Manhã",cargo:"01 Assistente Administrativo",       inscr:15},
+        {sala:"Sala 02",turno:"Manhã",cargo:"01 Assistente Social",               inscr:6 },
+        {sala:"Sala 03",turno:"Manhã",cargo:"01 Auxiliar de Serviços Gerais",     inscr:18},
+        {sala:"Sala 04",turno:"Tarde",cargo:"01 Enfermeiro",                      inscr:10},
+        {sala:"Sala 04",turno:"Tarde",cargo:"01 Farmacêutico",                    inscr:5 },
+        {sala:"Sala 05",turno:"Tarde",cargo:"01 Fisioterapeuta",                  inscr:7 },
+        {sala:"Sala 05",turno:"Tarde",cargo:"01 Médico Clínico Geral",            inscr:4 },
       ]
     },
     {
-      nome:        "Escola Municipal Aristides da Mota Marinho - ARD",
-      coord_local: "Jordan Guilherme",
-      salas: 3,
+      nome: "Escola Municipal Aristides da Mota Marinho - ARD",
+      coord_local: "Jordan Guilherme", salas: 3,
       cargos: [
-        { sala:"Sala 01", turno:"Manhã", cargo:"01 Contador",          inscr:9 },
-        { sala:"Sala 01", turno:"Manhã", cargo:"01 Educador Físico",   inscr:6 },
-        { sala:"Sala 02", turno:"Manhã", cargo:"01 Engenheiro Civil",  inscr:5 },
-        { sala:"Sala 02", turno:"Manhã", cargo:"01 Fonoaudiólogo",     inscr:4 },
-        { sala:"Sala 03", turno:"Manhã", cargo:"01 Médico Pediatra",   inscr:3 },
+        {sala:"Sala 01",turno:"Manhã",cargo:"01 Contador",         inscr:9},
+        {sala:"Sala 01",turno:"Manhã",cargo:"01 Educador Físico",  inscr:6},
+        {sala:"Sala 02",turno:"Manhã",cargo:"01 Engenheiro Civil", inscr:5},
+        {sala:"Sala 02",turno:"Manhã",cargo:"01 Fonoaudiólogo",    inscr:4},
+        {sala:"Sala 03",turno:"Manhã",cargo:"01 Médico Pediatra",  inscr:3},
       ]
     },
     {
-      nome:        "Escola Municipal Raul Soares - ARD",
-      coord_local: "Kênia Soiane",
-      salas: 4,
+      nome: "Escola Municipal Raul Soares - ARD",
+      coord_local: "Kênia Soiane", salas: 4,
       cargos: [
-        { sala:"Sala 01", turno:"Manhã", cargo:"01 Nutricionista",          inscr:7  },
-        { sala:"Sala 01", turno:"Manhã", cargo:"01 Odontólogo",             inscr:8  },
-        { sala:"Sala 02", turno:"Manhã", cargo:"01 Operador de Máquinas",   inscr:14 },
-        { sala:"Sala 02", turno:"Manhã", cargo:"01 Pedreiro",               inscr:16 },
-        { sala:"Sala 03", turno:"Tarde", cargo:"01 Psicólogo",              inscr:6  },
-        { sala:"Sala 03", turno:"Tarde", cargo:"01 Técnico em Enfermagem",  inscr:12 },
-        { sala:"Sala 04", turno:"Tarde", cargo:"01 Técnico em Informática", inscr:8  },
+        {sala:"Sala 01",turno:"Manhã",cargo:"01 Nutricionista",          inscr:7 },
+        {sala:"Sala 01",turno:"Manhã",cargo:"01 Odontólogo",             inscr:8 },
+        {sala:"Sala 02",turno:"Manhã",cargo:"01 Operador de Máquinas",   inscr:14},
+        {sala:"Sala 02",turno:"Manhã",cargo:"01 Pedreiro",               inscr:16},
+        {sala:"Sala 03",turno:"Tarde",cargo:"01 Psicólogo",              inscr:6 },
+        {sala:"Sala 03",turno:"Tarde",cargo:"01 Técnico em Enfermagem",  inscr:12},
+        {sala:"Sala 04",turno:"Tarde",cargo:"01 Técnico em Informática", inscr:8 },
       ]
     },
     {
-      nome:        "UNIPAC — Campus Bonifácio de Andrada - Barbacena",
-      coord_local: "Laryssa Fugêncio",
-      salas: 5,
+      nome: "UNIPAC — Campus Bonifácio de Andrada - Barbacena",
+      coord_local: "Laryssa Fugêncio", salas: 5,
       cargos: [
-        { sala:"Sala 01", turno:"Manhã", cargo:"01 Auxiliar Administrativo",  inscr:18 },
-        { sala:"Sala 01", turno:"Manhã", cargo:"01 Auxiliar de Biblioteca",   inscr:10 },
-        { sala:"Sala 02", turno:"Manhã", cargo:"01 Auxiliar de Farmácia",     inscr:12 },
-        { sala:"Sala 02", turno:"Manhã", cargo:"01 Cozinheiro",               inscr:15 },
-        { sala:"Sala 03", turno:"Manhã", cargo:"01 Gari",                     inscr:20 },
-        { sala:"Sala 03", turno:"Manhã", cargo:"01 Mecânico",                 inscr:8  },
-        { sala:"Sala 04", turno:"Tarde", cargo:"01 Motorista",                inscr:11 },
-        { sala:"Sala 04", turno:"Tarde", cargo:"01 Operador de Escavadeira",  inscr:6  },
-        { sala:"Sala 05", turno:"Tarde", cargo:"01 Recepcionista",            inscr:13 },
-        { sala:"Sala 05", turno:"Tarde", cargo:"01 Vigilante",                inscr:16 },
+        {sala:"Sala 01",turno:"Manhã",cargo:"01 Auxiliar Administrativo",  inscr:18},
+        {sala:"Sala 01",turno:"Manhã",cargo:"01 Auxiliar de Biblioteca",   inscr:10},
+        {sala:"Sala 02",turno:"Manhã",cargo:"01 Auxiliar de Farmácia",     inscr:12},
+        {sala:"Sala 02",turno:"Manhã",cargo:"01 Cozinheiro",               inscr:15},
+        {sala:"Sala 03",turno:"Manhã",cargo:"01 Gari",                     inscr:20},
+        {sala:"Sala 03",turno:"Manhã",cargo:"01 Mecânico",                 inscr:8 },
+        {sala:"Sala 04",turno:"Tarde",cargo:"01 Motorista",                inscr:11},
+        {sala:"Sala 04",turno:"Tarde",cargo:"01 Operador de Escavadeira",  inscr:6 },
+        {sala:"Sala 05",turno:"Tarde",cargo:"01 Recepcionista",            inscr:13},
+        {sala:"Sala 05",turno:"Tarde",cargo:"01 Vigilante",                inscr:16},
       ]
     },
   ]
 };
 
 // ════════════════════════════════════════════════════════════════
-//  INICIALIZAÇÃO
+//  INIT
 // ════════════════════════════════════════════════════════════════
-
-document.getElementById("headerSub").textContent =
-  CONCURSO.titulo + "  •  " + CONCURSO.data;
-
+document.getElementById("headerSub").textContent = CONCURSO.titulo + "  •  " + CONCURSO.data;
 const sel = document.getElementById("selEscola");
-CONCURSO.escolas.forEach((e, i) => {
-  const opt = document.createElement("option");
-  opt.value = i;
-  opt.textContent = e.nome;
-  sel.appendChild(opt);
+CONCURSO.escolas.forEach((e,i)=>{
+  const o = document.createElement("option");
+  o.value = i; o.textContent = e.nome;
+  sel.appendChild(o);
 });
 
-// ════════════════════════════════════════════════════════════════
-//  SELECIONA ESCOLA
-// ════════════════════════════════════════════════════════════════
-
-function onEscolaChange() {
-  const idx = sel.value;
-  const hidden = ["rowCoord","cardResultados","cardAndamento","divBtn"];
-
-  if (idx === "") {
-    hidden.forEach(id => document.getElementById(id).classList.add("hidden"));
-    return;
-  }
-
-  const escola = CONCURSO.escolas[parseInt(idx)];
-  document.getElementById("inputCoord").value = escola.coord_local;
-  hidden.forEach(id => document.getElementById(id).classList.remove("hidden"));
-  renderTabela(escola);
+function toggleApoio(){
+  const sim = document.querySelector('input[name="apoio"]:checked').value === "Sim";
+  document.getElementById("rowApoioNome").classList.toggle("hidden", !sim);
 }
 
-// ════════════════════════════════════════════════════════════════
-//  RENDERIZA TABELA
-// ════════════════════════════════════════════════════════════════
+function onEscolaChange(){
+  const idx = sel.value;
+  if(idx === ""){
+    ["rowIdent2","rowApoioNome","secManha","secTarde","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+    return;
+  }
+  const escola = CONCURSO.escolas[parseInt(idx)];
+  document.getElementById("inputCoord").value = escola.coord_local;
+  document.getElementById("rowIdent2").classList.remove("hidden");
 
-function renderTabela(escola) {
-  let rows = "";
-  escola.cargos.forEach((c, i) => {
-    const cls  = c.turno === "Manhã" ? "manha" : "tarde";
-    const nome = c.cargo.replace(/^01\s+/, "");
-    rows += `
-      <tr class="${cls}">
-        <td>${c.sala}</td>
-        <td>${nome}</td>
-        <td><span class="badge ${cls}">${c.turno}</span></td>
-        <td><input type="number" id="inscr_${i}" value="${c.inscr}" min="0"></td>
-        <td><input type="number" id="pres_${i}"  value="" min="0" placeholder="0"></td>
-        <td><input type="number" id="aus_${i}"   value="" min="0" placeholder="0"></td>
-        <td><input type="number" id="elim_${i}"  value="" min="0" placeholder="0"></td>
-      </tr>`;
+  const hasManha = escola.cargos.some(c=>c.turno==="Manhã");
+  const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
+
+  document.getElementById("secManha").classList.toggle("hidden", !hasManha);
+  document.getElementById("secTarde").classList.toggle("hidden", !haTarde);
+
+  if(hasManha) renderStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã"));
+  if(haTarde)  renderStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde"));
+
+  document.getElementById("cardObs").classList.remove("hidden");
+  document.getElementById("divBtn").classList.remove("hidden");
+}
+
+function renderStat(tableId, cargos){
+  const tbody = document.querySelector("#"+tableId+" tbody");
+  tbody.innerHTML = "";
+  cargos.forEach((c,i)=>{
+    const nome = c.cargo.replace(/^01\s+/,"");
+    tbody.innerHTML += `<tr>
+      <td>${c.sala} — ${nome}</td>
+      <td><input type="number" id="${tableId}_inscr_${i}" value="${c.inscr}" min="0" style="width:68px;padding:5px;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:13px;"></td>
+      <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" placeholder="0" style="width:68px;padding:5px;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:13px;"></td>
+      <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" placeholder="0" style="width:68px;padding:5px;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:13px;"></td>
+    </tr>`;
   });
+}
 
-  document.getElementById("wrapTabela").innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>Sala</th>
-          <th>Cargo</th>
-          <th>Turno</th>
-          <th>Inscritos</th>
-          <th>Presentes</th>
-          <th>Ausentes</th>
-          <th>Eliminados</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>`;
+function getTxt(id){ const el=document.getElementById(id); return el ? el.value.trim() : ""; }
+function getNum(id){ const el=document.getElementById(id); return el ? (parseInt(el.value)||0) : 0; }
+function getRad(name){ const el=document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : "Não"; }
+
+function coletarStat(tableId, cargos){
+  return cargos.map((c,i)=>({
+    sala: c.sala, cargo: c.cargo, turno: c.turno,
+    inscr: getNum(`${tableId}_inscr_${i}`),
+    pres:  getNum(`${tableId}_pres_${i}`),
+    aus:   getNum(`${tableId}_aus_${i}`),
+  }));
 }
 
 // ════════════════════════════════════════════════════════════════
 //  ENVIO
 // ════════════════════════════════════════════════════════════════
-
-function enviar() {
+function enviar(){
   const idx = sel.value;
-  if (idx === "") { alert("Selecione uma escola."); return; }
-
+  if(idx === ""){ alert("Selecione uma escola."); return; }
   const escola = CONCURSO.escolas[parseInt(idx)];
-
-  // Coleta resultados
-  const resultados = escola.cargos.map((c, i) => ({
-    sala:  c.sala,
-    turno: c.turno,
-    cargo: c.cargo,
-    inscr: num(`inscr_${i}`),
-    pres:  num(`pres_${i}`),
-    aus:   num(`aus_${i}`),
-    elim:  num(`elim_${i}`),
-  }));
+  const hasManha = escola.cargos.some(c=>c.turno==="Manhã");
+  const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
 
   const payload = {
-    escola:       escola.nome,
-    coord_local:  document.getElementById("inputCoord").value.trim(),
-    salas:        escola.salas,
-    andamento:    document.querySelector('input[name="andamento"]:checked').value,
-    toque_celular:document.querySelector('input[name="toque"]:checked').value,
-    ocorrencias:  document.getElementById("textOcorr").value.trim() || "Nenhuma ocorrência registrada.",
-    resultados,
-    concurso:     CONCURSO.titulo,
-    edital:       CONCURSO.edital,
-    data:         CONCURSO.data,
-    enviado_em:   new Date().toLocaleString("pt-BR"),
+    escola:      escola.nome,
+    coord_local: getTxt("inputCoord"),
+    salas:       escola.salas,
+    houve_apoio: getRad("apoio"),
+    nome_apoio:  getTxt("inputApoio"),
+    concurso:    CONCURSO.titulo,
+    edital:      CONCURSO.edital,
+    data:        CONCURSO.data,
+    enviado_em:  new Date().toLocaleString("pt-BR"),
+    obs:         getTxt("textObs"),
+
+    manha: !hasManha ? null : {
+      horarios: {
+        chegada:    getTxt("m_chegada"),    ab_portao:  getTxt("m_ab_portao"),
+        fch_portao: getTxt("m_fch_portao"), distrib:    getTxt("m_distrib"),
+        inicio:     getTxt("m_inicio"),     encerr:     getTxt("m_encerr"),
+        fch_malote: getTxt("m_fch_malote"), ab_malote:  getTxt("m_ab_malote"),
+      },
+      testemunhas: {
+        portao: [
+          {nome:getTxt("m_t1_portao_nome"), cpf:getTxt("m_t1_portao_cpf")},
+          {nome:getTxt("m_t2_portao_nome"), cpf:getTxt("m_t2_portao_cpf")},
+        ],
+        malote: [
+          {nome:getTxt("m_t1_malote_nome"), cpf:getTxt("m_t1_malote_cpf")},
+          {nome:getTxt("m_t2_malote_nome"), cpf:getTxt("m_t2_malote_cpf")},
+        ],
+      },
+      estatistica: coletarStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã")),
+      ocorrencias: {
+        sala:  {resp:getRad("m_ocorr_sala"), desc:getTxt("m_ocorr_sala_desc")},
+        cond:  {resp:getRad("m_cond"),       desc:getTxt("m_cond_desc")},
+        toque: {resp:getRad("m_toque"),      desc:getTxt("m_toque_desc")},
+        decl:  {resp:getRad("m_decl"),       desc:getTxt("m_decl_desc")},
+      },
+    },
+
+    tarde: !haTarde ? null : {
+      horarios: {
+        chegada:    getTxt("t_chegada"),    ab_portao:  getTxt("t_ab_portao"),
+        fch_portao: getTxt("t_fch_portao"), distrib:    getTxt("t_distrib"),
+        inicio:     getTxt("t_inicio"),     encerr:     getTxt("t_encerr"),
+        fch_malote: getTxt("t_fch_malote"), ab_malote:  getTxt("t_ab_malote"),
+      },
+      testemunhas: {
+        portao: [
+          {nome:getTxt("t_t1_portao_nome"), cpf:getTxt("t_t1_portao_cpf")},
+          {nome:getTxt("t_t2_portao_nome"), cpf:getTxt("t_t2_portao_cpf")},
+        ],
+        malote: [
+          {nome:getTxt("t_t1_malote_nome"), cpf:getTxt("t_t1_malote_cpf")},
+          {nome:getTxt("t_t2_malote_nome"), cpf:getTxt("t_t2_malote_cpf")},
+        ],
+      },
+      estatistica: coletarStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde")),
+      ocorrencias: {
+        sala:  {resp:getRad("t_ocorr_sala"), desc:getTxt("t_ocorr_sala_desc")},
+        cond:  {resp:getRad("t_cond"),       desc:getTxt("t_cond_desc")},
+        toque: {resp:getRad("t_toque"),      desc:getTxt("t_toque_desc")},
+        decl:  {resp:getRad("t_decl"),       desc:getTxt("t_decl_desc")},
+      },
+    },
   };
 
   const btn = document.getElementById("btnEnviar");
-  btn.disabled = true;
-  btn.textContent = "Enviando...";
+  btn.disabled = true; btn.textContent = "Enviando...";
 
   fetch(SCRIPT_URL, {
-    method:  "POST",
-    mode:    "no-cors",
-    headers: { "Content-Type": "text/plain" },
-    body:    JSON.stringify(payload),
+    method:"POST", mode:"no-cors",
+    headers:{"Content-Type":"text/plain"},
+    body: JSON.stringify(payload)
   })
-  .then(() => {
+  .then(()=>{
     document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
-    ["cardEscola","cardResultados","cardAndamento","divBtn"]
-      .forEach(id => document.getElementById(id).classList.add("hidden"));
+    ["cardIdent","secManha","secTarde","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
     document.getElementById("cardSucesso").classList.remove("hidden");
   })
-  .catch(() => {
-    btn.disabled = false;
-    btn.textContent = "Enviar Dados";
+  .catch(()=>{
+    btn.disabled = false; btn.textContent = "Enviar Formulário";
     alert("Erro ao enviar. Verifique sua conexão e tente novamente.");
   });
-}
-
-function num(id) {
-  return parseInt(document.getElementById(id).value) || 0;
 }
 </script>
 </body>
