@@ -111,18 +111,11 @@
         </div>
       </div>
     </div>
-    <div class="hidden" id="rowApoioNome">
-      <div class="form-group" style="margin-bottom:10px;">
-        <label>Nome do responsável pelo Apoio</label>
+    <div class="form-row hidden" id="rowApoioNome">
+      <div class="form-group">
+        <label>Nome do Apoio</label>
         <input type="text" id="inputApoio" placeholder="Nome completo">
       </div>
-      <label style="margin-bottom:6px;">Candidatos com Apoio</label>
-      <div id="apoio_entries">
-        <div style="margin-bottom:6px;"><input type="text" placeholder="Nome do candidato" style="width:100%;padding:8px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;"></div>
-        <div style="margin-bottom:6px;"><input type="text" placeholder="Nome do candidato" style="width:100%;padding:8px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;"></div>
-        <div style="margin-bottom:6px;"><input type="text" placeholder="Nome do candidato" style="width:100%;padding:8px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;"></div>
-      </div>
-      <button type="button" class="add-btn" onclick="addApoioEntry()">+ Adicionar candidato</button>
     </div>
   </div>
 
@@ -537,7 +530,6 @@ function enviar(){
     salas:       escola.salas,
     houve_apoio:   getRad("apoio"),
     nome_apoio:    getTxt("inputApoio"),
-    apoio_entries: Array.from(document.querySelectorAll('#apoio_entries input')).map(i=>i.value.trim()).filter(v=>v),
     concurso:    CONCURSO.titulo,
     edital:      CONCURSO.edital,
     data:        CONCURSO.data,
