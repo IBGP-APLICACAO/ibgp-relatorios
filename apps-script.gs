@@ -16,6 +16,7 @@ function doPost(e) {
     salvarHorarios(ss, data);
     salvarTestemunhas(ss, data);
     salvarOcorrencias(ss, data);
+    salvarCandidatos(ss, data);
 
     return ContentService
       .createTextOutput(JSON.stringify({ status: "ok" }))
@@ -103,7 +104,7 @@ function salvarLocais(ss, data) {
 function salvarResultados(ss, data) {
   var ws = getOrCreateSheet(ss, "RESULTADOS", [
     "Local / Escola", "Sala", "Turno", "Cargo",
-    "Inscritos", "Presentes", "Ausentes", "Enviado em"
+    "Inscritos", "Presentes", "Ausentes", "Inclusões", "Enviado em"
   ]);
 
   deletarLinhasEscola(ws, data.escola);
@@ -111,7 +112,7 @@ function salvarResultados(ss, data) {
   ["manha", "tarde"].forEach(function(t) {
     if (!data[t]) return;
     data[t].estatistica.forEach(function(r) {
-      ws.appendRow([data.escola, r.sala, r.turno, r.cargo, r.inscr, r.pres, r.aus, data.enviado_em]);
+      ws.appendRow([data.escola, r.sala, r.turno, r.cargo, r.inscr, r.pres, r.aus, r.incl || 0, data.enviado_em]);
     });
   });
 }
@@ -196,5 +197,41 @@ function salvarOcorrencias(ss, data) {
       o.decl.resp, o.decl.desc,
       data.enviado_em
     ]);
+  });
+}
+
+// ── Aba CANDIDATOS ────────────────────────────────────────────────
+function salvarCandidatos(ss, data) {
+  var ws = getOrCreateSheet(ss, "CANDIDATOS", [
+    "Local / Escola", "Turno", "Tipo", "Nº Inscrição", "Candidato", "Sala", "Enviado em"
+  ]);
+
+  deletarLinhasEscola(ws, data.escola);
+
+  // Apoio
+  if (data.apoio_entries && data.apoio_entries.length > 0) {
+    data.apoio_entries.forEach(function(c) {
+      ws.appendRow([data.escola, "—", "Apoio", c.inscricao, c.candidato, c.sala, data.enviado_em]);
+    });
+  }
+
+  // Ocorrências por turno
+  var tipos = [
+    {key: "sala",  label: "Ocorrências em sala"},
+    {key: "cond",  label: "Prova condicional"},
+    {key: "toque", label: "Toque de celular"},
+    {key: "decl",  label: "Declaração de comparecimento"},
+  ];
+
+  [["manha","Manhã"],["tarde","Tarde"]].forEach(function(par) {
+    var tkey = par[0], tlabel = par[1];
+    if (!data[tkey]) return;
+    tipos.forEach(function(tipo) {
+      var ocorr = data[tkey].ocorrencias[tipo.key];
+      if (!ocorr || !ocorr.candidatos) return;
+      ocorr.candidatos.forEach(function(c) {
+        ws.appendRow([data.escola, tlabel, tipo.label, c.inscricao, c.candidato, c.sala, data.enviado_em]);
+      });
+    });
   });
 }

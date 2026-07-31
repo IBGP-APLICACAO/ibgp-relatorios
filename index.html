@@ -65,6 +65,13 @@
 
     .hidden { display: none !important; }
     .sec-label { font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .5px; margin: 16px 0 8px; border-top: 1px solid #EEE; padding-top: 12px; }
+
+    .entry-row { display: grid; grid-template-columns: 130px 1fr 90px; gap: 8px; margin-bottom: 6px; align-items: center; }
+    @media(max-width:600px){ .entry-row { grid-template-columns: 1fr 1fr; } }
+    .entry-row input { font-size: 12px; padding: 6px 8px; }
+    .entry-header { display: grid; grid-template-columns: 130px 1fr 90px; gap: 8px; margin-bottom: 4px; font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .4px; }
+    .add-btn { background: none; border: 1px dashed #CF3432; color: #CF3432; border-radius: 4px; padding: 5px 14px; cursor: pointer; font-size: 12px; font-weight: 700; margin-top: 6px; transition: all .2s; }
+    .add-btn:hover { background: #CF3432; color: #FFF; }
   </style>
 </head>
 <body>
@@ -104,11 +111,19 @@
         </div>
       </div>
     </div>
-    <div class="form-row hidden" id="rowApoioNome">
-      <div class="form-group">
-        <label>Nome do Apoio</label>
+    <div class="hidden" id="rowApoioNome">
+      <div class="form-group" style="margin-bottom:10px;">
+        <label>Nome do responsável pelo Apoio</label>
         <input type="text" id="inputApoio" placeholder="Nome completo">
       </div>
+      <label style="margin-bottom:6px;">Candidatos com Apoio</label>
+      <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+      <div id="apoio_entries">
+        <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+      </div>
+      <button type="button" class="add-btn" onclick="addEntry('apoio_entries')">+ Adicionar candidato</button>
     </div>
   </div>
 
@@ -146,7 +161,7 @@
       <div class="card-title manha">4. Turno Manhã — Estatística por Cargo</div>
       <div class="aviso">Inscritos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
       <div style="overflow-x:auto;"><table class="stat-table" id="tabelaManha">
-        <thead><tr><th>Cargo / Função</th><th>Inscritos</th><th>Presentes</th><th>Ausentes</th></tr></thead>
+        <thead><tr><th>Cargo / Função</th><th>Inscritos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th></tr></thead>
         <tbody></tbody>
       </table></div>
     </div>
@@ -157,21 +172,49 @@
         <h4>Ocorrências em sala</h4>
         <div class="radio-row"><label><input type="radio" name="m_ocorr_sala" value="Não" checked> Não</label><label><input type="radio" name="m_ocorr_sala" value="Sim"> Sim</label></div>
         <label>Descrição (se sim):</label><textarea id="m_ocorr_sala_desc" rows="2" placeholder="Descreva..."></textarea>
+        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+        <div id="m_ocorr_sala_entries">
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        </div>
+        <button type="button" class="add-btn" onclick="addEntry('m_ocorr_sala_entries')">+ Adicionar</button>
       </div>
       <div class="ocorr-block">
         <h4>Prova condicional</h4>
         <div class="radio-row"><label><input type="radio" name="m_cond" value="Não" checked> Não</label><label><input type="radio" name="m_cond" value="Sim"> Sim</label></div>
         <label>Descrição (se sim):</label><textarea id="m_cond_desc" rows="2" placeholder="Descreva..."></textarea>
+        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+        <div id="m_cond_entries">
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        </div>
+        <button type="button" class="add-btn" onclick="addEntry('m_cond_entries')">+ Adicionar</button>
       </div>
       <div class="ocorr-block">
         <h4>Toque de celular</h4>
         <div class="radio-row"><label><input type="radio" name="m_toque" value="Não" checked> Não</label><label><input type="radio" name="m_toque" value="Sim"> Sim</label></div>
         <label>Descrição (se sim):</label><textarea id="m_toque_desc" rows="2" placeholder="Descreva..."></textarea>
+        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+        <div id="m_toque_entries">
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        </div>
+        <button type="button" class="add-btn" onclick="addEntry('m_toque_entries')">+ Adicionar</button>
       </div>
       <div class="ocorr-block">
         <h4>Declaração de comparecimento</h4>
         <div class="radio-row"><label><input type="radio" name="m_decl" value="Não" checked> Não</label><label><input type="radio" name="m_decl" value="Sim"> Sim</label></div>
         <label>Descrição (se sim):</label><textarea id="m_decl_desc" rows="2" placeholder="Descreva..."></textarea>
+        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+        <div id="m_decl_entries">
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        </div>
+        <button type="button" class="add-btn" onclick="addEntry('m_decl_entries')">+ Adicionar</button>
       </div>
     </div>
 
@@ -223,7 +266,7 @@
       <div class="card-title tarde">8. Turno Tarde — Estatística por Cargo</div>
       <div class="aviso">Inscritos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
       <div style="overflow-x:auto;"><table class="stat-table" id="tabelaTarde">
-        <thead><tr><th>Cargo / Função</th><th>Inscritos</th><th>Presentes</th><th>Ausentes</th></tr></thead>
+        <thead><tr><th>Cargo / Função</th><th>Inscritos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th></tr></thead>
         <tbody></tbody>
       </table></div>
     </div>
@@ -234,21 +277,49 @@
         <h4>Ocorrências em sala</h4>
         <div class="radio-row"><label><input type="radio" name="t_ocorr_sala" value="Não" checked> Não</label><label><input type="radio" name="t_ocorr_sala" value="Sim"> Sim</label></div>
         <label>Descrição (se sim):</label><textarea id="t_ocorr_sala_desc" rows="2" placeholder="Descreva..."></textarea>
+        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+        <div id="t_ocorr_sala_entries">
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        </div>
+        <button type="button" class="add-btn" onclick="addEntry('t_ocorr_sala_entries')">+ Adicionar</button>
       </div>
       <div class="ocorr-block">
         <h4>Prova condicional</h4>
         <div class="radio-row"><label><input type="radio" name="t_cond" value="Não" checked> Não</label><label><input type="radio" name="t_cond" value="Sim"> Sim</label></div>
         <label>Descrição (se sim):</label><textarea id="t_cond_desc" rows="2" placeholder="Descreva..."></textarea>
+        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+        <div id="t_cond_entries">
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        </div>
+        <button type="button" class="add-btn" onclick="addEntry('t_cond_entries')">+ Adicionar</button>
       </div>
       <div class="ocorr-block">
         <h4>Toque de celular</h4>
         <div class="radio-row"><label><input type="radio" name="t_toque" value="Não" checked> Não</label><label><input type="radio" name="t_toque" value="Sim"> Sim</label></div>
         <label>Descrição (se sim):</label><textarea id="t_toque_desc" rows="2" placeholder="Descreva..."></textarea>
+        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+        <div id="t_toque_entries">
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        </div>
+        <button type="button" class="add-btn" onclick="addEntry('t_toque_entries')">+ Adicionar</button>
       </div>
       <div class="ocorr-block">
         <h4>Declaração de comparecimento</h4>
         <div class="radio-row"><label><input type="radio" name="t_decl" value="Não" checked> Não</label><label><input type="radio" name="t_decl" value="Sim"> Sim</label></div>
         <label>Descrição (se sim):</label><textarea id="t_decl_desc" rows="2" placeholder="Descreva..."></textarea>
+        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+        <div id="t_decl_entries">
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        </div>
+        <button type="button" class="add-btn" onclick="addEntry('t_decl_entries')">+ Adicionar</button>
       </div>
     </div>
 
@@ -399,13 +470,15 @@ function onEscolaChange(){
 function renderStat(tableId, cargos){
   const tbody = document.querySelector("#"+tableId+" tbody");
   tbody.innerHTML = "";
+  const s = "width:68px;padding:5px;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:13px;";
   cargos.forEach((c,i)=>{
     const nome = c.cargo.replace(/^01\s+/,"");
     tbody.innerHTML += `<tr>
       <td>${c.sala} — ${nome}</td>
-      <td><input type="number" id="${tableId}_inscr_${i}" value="${c.inscr}" min="0" style="width:68px;padding:5px;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:13px;"></td>
-      <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" placeholder="0" style="width:68px;padding:5px;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:13px;"></td>
-      <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" placeholder="0" style="width:68px;padding:5px;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:13px;"></td>
+      <td><input type="number" id="${tableId}_inscr_${i}" value="${c.inscr}" min="0" style="${s}"></td>
+      <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" placeholder="0" style="${s}"></td>
+      <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" placeholder="0" style="${s}"></td>
+      <td><input type="number" id="${tableId}_incl_${i}"  value="" min="0" placeholder="0" style="${s}"></td>
     </tr>`;
   });
 }
@@ -420,7 +493,25 @@ function coletarStat(tableId, cargos){
     inscr: getNum(`${tableId}_inscr_${i}`),
     pres:  getNum(`${tableId}_pres_${i}`),
     aus:   getNum(`${tableId}_aus_${i}`),
+    incl:  getNum(`${tableId}_incl_${i}`),
   }));
+}
+
+function addEntry(listId){
+  const list = document.getElementById(listId);
+  const row = document.createElement('div');
+  row.className = 'entry-row';
+  row.innerHTML = '<input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala">';
+  list.appendChild(row);
+}
+
+function coletarEntries(listId){
+  const list = document.getElementById(listId);
+  if(!list) return [];
+  return Array.from(list.querySelectorAll('.entry-row')).map(row=>{
+    const ins = row.querySelectorAll('input');
+    return {inscricao: ins[0].value.trim(), candidato: ins[1].value.trim(), sala: ins[2].value.trim()};
+  }).filter(e=>e.inscricao||e.candidato||e.sala);
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -437,8 +528,9 @@ function enviar(){
     escola:      escola.nome,
     coord_local: getTxt("inputCoord"),
     salas:       escola.salas,
-    houve_apoio: getRad("apoio"),
-    nome_apoio:  getTxt("inputApoio"),
+    houve_apoio:   getRad("apoio"),
+    nome_apoio:    getTxt("inputApoio"),
+    apoio_entries: coletarEntries("apoio_entries"),
     concurso:    CONCURSO.titulo,
     edital:      CONCURSO.edital,
     data:        CONCURSO.data,
@@ -466,10 +558,10 @@ function enviar(){
       },
       estatistica: coletarStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã")),
       ocorrencias: {
-        sala:  {resp:getRad("m_ocorr_sala"), desc:getTxt("m_ocorr_sala_desc")},
-        cond:  {resp:getRad("m_cond"),       desc:getTxt("m_cond_desc")},
-        toque: {resp:getRad("m_toque"),      desc:getTxt("m_toque_desc")},
-        decl:  {resp:getRad("m_decl"),       desc:getTxt("m_decl_desc")},
+        sala:  {resp:getRad("m_ocorr_sala"), desc:getTxt("m_ocorr_sala_desc"), candidatos:coletarEntries("m_ocorr_sala_entries")},
+        cond:  {resp:getRad("m_cond"),       desc:getTxt("m_cond_desc"),       candidatos:coletarEntries("m_cond_entries")},
+        toque: {resp:getRad("m_toque"),      desc:getTxt("m_toque_desc"),      candidatos:coletarEntries("m_toque_entries")},
+        decl:  {resp:getRad("m_decl"),       desc:getTxt("m_decl_desc"),       candidatos:coletarEntries("m_decl_entries")},
       },
     },
 
@@ -494,10 +586,10 @@ function enviar(){
       },
       estatistica: coletarStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde")),
       ocorrencias: {
-        sala:  {resp:getRad("t_ocorr_sala"), desc:getTxt("t_ocorr_sala_desc")},
-        cond:  {resp:getRad("t_cond"),       desc:getTxt("t_cond_desc")},
-        toque: {resp:getRad("t_toque"),      desc:getTxt("t_toque_desc")},
-        decl:  {resp:getRad("t_decl"),       desc:getTxt("t_decl_desc")},
+        sala:  {resp:getRad("t_ocorr_sala"), desc:getTxt("t_ocorr_sala_desc"), candidatos:coletarEntries("t_ocorr_sala_entries")},
+        cond:  {resp:getRad("t_cond"),       desc:getTxt("t_cond_desc"),       candidatos:coletarEntries("t_cond_entries")},
+        toque: {resp:getRad("t_toque"),      desc:getTxt("t_toque_desc"),      candidatos:coletarEntries("t_toque_entries")},
+        decl:  {resp:getRad("t_decl"),       desc:getTxt("t_decl_desc"),       candidatos:coletarEntries("t_decl_entries")},
       },
     },
   };
