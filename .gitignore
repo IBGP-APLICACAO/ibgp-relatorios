@@ -1,0 +1,9 @@
+saida/
+__pycache__/
+*.pyc
+node_modules/
+*.pdf
+*.docx
+*.zip
+.DS_Store
+relatorio_geral_gen.js
