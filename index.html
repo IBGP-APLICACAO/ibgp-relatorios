@@ -117,13 +117,12 @@
         <input type="text" id="inputApoio" placeholder="Nome completo">
       </div>
       <label style="margin-bottom:6px;">Candidatos com Apoio</label>
-      <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
       <div id="apoio_entries">
-        <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-        <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-        <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        <div style="margin-bottom:6px;"><input type="text" placeholder="Nome do candidato" style="width:100%;padding:8px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;"></div>
+        <div style="margin-bottom:6px;"><input type="text" placeholder="Nome do candidato" style="width:100%;padding:8px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;"></div>
+        <div style="margin-bottom:6px;"><input type="text" placeholder="Nome do candidato" style="width:100%;padding:8px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;"></div>
       </div>
-      <button type="button" class="add-btn" onclick="addEntry('apoio_entries')">+ Adicionar candidato</button>
+      <button type="button" class="add-btn" onclick="addApoioEntry()">+ Adicionar candidato</button>
     </div>
   </div>
 
@@ -505,6 +504,14 @@ function addEntry(listId){
   list.appendChild(row);
 }
 
+function addApoioEntry(){
+  const list = document.getElementById('apoio_entries');
+  const div = document.createElement('div');
+  div.style.cssText = 'margin-bottom:6px;';
+  div.innerHTML = '<input type="text" placeholder="Nome do candidato" style="width:100%;padding:8px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;">';
+  list.appendChild(div);
+}
+
 function coletarEntries(listId){
   const list = document.getElementById(listId);
   if(!list) return [];
@@ -530,7 +537,7 @@ function enviar(){
     salas:       escola.salas,
     houve_apoio:   getRad("apoio"),
     nome_apoio:    getTxt("inputApoio"),
-    apoio_entries: coletarEntries("apoio_entries"),
+    apoio_entries: Array.from(document.querySelectorAll('#apoio_entries input')).map(i=>i.value.trim()).filter(v=>v),
     concurso:    CONCURSO.titulo,
     edital:      CONCURSO.edital,
     data:        CONCURSO.data,

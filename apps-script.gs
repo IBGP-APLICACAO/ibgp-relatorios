@@ -208,10 +208,10 @@ function salvarCandidatos(ss, data) {
 
   deletarLinhasEscola(ws, data.escola);
 
-  // Apoio
+  // Apoio (apenas nome)
   if (data.apoio_entries && data.apoio_entries.length > 0) {
-    data.apoio_entries.forEach(function(c) {
-      ws.appendRow([data.escola, "—", "Apoio", c.inscricao, c.candidato, c.sala, data.enviado_em]);
+    data.apoio_entries.forEach(function(nome) {
+      ws.appendRow([data.escola, "—", "Apoio", "", nome, "", data.enviado_em]);
     });
   }
 
