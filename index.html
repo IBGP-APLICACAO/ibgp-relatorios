@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBGP — Coleta de Dados de Aplicação</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #F2F2F2;
+      color: #393939;
+      min-height: 100vh;
+    }
+
+    /* ── Cabeçalho ── */
+    .header {
+      background: #393939;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .header img { height: 46px; }
+    .header-text h1 { color: #FFF; font-size: 15px; font-weight: 700; }
+    .header-text p  { color: #BBBBBB; font-size: 12px; margin-top: 3px; }
+    .red-bar { height: 4px; background: #CF3432; }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 880px;
+      margin: 30px auto;
+      padding: 0 16px 60px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: #FFF;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #393939;
+      border-left: 4px solid #CF3432;
+      padding-left: 12px;
+      margin-bottom: 22px;
+    }
+
+    /* ── Formulário ── */
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #555;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    select, input[type="text"], textarea {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1px solid #CCCCCC;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #393939;
+      background: #FAFAFA;
+      transition: border-color .2s, background .2s;
+    }
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: #CF3432;
+      background: #FFF;
+    }
+    .form-row { display: flex; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
+    .form-group { flex: 1; min-width: 200px; }
+
+    /* ── Tabela de resultados ── */
+    .table-wrap { overflow-x: auto; margin-top: 8px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead th {
+      background: #393939;
+      color: #FFF;
+      padding: 10px 9px;
+      text-align: center;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    thead th:nth-child(1),
+    thead th:nth-child(2) { text-align: left; }
+    tbody td {
+      padding: 7px 9px;
+      border-bottom: 1px solid #EEEEEE;
+      vertical-align: middle;
+    }
+    tbody tr:nth-child(even) td { background: #F8F8F8; }
+    tbody tr.manha td { border-left: 3px solid #1F3A6E; }
+    tbody tr.tarde  td { border-left: 3px solid #CF3432; }
+
+    input[type="number"] {
+      width: 72px;
+      padding: 6px 7px;
+      text-align: center;
+      border: 1px solid #CCCCCC;
+      border-radius: 5px;
+      font-size: 13px;
+      background: #FAFAFA;
+    }
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #CF3432;
+      background: #FFF;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .badge.manha { background: #E8EDF5; color: #1F3A6E; }
+    .badge.tarde { background: #FFF0F0; color: #CF3432; }
+
+    /* ── Radios ── */
+    .radio-group { display: flex; gap: 24px; margin-top: 5px; flex-wrap: wrap; }
+    .radio-group label {
+      display: flex; align-items: center; gap: 7px;
+      font-weight: normal; text-transform: none;
+      letter-spacing: 0; cursor: pointer; font-size: 14px;
+    }
+    input[type="radio"] { accent-color: #CF3432; width: 16px; height: 16px; }
+
+    /* ── Aviso ── */
+    .aviso {
+      background: #FFFBEA;
+      border: 1px solid #F0D060;
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #6B5600;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    /* ── Botão ── */
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background: #CF3432;
+      color: #FFF;
+      border: none;
+      border-radius: 7px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+      letter-spacing: .3px;
+    }
+    .btn:hover   { background: #B02C2A; }
+    .btn:disabled { background: #CCCCCC; cursor: not-allowed; }
+
+    /* ── Sucesso ── */
+    .success-box {
+      text-align: center;
+      padding: 52px 24px;
+    }
+    .check-circle {
+      width: 68px; height: 68px;
+      background: #1E6B3B;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 34px; color: #FFF;
+    }
+    .success-box h2 { color: #1E6B3B; font-size: 20px; margin-bottom: 10px; }
+    .success-box p  { color: #555; font-size: 14px; line-height: 1.6; }
+
+    /* ── Utilitários ── */
+    .hidden { display: none !important; }
+    .mt-16  { margin-top: 16px; }
+
+    @media (max-width: 600px) {
+      .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .header img { height: 36px; }
+      .card { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <img src="IBGP.png" alt="IBGP" onerror="this.style.display='none'">
+  <div class="header-text">
+    <h1>IBGP — Coleta de Dados de Aplicação de Prova</h1>
+    <p id="headerSub">Carregando...</p>
+  </div>
+</div>
+<div class="red-bar"></div>
+
+<div class="container">
+
+  <!-- PASSO 1: Seleção da escola -->
+  <div class="card" id="cardEscola">
+    <div class="card-title">Identificação do Local</div>
+    <div class="form-group" style="margin-bottom:18px;">
+      <label for="selEscola">Local / Escola</label>
+      <select id="selEscola" onchange="onEscolaChange()">
+        <option value="">— Selecione seu local de aplicação —</option>
+      </select>
+    </div>
+    <div class="form-row hidden" id="rowCoord">
+      <div class="form-group">
+        <label for="inputCoord">Coordenador(a) Local</label>
+        <input type="text" id="inputCoord" placeholder="Nome completo">
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSO 2: Tabela de resultados -->
+  <div class="card hidden" id="cardResultados">
+    <div class="card-title">Resultados por Sala e Cargo</div>
+    <div class="aviso">
+      Preencha <strong>Presentes</strong>, <strong>Ausentes</strong> e <strong>Eliminados</strong> para cada cargo.
+      O campo <strong>Inscritos</strong> está pré-preenchido com a alocação prevista — corrija se necessário.
+    </div>
+    <div class="table-wrap" id="wrapTabela"></div>
+  </div>
+
+  <!-- PASSO 3: Andamento -->
+  <div class="card hidden" id="cardAndamento">
+    <div class="card-title">Andamento e Ocorrências</div>
+
+    <div class="form-group" style="margin-bottom:20px;">
+      <label>Andamento Geral da Aplicação</label>
+      <div class="radio-group">
+        <label><input type="radio" name="andamento" value="Tranquilo, sem intercorrências relevantes" checked> Tranquilo, sem intercorrências</label>
+        <label><input type="radio" name="andamento" value="Com intercorrências"> Com intercorrências</label>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:20px;">
+      <label>Houve toque de celular em sala?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="toque" value="Não consta" checked> Não</label>
+        <label><input type="radio" name="toque" value="Sim"> Sim</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="textOcorr">Ocorrências / Intercorrências</label>
+      <textarea id="textOcorr" rows="4"
+        placeholder="Descreva qualquer ocorrência relevante. Se não houver, deixe em branco."></textarea>
+    </div>
+  </div>
+
+  <!-- Botão enviar -->
+  <div class="hidden" id="divBtn">
+    <button class="btn" id="btnEnviar" onclick="enviar()">Enviar Dados</button>
+  </div>
+
+  <!-- Sucesso -->
+  <div class="card success-box hidden" id="cardSucesso">
+    <div class="check-circle">✓</div>
+    <h2>Dados enviados com sucesso!</h2>
+    <p>Os dados de <strong id="nomeEscolaSucesso"></strong><br>foram registrados. Obrigado!</p>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ════════════════════════════════════════════════════════════════
+//  CONFIGURAÇÃO — altere aqui para cada novo concurso
+// ════════════════════════════════════════════════════════════════
+
+// URL do Google Apps Script (obter após deploy — ver SETUP.md)
+const SCRIPT_URL = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
+
+const CONCURSO = {
+  titulo: "Concurso Público do Município de Alto Rio Doce / MG",
+  edital: "Edital nº 01/2026",
+  data:   "26 de julho de 2026",
+  escolas: [
+    {
+      nome:        "Secretaria Municipal de Educação - ARD",
+      coord_local: "Natália Cristina Matias",
+      salas: 5,
+      cargos: [
+        { sala:"Sala 01", turno:"Manhã", cargo:"01 Agente de Combate a Endemias",    inscr:12 },
+        { sala:"Sala 01", turno:"Manhã", cargo:"01 Agente de Controle de Vetores",    inscr:8  },
+        { sala:"Sala 02", turno:"Manhã", cargo:"01 Assistente Administrativo",        inscr:15 },
+        { sala:"Sala 02", turno:"Manhã", cargo:"01 Assistente Social",                inscr:6  },
+        { sala:"Sala 03", turno:"Manhã", cargo:"01 Auxiliar de Serviços Gerais",      inscr:18 },
+        { sala:"Sala 04", turno:"Tarde", cargo:"01 Enfermeiro",                       inscr:10 },
+        { sala:"Sala 04", turno:"Tarde", cargo:"01 Farmacêutico",                     inscr:5  },
+        { sala:"Sala 05", turno:"Tarde", cargo:"01 Fisioterapeuta",                   inscr:7  },
+        { sala:"Sala 05", turno:"Tarde", cargo:"01 Médico Clínico Geral",             inscr:4  },
+      ]
+    },
+    {
+      nome:        "Escola Municipal Aristides da Mota Marinho - ARD",
+      coord_local: "Jordan Guilherme",
+      salas: 3,
+      cargos: [
+        { sala:"Sala 01", turno:"Manhã", cargo:"01 Contador",          inscr:9 },
+        { sala:"Sala 01", turno:"Manhã", cargo:"01 Educador Físico",   inscr:6 },
+        { sala:"Sala 02", turno:"Manhã", cargo:"01 Engenheiro Civil",  inscr:5 },
+        { sala:"Sala 02", turno:"Manhã", cargo:"01 Fonoaudiólogo",     inscr:4 },
+        { sala:"Sala 03", turno:"Manhã", cargo:"01 Médico Pediatra",   inscr:3 },
+      ]
+    },
+    {
+      nome:        "Escola Municipal Raul Soares - ARD",
+      coord_local: "Kênia Soiane",
+      salas: 4,
+      cargos: [
+        { sala:"Sala 01", turno:"Manhã", cargo:"01 Nutricionista",          inscr:7  },
+        { sala:"Sala 01", turno:"Manhã", cargo:"01 Odontólogo",             inscr:8  },
+        { sala:"Sala 02", turno:"Manhã", cargo:"01 Operador de Máquinas",   inscr:14 },
+        { sala:"Sala 02", turno:"Manhã", cargo:"01 Pedreiro",               inscr:16 },
+        { sala:"Sala 03", turno:"Tarde", cargo:"01 Psicólogo",              inscr:6  },
+        { sala:"Sala 03", turno:"Tarde", cargo:"01 Técnico em Enfermagem",  inscr:12 },
+        { sala:"Sala 04", turno:"Tarde", cargo:"01 Técnico em Informática", inscr:8  },
+      ]
+    },
+    {
+      nome:        "UNIPAC — Campus Bonifácio de Andrada - Barbacena",
+      coord_local: "Laryssa Fugêncio",
+      salas: 5,
+      cargos: [
+        { sala:"Sala 01", turno:"Manhã", cargo:"01 Auxiliar Administrativo",  inscr:18 },
+        { sala:"Sala 01", turno:"Manhã", cargo:"01 Auxiliar de Biblioteca",   inscr:10 },
+        { sala:"Sala 02", turno:"Manhã", cargo:"01 Auxiliar de Farmácia",     inscr:12 },
+        { sala:"Sala 02", turno:"Manhã", cargo:"01 Cozinheiro",               inscr:15 },
+        { sala:"Sala 03", turno:"Manhã", cargo:"01 Gari",                     inscr:20 },
+        { sala:"Sala 03", turno:"Manhã", cargo:"01 Mecânico",                 inscr:8  },
+        { sala:"Sala 04", turno:"Tarde", cargo:"01 Motorista",                inscr:11 },
+        { sala:"Sala 04", turno:"Tarde", cargo:"01 Operador de Escavadeira",  inscr:6  },
+        { sala:"Sala 05", turno:"Tarde", cargo:"01 Recepcionista",            inscr:13 },
+        { sala:"Sala 05", turno:"Tarde", cargo:"01 Vigilante",                inscr:16 },
+      ]
+    },
+  ]
+};
+
+// ════════════════════════════════════════════════════════════════
+//  INICIALIZAÇÃO
+// ════════════════════════════════════════════════════════════════
+
+document.getElementById("headerSub").textContent =
+  CONCURSO.titulo + "  •  " + CONCURSO.data;
+
+const sel = document.getElementById("selEscola");
+CONCURSO.escolas.forEach((e, i) => {
+  const opt = document.createElement("option");
+  opt.value = i;
+  opt.textContent = e.nome;
+  sel.appendChild(opt);
+});
+
+// ════════════════════════════════════════════════════════════════
+//  SELECIONA ESCOLA
+// ════════════════════════════════════════════════════════════════
+
+function onEscolaChange() {
+  const idx = sel.value;
+  const hidden = ["rowCoord","cardResultados","cardAndamento","divBtn"];
+
+  if (idx === "") {
+    hidden.forEach(id => document.getElementById(id).classList.add("hidden"));
+    return;
+  }
+
+  const escola = CONCURSO.escolas[parseInt(idx)];
+  document.getElementById("inputCoord").value = escola.coord_local;
+  hidden.forEach(id => document.getElementById(id).classList.remove("hidden"));
+  renderTabela(escola);
+}
+
+// ════════════════════════════════════════════════════════════════
+//  RENDERIZA TABELA
+// ════════════════════════════════════════════════════════════════
+
+function renderTabela(escola) {
+  let rows = "";
+  escola.cargos.forEach((c, i) => {
+    const cls  = c.turno === "Manhã" ? "manha" : "tarde";
+    const nome = c.cargo.replace(/^01\s+/, "");
+    rows += `
+      <tr class="${cls}">
+        <td>${c.sala}</td>
+        <td>${nome}</td>
+        <td><span class="badge ${cls}">${c.turno}</span></td>
+        <td><input type="number" id="inscr_${i}" value="${c.inscr}" min="0"></td>
+        <td><input type="number" id="pres_${i}"  value="" min="0" placeholder="0"></td>
+        <td><input type="number" id="aus_${i}"   value="" min="0" placeholder="0"></td>
+        <td><input type="number" id="elim_${i}"  value="" min="0" placeholder="0"></td>
+      </tr>`;
+  });
+
+  document.getElementById("wrapTabela").innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Sala</th>
+          <th>Cargo</th>
+          <th>Turno</th>
+          <th>Inscritos</th>
+          <th>Presentes</th>
+          <th>Ausentes</th>
+          <th>Eliminados</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+// ════════════════════════════════════════════════════════════════
+//  ENVIO
+// ════════════════════════════════════════════════════════════════
+
+function enviar() {
+  const idx = sel.value;
+  if (idx === "") { alert("Selecione uma escola."); return; }
+
+  const escola = CONCURSO.escolas[parseInt(idx)];
+
+  // Coleta resultados
+  const resultados = escola.cargos.map((c, i) => ({
+    sala:  c.sala,
+    turno: c.turno,
+    cargo: c.cargo,
+    inscr: num(`inscr_${i}`),
+    pres:  num(`pres_${i}`),
+    aus:   num(`aus_${i}`),
+    elim:  num(`elim_${i}`),
+  }));
+
+  const payload = {
+    escola:       escola.nome,
+    coord_local:  document.getElementById("inputCoord").value.trim(),
+    salas:        escola.salas,
+    andamento:    document.querySelector('input[name="andamento"]:checked').value,
+    toque_celular:document.querySelector('input[name="toque"]:checked').value,
+    ocorrencias:  document.getElementById("textOcorr").value.trim() || "Nenhuma ocorrência registrada.",
+    resultados,
+    concurso:     CONCURSO.titulo,
+    edital:       CONCURSO.edital,
+    data:         CONCURSO.data,
+    enviado_em:   new Date().toLocaleString("pt-BR"),
+  };
+
+  const btn = document.getElementById("btnEnviar");
+  btn.disabled = true;
+  btn.textContent = "Enviando...";
+
+  fetch(SCRIPT_URL, {
+    method:  "POST",
+    mode:    "no-cors",
+    headers: { "Content-Type": "text/plain" },
+    body:    JSON.stringify(payload),
+  })
+  .then(() => {
+    document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
+    ["cardEscola","cardResultados","cardAndamento","divBtn"]
+      .forEach(id => document.getElementById(id).classList.add("hidden"));
+    document.getElementById("cardSucesso").classList.remove("hidden");
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.textContent = "Enviar Dados";
+    alert("Erro ao enviar. Verifique sua conexão e tente novamente.");
+  });
+}
+
+function num(id) {
+  return parseInt(document.getElementById(id).value) || 0;
+}
+</script>
+</body>
+</html>
