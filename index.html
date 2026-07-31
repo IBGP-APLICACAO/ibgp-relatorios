@@ -131,20 +131,22 @@
 
     <div class="card">
       <div class="card-title manha">3. Turno Manhã — Testemunhas</div>
-      <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Portão</p>
+      <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Malote</p>
       <table class="test-table">
         <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
         <tbody>
-          <tr><td><input type="text" id="m_t1_portao_nome" placeholder="Nome"></td><td><input type="text" id="m_t1_portao_cpf" placeholder="000.000.000-00"></td></tr>
-          <tr><td><input type="text" id="m_t2_portao_nome" placeholder="Nome"></td><td><input type="text" id="m_t2_portao_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="m_t1_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t1_ab_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="m_t2_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t2_ab_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="m_t3_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t3_ab_malote_cpf" placeholder="000.000.000-00"></td></tr>
         </tbody>
       </table>
-      <p class="sec-label">Abertura do Malote</p>
+      <p class="sec-label">Fechamento do Malote</p>
       <table class="test-table">
         <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
         <tbody>
-          <tr><td><input type="text" id="m_t1_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t1_malote_cpf" placeholder="000.000.000-00"></td></tr>
-          <tr><td><input type="text" id="m_t2_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t2_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="m_t1_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t1_fch_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="m_t2_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t2_fch_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="m_t3_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t3_fch_malote_cpf" placeholder="000.000.000-00"></td></tr>
         </tbody>
       </table>
     </div>
@@ -203,20 +205,22 @@
 
     <div class="card">
       <div class="card-title tarde">7. Turno Tarde — Testemunhas</div>
-      <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Portão</p>
+      <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Malote</p>
       <table class="test-table">
         <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
         <tbody>
-          <tr><td><input type="text" id="t_t1_portao_nome" placeholder="Nome"></td><td><input type="text" id="t_t1_portao_cpf" placeholder="000.000.000-00"></td></tr>
-          <tr><td><input type="text" id="t_t2_portao_nome" placeholder="Nome"></td><td><input type="text" id="t_t2_portao_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="t_t1_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t1_ab_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="t_t2_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t2_ab_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="t_t3_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t3_ab_malote_cpf" placeholder="000.000.000-00"></td></tr>
         </tbody>
       </table>
-      <p class="sec-label">Abertura do Malote</p>
+      <p class="sec-label">Fechamento do Malote</p>
       <table class="test-table">
         <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
         <tbody>
-          <tr><td><input type="text" id="t_t1_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t1_malote_cpf" placeholder="000.000.000-00"></td></tr>
-          <tr><td><input type="text" id="t_t2_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t2_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="t_t1_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t1_fch_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="t_t2_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t2_fch_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td><input type="text" id="t_t3_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t3_fch_malote_cpf" placeholder="000.000.000-00"></td></tr>
         </tbody>
       </table>
     </div>
@@ -443,13 +447,15 @@ function enviar(){
         fch_malote: getTxt("m_fch_malote"), ab_malote:  getTxt("m_ab_malote"),
       },
       testemunhas: {
-        portao: [
-          {nome:getTxt("m_t1_portao_nome"), cpf:getTxt("m_t1_portao_cpf")},
-          {nome:getTxt("m_t2_portao_nome"), cpf:getTxt("m_t2_portao_cpf")},
+        ab_malote: [
+          {nome:getTxt("m_t1_ab_malote_nome"), cpf:getTxt("m_t1_ab_malote_cpf")},
+          {nome:getTxt("m_t2_ab_malote_nome"), cpf:getTxt("m_t2_ab_malote_cpf")},
+          {nome:getTxt("m_t3_ab_malote_nome"), cpf:getTxt("m_t3_ab_malote_cpf")},
         ],
-        malote: [
-          {nome:getTxt("m_t1_malote_nome"), cpf:getTxt("m_t1_malote_cpf")},
-          {nome:getTxt("m_t2_malote_nome"), cpf:getTxt("m_t2_malote_cpf")},
+        fch_malote: [
+          {nome:getTxt("m_t1_fch_malote_nome"), cpf:getTxt("m_t1_fch_malote_cpf")},
+          {nome:getTxt("m_t2_fch_malote_nome"), cpf:getTxt("m_t2_fch_malote_cpf")},
+          {nome:getTxt("m_t3_fch_malote_nome"), cpf:getTxt("m_t3_fch_malote_cpf")},
         ],
       },
       estatistica: coletarStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã")),
@@ -469,13 +475,15 @@ function enviar(){
         fch_malote: getTxt("t_fch_malote"), ab_malote:  getTxt("t_ab_malote"),
       },
       testemunhas: {
-        portao: [
-          {nome:getTxt("t_t1_portao_nome"), cpf:getTxt("t_t1_portao_cpf")},
-          {nome:getTxt("t_t2_portao_nome"), cpf:getTxt("t_t2_portao_cpf")},
+        ab_malote: [
+          {nome:getTxt("t_t1_ab_malote_nome"), cpf:getTxt("t_t1_ab_malote_cpf")},
+          {nome:getTxt("t_t2_ab_malote_nome"), cpf:getTxt("t_t2_ab_malote_cpf")},
+          {nome:getTxt("t_t3_ab_malote_nome"), cpf:getTxt("t_t3_ab_malote_cpf")},
         ],
-        malote: [
-          {nome:getTxt("t_t1_malote_nome"), cpf:getTxt("t_t1_malote_cpf")},
-          {nome:getTxt("t_t2_malote_nome"), cpf:getTxt("t_t2_malote_cpf")},
+        fch_malote: [
+          {nome:getTxt("t_t1_fch_malote_nome"), cpf:getTxt("t_t1_fch_malote_cpf")},
+          {nome:getTxt("t_t2_fch_malote_nome"), cpf:getTxt("t_t2_fch_malote_cpf")},
+          {nome:getTxt("t_t3_fch_malote_nome"), cpf:getTxt("t_t3_fch_malote_cpf")},
         ],
       },
       estatistica: coletarStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde")),

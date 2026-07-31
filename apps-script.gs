@@ -145,7 +145,8 @@ function salvarTestemunhas(ss, data) {
   var ws = getOrCreateSheet(ss, "TESTEMUNHAS", [
     "Local / Escola", "Turno", "Tipo",
     "Testemunha 1 — Nome", "Testemunha 1 — CPF",
-    "Testemunha 2 — Nome", "Testemunha 2 — CPF", "Enviado em"
+    "Testemunha 2 — Nome", "Testemunha 2 — CPF",
+    "Testemunha 3 — Nome", "Testemunha 3 — CPF", "Enviado em"
   ]);
 
   deletarLinhasEscola(ws, data.escola);
@@ -156,14 +157,16 @@ function salvarTestemunhas(ss, data) {
     var t = data[key].testemunhas;
 
     ws.appendRow([
-      data.escola, label, "Abertura do Portão",
-      t.portao[0].nome, t.portao[0].cpf,
-      t.portao[1].nome, t.portao[1].cpf, data.enviado_em
+      data.escola, label, "Abertura do Malote",
+      t.ab_malote[0].nome, t.ab_malote[0].cpf,
+      t.ab_malote[1].nome, t.ab_malote[1].cpf,
+      t.ab_malote[2].nome, t.ab_malote[2].cpf, data.enviado_em
     ]);
     ws.appendRow([
-      data.escola, label, "Abertura do Malote",
-      t.malote[0].nome, t.malote[0].cpf,
-      t.malote[1].nome, t.malote[1].cpf, data.enviado_em
+      data.escola, label, "Fechamento do Malote",
+      t.fch_malote[0].nome, t.fch_malote[0].cpf,
+      t.fch_malote[1].nome, t.fch_malote[1].cpf,
+      t.fch_malote[2].nome, t.fch_malote[2].cpf, data.enviado_em
     ]);
   });
 }
