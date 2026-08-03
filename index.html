@@ -61,6 +61,9 @@
     .btn { display: block; width: 100%; padding: 15px; background: #CF3432; color: #FFF; border: none; border-radius: 7px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .2s; }
     .btn:hover { background: #B02C2A; }
     .btn:disabled { background: #CCC; cursor: not-allowed; }
+    .campo-invalido { border-color: #CF3432 !important; background: #fff5f5 !important; }
+    .aviso-obrig { color: #CF3432; font-size: 12px; margin-top: 4px; display: none; }
+    #msgValidacao { background: #fdecea; color: #c62828; border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-bottom: 16px; display: none; }
 
     .success-box { text-align: center; padding: 52px 24px; }
     .check-circle { width: 68px; height: 68px; background: #1E6B3B; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 34px; color: #FFF; }
@@ -366,6 +369,7 @@
   </div>
 
   <div class="hidden" id="divBtn">
+    <div id="msgValidacao"></div>
     <button class="btn" id="btnEnviar" onclick="enviar()">Enviar Formulário</button>
   </div>
 
@@ -487,9 +491,9 @@ function renderStat(tableId, cargos){
     tbody.innerHTML += `<tr>
       <td>${c.sala} — ${nome}</td>
       <td><input type="number" id="${tableId}_inscr_${i}" value="${c.inscr}" min="0" style="${s}"></td>
-      <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" placeholder="0" style="${s}"></td>
-      <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" placeholder="0" style="${s}"></td>
-      <td><input type="number" id="${tableId}_incl_${i}"  value="" min="0" placeholder="0" style="${s}"></td>
+      <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig></td>
+      <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" placeholder="0" style="${s}" data-obrig></td>
+      <td><input type="number" id="${tableId}_incl_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig></td>
     </tr>`;
   });
 }
@@ -656,7 +660,70 @@ async function coletarFotos(){
 // ════════════════════════════════════════════════════════════════
 //  ENVIO
 // ════════════════════════════════════════════════════════════════
+function validar(){
+  // Limpa marcações anteriores
+  document.querySelectorAll('.campo-invalido').forEach(el => el.classList.remove('campo-invalido'));
+  const msg = document.getElementById('msgValidacao');
+  msg.style.display = 'none';
+
+  const secoes = [];
+  let primeiro = null;
+
+  function checar(el, secao){
+    if(!el) return;
+    const vazio = el.value === '' || el.value.trim() === '';
+    if(vazio){
+      el.classList.add('campo-invalido');
+      el.addEventListener('input', () => el.classList.remove('campo-invalido'), {once: true});
+      if(!secoes.includes(secao)) secoes.push(secao);
+      if(!primeiro) primeiro = el;
+    }
+  }
+
+  const hasManha = !document.getElementById('secManha').classList.contains('hidden');
+  const haTarde  = !document.getElementById('secTarde').classList.contains('hidden');
+
+  // ── Horários ──
+  if(hasManha){
+    ['m_chegada','m_ab_portao','m_ab_malote','m_distrib','m_fch_portao','m_inicio','m_encerr','m_fch_malote']
+      .forEach(id => checar(document.getElementById(id), 'Horários — Manhã'));
+  }
+  if(haTarde){
+    ['t_chegada','t_ab_portao','t_ab_malote','t_distrib','t_fch_portao','t_inicio','t_encerr','t_fch_malote']
+      .forEach(id => checar(document.getElementById(id), 'Horários — Tarde'));
+  }
+
+  // ── Testemunhas ──
+  if(hasManha){
+    for(let i=1;i<=3;i++){
+      checar(document.getElementById(`m_t${i}_ab_malote_nome`),  'Testemunhas Abertura Malote — Manhã');
+      checar(document.getElementById(`m_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote — Manhã');
+    }
+  }
+  if(haTarde){
+    for(let i=1;i<=3;i++){
+      checar(document.getElementById(`t_t${i}_ab_malote_nome`),  'Testemunhas Abertura Malote — Tarde');
+      checar(document.getElementById(`t_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote — Tarde');
+    }
+  }
+
+  // ── Estatística (pres / aus / incl) ──
+  document.querySelectorAll('[data-obrig]').forEach(el => {
+    const sec = el.closest('#secManha') ? 'Estatística — Manhã' : 'Estatística — Tarde';
+    checar(el, sec);
+  });
+
+  if(secoes.length > 0){
+    msg.textContent = '⚠ Preencha os campos obrigatórios: ' + secoes.join(' · ');
+    msg.style.display = 'block';
+    if(primeiro) primeiro.scrollIntoView({behavior:'smooth', block:'center'});
+    return false;
+  }
+  return true;
+}
+
 async function enviar(){
+  if(!validar()) return;
   const idx = sel.value;
   if(idx === ""){ alert("Selecione uma escola."); return; }
   const escola = CONCURSO.escolas[parseInt(idx)];
