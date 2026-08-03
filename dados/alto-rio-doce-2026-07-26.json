@@ -1,6 +1,6 @@
 {
   "id": "alto-rio-doce-2026-07-26",
-  "titulo": "Concurso Público do Município de Alto Rio Doce / MG",
+  "titulo": "CONCURSO PÚBLICO DO MUNICÍPIO DE ALTO RIO DOCE/MG",
   "edital": "Edital nº 01/2026",
   "data": "26 de julho de 2026",
   "escolas": [
@@ -82,6 +82,12 @@
       "coord_local": "KENIA SOIANE",
       "salas": 9,
       "cargos": [
+        {
+          "sala": "SALA AMAM",
+          "turno": "Manhã",
+          "cargo": "524 - PSICÓLOGO ESCOLAR",
+          "inscr": 1
+        },
         {
           "sala": "SALA 01",
           "turno": "Manhã",
@@ -399,12 +405,6 @@
           "turno": "Tarde",
           "cargo": "103 - AUXILIAR DE TRANSPORTE ESCOLAR",
           "inscr": 30
-        },
-        {
-          "sala": "SALA AMAM",
-          "turno": "Manhã",
-          "cargo": "524 - PSICÓLOGO ESCOLAR",
-          "inscr": 1
         }
       ]
     },
@@ -498,6 +498,36 @@
       "coord_local": "LARYSSA FUGÊNCIO",
       "salas": 24,
       "cargos": [
+        {
+          "sala": "SALA TRANS.",
+          "turno": "Manhã",
+          "cargo": "301 - AUXILIAR ADMINISTRATIVO",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA AMAM",
+          "turno": "Manhã",
+          "cargo": "510 - FARMACÊUTICO",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA TRANS.",
+          "turno": "Tarde",
+          "cargo": "103 - AUXILIAR DE TRANSPORTE ESCOLAR",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA AMP",
+          "turno": "Tarde",
+          "cargo": "501 - ADVOGADO",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA 15MIN",
+          "turno": "Tarde",
+          "cargo": "501 - ADVOGADO",
+          "inscr": 1
+        },
         {
           "sala": "SALA 1204",
           "turno": "Manhã",
@@ -1013,36 +1043,6 @@
           "turno": "Manhã",
           "cargo": "104 - MOTORISTA (D)",
           "inscr": 26
-        },
-        {
-          "sala": "SALA 15MIN",
-          "turno": "Tarde",
-          "cargo": "501 - ADVOGADO",
-          "inscr": 1
-        },
-        {
-          "sala": "SALA AMAM",
-          "turno": "Manhã",
-          "cargo": "510 - FARMACÊUTICO",
-          "inscr": 1
-        },
-        {
-          "sala": "SALA AMP",
-          "turno": "Tarde",
-          "cargo": "501 - ADVOGADO",
-          "inscr": 1
-        },
-        {
-          "sala": "SALA TRANS.",
-          "turno": "Manhã",
-          "cargo": "301 - AUXILIAR ADMINISTRATIVO",
-          "inscr": 1
-        },
-        {
-          "sala": "SALA TRANS.",
-          "turno": "Tarde",
-          "cargo": "103 - AUXILIAR DE TRANSPORTE ESCOLAR",
-          "inscr": 1
         }
       ]
     }
