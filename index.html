@@ -92,6 +92,14 @@
     <div class="card-title neutra">1. Identificação</div>
     <div class="form-row">
       <div class="form-group" style="flex:2;">
+        <label>Certame</label>
+        <select id="selCertame" onchange="onCertameChange()">
+          <option value="">— Selecione o certame —</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row hidden" id="rowEscola">
+      <div class="form-group" style="flex:2;">
         <label>Local / Escola</label>
         <select id="selEscola" onchange="onEscolaChange()">
           <option value="">— Selecione seu local de aplicação —</option>
@@ -376,84 +384,57 @@
 
 <script>
 // ════════════════════════════════════════════════════════════════
-//  CONFIGURAÇÃO — substitua pela URL do seu Apps Script
+//  CONFIGURAÇÃO
 // ════════════════════════════════════════════════════════════════
-
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwepGDrzaqsFmsHKph6ULsk_zWok9Tu3N8uEYUU6bSY1BybuKCqZJnwCRoCgmDODn5yVg/exec";
 
-const CONCURSO = {
-  titulo: "Concurso Público do Município de Alto Rio Doce / MG",
-  edital: "Edital nº 01/2026",
-  data:   "26 de julho de 2026",
-  escolas: [
-    {
-      nome: "Secretaria Municipal de Educação - ARD",
-      coord_local: "Natália Cristina Matias", salas: 5,
-      cargos: [
-        {sala:"Sala 01",turno:"Manhã",cargo:"01 Agente de Combate a Endemias",    inscr:12},
-        {sala:"Sala 01",turno:"Manhã",cargo:"01 Agente de Controle de Vetores",   inscr:8 },
-        {sala:"Sala 02",turno:"Manhã",cargo:"01 Assistente Administrativo",       inscr:15},
-        {sala:"Sala 02",turno:"Manhã",cargo:"01 Assistente Social",               inscr:6 },
-        {sala:"Sala 03",turno:"Manhã",cargo:"01 Auxiliar de Serviços Gerais",     inscr:18},
-        {sala:"Sala 04",turno:"Tarde",cargo:"01 Enfermeiro",                      inscr:10},
-        {sala:"Sala 04",turno:"Tarde",cargo:"01 Farmacêutico",                    inscr:5 },
-        {sala:"Sala 05",turno:"Tarde",cargo:"01 Fisioterapeuta",                  inscr:7 },
-        {sala:"Sala 05",turno:"Tarde",cargo:"01 Médico Clínico Geral",            inscr:4 },
-      ]
-    },
-    {
-      nome: "Escola Municipal Aristides da Mota Marinho - ARD",
-      coord_local: "Jordan Guilherme", salas: 3,
-      cargos: [
-        {sala:"Sala 01",turno:"Manhã",cargo:"01 Contador",         inscr:9},
-        {sala:"Sala 01",turno:"Manhã",cargo:"01 Educador Físico",  inscr:6},
-        {sala:"Sala 02",turno:"Manhã",cargo:"01 Engenheiro Civil", inscr:5},
-        {sala:"Sala 02",turno:"Manhã",cargo:"01 Fonoaudiólogo",    inscr:4},
-        {sala:"Sala 03",turno:"Manhã",cargo:"01 Médico Pediatra",  inscr:3},
-      ]
-    },
-    {
-      nome: "Escola Municipal Raul Soares - ARD",
-      coord_local: "Kênia Soiane", salas: 4,
-      cargos: [
-        {sala:"Sala 01",turno:"Manhã",cargo:"01 Nutricionista",          inscr:7 },
-        {sala:"Sala 01",turno:"Manhã",cargo:"01 Odontólogo",             inscr:8 },
-        {sala:"Sala 02",turno:"Manhã",cargo:"01 Operador de Máquinas",   inscr:14},
-        {sala:"Sala 02",turno:"Manhã",cargo:"01 Pedreiro",               inscr:16},
-        {sala:"Sala 03",turno:"Tarde",cargo:"01 Psicólogo",              inscr:6 },
-        {sala:"Sala 03",turno:"Tarde",cargo:"01 Técnico em Enfermagem",  inscr:12},
-        {sala:"Sala 04",turno:"Tarde",cargo:"01 Técnico em Informática", inscr:8 },
-      ]
-    },
-    {
-      nome: "UNIPAC — Campus Bonifácio de Andrada - Barbacena",
-      coord_local: "Laryssa Fugêncio", salas: 5,
-      cargos: [
-        {sala:"Sala 01",turno:"Manhã",cargo:"01 Auxiliar Administrativo",  inscr:18},
-        {sala:"Sala 01",turno:"Manhã",cargo:"01 Auxiliar de Biblioteca",   inscr:10},
-        {sala:"Sala 02",turno:"Manhã",cargo:"01 Auxiliar de Farmácia",     inscr:12},
-        {sala:"Sala 02",turno:"Manhã",cargo:"01 Cozinheiro",               inscr:15},
-        {sala:"Sala 03",turno:"Manhã",cargo:"01 Gari",                     inscr:20},
-        {sala:"Sala 03",turno:"Manhã",cargo:"01 Mecânico",                 inscr:8 },
-        {sala:"Sala 04",turno:"Tarde",cargo:"01 Motorista",                inscr:11},
-        {sala:"Sala 04",turno:"Tarde",cargo:"01 Operador de Escavadeira",  inscr:6 },
-        {sala:"Sala 05",turno:"Tarde",cargo:"01 Recepcionista",            inscr:13},
-        {sala:"Sala 05",turno:"Tarde",cargo:"01 Vigilante",                inscr:16},
-      ]
-    },
-  ]
-};
+let CONCURSO = null;
+const selCertame = document.getElementById("selCertame");
+const sel = document.getElementById("selEscola");
 
 // ════════════════════════════════════════════════════════════════
-//  INIT
+//  INIT — carrega lista de certames
 // ════════════════════════════════════════════════════════════════
-document.getElementById("headerSub").textContent = CONCURSO.titulo + "  •  " + CONCURSO.data;
-const sel = document.getElementById("selEscola");
-CONCURSO.escolas.forEach((e,i)=>{
-  const o = document.createElement("option");
-  o.value = i; o.textContent = e.nome;
-  sel.appendChild(o);
-});
+fetch("dados/certames.json")
+  .then(r => r.json())
+  .then(certames => {
+    certames.forEach((c, i) => {
+      const o = document.createElement("option");
+      o.value = i;
+      o.textContent = c.titulo + " — " + c.data;
+      o.dataset.id = c.id;
+      selCertame.appendChild(o);
+    });
+    window._certamesIndex = certames;
+    if(certames.length === 1){ selCertame.value = 0; onCertameChange(); }
+  })
+  .catch(() => {
+    document.getElementById("headerSub").textContent = "Erro ao carregar certames";
+  });
+
+function onCertameChange(){
+  const idx = selCertame.value;
+  if(idx === "") return;
+  const info = window._certamesIndex[parseInt(idx)];
+  document.getElementById("headerSub").textContent = info.titulo + "  •  " + info.data;
+
+  // Reseta escola
+  sel.innerHTML = '<option value="">— Selecione seu local de aplicação —</option>';
+  ["rowEscola","rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"]
+    .forEach(id => { const el = document.getElementById(id); if(el) el.classList.add("hidden"); });
+
+  fetch("dados/" + info.id + ".json")
+    .then(r => r.json())
+    .then(dados => {
+      CONCURSO = dados;
+      dados.escolas.forEach((e, i) => {
+        const o = document.createElement("option");
+        o.value = i; o.textContent = e.nome;
+        sel.appendChild(o);
+      });
+      document.getElementById("rowEscola").classList.remove("hidden");
+    });
+}
 
 function toggleApoio(){
   const sim = document.querySelector('input[name="apoio"]:checked').value === "Sim";
@@ -462,7 +443,7 @@ function toggleApoio(){
 
 function onEscolaChange(){
   const idx = sel.value;
-  if(idx === ""){
+  if(idx === "" || !CONCURSO){
     ["rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
     return;
   }
