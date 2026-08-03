@@ -97,7 +97,7 @@
 <div class="container">
 
   <!-- 1. IDENTIFICAÇÃO -->
-  <div class="card">
+  <div class="card" id="cardIdent">
     <div class="card-title neutra">1. Identificação</div>
     <div class="form-row">
       <div class="form-group" style="flex:2;">
@@ -383,9 +383,23 @@
 
 <script>
 // ════════════════════════════════════════════════════════════════
+//  MAIÚSCULAS — campos de nome
+// ════════════════════════════════════════════════════════════════
+document.addEventListener('input', function(e){
+  const el = e.target;
+  if(el.tagName !== 'INPUT' || el.type !== 'text') return;
+  const ph = (el.placeholder || '').toLowerCase();
+  if(ph.includes('nome') || ph.includes('candidato')){
+    const pos = el.selectionStart;
+    el.value = el.value.toUpperCase();
+    el.setSelectionRange(pos, pos);
+  }
+});
+
+// ════════════════════════════════════════════════════════════════
 //  CONFIGURAÇÃO
 // ════════════════════════════════════════════════════════════════
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwepGDrzaqsFmsHKph6ULsk_zWok9Tu3N8uEYUU6bSY1BybuKCqZJnwCRoCgmDODn5yVg/exec";
+const SCRIPT_URL = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
 
 let CONCURSO = null;
 const selCertame = document.getElementById("selCertame");
@@ -709,8 +723,10 @@ function validar(){
 
   // ── Estatística (pres / aus / incl) ──
   document.querySelectorAll('[data-obrig]').forEach(el => {
-    const sec = el.closest('#secManha') ? 'Estatística — Manhã' : 'Estatística — Tarde';
-    checar(el, sec);
+    const inManha = !!el.closest('#secManha');
+    const inTarde = !!el.closest('#secTarde');
+    if(inManha && hasManha) checar(el, 'Estatística — Manhã');
+    if(inTarde && haTarde)  checar(el, 'Estatística — Tarde');
   });
 
   if(secoes.length > 0){
