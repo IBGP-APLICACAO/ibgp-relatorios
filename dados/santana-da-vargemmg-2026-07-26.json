@@ -1,0 +1,27 @@
+{
+  "id": "santana-da-vargemmg-2026-07-26",
+  "titulo": "CONCURSO PÚBLICO DA CÂMARA MUNICIPAL DE SANTANA DA VARGEM/MG",
+  "edital": "Edital nº 01/2026",
+  "data": "26 de julho de 2026",
+  "escolas": [
+    {
+      "nome": "EE. PADRE JOÃO NEIVA",
+      "coord_local": "NATÁLIA MATIAS",
+      "salas": 2,
+      "cargos": [
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "201 - AUXILIAR LEGISLATIVO",
+          "inscr": 34
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "201 - AUXILIAR LEGISLATIVO",
+          "inscr": 14
+        }
+      ]
+    }
+  ]
+}
