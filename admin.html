@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IBGP — Admin Certames</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f0f2f5;color:#1a1a1a;min-height:100vh}
+
+/* ── Gate ── */
+#gate{display:flex;align-items:center;justify-content:center;min-height:100vh}
+.gate-card{background:#fff;border-radius:14px;padding:44px 40px;width:360px;box-shadow:0 4px 24px rgba(0,0,0,.12);text-align:center}
+.gate-card .logo{height:48px;margin-bottom:20px}
+.gate-card h1{font-size:17px;font-weight:600;margin-bottom:4px}
+.gate-card p{font-size:13px;color:#666;margin-bottom:24px}
+.err-msg{color:#c62828;font-size:12px;margin-top:10px;display:none}
+
+/* ── Admin ── */
+#admin{display:none}
+header{background:#1F3A6E;color:#fff;padding:14px 32px;display:flex;align-items:center;gap:14px}
+header .logo{height:30px}
+header h1{font-size:15px;font-weight:500}
+
+.container{max-width:960px;margin:32px auto;padding:0 24px}
+
+.card{background:#fff;border-radius:12px;padding:26px 28px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card-title{font-size:14px;font-weight:600;color:#1F3A6E;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.card-title span{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:#1F3A6E;color:#fff;border-radius:50%;font-size:11px;font-weight:700;flex-shrink:0}
+
+/* Inputs */
+input[type=text],input[type=password]{width:100%;border:1px solid #ddd;border-radius:8px;padding:9px 13px;font-size:14px;outline:none;transition:border-color .15s}
+input[type=text]:focus,input[type=password]:focus{border-color:#1F3A6E}
+label.lbl{font-size:11px;color:#666;display:block;margin-bottom:4px;font-weight:500;letter-spacing:.02em}
+
+.field{margin-bottom:12px}
+.row{display:flex;gap:14px;margin-bottom:12px}
+.row .field{flex:1;margin-bottom:0}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s}
+.btn:hover{opacity:.88}
+.btn-primary{background:#1F3A6E;color:#fff;width:100%}
+.btn-publish{background:#2e7d32;color:#fff;width:100%}
+.btn-sm{font-size:12px;padding:6px 14px;width:auto}
+
+/* Drop zone */
+.drop-zone{border:2px dashed #ccc;border-radius:10px;padding:40px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+.drop-zone:hover,.drop-zone.over{border-color:#1F3A6E;background:#f0f4ff}
+.drop-zone svg{opacity:.4;margin-bottom:10px}
+.drop-zone p{font-size:14px;color:#666;margin-bottom:4px}
+.drop-zone small{font-size:12px;color:#aaa}
+.drop-zone.loaded{border-style:solid;border-color:#2e7d32;background:#f1f8e9}
+.drop-zone.loaded p{color:#2e7d32;font-weight:500}
+
+/* Table */
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
+th{background:#f0f4ff;text-align:left;padding:9px 12px;font-weight:600;color:#1F3A6E;font-size:12px}
+th:first-child{border-radius:6px 0 0 6px}
+th:last-child{border-radius:0 6px 6px 0}
+td{padding:8px 12px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+td input{border:1px solid #ddd;border-radius:6px;padding:5px 9px;font-size:13px;width:100%;outline:none}
+td input:focus{border-color:#1F3A6E}
+
+/* Badges */
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-m{background:#e3f2fd;color:#1565c0}
+.badge-t{background:#fce4ec;color:#c62828}
+.badge-mt{background:#ede7f6;color:#4527a0}
+
+/* Status */
+#status{font-size:13px;padding:10px 14px;border-radius:8px;margin-top:14px;display:none}
+#status.ok{background:#e8f5e9;color:#2e7d32}
+#status.err{background:#fdecea;color:#c62828}
+#status.info{background:#e3f2fd;color:#1565c0}
+
+hr{border:none;border-top:1px solid #eee;margin:18px 0}
+.note{font-size:12px;color:#888;margin-top:6px}
+.token-hint{font-size:11px;color:#aaa;margin-top:4px}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     GATE
+══════════════════════════════════════════ -->
+<div id="gate">
+  <div class="gate-card">
+    <img class="logo" src="https://ibgp-aplicacao.github.io/ibgp-relatorios/ibgp-logo.png"
+         onerror="this.style.display='none'" alt="IBGP">
+    <h1>IBGP — Área Admin</h1>
+    <p>Cadastro de novos certames</p>
+    <div class="field">
+      <input type="password" id="senhaInput" placeholder="Senha de acesso"
+             onkeydown="if(event.key==='Enter')entrar()">
+    </div>
+    <button class="btn btn-primary" onclick="entrar()">Entrar</button>
+    <p class="err-msg" id="gateErr">Senha incorreta. Tente novamente.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ADMIN
+══════════════════════════════════════════ -->
+<div id="admin">
+  <header>
+    <img class="logo" src="https://ibgp-aplicacao.github.io/ibgp-relatorios/ibgp-logo.png"
+         onerror="this.style.display='none'" alt="">
+    <h1>Administração — Cadastro de Certame</h1>
+  </header>
+
+  <div class="container">
+
+    <!-- PASSO 1 -->
+    <div class="card">
+      <div class="card-title"><span>1</span> Planilha de alocação</div>
+      <div class="drop-zone" id="dropZone"
+           onclick="document.getElementById('fileInput').click()"
+           ondragover="event.preventDefault();this.classList.add('over')"
+           ondragleave="this.classList.remove('over')"
+           ondrop="onDrop(event)">
+        <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 12l-4-4-4 4M12 8v8"/>
+        </svg>
+        <p>Clique ou arraste a planilha .xlsx aqui</p>
+        <small>Formato: MODELO DE ALOCAÇÃO IBGP</small>
+      </div>
+      <input type="file" id="fileInput" accept=".xlsx" style="display:none"
+             onchange="lerArquivo(this.files[0])">
+    </div>
+
+    <!-- PASSO 2 (oculto até carregar arquivo) -->
+    <div class="card" id="cardRevisao" style="display:none">
+      <div class="card-title"><span>2</span> Dados do certame</div>
+
+      <div class="row">
+        <div class="field" style="flex:3">
+          <label class="lbl">Título do certame</label>
+          <input type="text" id="fTitulo">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field" style="flex:2">
+          <label class="lbl">Edital</label>
+          <input type="text" id="fEdital" placeholder="Ex: Edital nº 01/2026">
+        </div>
+        <div class="field" style="flex:2">
+          <label class="lbl">Data da prova (por extenso)</label>
+          <input type="text" id="fData" placeholder="Ex: 26 de julho de 2026">
+        </div>
+        <div class="field" style="flex:2">
+          <label class="lbl">ID (identificador único)</label>
+          <input type="text" id="fId" placeholder="Ex: alto-rio-doce-2026-07-26">
+        </div>
+      </div>
+
+      <hr>
+      <div class="card-title" style="margin-bottom:12px"><span>·</span> Locais de aplicação</div>
+      <p class="note" style="margin-bottom:12px">Coordenadores detectados automaticamente — corrija se necessário.</p>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40%">Escola / Local</th>
+            <th style="width:30%">Coordenador local</th>
+            <th style="width:8%;text-align:center">Salas</th>
+            <th style="width:11%;text-align:center">Turno</th>
+            <th style="width:11%;text-align:center">Candidatos</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaEscolas"></tbody>
+      </table>
+    </div>
+
+    <!-- PASSO 3 -->
+    <div class="card" id="cardPublicar" style="display:none">
+      <div class="card-title"><span>3</span> Publicar no site</div>
+      <p style="font-size:13px;color:#555;margin-bottom:16px">
+        O certame será salvo em <code style="background:#f5f5f5;padding:2px 5px;border-radius:4px">dados/</code>
+        e aparecerá automaticamente no formulário em ~1 minuto.
+      </p>
+      <div class="field">
+        <label class="lbl">Token GitHub (PAT) — guardado na sessão atual</label>
+        <input type="password" id="fToken" placeholder="github_pat_...">
+        <p class="token-hint">Cole o token uma vez; ele será lembrado até fechar o navegador.</p>
+      </div>
+      <button class="btn btn-publish" onclick="publicar()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 8l-4-4-4 4M12 4v12"/>
+        </svg>
+        Publicar certame
+      </button>
+      <div id="status"></div>
+    </div>
+
+  </div><!-- /container -->
+</div><!-- /admin -->
+
+<script>
+// ═══════════════════════════════════════════════
+//  CONFIG — altere a senha abaixo se quiser
+// ═══════════════════════════════════════════════
+const SENHA    = "ibgpadmin2026";
+const GH_OWNER = "IBGP-APLICACAO";
+const GH_REPO  = "ibgp-relatorios";
+
+// ── Gate ─────────────────────────────────────────────────────────────
+function entrar() {
+  if (document.getElementById("senhaInput").value === SENHA) {
+    document.getElementById("gate").style.display  = "none";
+    document.getElementById("admin").style.display = "block";
+    const t = sessionStorage.getItem("ghToken");
+    if (t) document.getElementById("fToken").value = t;
+  } else {
+    document.getElementById("gateErr").style.display = "block";
+  }
+}
+
+// ── Drag & Drop ───────────────────────────────────────────────────────
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById("dropZone").classList.remove("over");
+  const f = e.dataTransfer.files[0];
+  if (f) lerArquivo(f);
+}
+
+// ── Lê o Excel ───────────────────────────────────────────────────────
+let dadosCertame = null;
+
+function lerArquivo(file) {
+  const dz = document.getElementById("dropZone");
+  dz.querySelector("p").textContent = "Lendo arquivo...";
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(new Uint8Array(e.target.result), {type:"array", cellDates:true});
+      processarPlanilha(wb, file.name);
+    } catch(err) {
+      dz.querySelector("p").textContent = "Erro ao ler arquivo: " + err.message;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function processarPlanilha(wb, nomeArquivo) {
+  const wsAlocacao = wb.Sheets["DADOS ALOCAÇÃO"];
+  if (!wsAlocacao) { alert("Aba 'DADOS ALOCAÇÃO' não encontrada."); return; }
+
+  const linhas = XLSX.utils.sheet_to_json(wsAlocacao, {header:1, defval:""});
+  if (linhas.length < 2) { alert("Planilha sem dados."); return; }
+
+  // ── Info do certame (linha 2, índice 1) ──
+  const info = linhas[1];
+  const concursoRaw  = String(info[5]  || "");
+  const dataProvaRaw = info[8];            // Date object (cellDates:true)
+
+  // Separa título e edital
+  const mEdital = concursoRaw.match(/\s*[-–]\s*(EDITAL\s*[Nº°Oo]+\.?\s*[\d/]+[\d]*)/i);
+  const titulo  = mEdital ? concursoRaw.slice(0, mEdital.index).trim() : concursoRaw.trim();
+  const edital  = mEdital ? cap(mEdital[1].trim()) : "";
+
+  // Formata data
+  const MESES = ["janeiro","fevereiro","março","abril","maio","junho",
+                 "julho","agosto","setembro","outubro","novembro","dezembro"];
+  let dataFormatada = "", dataISO = "";
+  if (dataProvaRaw instanceof Date) {
+    const d = dataProvaRaw;
+    dataFormatada = `${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()}`;
+    dataISO = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+
+  // Gera ID a partir do título
+  // "CONCURSO PÚBLICO DO MUNICÍPIO DE ALTO RIO DOCE/MG" → "alto-rio-doce"
+  const mCidade = titulo.match(/(?:MUNIC[IÍ]PIO DE|CIDADE DE|ESTADO DE|GOVERNO DE|CÂMARA DE|PREFEITURA DE)\s+([^/,\n]+)/i);
+  const cidadeId = mCidade
+    ? mCidade[1].trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"")
+    : slugify(titulo.split(" ").slice(-3).join(" "));
+  const id = `${cidadeId}-${dataISO}`;
+
+  // ── Mapa de coordenadores (colunas 22 e 23 da DADOS ALOCAÇÃO) ──
+  const coordMap = {};
+  for (let i = 1; i < linhas.length; i++) {
+    const r = linhas[i];
+    const escCoord = String(r[22] || "").trim();
+    const nomeCoord = String(r[23] || "").trim();
+    if (escCoord && nomeCoord && escCoord !== "ESCOLA") {
+      coordMap[escCoord] = nomeCoord;
+    }
+  }
+
+  // ── Agrega cargos: escola → sala → turno → cargo → count ──
+  // Col 16=ESCOLA, 13=SALA, 12=TURNO, 7=CARGO
+  const escMap = {};
+  for (let i = 1; i < linhas.length; i++) {
+    const r = linhas[i];
+    const escola = String(r[16] || "").trim();
+    if (!escola) continue;
+    const sala  = String(r[13] || "").trim();
+    const turno = String(r[12] || "").trim();
+    const cargo = String(r[7]  || "").trim();
+    if (!sala || !turno || !cargo) continue;
+
+    if (!escMap[escola]) escMap[escola] = {cargosMap:{}, candidatos:0};
+    escMap[escola].candidatos++;
+    const key = `${sala}|${turno}|${cargo}`;
+    escMap[escola].cargosMap[key] = (escMap[escola].cargosMap[key] || 0) + 1;
+  }
+
+  // Monta array de escolas
+  const escolas = Object.keys(escMap).map(nome => {
+    const cargos = Object.entries(escMap[nome].cargosMap).map(([key, inscr]) => {
+      const [sala, turno, cargo] = key.split("|");
+      return { sala, turno: turno === "MANHÃ" ? "Manhã" : "Tarde", cargo, inscr };
+    });
+    cargos.sort((a, b) => {
+      const na = parseInt(a.sala.replace(/\D/g,"")) || 0;
+      const nb = parseInt(b.sala.replace(/\D/g,"")) || 0;
+      return na - nb || a.turno.localeCompare(b.turno) || a.cargo.localeCompare(b.cargo);
+    });
+    const salas = new Set(cargos.map(c => c.sala)).size;
+    const hasManha = cargos.some(c => c.turno === "Manhã");
+    const haTarde  = cargos.some(c => c.turno === "Tarde");
+
+    // Tenta achar coordenador: match exato ou parcial
+    let coord = "";
+    for (const [k, v] of Object.entries(coordMap)) {
+      if (k === nome || nome.startsWith(k.trimEnd()) || k.trimEnd().startsWith(nome.split(" - ")[0])) {
+        coord = v; break;
+      }
+    }
+
+    return { nome, coord_local: coord, salas, cargos, hasManha, haTarde,
+             candidatos: escMap[nome].candidatos };
+  });
+
+  dadosCertame = { id, titulo, edital, data: dataFormatada, dataISO, escolas };
+  renderRevisao(nomeArquivo);
+}
+
+function renderRevisao(nomeArquivo) {
+  document.getElementById("fTitulo").value = dadosCertame.titulo;
+  document.getElementById("fEdital").value = dadosCertame.edital;
+  document.getElementById("fData").value   = dadosCertame.data;
+  document.getElementById("fId").value     = dadosCertame.id;
+
+  const tbody = document.getElementById("tabelaEscolas");
+  tbody.innerHTML = "";
+  dadosCertame.escolas.forEach((e, i) => {
+    const turno = e.hasManha && e.haTarde ? '<span class="badge badge-mt">Manhã e Tarde</span>'
+                : e.hasManha ? '<span class="badge badge-m">Manhã</span>'
+                : '<span class="badge badge-t">Tarde</span>';
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${e.nome}</td>
+      <td><input type="text" data-idx="${i}" class="coordInput" value="${e.coord_local}" placeholder="Nome do coordenador"></td>
+      <td style="text-align:center">${e.salas}</td>
+      <td style="text-align:center">${turno}</td>
+      <td style="text-align:center">${e.candidatos}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  const dz = document.getElementById("dropZone");
+  dz.querySelector("p").textContent = `✓ ${nomeArquivo} — ${dadosCertame.escolas.length} locais detectados`;
+  dz.classList.add("loaded");
+
+  document.getElementById("cardRevisao").style.display  = "block";
+  document.getElementById("cardPublicar").style.display = "block";
+}
+
+// ── Publicar ─────────────────────────────────────────────────────────
+async function publicar() {
+  const token = document.getElementById("fToken").value.trim();
+  if (!token) { setStatus("Informe o Token GitHub (PAT).", "err"); return; }
+  sessionStorage.setItem("ghToken", token);
+
+  // Coleta dados do formulário
+  const titulo = document.getElementById("fTitulo").value.trim();
+  const edital = document.getElementById("fEdital").value.trim();
+  const data   = document.getElementById("fData").value.trim();
+  const id     = document.getElementById("fId").value.trim();
+
+  if (!titulo || !data || !id) {
+    setStatus("Preencha título, data e ID antes de publicar.", "err"); return;
+  }
+
+  // Atualiza coordenadores pelo formulário
+  document.querySelectorAll(".coordInput").forEach(inp => {
+    dadosCertame.escolas[parseInt(inp.dataset.idx)].coord_local = inp.value.trim();
+  });
+
+  const certameJSON = {
+    id, titulo, edital, data,
+    escolas: dadosCertame.escolas.map(e => ({
+      nome: e.nome,
+      coord_local: e.coord_local,
+      salas: e.salas,
+      cargos: e.cargos
+    }))
+  };
+
+  const headers = {
+    "Authorization": `token ${token}`,
+    "Accept": "application/vnd.github.v3+json",
+    "Content-Type": "application/json"
+  };
+  const base = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/dados`;
+
+  try {
+    setStatus("Verificando certames existentes...", "info");
+
+    // 1. Lê certames.json
+    const r1 = await fetch(`${base}/certames.json`, {headers});
+    if (!r1.ok) throw new Error("Erro ao ler certames.json: " + r1.status);
+    const j1 = await r1.json();
+    const certames = JSON.parse(b64decode(j1.content));
+    const sha1 = j1.sha;
+
+    // Verifica duplicata
+    const idxExist = certames.findIndex(c => c.id === id);
+    if (idxExist >= 0) {
+      if (!confirm(`O certame "${id}" já existe.\nDeseja substituir?`)) return;
+      certames.splice(idxExist, 1);
+    }
+    certames.push({ id, titulo, edital, data });
+
+    // 2. Verifica se arquivo certame já existe
+    let sha2;
+    const r2 = await fetch(`${base}/${id}.json`, {headers});
+    if (r2.ok) { sha2 = (await r2.json()).sha; }
+
+    setStatus("Salvando dados do certame...", "info");
+
+    // 3. Cria/atualiza {id}.json
+    const put = async (url, content, sha, msg) => {
+      const body = {message: msg, content: b64encode(content)};
+      if (sha) body.sha = sha;
+      const r = await fetch(url, {method:"PUT", headers, body: JSON.stringify(body)});
+      if (!r.ok) throw new Error(await r.text());
+      return r;
+    };
+
+    await put(`${base}/${id}.json`,
+              JSON.stringify(certameJSON, null, 2),
+              sha2,
+              `feat: dados ${id}`);
+
+    setStatus("Atualizando índice de certames...", "info");
+
+    // 4. Atualiza certames.json
+    await put(`${base}/certames.json`,
+              JSON.stringify(certames, null, 2),
+              sha1,
+              `feat: adiciona ${id} ao índice`);
+
+    setStatus(`✓ Certame "${titulo}" publicado com sucesso! O formulário atualizará em cerca de 1 minuto.`, "ok");
+
+  } catch(err) {
+    setStatus("Erro: " + err.message, "err");
+  }
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────
+function setStatus(msg, tipo) {
+  const el = document.getElementById("status");
+  el.textContent = msg;
+  el.className = tipo;
+  el.style.display = "block";
+}
+
+function b64decode(b64) {
+  const bin = atob(b64.replace(/\s/g, ""));
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+function b64encode(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  bytes.forEach(b => bin += String.fromCharCode(b));
+  return btoa(bin);
+}
+function pad(n) { return String(n).padStart(2, "0"); }
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase(); }
+function slugify(s) {
+  return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+          .replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"");
+}
+</script>
+</body>
+</html>
