@@ -111,11 +111,12 @@
         </div>
       </div>
     </div>
-    <div class="form-row hidden" id="rowApoioNome">
-      <div class="form-group">
-        <label>Nome do Apoio</label>
-        <input type="text" id="inputApoio" placeholder="Nome completo">
+    <div class="hidden" id="rowApoioNome">
+      <label style="margin-bottom:6px;">Nome do Apoio</label>
+      <div id="apoio_entries">
+        <div style="margin-bottom:6px;"><input type="text" placeholder="Nome completo" style="width:100%;padding:9px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;background:#FAFAFA;"></div>
       </div>
+      <button type="button" class="add-btn" onclick="addApoioEntry()" style="margin-bottom:4px;">+ Adicionar apoio</button>
     </div>
   </div>
 
@@ -162,51 +163,59 @@
       <div class="card-title manha">5. Turno Manhã — Ocorrências</div>
       <div class="ocorr-block">
         <h4>Ocorrências em sala</h4>
-        <div class="radio-row"><label><input type="radio" name="m_ocorr_sala" value="Não" checked> Não</label><label><input type="radio" name="m_ocorr_sala" value="Sim"> Sim</label></div>
-        <label>Descrição (se sim):</label><textarea id="m_ocorr_sala_desc" rows="2" placeholder="Descreva..."></textarea>
-        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-        <div id="m_ocorr_sala_entries">
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        <div class="radio-row"><label><input type="radio" name="m_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="m_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Sim</label></div>
+        <div id="m_ocorr_sala_wrap" class="hidden">
+          <label>Descrição:</label><textarea id="m_ocorr_sala_desc" rows="2" placeholder="Descreva..."></textarea>
+          <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="m_ocorr_sala_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('m_ocorr_sala_entries')">+ Adicionar</button>
         </div>
-        <button type="button" class="add-btn" onclick="addEntry('m_ocorr_sala_entries')">+ Adicionar</button>
       </div>
       <div class="ocorr-block">
         <h4>Prova condicional</h4>
-        <div class="radio-row"><label><input type="radio" name="m_cond" value="Não" checked> Não</label><label><input type="radio" name="m_cond" value="Sim"> Sim</label></div>
-        <label>Descrição (se sim):</label><textarea id="m_cond_desc" rows="2" placeholder="Descreva..."></textarea>
-        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-        <div id="m_cond_entries">
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        <div class="radio-row"><label><input type="radio" name="m_cond" value="Não" checked onchange="toggleOcorrEntries('m_cond','m_cond_wrap')"> Não</label><label><input type="radio" name="m_cond" value="Sim" onchange="toggleOcorrEntries('m_cond','m_cond_wrap')"> Sim</label></div>
+        <div id="m_cond_wrap" class="hidden">
+          <label>Descrição:</label><textarea id="m_cond_desc" rows="2" placeholder="Descreva..."></textarea>
+          <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="m_cond_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('m_cond_entries')">+ Adicionar</button>
         </div>
-        <button type="button" class="add-btn" onclick="addEntry('m_cond_entries')">+ Adicionar</button>
       </div>
       <div class="ocorr-block">
         <h4>Toque de celular</h4>
-        <div class="radio-row"><label><input type="radio" name="m_toque" value="Não" checked> Não</label><label><input type="radio" name="m_toque" value="Sim"> Sim</label></div>
-        <label>Descrição (se sim):</label><textarea id="m_toque_desc" rows="2" placeholder="Descreva..."></textarea>
-        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-        <div id="m_toque_entries">
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        <div class="radio-row"><label><input type="radio" name="m_toque" value="Não" checked onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Não</label><label><input type="radio" name="m_toque" value="Sim" onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Sim</label></div>
+        <div id="m_toque_wrap" class="hidden">
+          <label>Descrição:</label><textarea id="m_toque_desc" rows="2" placeholder="Descreva..."></textarea>
+          <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="m_toque_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('m_toque_entries')">+ Adicionar</button>
         </div>
-        <button type="button" class="add-btn" onclick="addEntry('m_toque_entries')">+ Adicionar</button>
       </div>
       <div class="ocorr-block">
         <h4>Declaração de comparecimento</h4>
-        <div class="radio-row"><label><input type="radio" name="m_decl" value="Não" checked> Não</label><label><input type="radio" name="m_decl" value="Sim"> Sim</label></div>
-        <label>Descrição (se sim):</label><textarea id="m_decl_desc" rows="2" placeholder="Descreva..."></textarea>
-        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-        <div id="m_decl_entries">
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        <div class="radio-row"><label><input type="radio" name="m_decl" value="Não" checked onchange="toggleOcorrEntries('m_decl','m_decl_wrap')"> Não</label><label><input type="radio" name="m_decl" value="Sim" onchange="toggleOcorrEntries('m_decl','m_decl_wrap')"> Sim</label></div>
+        <div id="m_decl_wrap" class="hidden">
+          <label>Descrição:</label><textarea id="m_decl_desc" rows="2" placeholder="Descreva..."></textarea>
+          <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="m_decl_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('m_decl_entries')">+ Adicionar</button>
         </div>
-        <button type="button" class="add-btn" onclick="addEntry('m_decl_entries')">+ Adicionar</button>
       </div>
     </div>
 
@@ -267,51 +276,59 @@
       <div class="card-title tarde">9. Turno Tarde — Ocorrências</div>
       <div class="ocorr-block">
         <h4>Ocorrências em sala</h4>
-        <div class="radio-row"><label><input type="radio" name="t_ocorr_sala" value="Não" checked> Não</label><label><input type="radio" name="t_ocorr_sala" value="Sim"> Sim</label></div>
-        <label>Descrição (se sim):</label><textarea id="t_ocorr_sala_desc" rows="2" placeholder="Descreva..."></textarea>
-        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-        <div id="t_ocorr_sala_entries">
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        <div class="radio-row"><label><input type="radio" name="t_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="t_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Sim</label></div>
+        <div id="t_ocorr_sala_wrap" class="hidden">
+          <label>Descrição:</label><textarea id="t_ocorr_sala_desc" rows="2" placeholder="Descreva..."></textarea>
+          <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="t_ocorr_sala_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('t_ocorr_sala_entries')">+ Adicionar</button>
         </div>
-        <button type="button" class="add-btn" onclick="addEntry('t_ocorr_sala_entries')">+ Adicionar</button>
       </div>
       <div class="ocorr-block">
         <h4>Prova condicional</h4>
-        <div class="radio-row"><label><input type="radio" name="t_cond" value="Não" checked> Não</label><label><input type="radio" name="t_cond" value="Sim"> Sim</label></div>
-        <label>Descrição (se sim):</label><textarea id="t_cond_desc" rows="2" placeholder="Descreva..."></textarea>
-        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-        <div id="t_cond_entries">
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        <div class="radio-row"><label><input type="radio" name="t_cond" value="Não" checked onchange="toggleOcorrEntries('t_cond','t_cond_wrap')"> Não</label><label><input type="radio" name="t_cond" value="Sim" onchange="toggleOcorrEntries('t_cond','t_cond_wrap')"> Sim</label></div>
+        <div id="t_cond_wrap" class="hidden">
+          <label>Descrição:</label><textarea id="t_cond_desc" rows="2" placeholder="Descreva..."></textarea>
+          <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="t_cond_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('t_cond_entries')">+ Adicionar</button>
         </div>
-        <button type="button" class="add-btn" onclick="addEntry('t_cond_entries')">+ Adicionar</button>
       </div>
       <div class="ocorr-block">
         <h4>Toque de celular</h4>
-        <div class="radio-row"><label><input type="radio" name="t_toque" value="Não" checked> Não</label><label><input type="radio" name="t_toque" value="Sim"> Sim</label></div>
-        <label>Descrição (se sim):</label><textarea id="t_toque_desc" rows="2" placeholder="Descreva..."></textarea>
-        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-        <div id="t_toque_entries">
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        <div class="radio-row"><label><input type="radio" name="t_toque" value="Não" checked onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Não</label><label><input type="radio" name="t_toque" value="Sim" onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Sim</label></div>
+        <div id="t_toque_wrap" class="hidden">
+          <label>Descrição:</label><textarea id="t_toque_desc" rows="2" placeholder="Descreva..."></textarea>
+          <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="t_toque_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('t_toque_entries')">+ Adicionar</button>
         </div>
-        <button type="button" class="add-btn" onclick="addEntry('t_toque_entries')">+ Adicionar</button>
       </div>
       <div class="ocorr-block">
         <h4>Declaração de comparecimento</h4>
-        <div class="radio-row"><label><input type="radio" name="t_decl" value="Não" checked> Não</label><label><input type="radio" name="t_decl" value="Sim"> Sim</label></div>
-        <label>Descrição (se sim):</label><textarea id="t_decl_desc" rows="2" placeholder="Descreva..."></textarea>
-        <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-        <div id="t_decl_entries">
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+        <div class="radio-row"><label><input type="radio" name="t_decl" value="Não" checked onchange="toggleOcorrEntries('t_decl','t_decl_wrap')"> Não</label><label><input type="radio" name="t_decl" value="Sim" onchange="toggleOcorrEntries('t_decl','t_decl_wrap')"> Sim</label></div>
+        <div id="t_decl_wrap" class="hidden">
+          <label>Descrição:</label><textarea id="t_decl_desc" rows="2" placeholder="Descreva..."></textarea>
+          <div class="entry-header" style="margin-top:10px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="t_decl_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('t_decl_entries')">+ Adicionar</button>
         </div>
-        <button type="button" class="add-btn" onclick="addEntry('t_decl_entries')">+ Adicionar</button>
       </div>
     </div>
 
@@ -501,8 +518,13 @@ function addApoioEntry(){
   const list = document.getElementById('apoio_entries');
   const div = document.createElement('div');
   div.style.cssText = 'margin-bottom:6px;';
-  div.innerHTML = '<input type="text" placeholder="Nome do candidato" style="width:100%;padding:8px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;">';
+  div.innerHTML = '<input type="text" placeholder="Nome completo" style="width:100%;padding:9px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;background:#FAFAFA;">';
   list.appendChild(div);
+}
+
+function toggleOcorrEntries(name, wrapId){
+  const sim = document.querySelector(`input[name="${name}"]:checked`).value === "Sim";
+  document.getElementById(wrapId).classList.toggle("hidden", !sim);
 }
 
 function coletarEntries(listId){
@@ -529,7 +551,7 @@ function enviar(){
     coord_local: getTxt("inputCoord"),
     salas:       escola.salas,
     houve_apoio:   getRad("apoio"),
-    nome_apoio:    getTxt("inputApoio"),
+    nome_apoio:    Array.from(document.querySelectorAll('#apoio_entries input')).map(i=>i.value.trim()).filter(v=>v).join("; "),
     concurso:    CONCURSO.titulo,
     edital:      CONCURSO.edital,
     data:        CONCURSO.data,
