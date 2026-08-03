@@ -28,6 +28,9 @@
       font-size: 13px; color: #393939; background: #FAFAFA; transition: border-color .2s;
     }
     select:focus, input:focus, textarea:focus { outline: none; border-color: #CF3432; background: #FFF; }
+    select:disabled { background: #f0f0f0; color: #555; cursor: not-allowed; opacity: 1; }
+    .btn-alterar { font-size: 12px; color: #888; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; margin-top: 4px; }
+    .btn-alterar:hover { color: #CF3432; }
     .form-row  { display: flex; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
     .form-group { flex: 1; min-width: 160px; }
 
@@ -105,6 +108,7 @@
         <select id="selEscola" onchange="onEscolaChange()">
           <option value="">— Selecione seu local de aplicação —</option>
         </select>
+        <button class="btn-alterar" id="btnAlterar" style="display:none" onclick="alterarEscola()">✎ Alterar escola</button>
       </div>
     </div>
     <div class="form-row hidden" id="rowIdent2">
@@ -465,6 +469,23 @@ function onEscolaChange(){
   document.getElementById("cardFotos").classList.remove("hidden");
   document.getElementById("cardObs").classList.remove("hidden");
   document.getElementById("divBtn").classList.remove("hidden");
+
+  // Trava os selects após a escolha
+  selCertame.disabled = true;
+  sel.disabled = true;
+  document.getElementById("btnAlterar").style.display = "inline";
+}
+
+function alterarEscola(){
+  if(!confirm("Tem certeza que deseja alterar a escola?\nTodos os dados preenchidos serão perdidos.")) return;
+  // Destrava
+  selCertame.disabled = false;
+  sel.disabled = false;
+  document.getElementById("btnAlterar").style.display = "none";
+  // Reseta form
+  sel.value = "";
+  ["rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"]
+    .forEach(id => document.getElementById(id).classList.add("hidden"));
 }
 
 function renderStat(tableId, cargos){
