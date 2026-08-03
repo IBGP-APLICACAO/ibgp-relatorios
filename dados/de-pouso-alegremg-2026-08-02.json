@@ -6,7 +6,7 @@
   "escolas": [
     {
       "nome": "EE. PRESIDENTE BERNARDES",
-      "coord_local": "",
+      "coord_local": "NATÁLIA MATIAS",
       "salas": 3,
       "cargos": [
         {
@@ -31,7 +31,7 @@
     },
     {
       "nome": "EM. DOUTOR ÂNGELO CÔNSOLI",
-      "coord_local": "",
+      "coord_local": "ÉGON SILVA",
       "salas": 17,
       "cargos": [
         {
@@ -140,7 +140,7 @@
     },
     {
       "nome": "UNA - POUSO ALEGRE",
-      "coord_local": "",
+      "coord_local": "JORRAINE VIEIRA",
       "salas": 25,
       "cargos": [
         {
