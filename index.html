@@ -801,23 +801,29 @@ async function enviar(){
 
   const btn = document.getElementById("btnEnviar");
   btn.disabled = true; btn.textContent = "Comprimindo fotos...";
-  payload.fotos = await coletarFotos();
+
+  try {
+    payload.fotos = await coletarFotos();
+  } catch(e) {
+    btn.disabled = false; btn.textContent = "Enviar Formulário";
+    alert("Erro ao processar fotos: " + e.message); return;
+  }
+
   btn.textContent = "Enviando...";
 
-  fetch(SCRIPT_URL, {
-    method:"POST", mode:"no-cors",
-    headers:{"Content-Type":"text/plain"},
-    body: JSON.stringify(payload)
-  })
-  .then(()=>{
+  try {
+    await fetch(SCRIPT_URL, {
+      method:"POST", mode:"no-cors",
+      headers:{"Content-Type":"text/plain"},
+      body: JSON.stringify(payload)
+    });
     document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
     ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
     document.getElementById("cardSucesso").classList.remove("hidden");
-  })
-  .catch(()=>{
+  } catch(e) {
     btn.disabled = false; btn.textContent = "Enviar Formulário";
-    alert("Erro ao enviar. Verifique sua conexão e tente novamente.");
-  });
+    alert("Erro ao enviar: " + e.message + "\n\nVerifique sua conexão e tente novamente.");
+  }
 }
 </script>
 </body>
