@@ -33,6 +33,7 @@
 
     .horarios-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 8px; }
     @media(max-width:600px){ .horarios-grid { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:420px){ .horarios-grid { grid-template-columns: 1fr; } }
 
     .test-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
     .test-table th { background: #555; color: #FFF; padding: 7px 10px; text-align: left; font-size: 12px; }
@@ -136,12 +137,12 @@
       <div class="horarios-grid">
         <div class="form-group"><label>Chegada da equipe</label><input type="time" id="m_chegada"></div>
         <div class="form-group"><label>Abertura do portão</label><input type="time" id="m_ab_portao"></div>
-        <div class="form-group"><label>Fechamento do portão</label><input type="time" id="m_fch_portao"></div>
+        <div class="form-group"><label>Abertura do malote</label><input type="time" id="m_ab_malote"></div>
         <div class="form-group"><label>Distribuição dos pacotes</label><input type="time" id="m_distrib"></div>
+        <div class="form-group"><label>Fechamento do portão</label><input type="time" id="m_fch_portao"></div>
         <div class="form-group"><label>Início da aplicação</label><input type="time" id="m_inicio"></div>
         <div class="form-group"><label>Encerramento</label><input type="time" id="m_encerr"></div>
         <div class="form-group"><label>Fechamento do malote</label><input type="time" id="m_fch_malote"></div>
-        <div class="form-group"><label>Abertura do malote</label><input type="time" id="m_ab_malote"></div>
       </div>
     </div>
 
@@ -249,12 +250,12 @@
       <div class="horarios-grid">
         <div class="form-group"><label>Chegada da equipe</label><input type="time" id="t_chegada"></div>
         <div class="form-group"><label>Abertura do portão</label><input type="time" id="t_ab_portao"></div>
-        <div class="form-group"><label>Fechamento do portão</label><input type="time" id="t_fch_portao"></div>
+        <div class="form-group"><label>Abertura do malote</label><input type="time" id="t_ab_malote"></div>
         <div class="form-group"><label>Distribuição dos pacotes</label><input type="time" id="t_distrib"></div>
+        <div class="form-group"><label>Fechamento do portão</label><input type="time" id="t_fch_portao"></div>
         <div class="form-group"><label>Início da aplicação</label><input type="time" id="t_inicio"></div>
         <div class="form-group"><label>Encerramento</label><input type="time" id="t_encerr"></div>
         <div class="form-group"><label>Fechamento do malote</label><input type="time" id="t_fch_malote"></div>
-        <div class="form-group"><label>Abertura do malote</label><input type="time" id="t_ab_malote"></div>
       </div>
     </div>
 
