@@ -349,13 +349,38 @@
   <!-- REGISTRO FOTOGRÁFICO -->
   <div class="card hidden" id="cardFotos">
     <div class="card-title neutra">Registro Fotográfico</div>
-    <p style="font-size:13px;color:#666;margin-bottom:12px;">Selecione as fotos da aplicação. Elas serão salvas no Google Drive automaticamente.</p>
-    <label for="inputFotos" style="display:inline-block;padding:10px 20px;background:#393939;color:#FFF;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;margin-bottom:14px;">
-      📷 Selecionar fotos
-    </label>
-    <input type="file" id="inputFotos" multiple accept="image/*" onchange="previewFotos()" style="display:none;">
-    <div id="fotosPreview" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
-    <p id="fotosCount" style="font-size:12px;color:#888;margin-top:8px;"></p>
+    <p style="font-size:13px;color:#666;margin-bottom:16px;">Selecione 2 fotos para cada categoria abaixo. Elas serão salvas automaticamente no Google Drive.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+
+      <div style="border:1px solid #EEE;border-radius:8px;padding:14px;">
+        <p style="font-size:12px;font-weight:700;color:#393939;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;">📌 Sinalização <span style="color:#888;font-weight:400;">(2 fotos)</span></p>
+        <label for="fotos_sinal" style="display:inline-block;padding:7px 14px;background:#393939;color:#FFF;border-radius:5px;cursor:pointer;font-size:12px;font-weight:700;margin-bottom:8px;">Selecionar</label>
+        <input type="file" id="fotos_sinal" multiple accept="image/*" onchange="previewCat('fotos_sinal','prev_sinal')" style="display:none;">
+        <div id="prev_sinal" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>
+
+      <div style="border:1px solid #EEE;border-radius:8px;padding:14px;">
+        <p style="font-size:12px;font-weight:700;color:#393939;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;">📝 Aplicação <span style="color:#888;font-weight:400;">(2 fotos)</span></p>
+        <label for="fotos_aplic" style="display:inline-block;padding:7px 14px;background:#393939;color:#FFF;border-radius:5px;cursor:pointer;font-size:12px;font-weight:700;margin-bottom:8px;">Selecionar</label>
+        <input type="file" id="fotos_aplic" multiple accept="image/*" onchange="previewCat('fotos_aplic','prev_aplic')" style="display:none;">
+        <div id="prev_aplic" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>
+
+      <div style="border:1px solid #EEE;border-radius:8px;padding:14px;">
+        <p style="font-size:12px;font-weight:700;color:#1F3A6E;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;">📦 Abertura do Malote <span style="color:#888;font-weight:400;">(2 fotos)</span></p>
+        <label for="fotos_abmal" style="display:inline-block;padding:7px 14px;background:#1F3A6E;color:#FFF;border-radius:5px;cursor:pointer;font-size:12px;font-weight:700;margin-bottom:8px;">Selecionar</label>
+        <input type="file" id="fotos_abmal" multiple accept="image/*" onchange="previewCat('fotos_abmal','prev_abmal')" style="display:none;">
+        <div id="prev_abmal" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>
+
+      <div style="border:1px solid #EEE;border-radius:8px;padding:14px;">
+        <p style="font-size:12px;font-weight:700;color:#CF3432;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;">📦 Fechamento do Malote <span style="color:#888;font-weight:400;">(2 fotos)</span></p>
+        <label for="fotos_fchmal" style="display:inline-block;padding:7px 14px;background:#CF3432;color:#FFF;border-radius:5px;cursor:pointer;font-size:12px;font-weight:700;margin-bottom:8px;">Selecionar</label>
+        <input type="file" id="fotos_fchmal" multiple accept="image/*" onchange="previewCat('fotos_fchmal','prev_fchmal')" style="display:none;">
+        <div id="prev_fchmal" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>
+
+    </div>
   </div>
 
   <!-- OBSERVAÇÕES GERAIS -->
@@ -552,23 +577,37 @@ function coletarEntries(listId){
 // ════════════════════════════════════════════════════════════════
 //  FOTOS
 // ════════════════════════════════════════════════════════════════
-function previewFotos(){
-  const input = document.getElementById('inputFotos');
-  const preview = document.getElementById('fotosPreview');
-  const count = document.getElementById('fotosCount');
+const fotosMap = { fotos_sinal: [], fotos_aplic: [], fotos_abmal: [], fotos_fchmal: [] };
+
+function previewCat(inputId, previewId){
+  const files = Array.from(document.getElementById(inputId).files);
+  fotosMap[inputId] = [...fotosMap[inputId], ...files];
+  renderPreview(inputId, previewId);
+}
+
+function renderPreview(inputId, previewId){
+  const preview = document.getElementById(previewId);
   preview.innerHTML = '';
-  Array.from(input.files).forEach(file => {
+  fotosMap[inputId].forEach((file, idx) => {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:relative;display:inline-block;';
     const img = document.createElement('img');
-    img.style.cssText = 'width:90px;height:90px;object-fit:cover;border-radius:6px;border:1px solid #DDD;';
+    img.style.cssText = 'width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #DDD;display:block;';
     const reader = new FileReader();
     reader.onload = e => img.src = e.target.result;
     reader.readAsDataURL(file);
-    preview.appendChild(img);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = '✕';
+    btn.style.cssText = 'position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.6);color:#FFF;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;line-height:1;padding:0;';
+    btn.onclick = () => { fotosMap[inputId].splice(idx, 1); renderPreview(inputId, previewId); };
+    wrap.appendChild(img);
+    wrap.appendChild(btn);
+    preview.appendChild(wrap);
   });
-  count.textContent = input.files.length > 0 ? `${input.files.length} foto(s) selecionada(s)` : '';
 }
 
-function comprimirImagem(file){
+function comprimirImagem(file, categoria){
   return new Promise(resolve => {
     const reader = new FileReader();
     reader.onload = e => {
@@ -581,7 +620,7 @@ function comprimirImagem(file){
         const canvas = document.createElement('canvas');
         canvas.width = w; canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        resolve({ nome: file.name, b64: canvas.toDataURL('image/jpeg', 0.75).split(',')[1] });
+        resolve({ categoria, nome: file.name, b64: canvas.toDataURL('image/jpeg', 0.75).split(',')[1] });
       };
       img.src = e.target.result;
     };
@@ -590,9 +629,16 @@ function comprimirImagem(file){
 }
 
 async function coletarFotos(){
-  const files = document.getElementById('inputFotos').files;
+  const cats = [
+    {id:'fotos_sinal',  label:'Sinalização'},
+    {id:'fotos_aplic',  label:'Aplicação'},
+    {id:'fotos_abmal',  label:'Abertura do Malote'},
+    {id:'fotos_fchmal', label:'Fechamento do Malote'},
+  ];
   const fotos = [];
-  for(const f of files) fotos.push(await comprimirImagem(f));
+  for(const cat of cats)
+    for(const f of fotosMap[cat.id])
+      fotos.push(await comprimirImagem(f, cat.label));
   return fotos;
 }
 

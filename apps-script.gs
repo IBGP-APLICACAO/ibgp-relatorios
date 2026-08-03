@@ -220,8 +220,8 @@ function salvarFotos(data) {
   data.fotos.forEach(function(foto, idx) {
     try {
       var bytes = Utilities.base64Decode(foto.b64);
-      var ext   = foto.nome.split('.').pop().toLowerCase() || "jpg";
-      var nome  = (idx + 1) + "_" + foto.nome;
+      var cat   = (foto.categoria || "Foto").replace(/[\/\\:*?"<>|]/g, "_");
+      var nome  = cat + "_" + (idx + 1) + "_" + foto.nome;
       var blob  = Utilities.newBlob(bytes, "image/jpeg", nome);
       escolaFolder.createFile(blob);
     } catch(e) { /* ignora foto com erro */ }
