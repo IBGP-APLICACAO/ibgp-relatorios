@@ -1,0 +1,299 @@
+{
+  "id": "de-pouso-alegremg-2026-08-02",
+  "titulo": "CONCURSO PÚBLICO DA GUARDA CIVIL MUNICIPAL DE POUSO ALEGRE/MG",
+  "edital": "Edital nº 01/2026",
+  "data": "2 de agosto de 2026",
+  "escolas": [
+    {
+      "nome": "EE. PRESIDENTE BERNARDES",
+      "coord_local": "",
+      "salas": 3,
+      "cargos": [
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 36
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 36
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 36
+        }
+      ]
+    },
+    {
+      "nome": "EM. DOUTOR ÂNGELO CÔNSOLI",
+      "coord_local": "",
+      "salas": 17,
+      "cargos": [
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 33
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 27
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 27
+        },
+        {
+          "sala": "SALA 05",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 24
+        },
+        {
+          "sala": "SALA 06",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 23
+        },
+        {
+          "sala": "SALA 08",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 27
+        },
+        {
+          "sala": "SALA 09",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 25
+        },
+        {
+          "sala": "SALA 10",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 25
+        },
+        {
+          "sala": "SALA 11",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 25
+        },
+        {
+          "sala": "SALA 12",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 27
+        },
+        {
+          "sala": "SALA 13",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 25
+        },
+        {
+          "sala": "SALA 14",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 26
+        },
+        {
+          "sala": "SALA 15",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 26
+        },
+        {
+          "sala": "SALA 16",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 24
+        },
+        {
+          "sala": "SALA 17",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 24
+        },
+        {
+          "sala": "SALA 18",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 24
+        },
+        {
+          "sala": "SALA 19",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 25
+        }
+      ]
+    },
+    {
+      "nome": "UNA - POUSO ALEGRE",
+      "coord_local": "",
+      "salas": 25,
+      "cargos": [
+        {
+          "sala": "SALA AMAM.",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA IND. 15MIN",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA 206",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 53
+        },
+        {
+          "sala": "SALA 302",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 54
+        },
+        {
+          "sala": "SALA 306",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 95
+        },
+        {
+          "sala": "SALA 503",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 39
+        },
+        {
+          "sala": "SALA 601",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 72
+        },
+        {
+          "sala": "SALA 602",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 117
+        },
+        {
+          "sala": "SALA 603",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 43
+        },
+        {
+          "sala": "SALA 604",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 48
+        },
+        {
+          "sala": "SALA 605",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 92
+        },
+        {
+          "sala": "SALA 701",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 61
+        },
+        {
+          "sala": "SALA 704",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 42
+        },
+        {
+          "sala": "SALA 801",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 66
+        },
+        {
+          "sala": "SALA 804",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 45
+        },
+        {
+          "sala": "SALA 805",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 51
+        },
+        {
+          "sala": "SALA 806",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 51
+        },
+        {
+          "sala": "SALA 807",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 52
+        },
+        {
+          "sala": "SALA 901",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 42
+        },
+        {
+          "sala": "SALA 904",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 97
+        },
+        {
+          "sala": "SALA 906",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 57
+        },
+        {
+          "sala": "SALA 1001",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 64
+        },
+        {
+          "sala": "SALA 1002",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 57
+        },
+        {
+          "sala": "SALA 501/502",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 130
+        },
+        {
+          "sala": "SALA 702/703",
+          "turno": "Manhã",
+          "cargo": "301 - GUARDA CIVIL MUNICIPAL",
+          "inscr": 125
+        }
+      ]
+    }
+  ]
+}
