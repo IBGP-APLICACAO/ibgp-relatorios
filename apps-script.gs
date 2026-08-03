@@ -17,6 +17,7 @@ function doPost(e) {
     salvarTestemunhas(ss, data);
     salvarOcorrencias(ss, data);
     salvarCandidatos(ss, data);
+    salvarFotos(data);
 
     return ContentService
       .createTextOutput(JSON.stringify({ status: "ok" }))
@@ -197,6 +198,33 @@ function salvarOcorrencias(ss, data) {
       o.decl.resp, o.decl.desc,
       data.enviado_em
     ]);
+  });
+}
+
+// ── Fotos → Google Drive ──────────────────────────────────────────
+function salvarFotos(data) {
+  if (!data.fotos || data.fotos.length === 0) return;
+
+  // Cria estrutura: Minha Unidade / IBGP_RELATORIOS / <NomeEscola>
+  var root = DriveApp.getRootFolder();
+
+  var ibgpFolder;
+  var ibgpIt = root.getFoldersByName("IBGP_RELATORIOS");
+  ibgpFolder = ibgpIt.hasNext() ? ibgpIt.next() : root.createFolder("IBGP_RELATORIOS");
+
+  var nomeEscola = data.escola.replace(/[\/\\:*?"<>|]/g, "_");
+  var escolaFolder;
+  var escolaIt = ibgpFolder.getFoldersByName(nomeEscola);
+  escolaFolder = escolaIt.hasNext() ? escolaIt.next() : ibgpFolder.createFolder(nomeEscola);
+
+  data.fotos.forEach(function(foto, idx) {
+    try {
+      var bytes = Utilities.base64Decode(foto.b64);
+      var ext   = foto.nome.split('.').pop().toLowerCase() || "jpg";
+      var nome  = (idx + 1) + "_" + foto.nome;
+      var blob  = Utilities.newBlob(bytes, "image/jpeg", nome);
+      escolaFolder.createFile(blob);
+    } catch(e) { /* ignora foto com erro */ }
   });
 }
 
