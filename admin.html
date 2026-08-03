@@ -153,7 +153,12 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
     <div class="card" id="cardGerenciar">
       <div class="card-title"><span>✕</span> Remover certame publicado</div>
       <p class="note" style="margin-bottom:14px">Selecione o certame que deseja excluir do site.</p>
-      <div class="row" style="align-items:flex-end">
+      <div class="field">
+        <label class="lbl">Token GitHub (PAT)</label>
+        <input type="password" id="fTokenRemover" placeholder="github_pat_...">
+        <p class="token-hint">Cole o token — o mesmo usado no passo 3.</p>
+      </div>
+      <div class="row" style="align-items:flex-end;margin-top:4px">
         <div class="field" style="flex:1;margin-bottom:0">
           <label class="lbl">Certame</label>
           <select id="selRemover"><option value="">— Carregando... —</option></select>
@@ -278,12 +283,12 @@ async function carregarListaCertames() {
 async function removerCertame() {
   const id = document.getElementById("selRemover").value;
   if (!id) return;
-  const token = document.getElementById("fToken").value.trim();
+  const token = (document.getElementById("fTokenRemover").value || document.getElementById("fToken").value || "").trim();
   const stEl = document.getElementById("statusRemover");
 
   if (!token) {
     stEl.style.display = "block"; stEl.style.color = "#c62828";
-    stEl.textContent = "Cole o Token GitHub no passo 3 antes de excluir."; return;
+    stEl.textContent = "Cole o Token GitHub antes de excluir."; return;
   }
   if (!confirm(`Excluir o certame "${id}" permanentemente?`)) return;
 
@@ -438,7 +443,10 @@ function entrar() {
     document.getElementById("gate").style.display  = "none";
     document.getElementById("admin").style.display = "block";
     const t = sessionStorage.getItem("ghToken");
-    if (t) document.getElementById("fToken").value = t;
+    if (t) {
+      document.getElementById("fToken").value = t;
+      document.getElementById("fTokenRemover").value = t;
+    }
     carregarCoordenadores();
     carregarListaCertames();
   } else {
