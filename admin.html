@@ -78,6 +78,22 @@ td input:focus{border-color:#1F3A6E}
 hr{border:none;border-top:1px solid #eee;margin:18px 0}
 .note{font-size:12px;color:#888;margin-top:6px}
 .token-hint{font-size:11px;color:#aaa;margin-top:4px}
+
+/* ── Autocomplete coordenador ── */
+.coord-wrap{position:relative}
+.coord-wrap input{width:100%;padding-right:32px}
+.coord-dropdown{position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);max-height:200px;overflow-y:auto;z-index:999;display:none}
+.coord-dropdown.open{display:block}
+.coord-opt{padding:8px 12px;font-size:13px;cursor:pointer}
+.coord-opt:hover,.coord-opt.focused{background:#f0f4ff;color:#1F3A6E}
+.coord-opt.add-new{color:#2e7d32;font-weight:500;border-top:1px solid #eee}
+.coord-opt.add-new:hover{background:#f1f8e9}
+
+/* ── Gerenciar coordenadores ── */
+.coord-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#f0f4ff;color:#1F3A6E;border-radius:20px;padding:4px 10px 4px 12px;font-size:12px;font-weight:500}
+.chip button{border:none;background:none;color:#999;cursor:pointer;font-size:14px;line-height:1;padding:0}
+.chip button:hover{color:#c62828}
 </style>
 </head>
 <body>
@@ -111,6 +127,27 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
   </header>
 
   <div class="container">
+
+    <!-- COORDENADORES -->
+    <div class="card" id="cardCoords">
+      <div class="card-title"><span>★</span> Coordenadores cadastrados</div>
+      <p class="note" style="margin-bottom:14px">Clique no <strong>✕</strong> para remover. Use o campo abaixo para adicionar novos.</p>
+      <div class="coord-chips" id="chipsCoord"></div>
+      <div class="row" style="margin-top:16px;align-items:flex-end">
+        <div class="field" style="flex:1;margin-bottom:0">
+          <label class="lbl">Adicionar coordenador</label>
+          <input type="text" id="novoCoord" placeholder="Digite o nome em maiúsculas"
+                 onkeydown="if(event.key==='Enter'){adicionarCoord();event.preventDefault()}">
+        </div>
+        <div style="flex:0 0 auto;padding-bottom:0">
+          <button class="btn btn-primary btn-sm" style="white-space:nowrap" onclick="adicionarCoord()">+ Adicionar</button>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <button class="btn btn-publish btn-sm" onclick="salvarCoordenadores()">Salvar base de coordenadores no site</button>
+        <div id="statusCoord" style="font-size:12px;margin-top:8px;display:none"></div>
+      </div>
+    </div>
 
     <!-- PASSO 1 -->
     <div class="card">
@@ -198,11 +235,126 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
 
 <script>
 // ═══════════════════════════════════════════════
-//  CONFIG — altere a senha abaixo se quiser
+//  CONFIG
 // ═══════════════════════════════════════════════
-const SENHA    = "ibgpadmin2026";
+const SENHA    = "ibgpadmin2026"; // ← altere aqui se quiser
 const GH_OWNER = "IBGP-APLICACAO";
 const GH_REPO  = "ibgp-relatorios";
+
+// ── Lista de coordenadores ────────────────────────────────────────────
+let coordenadores = [];
+
+async function carregarCoordenadores() {
+  try {
+    const r = await fetch("dados/coordenadores.json?_=" + Date.now());
+    if (r.ok) coordenadores = await r.json();
+  } catch(_) {}
+  renderChips();
+}
+
+function renderChips() {
+  const el = document.getElementById("chipsCoord");
+  el.innerHTML = "";
+  coordenadores.slice().sort().forEach(nome => {
+    const chip = document.createElement("div");
+    chip.className = "chip";
+    chip.innerHTML = `${nome} <button onclick="removerCoord('${nome.replace(/'/g,"\\'")}')">✕</button>`;
+    el.appendChild(chip);
+  });
+}
+
+function adicionarCoord() {
+  const inp = document.getElementById("novoCoord");
+  const nome = inp.value.trim().toUpperCase();
+  if (!nome) return;
+  if (coordenadores.includes(nome)) { inp.value = ""; return; }
+  coordenadores.push(nome);
+  coordenadores.sort();
+  inp.value = "";
+  renderChips();
+}
+
+function removerCoord(nome) {
+  coordenadores = coordenadores.filter(c => c !== nome);
+  renderChips();
+}
+
+async function salvarCoordenadores() {
+  const token = document.getElementById("fToken").value.trim();
+  const stEl = document.getElementById("statusCoord");
+  if (!token) {
+    stEl.style.display = "block";
+    stEl.style.color = "#c62828";
+    stEl.textContent = "Cole o Token GitHub no passo 3 antes de salvar.";
+    return;
+  }
+  stEl.style.display = "block";
+  stEl.style.color = "#1565c0";
+  stEl.textContent = "Salvando...";
+
+  const headers = {
+    "Authorization": `token ${token}`,
+    "Accept": "application/vnd.github.v3+json",
+    "Content-Type": "application/json"
+  };
+  const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/dados/coordenadores.json`;
+
+  try {
+    let sha;
+    const r0 = await fetch(url, {headers});
+    if (r0.ok) sha = (await r0.json()).sha;
+
+    const body = {message: "chore: atualiza base de coordenadores",
+                  content: b64encode(JSON.stringify(coordenadores, null, 2))};
+    if (sha) body.sha = sha;
+    const r1 = await fetch(url, {method:"PUT", headers, body: JSON.stringify(body)});
+    if (!r1.ok) throw new Error(await r1.text());
+    stEl.style.color = "#2e7d32";
+    stEl.textContent = "✓ Base salva com sucesso!";
+  } catch(err) {
+    stEl.style.color = "#c62828";
+    stEl.textContent = "Erro: " + err.message;
+  }
+}
+
+// ── Autocomplete coordenador ──────────────────────────────────────────
+function filtrarCoords(inputId, dropId) {
+  const inp  = document.getElementById(inputId);
+  const drop = document.getElementById(dropId);
+  const val  = inp.value.trim().toUpperCase();
+  const matches = val
+    ? coordenadores.filter(c => c.includes(val))
+    : coordenadores.slice();
+
+  drop.innerHTML = "";
+  matches.forEach(nome => {
+    const opt = document.createElement("div");
+    opt.className = "coord-opt";
+    opt.textContent = nome;
+    opt.onmousedown = () => { inp.value = nome; fecharDrop(dropId); };
+    drop.appendChild(opt);
+  });
+  // Opção "adicionar novo"
+  if (val && !coordenadores.includes(val)) {
+    const opt = document.createElement("div");
+    opt.className = "coord-opt add-new";
+    opt.textContent = `+ Adicionar "${val}" à base`;
+    opt.onmousedown = () => {
+      coordenadores.push(val);
+      coordenadores.sort();
+      renderChips();
+      inp.value = val;
+      fecharDrop(dropId);
+    };
+    drop.appendChild(opt);
+  }
+  drop.classList.toggle("open", drop.children.length > 0);
+}
+
+function fecharDrop(dropId) {
+  const el = document.getElementById(dropId);
+  if (el) el.classList.remove("open");
+}
 
 // ── Gate ─────────────────────────────────────────────────────────────
 function entrar() {
@@ -211,6 +363,7 @@ function entrar() {
     document.getElementById("admin").style.display = "block";
     const t = sessionStorage.getItem("ghToken");
     if (t) document.getElementById("fToken").value = t;
+    carregarCoordenadores();
   } else {
     document.getElementById("gateErr").style.display = "block";
   }
@@ -349,10 +502,22 @@ function renderRevisao(nomeArquivo) {
     const turno = e.hasManha && e.haTarde ? '<span class="badge badge-mt">Manhã e Tarde</span>'
                 : e.hasManha ? '<span class="badge badge-m">Manhã</span>'
                 : '<span class="badge badge-t">Tarde</span>';
+    const dropId  = `drop_${i}`;
+    const inputId = `cinput_${i}`;
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${e.nome}</td>
-      <td><input type="text" data-idx="${i}" class="coordInput" value="${e.coord_local}" placeholder="Nome do coordenador"></td>
+      <td>
+        <div class="coord-wrap">
+          <input type="text" id="${inputId}" data-idx="${i}" class="coordInput"
+                 value="${e.coord_local}" placeholder="Digite ou selecione..."
+                 autocomplete="off"
+                 oninput="filtrarCoords('${inputId}','${dropId}')"
+                 onfocus="filtrarCoords('${inputId}','${dropId}')"
+                 onblur="setTimeout(()=>fecharDrop('${dropId}'),180)">
+          <div class="coord-dropdown" id="${dropId}"></div>
+        </div>
+      </td>
       <td style="text-align:center">${e.salas}</td>
       <td style="text-align:center">${turno}</td>
       <td style="text-align:center">${e.candidatos}</td>
