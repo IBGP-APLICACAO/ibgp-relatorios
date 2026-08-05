@@ -251,6 +251,25 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
       <div id="status"></div>
     </div>
 
+    <!-- RELATÓRIO GERAL -->
+    <div class="card">
+      <div class="card-title"><span>📄</span> Relatório Geral</div>
+      <p style="font-size:13px;color:#555;margin-bottom:16px;">
+        Gera o Relatório Geral de Aplicação consolidando os dados de todas as escolas enviados pelos coordenadores. Abre uma página pronta para imprimir ou salvar como PDF.
+      </p>
+      <div class="field">
+        <label class="lbl">URL do Apps Script</label>
+        <input type="text" id="fScriptUrl" placeholder="https://script.google.com/macros/s/..." value="https://script.google.com/macros/s/AKfycbwepGDrzaqsFmsHKph6ULsk_zWok9Tu3N8uEYUU6bSY1BybuKCqZJnwCRoCgmDODn5yVg/exec">
+      </div>
+      <button class="btn btn-primary" onclick="gerarRelatorioGeral()" id="btnRelatorio">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        Gerar Relatório Geral
+      </button>
+      <div id="statusRelatorio" style="font-size:13px;margin-top:10px;display:none;padding:10px;border-radius:8px;"></div>
+    </div>
+
   </div><!-- /container -->
 </div><!-- /admin -->
 
@@ -735,6 +754,186 @@ function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase(); }
 function slugify(s) {
   return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
           .replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"");
+}
+
+// ── Relatório Geral ───────────────────────────────────────────────────
+async function gerarRelatorioGeral() {
+  const url = document.getElementById("fScriptUrl").value.trim();
+  if (!url || !url.startsWith("https://script.google.com")) {
+    mostrarStatusRelatorio("Informe a URL do Apps Script.", false); return;
+  }
+  const btn = document.getElementById("btnRelatorio");
+  btn.disabled = true; btn.textContent = "Buscando dados...";
+  mostrarStatusRelatorio("Conectando ao Apps Script...", null);
+
+  try {
+    const resp = await fetch(url + "?action=relatorio");
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    const dados = await resp.json();
+
+    btn.disabled = false; btn.innerHTML = "📄 Gerar Relatório Geral";
+    document.getElementById("statusRelatorio").style.display = "none";
+
+    abrirRelatorioImprimivel(dados);
+  } catch(e) {
+    btn.disabled = false; btn.innerHTML = "📄 Gerar Relatório Geral";
+    mostrarStatusRelatorio("Erro ao buscar dados: " + e.message + ". Verifique a URL do Apps Script e tente novamente.", false);
+  }
+}
+
+function mostrarStatusRelatorio(msg, ok) {
+  const el = document.getElementById("statusRelatorio");
+  el.style.display = "block";
+  el.style.background = ok === null ? "#e3f2fd" : ok ? "#e8f5e9" : "#fdecea";
+  el.style.color = ok === null ? "#1565c0" : ok ? "#2e7d32" : "#c62828";
+  el.textContent = msg;
+}
+
+function abrirRelatorioImprimivel(dados) {
+  const win = window.open("", "_blank");
+  const conc = dados.concurso || {};
+  const escolas = dados.escolas || [];
+
+  const corM = "#1F3A6E", corT = "#CF3432", corH = "#393939";
+
+  function secao(titulo, cor, conteudo) {
+    return `<div style="background:#fff;border-radius:8px;margin-bottom:14px;overflow:hidden;page-break-inside:avoid;">
+      <div style="background:${cor};padding:9px 14px;">
+        <h3 style="color:#fff;font-size:12px;margin:0;text-transform:uppercase;letter-spacing:.4px;">${titulo}</h3>
+      </div>
+      <div style="padding:14px 16px;">${conteudo}</div>
+    </div>`;
+  }
+
+  function grid2(l1,v1,l2,v2) {
+    const cel = (l,v) => l ? `<div><span style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;">${l}</span><br><span style="font-size:12px;">${v||"—"}</span></div>` : "<div></div>";
+    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">${cel(l1,v1)}${cel(l2,v2)}</div>`;
+  }
+
+  let html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+  <title>Relatório Geral — IBGP</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;background:#f2f2f2;padding:20px;font-size:13px;color:#393939;}
+    .page-header{background:#393939;color:#fff;padding:16px 24px;border-radius:8px 8px 0 0;margin-bottom:4px;}
+    .red-bar{height:4px;background:#CF3432;margin-bottom:20px;border-radius:0 0 4px 4px;}
+    .escola-titulo{background:#393939;color:#fff;padding:10px 16px;font-size:14px;font-weight:700;border-radius:8px;margin:24px 0 12px;}
+    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;}
+    th{background:#555;color:#fff;padding:6px 8px;text-align:left;}
+    td{padding:5px 8px;border-bottom:1px solid #eee;}
+    tr:nth-child(even) td{background:#f8f8f8;}
+    .total-row td{background:#eee!important;font-weight:700;}
+    @media print{
+      body{background:#fff;padding:0;}
+      .no-print{display:none;}
+      .page-break{page-break-before:always;}
+    }
+  </style></head><body>`;
+
+  html += `<div class="no-print" style="background:#1F3A6E;color:#fff;padding:12px 20px;margin-bottom:16px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;">
+    <span>Relatório Geral — IBGP</span>
+    <button onclick="window.print()" style="background:#CF3432;color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">🖨 Imprimir / Salvar PDF</button>
+  </div>`;
+
+  html += `<div class="page-header">
+    <h1 style="font-size:16px;margin:0;">IBGP — Relatório Geral de Aplicação de Prova</h1>
+    <p style="font-size:12px;color:#bbb;margin-top:4px;">${conc["Título do Concurso"]||""} &bull; ${conc["Data da Prova"]||""} &bull; ${conc["Edital"]||""}</p>
+  </div><div class="red-bar"></div>`;
+
+  // Resumo geral
+  let totI=0,totP=0,totA=0,totIn=0;
+  escolas.forEach(function(e){
+    (e.resultados||[]).forEach(function(r){totI+=Number(r.inscr)||0;totP+=Number(r.pres)||0;totA+=Number(r.aus)||0;totIn+=Number(r.incl)||0;});
+  });
+  html += secao("Resumo Geral", corH,
+    grid2("Total de Locais", escolas.length, "Total de Inscritos", totI) +
+    grid2("Total de Presentes", totP, "Total de Ausentes", totA) +
+    grid2("Total de Inclusões", totIn, "Gerado em", new Date().toLocaleString("pt-BR"))
+  );
+
+  // Por escola
+  escolas.forEach(function(e, ei) {
+    html += `<div class="${ei > 0 ? 'page-break' : ''}">`;
+    html += `<div class="escola-titulo">📍 ${e.nome}</div>`;
+
+    // Identificação
+    html += secao("Identificação", corH,
+      grid2("Coordenador Local", e.coord_local, "Turno(s)", e.turno) +
+      grid2("Houve Apoio?", e.houve_apoio, "Nome do Apoio", e.nome_apoio||"—") +
+      (e.obs ? `<div style="margin-top:8px;"><span style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;">Observações</span><br><span>${e.obs}</span></div>` : "")
+    );
+
+    // Horários
+    (e.horarios||[]).forEach(function(h) {
+      const cor = h.turno==="Manhã" ? corM : corT;
+      html += secao("Horários — " + h.turno, cor,
+        grid2("Chegada da equipe", h.chegada, "Abertura do portão", h.ab_portao) +
+        grid2("Abertura do malote", h.ab_malote, "Distribuição dos pacotes", h.distrib) +
+        grid2("Fechamento do portão", h.fch_portao, "Início da aplicação", h.inicio) +
+        grid2("Encerramento", h.encerr, "Fechamento do malote", h.fch_malote)
+      );
+    });
+
+    // Testemunhas
+    const turnos = [...new Set((e.testemunhas||[]).map(t=>t.turno))];
+    turnos.forEach(function(turno) {
+      const cor = turno==="Manhã" ? corM : corT;
+      const tt = (e.testemunhas||[]).filter(t=>t.turno===turno);
+      let tHtml = "";
+      tt.forEach(function(t) {
+        tHtml += `<div style="margin-bottom:10px;"><strong style="font-size:11px;color:#888;">${t.tipo}</strong><br>`;
+        tHtml += `1. ${t.t1_nome} — ${t.t1_cpf}<br>2. ${t.t2_nome} — ${t.t2_cpf}<br>3. ${t.t3_nome} — ${t.t3_cpf}</div>`;
+      });
+      html += secao("Testemunhas — " + turno, cor, tHtml);
+    });
+
+    // Estatística
+    const turnosRes = [...new Set((e.resultados||[]).map(r=>r.turno))];
+    turnosRes.forEach(function(turno) {
+      const cor = turno==="Manhã" ? corM : corT;
+      const rows = (e.resultados||[]).filter(r=>r.turno===turno);
+      let tI=0,tP=0,tA=0,tIn=0;
+      let tabela = `<table><thead><tr>
+        <th>Cargo</th><th style="text-align:center">Inscritos</th>
+        <th style="text-align:center">Presentes</th><th style="text-align:center">Ausentes</th>
+        <th style="text-align:center">Inclusões</th></tr></thead><tbody>`;
+      rows.forEach(function(r){
+        tI+=Number(r.inscr)||0;tP+=Number(r.pres)||0;tA+=Number(r.aus)||0;tIn+=Number(r.incl)||0;
+        tabela+=`<tr><td>${r.sala} — ${r.cargo.replace(/^01\s+/,"")}</td>
+          <td style="text-align:center">${r.inscr}</td><td style="text-align:center">${r.pres}</td>
+          <td style="text-align:center">${r.aus}</td><td style="text-align:center">${r.incl||0}</td></tr>`;
+      });
+      tabela+=`<tr class="total-row"><td>TOTAL</td>
+        <td style="text-align:center">${tI}</td><td style="text-align:center">${tP}</td>
+        <td style="text-align:center">${tA}</td><td style="text-align:center">${tIn}</td></tr>`;
+      tabela += "</tbody></table>";
+      html += secao("Estatística por Cargo — " + turno, cor, tabela);
+    });
+
+    // Ocorrências
+    if ((e.ocorrencias||[]).length > 0) {
+      e.ocorrencias.forEach(function(o) {
+        const cor = o.turno==="Manhã" ? corM : corT;
+        const cands = (e.candidatos||[]).filter(c=>c.turno===o.turno);
+        let oHtml = grid2("Ocorrências em sala", o.sala, "Prova condicional", o.cond) +
+                    grid2("Toque de celular", o.toque, "Declaração de comparecimento", o.decl);
+        if (cands.length > 0) {
+          oHtml += `<table style="margin-top:8px;"><thead><tr><th>Tipo</th><th>Inscrição</th><th>Candidato</th><th>Sala</th></tr></thead><tbody>`;
+          cands.forEach(function(c){
+            oHtml+=`<tr><td>${c.tipo}</td><td>${c.inscricao}</td><td>${c.candidato}</td><td>${c.sala}</td></tr>`;
+          });
+          oHtml += "</tbody></table>";
+        }
+        html += secao("Ocorrências — " + o.turno, cor, oHtml);
+      });
+    }
+
+    html += "</div>";
+  });
+
+  html += "</body></html>";
+  win.document.write(html);
+  win.document.close();
 }
 </script>
 </body>
