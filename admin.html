@@ -791,6 +791,12 @@ async function gerarRelatorioGeral() {
   if (!certameId) {
     mostrarStatusRelatorio("Selecione um certame.", false); return;
   }
+  // Abre a janela ANTES do await para não ser bloqueada pelo browser
+  const reportWin = window.open("", "_blank");
+  if (!reportWin) {
+    mostrarStatusRelatorio("Pop-up bloqueado. Permita pop-ups para este site nas configurações do browser.", false); return;
+  }
+  reportWin.document.write('<html><body style="font-family:Arial;padding:40px;color:#555;text-align:center;"><p style="font-size:16px;margin-top:80px;">⏳ Carregando dados do relatório...</p></body></html>');
   const certameOpt = selRel.selectedOptions[0];
   const certameTitulo = certameOpt.dataset.titulo;
   const certameData   = certameOpt.dataset.data;
@@ -820,11 +826,12 @@ async function gerarRelatorioGeral() {
     btn.disabled = false; btn.innerHTML = "📄 Gerar Relatório Geral";
 
     _dadosGeral = { escolas: dados.escolas, concurso: dados.concurso };
-    abrirRelatorioGeral(dados, { titulo: certameTitulo, data: certameData, edital: certameDados.edital || "" });
+    abrirRelatorioGeral(dados, { titulo: certameTitulo, data: certameData, edital: certameDados.edital || "" }, reportWin);
     mostrarBotoesIndividuais(dados.escolas);
   } catch(e) {
     btn.disabled = false; btn.innerHTML = "📄 Gerar Relatório Geral";
     mostrarStatusRelatorio("Erro: " + e.message, false);
+    if (reportWin && !reportWin.closed) reportWin.close();
   }
 }
 
@@ -1031,8 +1038,8 @@ function abrirIndividualPorIdx(i) {
 }
 
 // ── Relatório Técnico Consolidado (Geral) ────────────────────────────
-function abrirRelatorioGeral(dados, meta) {
-  var win = window.open("", "_blank");
+function abrirRelatorioGeral(dados, meta, win) {
+  if (!win) win = window.open("", "_blank");
   var conc = dados.concurso || {};
   var escolas = dados.escolas || [];
 
