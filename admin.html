@@ -255,8 +255,16 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
     <div class="card">
       <div class="card-title"><span>📄</span> Relatório Geral</div>
       <p style="font-size:13px;color:#555;margin-bottom:16px;">
-        Gera o Relatório Geral de Aplicação consolidando os dados de todas as escolas enviados pelos coordenadores. Abre uma página pronta para imprimir ou salvar como PDF.
+        Gera o Relatório Geral de Aplicação consolidando os dados enviados pelos coordenadores para o certame selecionado.
       </p>
+      <div class="row">
+        <div class="field" style="flex:2">
+          <label class="lbl">Certame</label>
+          <select id="selRelatorio" style="border:1px solid #ddd;border-radius:8px;padding:9px 13px;font-size:14px;width:100%;outline:none;background:#fff;">
+            <option value="">— Carregando certames... —</option>
+          </select>
+        </div>
+      </div>
       <div class="field">
         <label class="lbl">URL do Apps Script</label>
         <input type="text" id="fScriptUrl" placeholder="https://script.google.com/macros/s/..." value="https://script.google.com/macros/s/AKfycbxCWRNetGErTHgaYb-VMOCjMrcIg7GlYtutkHFC-Fo2U6Vd4yF2TBYc0W8t_AqxUI7Ocg/exec">
@@ -468,6 +476,7 @@ function entrar() {
     }
     carregarCoordenadores();
     carregarListaCertames();
+    carregarCertamesRelatorio();
   } else {
     document.getElementById("gateErr").style.display = "block";
   }
@@ -756,20 +765,57 @@ function slugify(s) {
           .replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"");
 }
 
+// ── Carrega certames no select do Relatório Geral ────────────────────
+async function carregarCertamesRelatorio() {
+  const sel = document.getElementById("selRelatorio");
+  try {
+    const r = await fetch("dados/certames.json?_=" + Date.now());
+    const lista = await r.json();
+    sel.innerHTML = lista.length
+      ? '<option value="">— Selecione o certame —</option>' +
+        lista.map(c => `<option value="${c.id}" data-titulo="${c.titulo}" data-data="${c.data}">${c.titulo} — ${c.data}</option>`).join("")
+      : '<option value="">Nenhum certame publicado</option>';
+  } catch(_) {
+    sel.innerHTML = '<option value="">Erro ao carregar</option>';
+  }
+}
+
 // ── Relatório Geral ───────────────────────────────────────────────────
 async function gerarRelatorioGeral() {
   const url = document.getElementById("fScriptUrl").value.trim();
   if (!url || !url.startsWith("https://script.google.com")) {
     mostrarStatusRelatorio("Informe a URL do Apps Script.", false); return;
   }
+  const selRel = document.getElementById("selRelatorio");
+  const certameId = selRel.value;
+  if (!certameId) {
+    mostrarStatusRelatorio("Selecione um certame.", false); return;
+  }
+  const certameOpt = selRel.selectedOptions[0];
+  const certameTitulo = certameOpt.dataset.titulo;
+  const certameData   = certameOpt.dataset.data;
+
   const btn = document.getElementById("btnRelatorio");
   btn.disabled = true; btn.textContent = "Buscando dados...";
   mostrarStatusRelatorio("Conectando ao Apps Script...", null);
 
   try {
+    // Busca lista de escolas do certame selecionado
+    const rCertame = await fetch(`dados/${certameId}.json?_=${Date.now()}`);
+    if (!rCertame.ok) throw new Error("Certame não encontrado");
+    const certameDados = await rCertame.json();
+    const escolasDoCertame = new Set((certameDados.escolas || []).map(e => e.nome));
+
+    // Busca dados do Apps Script
     const resp = await fetch(url + "?action=relatorio");
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     const dados = await resp.json();
+
+    // Filtra apenas escolas do certame selecionado
+    dados.escolas = (dados.escolas || []).filter(e => escolasDoCertame.has(e.nome));
+    dados.concurso["Título do Concurso"] = certameTitulo;
+    dados.concurso["Data da Prova"]      = certameData;
+    dados.concurso["Edital"]             = certameDados.edital || dados.concurso["Edital"] || "";
 
     btn.disabled = false; btn.innerHTML = "📄 Gerar Relatório Geral";
     document.getElementById("statusRelatorio").style.display = "none";
@@ -777,7 +823,7 @@ async function gerarRelatorioGeral() {
     abrirRelatorioImprimivel(dados);
   } catch(e) {
     btn.disabled = false; btn.innerHTML = "📄 Gerar Relatório Geral";
-    mostrarStatusRelatorio("Erro ao buscar dados: " + e.message + ". Verifique a URL do Apps Script e tente novamente.", false);
+    mostrarStatusRelatorio("Erro: " + e.message, false);
   }
 }
 
