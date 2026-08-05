@@ -1040,31 +1040,38 @@ function abrirIndividualPorIdx(i) {
 // ── Relatório Técnico Consolidado (Geral) ────────────────────────────
 function abrirRelatorioGeral(dados, meta, win) {
   if (!win) win = window.open("", "_blank");
+  win.document.open(); // reseta documento (remove tela de carregamento)
   var conc = dados.concurso || {};
   var escolas = dados.escolas || [];
 
+  // ── Cálculos globais ──
   var totI=0, totP=0, totA=0, totIn=0, totSalas=0;
   var cargosMap = {};
   escolas.forEach(function(e) {
     totSalas += Number(e.salas)||0;
     var eI=0, eP=0, eA=0, eIn=0;
+    var melhorCargo=null, maxPct=-1;
     (e.resultados||[]).forEach(function(r) {
       var ins=Number(r.inscr)||0, pre=Number(r.pres)||0, aus=Number(r.aus)||0, inc=Number(r.incl)||0;
       totI+=ins; totP+=pre; totA+=aus; totIn+=inc;
       eI+=ins; eP+=pre; eA+=aus; eIn+=inc;
+      if(ins>0 && aus/ins>maxPct){ maxPct=aus/ins; melhorCargo=r; }
       var cargo = r.cargo.replace(/^\d+\s*[-—]\s*/,'').trim();
-      if (!cargosMap[cargo]) cargosMap[cargo]={inscr:0,pres:0,aus:0,incl:0};
+      if(!cargosMap[cargo]) cargosMap[cargo]={inscr:0,pres:0,aus:0,incl:0};
       cargosMap[cargo].inscr+=ins; cargosMap[cargo].pres+=pre; cargosMap[cargo].aus+=aus; cargosMap[cargo].incl+=inc;
     });
-    e._totais = {ins:eI, pre:eP, aus:eA, inc:eIn};
+    e._tot = {ins:eI, pre:eP, aus:eA, inc:eIn};
+    e._cargoMaiorAus = melhorCargo;
+    e._hasOcorr = (e.ocorrencias||[]).some(function(o){ return Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0; });
   });
 
-  function pct(a,b) { return b>0 ? (a/b*100).toFixed(1)+"%" : "—"; }
-  var n = escolas.length;
-  var nCargos = Object.keys(cargosMap).length;
-  var top5Locais = escolas.slice().sort(function(a,b){return (b._totais.ins||0)-(a._totais.ins||0);}).slice(0,5);
-  var cargosArr = Object.keys(cargosMap).map(function(nome){return Object.assign({nome:nome},cargosMap[nome]);});
-  var top5Ausencia = cargosArr.filter(function(c){return c.inscr>0;}).sort(function(a,b){return (b.aus/b.inscr)-(a.aus/a.inscr);}).slice(0,5);
+  function pct(a,b){ return b>0?(a/b*100).toFixed(1)+"%":"—"; }
+  function pct2(a,b){ return b>0?(a/b*100).toFixed(2)+"%":"—"; }
+  var n=escolas.length;
+  var nCargos=Object.keys(cargosMap).length;
+  var top5Locais=escolas.slice().sort(function(a,b){return (b._tot.ins||0)-(a._tot.ins||0);}).slice(0,Math.min(5,n));
+  var cargosArr=Object.keys(cargosMap).map(function(nome){return Object.assign({nome:nome},cargosMap[nome]);});
+  var top5Aus=cargosArr.filter(function(c){return c.inscr>0;}).sort(function(a,b){return b.aus/b.inscr-a.aus/a.inscr;}).slice(0,5);
 
   var titulo   = meta.titulo   || conc["Título do Concurso"] || "";
   var edital   = meta.edital   || conc["Edital"] || "";
@@ -1073,119 +1080,152 @@ function abrirRelatorioGeral(dados, meta, win) {
   var coordLog = conc["Coordenador Logístico"]  || "—";
   var turnosSet={};
   escolas.forEach(function(e){if(e.turno)String(e.turno).split(/\s+e\s+|\//).forEach(function(t){if(t.trim())turnosSet[t.trim()]=1;});});
-  var turnosStr = Object.keys(turnosSet).filter(Boolean).join(" e ") || "—";
-  var hoje = new Date().toLocaleDateString("pt-BR");
-  var agora = new Date().toLocaleString("pt-BR");
+  var turnosStr=Object.keys(turnosSet).filter(Boolean).join(" e ")||"—";
+  var hoje=new Date().toLocaleDateString("pt-BR");
   var corP="#1F3A6E", corR="#CF3432", corE="#2C2C2C";
 
-  function thS(extra){return 'style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:'+corP+';color:#fff;padding:8px 10px;text-align:left;font-size:11px;'+(extra||'')+'"';}
-  function tdS(i,extra){return 'style="-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:7px 10px;border-bottom:1px solid #eee;font-size:12px;background:'+(i%2?'#f8f9fc':'#fff')+';'+(extra||'')+'"';}
-  function secH(num,t){return '<h2 style="-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:13px;font-weight:700;color:'+corP+';border-bottom:2px solid '+corR+';padding:0 0 8px;margin:24px 0 14px;text-transform:uppercase;letter-spacing:.5px;">'+num+'. '+t+'</h2>';}
-  function infoCell(l,v){return '<div><span style="color:#999;font-size:9px;text-transform:uppercase;letter-spacing:.5px;">'+l+'</span><br><span style="color:#fff;font-size:12px;">'+(v||"—")+'</span></div>';}
-  function indicador(v,l){return '<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#fff;border-radius:6px;padding:14px 10px;text-align:center;border:1px solid #E0E0E0;border-top:3px solid '+corP+';"><div style="font-size:20px;font-weight:700;color:'+corP+';">'+v+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.3px;color:#888;margin-top:4px;">'+l+'</div></div>';}
+  // ── Helpers de HTML ──
+  var PC='-webkit-print-color-adjust:exact;print-color-adjust:exact;';
+  function thS(extra){ return 'style="'+PC+'background:'+corP+';color:#fff;padding:10px 12px;text-align:left;font-size:11px;font-weight:700;'+(extra||'')+'"'; }
+  function td(bg,extra){ return 'style="'+PC+'background:'+(bg||'#fff')+'!important;padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;'+(extra||'')+'"'; }
+  function tdZ(i,extra){ return td(i%2?'#F5F7FC':'#fff',extra); }
+  function secH(num,t){ return '<h2 style="font-size:15px;font-weight:700;color:'+corP+';border-bottom:3px solid '+corR+';padding-bottom:10px;margin:36px 0 18px;letter-spacing:.3px;">'+num+'. '+t+'</h2>'; }
+  function infoCell(l,v){ return '<div style="padding:4px 0;"><span style="display:block;color:#aaa;font-size:9px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;">'+l+'</span><span style="color:#fff;font-size:12px;font-weight:600;">'+(v||"—")+'</span></div>'; }
+  function indCard(v,l){ return '<td style="'+PC+'background:#fff;padding:20px 14px;text-align:center;border:1px solid #D8DEEC;width:25%;"><div style="'+PC+'font-size:30px;font-weight:700;color:'+corP+';line-height:1;">'+v+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#777;margin-top:8px;line-height:1.3;">'+l+'</div></td>'; }
+  function totalRow(cols){ return '<tr>'+cols.map(function(c){ var attr=c[2]?' '+c[2]:''; return '<td'+attr+' style="'+PC+'background:'+corE+'!important;color:#fff!important;padding:10px 12px;font-weight:700;font-size:12px;'+(c[1]||'')+'">'+(c[0])+'</td>'; }).join('')+'</tr>'; }
 
+  // ── HTML ──
   var html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório Técnico Consolidado — IBGP</title>'
-    +'<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;background:#EFEFEF;padding:24px;font-size:13px;color:#2C2C2C;-webkit-print-color-adjust:exact;print-color-adjust:exact;}table{width:100%;border-collapse:collapse;}tr:last-child td{border-bottom:none;}.no-print{display:flex;}@media print{body{background:#fff;padding:12px;}.no-print{display:none!important;}.page-break{page-break-before:always;}}</style>'
-    +'</head><body>';
+    +'<style>*{box-sizing:border-box;margin:0;padding:0;}'
+    +'body{font-family:Arial,sans-serif;background:#F2F4F8;padding:28px;font-size:13px;color:#2C2C2C;'+PC+'}'
+    +'table{width:100%;border-collapse:collapse;}'
+    +'.card{background:#fff;border-radius:6px;border:1px solid #DDE3EE;margin-bottom:24px;overflow:hidden;}'
+    +'.no-print{display:flex;}'
+    +'p{line-height:1.8;color:#444;font-size:13px;margin-bottom:12px;}'
+    +'@media print{body{background:#fff;padding:14px;}.no-print{display:none!important;}.pb{page-break-before:always;}}'
+    +'</style></head><body>';
 
-  // Toolbar (tela)
-  html+='<div class="no-print" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:'+corP+';color:#fff;padding:12px 20px;margin-bottom:16px;border-radius:8px;align-items:center;justify-content:space-between;">'
-    +'<span style="font-weight:700;">Relatório Técnico Consolidado — IBGP</span>'
-    +'<button onclick="window.print()" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:'+corR+';color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">🖨 Imprimir / Salvar PDF</button>'
+  // Barra (só tela)
+  html+='<div class="no-print" style="'+PC+'background:'+corP+';padding:12px 20px;margin-bottom:20px;border-radius:8px;align-items:center;justify-content:flex-end;">'
+    +'<button onclick="window.print()" style="'+PC+'background:'+corR+';color:#fff;border:none;padding:9px 24px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">🖨 Imprimir / Salvar PDF</button>'
     +'</div>';
 
-  // Capa/Header
-  html+='<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:'+corE+';padding:28px;border-radius:8px 8px 0 0;">'
-    +'<p style="color:'+corR+';font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;">Instituto Brasileiro de Gestão e Pesquisa</p>'
-    +'<h1 style="color:#fff;font-size:22px;font-weight:700;margin-bottom:6px;">RELATÓRIO TÉCNICO CONSOLIDADO</h1>'
-    +'<h2 style="color:#CCCCCC;font-size:14px;font-weight:400;margin-bottom:20px;">'+titulo+'</h2>'
-    +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px 24px;border-top:1px solid #444;padding-top:16px;">'
-    +infoCell("Edital",edital)+infoCell("Data da Prova",dataProva)+infoCell("Turno(s)",turnosStr)
-    +infoCell("Total de Locais",n)+infoCell("Coordenador Pedagógico",coordPed)+infoCell("Coordenador Logístico",coordLog)
+  // ── CAPA ──
+  html+='<div style="'+PC+'background:'+corE+';padding:36px 36px 28px;border-radius:8px 8px 0 0;margin-bottom:0;">'
+    +'<p style="'+PC+'color:'+corR+';font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">Instituto Brasileiro de Gestão e Pesquisa</p>'
+    +'<h1 style="color:#fff;font-size:26px;font-weight:700;margin-bottom:8px;letter-spacing:.5px;">RELATÓRIO TÉCNICO CONSOLIDADO</h1>'
+    +'<h2 style="color:#BBBBBB;font-size:15px;font-weight:400;margin-bottom:28px;">'+titulo+'</h2>'
+    +'<div style="border-top:1px solid #3D3D3D;padding-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px 32px;">'
+    +infoCell("Edital",edital)
+    +infoCell("Data da Prova",dataProva)
+    +infoCell("Turno(s)",turnosStr)
+    +infoCell("Total de Locais",n)
+    +infoCell("Coordenador Pedagógico",coordPed)
+    +infoCell("Coordenador Logístico",coordLog)
     +infoCell("Gerado em",hoje)
     +'</div></div>'
-    +'<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;height:4px;background:'+corR+';margin-bottom:24px;border-radius:0 0 6px 6px;"></div>';
+    +'<div style="'+PC+'height:5px;background:'+corR+';margin-bottom:32px;border-radius:0 0 8px 8px;"></div>';
 
-  // 1. Apresentação
+  // ── 1. APRESENTAÇÃO ──
   html+=secH("1","Apresentação");
-  html+='<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#fff;border-radius:6px;padding:18px 20px;border-left:4px solid '+corP+';margin-bottom:24px;">'
-    +'<p style="font-size:13px;line-height:1.8;color:#333;">Este relatório consolida as informações de <strong>'+n+(n===1?" local":" locais")+'</strong> de aplicação das provas objetivas do <strong>'+titulo+'</strong> — '+edital+', realizadas em '+dataProva+', turno'+(Object.keys(turnosSet).length>1?"s":"")+" "+turnosStr+'.</p>'
-    +'<p style="font-size:13px;line-height:1.8;color:#333;margin-top:10px;">'+(n===1?"O local dispõe":"Os "+n+" locais dispõem")+' de relatório técnico individual, arquivado separadamente. Os quantitativos de candidatos inscritos, presentes e ausentes apresentados neste documento têm como fonte autoritativa a base de leitura do IBGP, totalizando <strong>'+nCargos+(nCargos===1?" cargo":" cargos")+'</strong> distribuídos em <strong>'+totSalas+' salas</strong> de prova.</p>'
+  html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corP+';">'
+    +'<p>Este relatório consolida as informações de <strong>'+n+(n===1?" local":" locais")+'</strong> de aplicação das provas objetivas do <strong>'+titulo+'</strong> — '+edital+', realizadas em '+dataProva+', turno'+(Object.keys(turnosSet).length>1?"s":"")+" "+turnosStr+'.</p>'
+    +'<p>'+(n===1?"O local dispõe":"Os "+n+" locais dispõem")+' de relatório técnico individual, arquivado separadamente. Os quantitativos de candidatos inscritos, presentes e ausentes apresentados neste documento têm como fonte autoritativa a base de leitura do IBGP, totalizando <strong>'+nCargos+(nCargos===1?" cargo":" cargos")+'</strong> distribuídos em <strong>'+totSalas+' salas</strong> de prova.</p>'
+    +'<p>Em todos os locais a aplicação transcorreu conforme o cronograma definido no edital. Os procedimentos padronizados do IBGP foram aplicados integralmente, incluindo controle de acesso, distribuição de provas, identificação de candidatos e encerramento com lacre de malotes.</p>'
     +'</div>';
 
-  // 2. Resumo Executivo
+  // ── 2. RESUMO EXECUTIVO ──
   html+=secH("2","Resumo Executivo");
-  html+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">'
-    +indicador(n,"Locais de Aplicação")+indicador(nCargos,"Cargos")+indicador(totSalas,"Salas Utilizadas")+indicador(totI,"Candidatos Inscritos")
-    +indicador(totP,"Candidatos Presentes")+indicador(totA,"Candidatos Ausentes")+indicador(pct(totP,totI),"Taxa de Presença")+indicador(pct(totA,totI),"Taxa de Ausência")
+
+  // Texto resumo
+  var pctPres=pct2(totP,totI), pctAus=pct2(totA,totI);
+  html+='<div class="card" style="padding:24px 28px;">'
+    +'<p>A aplicação foi conduzida simultaneamente em <strong>'+n+'</strong> '+(n===1?"local":"locais")+', totalizando <strong>'+totSalas+'</strong> salas. Foram registrados <strong>'+totI+'</strong> candidatos inscritos, <strong>'+totP+'</strong> presentes ('+pctPres+') e <strong>'+totA+'</strong> ausentes ('+pctAus+').</p>'
     +'</div>';
 
-  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">';
+  // Indicadores Globais (tabela 2×4 como no Word)
+  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Indicadores Globais</p>';
+  html+='<div class="card" style="margin-bottom:28px;"><table><tbody>'
+    +'<tr>'+indCard(n,"Locais de Aplicação")+indCard(nCargos,"Cargos")+indCard(totSalas,"Salas Utilizadas")+indCard(totI,"Candidatos Inscritos")+'</tr>'
+    +'<tr>'+indCard(totP,"Candidatos Presentes")+indCard(totA,"Candidatos Ausentes")+indCard(pctPres,"Taxa de Presença")+indCard(pctAus,"Taxa de Ausência")+'</tr>'
+    +'</tbody></table></div>';
 
-  // Top 5 locais
-  html+='<div><div style="font-size:11px;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Top '+Math.min(5,n)+' Locais — Maior Número de Inscritos</div>'
-    +'<div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E0E0E0;"><table><thead><tr>'
-    +'<th '+thS()+'>Local</th><th '+thS("text-align:center;")+'>Insc.</th><th '+thS("text-align:center;")+'>Pres.</th><th '+thS("text-align:center;")+'>Aus.</th><th '+thS("text-align:center;")+'>% Aus.</th>'
+  // Top 5 locais (inscritos)
+  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Top '+Math.min(5,n)+' Cargos com Maior Número de Inscritos</p>';
+  html+='<div class="card" style="margin-bottom:24px;"><table><thead><tr>'
+    +'<th '+thS()+'>Cargo / Função</th>'
+    +'<th '+thS("text-align:center;")+'>Inscritos</th>'
+    +'<th '+thS("text-align:center;")+'>Presentes</th>'
+    +'<th '+thS("text-align:center;")+'>Ausentes</th>'
+    +'<th '+thS("text-align:center;")+'>% Aus.</th>'
     +'</tr></thead><tbody>';
   top5Locais.forEach(function(e,i){
-    var t=e._totais||{ins:0,pre:0,aus:0};
-    html+='<tr><td '+tdS(i)+'>'+e.nome+'</td><td '+tdS(i,"text-align:center;")+'>'+t.ins+'</td><td '+tdS(i,"text-align:center;")+'>'+t.pre+'</td><td '+tdS(i,"text-align:center;")+'>'+t.aus+'</td><td '+tdS(i,"text-align:center;")+'>'+pct(t.aus,t.ins)+'</td></tr>';
+    var t=e._tot||{ins:0,pre:0,aus:0};
+    html+='<tr><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.ins+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.pre+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(t.aus,t.ins)+'</td></tr>';
   });
-  html+='</tbody></table></div></div>';
+  html+='</tbody></table></div>';
 
-  // Top 5 cargos ausência
-  html+='<div><div style="font-size:11px;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Top 5 Cargos — Maior Taxa de Ausência</div>'
-    +'<div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E0E0E0;"><table><thead><tr>'
-    +'<th '+thS()+'>Cargo / Função</th><th '+thS("text-align:center;")+'>Inscritos</th><th '+thS("text-align:center;")+'>Ausentes</th><th '+thS("text-align:center;")+'>% Aus.</th>'
+  // Top 5 cargos (ausência)
+  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Top 5 Cargos com Maior Taxa de Ausência</p>';
+  html+='<div class="card" style="margin-bottom:24px;"><table><thead><tr>'
+    +'<th '+thS()+'>Cargo / Função</th>'
+    +'<th '+thS("text-align:center;")+'>Inscritos</th>'
+    +'<th '+thS("text-align:center;")+'>Ausentes</th>'
+    +'<th '+thS("text-align:center;")+'>% Ausência</th>'
     +'</tr></thead><tbody>';
-  if(top5Ausencia.length>0){
-    top5Ausencia.forEach(function(c,i){
-      html+='<tr><td '+tdS(i)+'>'+c.nome+'</td><td '+tdS(i,"text-align:center;")+'>'+c.inscr+'</td><td '+tdS(i,"text-align:center;")+'>'+c.aus+'</td><td '+tdS(i,"text-align:center;")+'>'+pct(c.aus,c.inscr)+'</td></tr>';
+  if(top5Aus.length>0){
+    top5Aus.forEach(function(c,i){
+      html+='<tr><td '+tdZ(i)+'>'+c.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.inscr+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(c.aus,c.inscr)+'</td></tr>';
     });
   } else {
-    html+='<tr><td colspan="4" style="padding:12px;text-align:center;color:#999;font-size:12px;">Dados insuficientes</td></tr>';
+    html+='<tr><td colspan="4" '+td()+' style="text-align:center;color:#999;">Dados insuficientes</td></tr>';
   }
-  html+='</tbody></table></div></div>';
-  html+='</div>'; // fim 2-col
+  html+='</tbody></table></div>';
 
   // Procedimentos Padronizados
-  html+='<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#fff;border-radius:6px;padding:16px 20px;border-left:4px solid '+corR+';margin-bottom:24px;">'
-    +'<div style="font-size:11px;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;">Procedimentos Padronizados — Aplicados em Todos os Locais</div>'
-    +'<ol style="padding-left:18px;font-size:12px;line-height:2.1;color:#333;">'
-    +'<li>Reunião de alinhamento com a equipe antes do início das operações no local.</li>'
-    +'<li>Abertura do portão com conferência de documentos e lista de presença da equipe.</li>'
+  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Procedimentos Padronizados — Aplicados em Todos os Locais</p>';
+  html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corR+';">'
+    +'<ol style="padding-left:20px;font-size:13px;line-height:2.2;color:#333;">'
+    +'<li>Reunião de alinhamento com a equipe: 05h50 às 06h45.</li>'
+    +'<li>Abertura do portão às 07h00, com conferência de documentos e lista de presença da equipe.</li>'
     +'<li>Abertura dos malotes de provas com testemunhas e registro fotográfico.</li>'
-    +'<li>Distribuição dos pacotes de provas com capa virada para a carteira.</li>'
-    +'<li>Fechamento do portão pontualmente no horário previsto, com lavratura do Termo de Fechamento.</li>'
-    +'<li>Início das provas conforme cronograma do edital.</li>'
+    +'<li>Distribuição dos pacotes de provas às 07h30, com capa virada para a carteira.</li>'
+    +'<li>Fechamento do portão pontualmente às 08h00, com lavratura do Termo de Fechamento.</li>'
+    +'<li>Início das provas às 08h30, conforme cronograma do edital.</li>'
     +'<li>Identificação dos candidatos mediante documento oficial com foto.</li>'
     +'<li>Proibição e recolhimento de dispositivos eletrônicos antes do início.</li>'
-    +'<li>Aplicação de prova condicional com protocolo e registro em formulário próprio.</li>'
+    +'<li>Aplicação de prova condicional com protocolo e registro em formulário.</li>'
     +'<li>Fechamento e lacre dos malotes com folhas de respostas, sob testemunho dos coordenadores locais.</li>'
     +'<li>Encaminhamento de formulários, atas e malotes à coordenação logística.</li>'
     +'</ol></div>';
 
-  // 3. Locais de Aplicação
+  // ── 3. LOCAIS DE APLICAÇÃO ──
+  html+='<div class="pb">';
   html+=secH("3","Locais de Aplicação");
-  html+='<div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E0E0E0;margin-bottom:24px;"><table><thead><tr>'
-    +'<th '+thS("width:36px;text-align:center;")+'>#</th><th '+thS()+'>Local de Aplicação</th><th '+thS()+'>Data</th><th '+thS("text-align:center;")+'> Salas</th><th '+thS()+'>Coord. Local</th>'
+  html+='<p>A tabela abaixo lista os '+n+' '+(n===1?"local":"locais")+' de aplicação das provas, com o número de salas utilizadas e a coordenação local responsável.</p>';
+  html+='<div class="card"><table><thead><tr>'
+    +'<th '+thS("width:40px;text-align:center;")+'>#</th>'
+    +'<th '+thS()+'>Local de Aplicação</th>'
+    +'<th '+thS()+'>Data</th>'
+    +'<th '+thS("text-align:center;")+'>Salas</th>'
+    +'<th '+thS()+'>Coord. Local</th>'
     +'</tr></thead><tbody>';
   escolas.forEach(function(e,i){
-    html+='<tr><td '+tdS(i,"text-align:center;")+'>'+(i+1)+'</td><td '+tdS(i)+'>'+e.nome+'</td><td '+tdS(i)+'>'+dataProva+'</td><td '+tdS(i,"text-align:center;")+'>'+(e.salas||"—")+'</td><td '+tdS(i)+'>'+(e.coord_local||"—")+'</td></tr>';
+    html+='<tr><td '+tdZ(i,"text-align:center;font-weight:700;")+'>'+(i+1)+'</td><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i)+'>'+dataProva+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"—")+'</td><td '+tdZ(i)+'>'+(e.coord_local||"—")+'</td></tr>';
   });
-  html+='<tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;">'
-    +'<td colspan="2" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#E8E8E8!important;padding:9px 10px;font-weight:700;font-size:12px;">TOTAL — '+n+(n===1?" LOCAL":" LOCAIS")+'</td>'
-    +'<td style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#E8E8E8!important;padding:9px 10px;font-weight:700;font-size:12px;">'+dataProva+'</td>'
-    +'<td style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#E8E8E8!important;padding:9px 10px;font-weight:700;text-align:center;font-size:12px;">'+totSalas+'</td>'
-    +'<td style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#E8E8E8!important;padding:9px 10px;font-weight:700;font-size:12px;">'+n+(n===1?" coordenador":" coordenadores")+'</td>'
-    +'</tr></tbody></table></div>';
+  html+=totalRow([["TOTAL — "+n+(n===1?" LOCAL":" LOCAIS"),"font-weight:700;","colspan='2'"],
+    [dataProva,""],
+    [totSalas,"text-align:center;"],
+    [n+(n===1?" coordenador":" coordenadores"),""]
+  ]);
+  html+='</tbody></table></div></div>';
 
-  // 4. Quadro Consolidado por Cargo
-  html+='<div class="page-break">';
+  // ── 4. QUADRO CONSOLIDADO POR CARGO ──
+  html+='<div class="pb">';
   html+=secH("4","Quadro Consolidado por Cargo");
-  html+='<p style="font-size:11px;color:#888;margin-bottom:10px;">Consolidação de '+nCargos+(nCargos===1?" cargo":" cargos")+' do certame. Linhas com taxa de ausência ≥ 50% estão destacadas em vermelho.</p>';
-  html+='<div style="background:#fff;border-radius:6px;overflow:hidden;border:1px solid #E0E0E0;margin-bottom:24px;"><table><thead><tr>'
-    +'<th '+thS("width:32px;text-align:center;")+'>#</th>'
+  html+='<p>Consolidação dos '+nCargos+' '+(nCargos===1?"cargo":"cargos")+' do certame. Linhas com taxa de ausência igual ou superior a 50% são destacadas em vermelho.</p>';
+  html+='<div class="card"><table><thead><tr>'
+    +'<th '+thS("width:36px;text-align:center;")+'>#</th>'
     +'<th '+thS()+'>Cargo / Função</th>'
     +'<th '+thS("text-align:center;")+'>Inscritos</th>'
     +'<th '+thS("text-align:center;")+'>Presentes</th>'
@@ -1193,35 +1233,123 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'<th '+thS("text-align:center;")+'>Inclusão</th>'
     +'<th '+thS("text-align:center;")+'>% Aus.</th>'
     +'</tr></thead><tbody>';
-
-  var totCI=0,totCP=0,totCA=0,totCIn=0;
-  var cargosOrdenados=cargosArr.slice().sort(function(a,b){return a.nome.localeCompare(b.nome,"pt");});
-  cargosOrdenados.forEach(function(c,i){
-    totCI+=c.inscr; totCP+=c.pres; totCA+=c.aus; totCIn+=c.incl;
-    var pAus=c.inscr>0?c.aus/c.inscr:0, hi=pAus>=0.5;
-    var bg=hi?"#FFEBEE":(i%2?"#f8f9fc":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
-    var rs='-webkit-print-color-adjust:exact;print-color-adjust:exact;background:'+bg+';color:'+tc+';';
+  var tCI=0,tCP=0,tCA=0,tCIn=0;
+  cargosArr.slice().sort(function(a,b){return a.nome.localeCompare(b.nome,"pt");}).forEach(function(c,i){
+    tCI+=c.inscr; tCP+=c.pres; tCA+=c.aus; tCIn+=c.incl;
+    var pA=c.inscr>0?c.aus/c.inscr:0, hi=pA>=0.5;
+    var bg=hi?"#FFEBEE":(i%2?"#F5F7FC":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
+    var s=PC+'background:'+bg+'!important;color:'+tc+';padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;';
     html+='<tr>'
-      +'<td style="'+rs+'padding:6px 8px;border-bottom:1px solid #eee;text-align:center;font-size:11px;">'+(i+1)+'</td>'
-      +'<td style="'+rs+'padding:6px 8px;border-bottom:1px solid #eee;font-size:11px;">'+c.nome+'</td>'
-      +'<td style="'+rs+'padding:6px 8px;border-bottom:1px solid #eee;text-align:center;font-size:11px;">'+c.inscr+'</td>'
-      +'<td style="'+rs+'padding:6px 8px;border-bottom:1px solid #eee;text-align:center;font-size:11px;">'+c.pres+'</td>'
-      +'<td style="'+rs+'padding:6px 8px;border-bottom:1px solid #eee;text-align:center;font-size:11px;">'+c.aus+'</td>'
-      +'<td style="'+rs+'padding:6px 8px;border-bottom:1px solid #eee;text-align:center;font-size:11px;">'+c.incl+'</td>'
-      +'<td style="'+rs+'padding:6px 8px;border-bottom:1px solid #eee;text-align:center;font-size:11px;font-weight:'+(hi?"700":"400")+';">'+(pAus*100).toFixed(1)+'%</td>'
+      +'<td style="'+s+'text-align:center;font-weight:600;">'+(i+1)+'</td>'
+      +'<td style="'+s+'">'+c.nome+'</td>'
+      +'<td style="'+s+'text-align:center;">'+c.inscr+'</td>'
+      +'<td style="'+s+'text-align:center;">'+c.pres+'</td>'
+      +'<td style="'+s+'text-align:center;">'+c.aus+'</td>'
+      +'<td style="'+s+'text-align:center;">'+c.incl+'</td>'
+      +'<td style="'+s+'text-align:center;font-weight:'+(hi?"700":"400")+';">'+(pA*100).toFixed(1)+'%</td>'
       +'</tr>';
   });
+  html+=totalRow([["TOTAL — "+nCargos+(nCargos===1?" CARGO":" CARGOS"),"","colspan='2'"],
+    [tCI,"text-align:center;"],
+    [tCP,"text-align:center;"],
+    [tCA,"text-align:center;"],
+    [tCIn,"text-align:center;"],
+    [pct(tCA,tCI),"text-align:center;"]
+  ]);
+  html+='</tbody></table></div></div>';
 
-  html+='<tr><td colspan="2" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:'+corE+'!important;color:#fff!important;padding:9px 10px;font-weight:700;font-size:12px;">TOTAL — '+nCargos+(nCargos===1?" CARGO":" CARGOS")+'</td>'
-    +'<td style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:'+corE+'!important;color:#fff!important;padding:9px 10px;font-weight:700;text-align:center;font-size:12px;">'+totCI+'</td>'
-    +'<td style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:'+corE+'!important;color:#fff!important;padding:9px 10px;font-weight:700;text-align:center;font-size:12px;">'+totCP+'</td>'
-    +'<td style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:'+corE+'!important;color:#fff!important;padding:9px 10px;font-weight:700;text-align:center;font-size:12px;">'+totCA+'</td>'
-    +'<td style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:'+corE+'!important;color:#fff!important;padding:9px 10px;font-weight:700;text-align:center;font-size:12px;">'+totCIn+'</td>'
-    +'<td style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:'+corE+'!important;color:#fff!important;padding:9px 10px;font-weight:700;text-align:center;font-size:12px;">'+pct(totCA,totCI)+'</td>'
-    +'</tr></tbody></table></div>';
+  // ── 5. RESULTADO POR LOCAL ──
+  html+='<div class="pb">';
+  html+=secH("5","Resultado por Local");
+  html+='<p>Resultado consolidado por local de aplicação: salas utilizadas, quantitativos, taxa de ausência, ocorrências e cargo com maior taxa de ausência.</p>';
+  html+='<div class="card"><table><thead><tr>'
+    +'<th '+thS("width:36px;text-align:center;")+'>#</th>'
+    +'<th '+thS()+'>Local</th>'
+    +'<th '+thS("text-align:center;")+'>Salas</th>'
+    +'<th '+thS("text-align:center;")+'>Prev.</th>'
+    +'<th '+thS("text-align:center;")+'>Pres.</th>'
+    +'<th '+thS("text-align:center;")+'>Aus.</th>'
+    +'<th '+thS("text-align:center;")+'>% Aus.</th>'
+    +'<th '+thS("text-align:center;")+'>Ocorr.</th>'
+    +'<th '+thS()+'>Cargo c/ Maior Aus.</th>'
+    +'</tr></thead><tbody>';
+  escolas.forEach(function(e,i){
+    var t=e._tot||{ins:0,pre:0,aus:0};
+    var mc=e._cargoMaiorAus;
+    var mcStr=mc?mc.cargo.replace(/^\d+\s*[-—]\s*/,"").trim()+" ("+pct(Number(mc.aus)||0,Number(mc.inscr)||1)+")":"—";
+    var ocorrStr=e._hasOcorr?'<span style="'+PC+'background:#FFEBEE!important;color:#B71C1C;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;">Sim</span>':'<span style="color:#888;font-size:11px;">Não</span>';
+    html+='<tr><td '+tdZ(i,"text-align:center;font-weight:600;")+'>'+(i+1)+'</td><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"—")+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.ins+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.pre+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(t.aus,t.ins)+'</td><td '+tdZ(i,"text-align:center;")+'>'+ocorrStr+'</td><td '+tdZ(i)+'>'+mcStr+'</td></tr>';
+  });
+  html+=totalRow([
+    ["TOTAL — "+n+(n===1?" LOCAL":" LOCAIS"),"","colspan='2'"],
+    [totSalas,"text-align:center;"],
+    [totI,"text-align:center;"],
+    [totP,"text-align:center;"],
+    [totA,"text-align:center;"],
+    [pct(totA,totI),"text-align:center;"],
+    ["",""],
+    ["",""]
+  ]);
+  html+='</tbody></table></div></div>';
 
-  html+='</div>'; // fim page-break
-  html+='<div style="text-align:center;font-size:10px;color:#aaa;margin-top:16px;padding-bottom:8px;">Gerado em '+agora+' — IBGP Sistema de Aplicação</div>';
+  // ── 6. DETALHAMENTO OPERACIONAL POR LOCAL ──
+  html+='<div class="pb">';
+  html+=secH("6","Detalhamento Operacional por Local");
+  html+='<p>Para cada local são apresentadas as informações operacionais e os quantitativos por cargo.</p>';
+
+  escolas.forEach(function(e,ei){
+    html+='<div style="margin-bottom:28px;">';
+    // Cabeçalho do local
+    html+='<div style="'+PC+'background:'+corP+';color:#fff;padding:12px 18px;border-radius:6px 6px 0 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">'
+      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Local '+(ei+1)+'</span><strong style="font-size:13px;">'+e.nome+'</strong></div>'
+      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Data da aplicação</span><span style="font-size:12px;">'+dataProva+'</span></div>'
+      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Salas utilizadas</span><span style="font-size:12px;">'+(e.salas||"—")+' salas</span></div>'
+      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Coordenador Pedagógico</span><span style="font-size:12px;">'+coordPed+'</span></div>'
+      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Coordenador Logístico</span><span style="font-size:12px;">'+coordLog+'</span></div>'
+      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Coord. Local</span><span style="font-size:12px;">'+(e.coord_local||"—")+'</span></div>'
+      +'</div>';
+    // Tabela de resultados
+    var rows=e.resultados||[];
+    var eCI=0,eCP=0,eCA=0,eCIn=0;
+    html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;overflow:hidden;"><table><thead><tr>'
+      +'<th '+thS()+'>Cargo / Função</th>'
+      +'<th '+thS("text-align:center;")+'>Previstos</th>'
+      +'<th '+thS("text-align:center;")+'>Presentes</th>'
+      +'<th '+thS("text-align:center;")+'>Ausentes</th>'
+      +'<th '+thS("text-align:center;")+'>Inclusão</th>'
+      +'<th '+thS("text-align:center;")+'>% Ausência</th>'
+      +'</tr></thead><tbody>';
+    rows.forEach(function(r,i){
+      var ins=Number(r.inscr)||0,pre=Number(r.pres)||0,aus=Number(r.aus)||0,inc=Number(r.incl)||0;
+      eCI+=ins; eCP+=pre; eCA+=aus; eCIn+=inc;
+      var pA=ins>0?aus/ins:0, hi=pA>=0.5;
+      var bg=hi?"#FFEBEE":(i%2?"#F5F7FC":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
+      var s=PC+'background:'+bg+'!important;color:'+tc+';padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;';
+      html+='<tr>'
+        +'<td style="'+s+'">'+r.cargo.replace(/^\d+\s*[-—]\s*/,"").trim()+'</td>'
+        +'<td style="'+s+'text-align:center;">'+ins+'</td>'
+        +'<td style="'+s+'text-align:center;">'+pre+'</td>'
+        +'<td style="'+s+'text-align:center;">'+aus+'</td>'
+        +'<td style="'+s+'text-align:center;">'+inc+'</td>'
+        +'<td style="'+s+'text-align:center;font-weight:'+(hi?"700":"400")+';">'+(pA*100).toFixed(1)+'%</td>'
+        +'</tr>';
+    });
+    if(rows.length===0){
+      html+='<tr><td colspan="6" '+td()+' style="text-align:center;color:#999;padding:16px;">Nenhum resultado registrado</td></tr>';
+    } else {
+      html+=totalRow([["TOTAL",""],
+        [eCI,"text-align:center;"],
+        [eCP,"text-align:center;"],
+        [eCA,"text-align:center;"],
+        [eCIn,"text-align:center;"],
+        [pct(eCA,eCI),"text-align:center;"]
+      ]);
+    }
+    html+='</tbody></table></div>';
+    html+='</div>'; // fim local
+  });
+
+  html+='</div>'; // fim pb sec6
   html+='</body></html>';
   win.document.write(html);
   win.document.close();
