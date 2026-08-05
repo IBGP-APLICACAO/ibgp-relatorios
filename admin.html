@@ -852,19 +852,19 @@ function abrirRelatorioImprimivel(dados) {
   }
 
   function secao(titulo, cor, conteudo) {
-    return `<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#fff;border-radius:8px;margin-bottom:14px;overflow:hidden;page-break-inside:avoid;box-shadow:0 1px 4px rgba(0,0,0,.08);">
-      <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};padding:9px 16px;">
+    return `<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#fff;border-radius:6px;margin-bottom:12px;overflow:hidden;page-break-inside:avoid;border:1px solid #E0E0E0;border-left:4px solid ${cor};">
+      <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};padding:8px 14px;">
         <h3 style="color:#fff;font-size:11px;margin:0;text-transform:uppercase;letter-spacing:.6px;font-weight:700;">${titulo}</h3>
       </div>
-      <div style="padding:14px 16px;">${conteudo}</div>
+      <div style="padding:12px 16px;">${conteudo}</div>
     </div>`;
   }
 
   function grid2(l1,v1,l2,v2) {
     const cel = (l,v) => l
-      ? `<div style="padding:4px 0;"><span style="display:block;font-size:9px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;">${l}</span><span style="font-size:12px;color:#1a1a1a;">${v||"—"}</span></div>`
+      ? `<div style="padding:6px 0;"><span style="display:block;font-size:9px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;">${l}</span><span style="font-size:12px;color:#1a1a1a;">${v||"—"}</span></div>`
       : "<div></div>";
-    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;margin-bottom:4px;">${cel(l1,v1)}${cel(l2,v2)}</div>`;
+    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;border-bottom:1px solid #F0F0F0;padding:2px 0;">${cel(l1,v1)}${cel(l2,v2)}</div>`;
   }
 
   let html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
