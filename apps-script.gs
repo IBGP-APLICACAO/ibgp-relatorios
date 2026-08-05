@@ -57,6 +57,17 @@ function doGet(e) {
 }
 
 // ────────────────────────────────────────────────────────────────
+//  Helper — formata valor de hora do Sheets como "HH:mm"
+// ────────────────────────────────────────────────────────────────
+function horaStr(v) {
+  if (!v) return "";
+  if (Object.prototype.toString.call(v) === "[object Date]") {
+    return Utilities.formatDate(v, Session.getScriptTimeZone(), "HH:mm");
+  }
+  return String(v);
+}
+
+// ────────────────────────────────────────────────────────────────
 //  Coleta dados de todas as abas para o Relatório Geral
 // ────────────────────────────────────────────────────────────────
 function coletarDadosRelatorio() {
@@ -91,8 +102,11 @@ function coletarDadosRelatorio() {
     wsHor.getRange(2, 1, wsHor.getLastRow() - 1, 11).getValues().forEach(function(r) {
       if (!escolas[r[0]]) return;
       escolas[r[0]].horarios.push({
-        turno: r[1], chegada: r[2], ab_portao: r[3], fch_portao: r[4],
-        distrib: r[5], inicio: r[6], encerr: r[7], fch_malote: r[8], ab_malote: r[9]
+        turno: r[1],
+        chegada:   horaStr(r[2]),  ab_portao: horaStr(r[3]),
+        fch_portao: horaStr(r[4]), distrib:   horaStr(r[5]),
+        inicio:    horaStr(r[6]),  encerr:    horaStr(r[7]),
+        fch_malote: horaStr(r[8]), ab_malote: horaStr(r[9])
       });
     });
   }
@@ -126,11 +140,11 @@ function coletarDadosRelatorio() {
   // OCORRÊNCIAS
   var wsOcorr = ss.getSheetByName("OCORRÊNCIAS");
   if (wsOcorr && wsOcorr.getLastRow() > 1) {
-    wsOcorr.getRange(2, 1, wsOcorr.getLastRow() - 1, 11).getValues().forEach(function(r) {
+    wsOcorr.getRange(2, 1, wsOcorr.getLastRow() - 1, 7).getValues().forEach(function(r) {
       if (!escolas[r[0]]) return;
       escolas[r[0]].ocorrencias.push({
         turno: r[1],
-        sala: r[2], cond: r[4], toque: r[6], decl: r[8]
+        sala: r[2], cond: r[3], toque: r[4], decl: r[5]
       });
     });
   }

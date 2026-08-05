@@ -839,142 +839,167 @@ function abrirRelatorioImprimivel(dados) {
   const win = window.open("", "_blank");
   const conc = dados.concurso || {};
   const escolas = dados.escolas || [];
+  const corM = "#1F3A6E", corT = "#CF3432", corH = "#2C2C2C";
 
-  const corM = "#1F3A6E", corT = "#CF3432", corH = "#393939";
+  // ── Formata hora: converte ISO timestamp ou string para "HH:mm"
+  function fh(val) {
+    if (!val || val === "—") return val || "—";
+    const s = String(val);
+    const m = s.match(/T(\d{2}:\d{2})/);
+    if (m) return m[1];
+    if (/^\d{1,2}:\d{2}/.test(s)) return s.substring(0,5);
+    return s;
+  }
 
   function secao(titulo, cor, conteudo) {
-    return `<div style="background:#fff;border-radius:8px;margin-bottom:14px;overflow:hidden;page-break-inside:avoid;">
-      <div style="background:${cor};padding:9px 14px;">
-        <h3 style="color:#fff;font-size:12px;margin:0;text-transform:uppercase;letter-spacing:.4px;">${titulo}</h3>
+    return `<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#fff;border-radius:8px;margin-bottom:14px;overflow:hidden;page-break-inside:avoid;box-shadow:0 1px 4px rgba(0,0,0,.08);">
+      <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};padding:9px 16px;">
+        <h3 style="color:#fff;font-size:11px;margin:0;text-transform:uppercase;letter-spacing:.6px;font-weight:700;">${titulo}</h3>
       </div>
       <div style="padding:14px 16px;">${conteudo}</div>
     </div>`;
   }
 
   function grid2(l1,v1,l2,v2) {
-    const cel = (l,v) => l ? `<div><span style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;">${l}</span><br><span style="font-size:12px;">${v||"—"}</span></div>` : "<div></div>";
-    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">${cel(l1,v1)}${cel(l2,v2)}</div>`;
+    const cel = (l,v) => l
+      ? `<div style="padding:4px 0;"><span style="display:block;font-size:9px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;">${l}</span><span style="font-size:12px;color:#1a1a1a;">${v||"—"}</span></div>`
+      : "<div></div>";
+    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;margin-bottom:4px;">${cel(l1,v1)}${cel(l2,v2)}</div>`;
   }
 
   let html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
-  <title>Relatório Geral — IBGP</title>
+  <title>Relatório Individual — IBGP</title>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Arial,sans-serif;background:#f2f2f2;padding:20px;font-size:13px;color:#393939;}
-    .page-header{background:#393939;color:#fff;padding:16px 24px;border-radius:8px 8px 0 0;margin-bottom:4px;}
-    .red-bar{height:4px;background:#CF3432;margin-bottom:20px;border-radius:0 0 4px 4px;}
-    .escola-titulo{background:#393939;color:#fff;padding:10px 16px;font-size:14px;font-weight:700;border-radius:8px;margin:24px 0 12px;}
-    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;}
-    th{background:#555;color:#fff;padding:6px 8px;text-align:left;}
-    td{padding:5px 8px;border-bottom:1px solid #eee;}
-    tr:nth-child(even) td{background:#f8f8f8;}
-    .total-row td{background:#eee!important;font-weight:700;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Arial,sans-serif;background:#EFEFEF;padding:24px;font-size:13px;color:#2C2C2C;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+    th{-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:#fff;}
+    td{padding:6px 10px;border-bottom:1px solid #eee;font-size:12px;}
+    tr:last-child td{border-bottom:none;}
+    .alt td{background:#F7F7F7;}
+    .total-row td{-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#E8E8E8!important;font-weight:700;font-size:12px;}
+    .no-print{display:flex;}
     @media print{
-      body{background:#fff;padding:0;}
-      .no-print{display:none;}
+      body{background:#fff;padding:12px;}
+      .no-print{display:none!important;}
       .page-break{page-break-before:always;}
     }
   </style></head><body>`;
 
-  html += `<div class="no-print" style="background:#1F3A6E;color:#fff;padding:12px 20px;margin-bottom:16px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;">
-    <span>Relatório Geral — IBGP</span>
-    <button onclick="window.print()" style="background:#CF3432;color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">🖨 Imprimir / Salvar PDF</button>
+  // Barra superior (apenas na tela)
+  html += `<div class="no-print" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#1F3A6E;color:#fff;padding:12px 20px;margin-bottom:16px;border-radius:8px;align-items:center;justify-content:space-between;">
+    <span style="font-weight:700;">Relatório Individual — IBGP</span>
+    <button onclick="window.print()" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#CF3432;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">🖨 Imprimir / Salvar PDF</button>
   </div>`;
-
-  html += `<div class="page-header">
-    <h1 style="font-size:16px;margin:0;">IBGP — Relatório Geral de Aplicação de Prova</h1>
-    <p style="font-size:12px;color:#bbb;margin-top:4px;">${conc["Título do Concurso"]||""} &bull; ${conc["Data da Prova"]||""} &bull; ${conc["Edital"]||""}</p>
-  </div><div class="red-bar"></div>`;
-
-  // Resumo geral
-  let totI=0,totP=0,totA=0,totIn=0;
-  escolas.forEach(function(e){
-    (e.resultados||[]).forEach(function(r){totI+=Number(r.inscr)||0;totP+=Number(r.pres)||0;totA+=Number(r.aus)||0;totIn+=Number(r.incl)||0;});
-  });
-  html += secao("Resumo Geral", corH,
-    grid2("Total de Locais", escolas.length, "Total de Inscritos", totI) +
-    grid2("Total de Presentes", totP, "Total de Ausentes", totA) +
-    grid2("Total de Inclusões", totIn, "Gerado em", new Date().toLocaleString("pt-BR"))
-  );
 
   // Por escola
   escolas.forEach(function(e, ei) {
     html += `<div class="${ei > 0 ? 'page-break' : ''}">`;
-    html += `<div class="escola-titulo">📍 ${e.nome}</div>`;
 
-    // Identificação
+    // Cabeçalho da escola
+    html += `<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#2C2C2C;padding:16px 20px;border-radius:8px 8px 0 0;">
+      <p style="color:#CF3432;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">IBGP — Relatório de Aplicação de Prova</p>
+      <h1 style="color:#fff;font-size:17px;margin:0 0 4px;">${e.nome || "—"}</h1>
+      <p style="color:#bbb;font-size:11px;">${conc["Título do Concurso"]||""} &bull; ${conc["Data da Prova"]||""} &bull; ${conc["Edital"]||""}</p>
+    </div>
+    <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;height:4px;background:#CF3432;margin-bottom:16px;border-radius:0 0 4px 4px;"></div>`;
+
+    // Identificação (sem obs)
     html += secao("Identificação", corH,
       grid2("Coordenador Local", e.coord_local, "Turno(s)", e.turno) +
-      grid2("Houve Apoio?", e.houve_apoio, "Nome do Apoio", e.nome_apoio||"—") +
-      (e.obs ? `<div style="margin-top:8px;"><span style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;">Observações</span><br><span>${e.obs}</span></div>` : "")
+      grid2("Houve Apoio?", e.houve_apoio, "Nome do Apoio", e.nome_apoio||"—")
     );
 
-    // Horários
+    // Horários por turno
     (e.horarios||[]).forEach(function(h) {
       const cor = h.turno==="Manhã" ? corM : corT;
       html += secao("Horários — " + h.turno, cor,
-        grid2("Chegada da equipe", h.chegada, "Abertura do portão", h.ab_portao) +
-        grid2("Abertura do malote", h.ab_malote, "Distribuição dos pacotes", h.distrib) +
-        grid2("Fechamento do portão", h.fch_portao, "Início da aplicação", h.inicio) +
-        grid2("Encerramento", h.encerr, "Fechamento do malote", h.fch_malote)
+        grid2("Chegada da equipe", fh(h.chegada), "Abertura do portão", fh(h.ab_portao)) +
+        grid2("Abertura do malote", fh(h.ab_malote), "Distribuição dos pacotes", fh(h.distrib)) +
+        grid2("Fechamento do portão", fh(h.fch_portao), "Início da aplicação", fh(h.inicio)) +
+        grid2("Encerramento", fh(h.encerr), "Fechamento do malote", fh(h.fch_malote))
       );
     });
 
-    // Testemunhas
-    const turnos = [...new Set((e.testemunhas||[]).map(t=>t.turno))];
-    turnos.forEach(function(turno) {
+    // Testemunhas por turno
+    const turnosTest = [...new Set((e.testemunhas||[]).map(t=>t.turno))];
+    turnosTest.forEach(function(turno) {
       const cor = turno==="Manhã" ? corM : corT;
       const tt = (e.testemunhas||[]).filter(t=>t.turno===turno);
       let tHtml = "";
       tt.forEach(function(t) {
-        tHtml += `<div style="margin-bottom:10px;"><strong style="font-size:11px;color:#888;">${t.tipo}</strong><br>`;
-        tHtml += `1. ${t.t1_nome} — ${t.t1_cpf}<br>2. ${t.t2_nome} — ${t.t2_cpf}<br>3. ${t.t3_nome} — ${t.t3_cpf}</div>`;
+        tHtml += `<div style="margin-bottom:12px;">
+          <div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">${t.tipo}</div>
+          <div style="font-size:12px;line-height:1.8;">
+            1. ${t.t1_nome||"—"} — ${t.t1_cpf||"—"}<br>
+            2. ${t.t2_nome||"—"} — ${t.t2_cpf||"—"}<br>
+            3. ${t.t3_nome||"—"} — ${t.t3_cpf||"—"}
+          </div>
+        </div>`;
       });
-      html += secao("Testemunhas — " + turno, cor, tHtml);
+      if (tHtml) html += secao("Testemunhas — " + turno, cor, tHtml);
     });
 
-    // Estatística
+    // Estatística por turno
     const turnosRes = [...new Set((e.resultados||[]).map(r=>r.turno))];
     turnosRes.forEach(function(turno) {
       const cor = turno==="Manhã" ? corM : corT;
       const rows = (e.resultados||[]).filter(r=>r.turno===turno);
       let tI=0,tP=0,tA=0,tIn=0;
-      let tabela = `<table><thead><tr>
-        <th>Cargo</th><th style="text-align:center">Inscritos</th>
-        <th style="text-align:center">Presentes</th><th style="text-align:center">Ausentes</th>
-        <th style="text-align:center">Inclusões</th></tr></thead><tbody>`;
-      rows.forEach(function(r){
-        tI+=Number(r.inscr)||0;tP+=Number(r.pres)||0;tA+=Number(r.aus)||0;tIn+=Number(r.incl)||0;
-        tabela+=`<tr><td>${r.sala} — ${r.cargo.replace(/^01\s+/,"")}</td>
-          <td style="text-align:center">${r.inscr}</td><td style="text-align:center">${r.pres}</td>
-          <td style="text-align:center">${r.aus}</td><td style="text-align:center">${r.incl||0}</td></tr>`;
+      let tabela = `<table><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
+        <th style="background:${cor};">Cargo</th>
+        <th style="background:${cor};text-align:center;">Inscritos</th>
+        <th style="background:${cor};text-align:center;">Presentes</th>
+        <th style="background:${cor};text-align:center;">Ausentes</th>
+        <th style="background:${cor};text-align:center;">Inclusões</th>
+      </tr></thead><tbody>`;
+      rows.forEach(function(r, i){
+        tI+=Number(r.inscr)||0; tP+=Number(r.pres)||0; tA+=Number(r.aus)||0; tIn+=Number(r.incl)||0;
+        tabela+=`<tr class="${i%2===1?'alt':''}"><td>${r.sala} — ${r.cargo.replace(/^\d+\s+-\s+/,"")}</td>
+          <td style="text-align:center;">${r.inscr}</td><td style="text-align:center;">${r.pres}</td>
+          <td style="text-align:center;">${r.aus}</td><td style="text-align:center;">${r.incl||0}</td></tr>`;
       });
-      tabela+=`<tr class="total-row"><td>TOTAL</td>
-        <td style="text-align:center">${tI}</td><td style="text-align:center">${tP}</td>
-        <td style="text-align:center">${tA}</td><td style="text-align:center">${tIn}</td></tr>`;
+      tabela+=`<tr class="total-row"><td><strong>TOTAL</strong></td>
+        <td style="text-align:center;">${tI}</td><td style="text-align:center;">${tP}</td>
+        <td style="text-align:center;">${tA}</td><td style="text-align:center;">${tIn}</td></tr>`;
       tabela += "</tbody></table>";
       html += secao("Estatística por Cargo — " + turno, cor, tabela);
     });
 
-    // Ocorrências
-    if ((e.ocorrencias||[]).length > 0) {
-      e.ocorrencias.forEach(function(o) {
-        const cor = o.turno==="Manhã" ? corM : corT;
-        const cands = (e.candidatos||[]).filter(c=>c.turno===o.turno);
-        let oHtml = grid2("Ocorrências em sala", o.sala, "Prova condicional", o.cond) +
-                    grid2("Toque de celular", o.toque, "Declaração de comparecimento", o.decl);
-        if (cands.length > 0) {
-          oHtml += `<table style="margin-top:8px;"><thead><tr><th>Tipo</th><th>Inscrição</th><th>Candidato</th><th>Sala</th></tr></thead><tbody>`;
-          cands.forEach(function(c){
-            oHtml+=`<tr><td>${c.tipo}</td><td>${c.inscricao}</td><td>${c.candidato}</td><td>${c.sala}</td></tr>`;
-          });
-          oHtml += "</tbody></table>";
-        }
-        html += secao("Ocorrências — " + o.turno, cor, oHtml);
-      });
+    // Ocorrências por turno
+    (e.ocorrencias||[]).forEach(function(o) {
+      const cor = o.turno==="Manhã" ? corM : corT;
+      const cands = (e.candidatos||[]).filter(c=>c.turno===o.turno);
+      let oHtml = grid2("Ocorrências em sala", o.sala, "Prova condicional", o.cond) +
+                  grid2("Toque de celular", o.toque, "Declaração de comparecimento", o.decl);
+      if (cands.length > 0) {
+        oHtml += `<table style="margin-top:12px;"><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
+          <th style="background:${cor};">Tipo</th>
+          <th style="background:${cor};">Inscrição</th>
+          <th style="background:${cor};">Candidato</th>
+          <th style="background:${cor};">Sala</th>
+        </tr></thead><tbody>`;
+        cands.forEach(function(c, i){
+          oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.tipo}</td><td>${c.inscricao}</td><td>${c.candidato}</td><td>${c.sala}</td></tr>`;
+        });
+        oHtml += "</tbody></table>";
+      }
+      html += secao("Ocorrências — " + o.turno, cor, oHtml);
+    });
+
+    // Observações — ao final
+    if (e.obs) {
+      html += secao("Observações Gerais", corH,
+        `<p style="font-size:13px;line-height:1.6;color:#2C2C2C;">${e.obs}</p>`
+      );
     }
 
-    html += "</div>";
+    // Rodapé
+    html += `<div style="text-align:center;font-size:10px;color:#aaa;margin-top:8px;padding-bottom:8px;">
+      Gerado em ${new Date().toLocaleString("pt-BR")} — IBGP Sistema de Aplicação
+    </div>`;
+
+    html += "</div>"; // fim escola
   });
 
   html += "</body></html>";
