@@ -804,15 +804,15 @@ async function gerarRelatorioGeral() {
     const rCertame = await fetch(`dados/${certameId}.json?_=${Date.now()}`);
     if (!rCertame.ok) throw new Error("Certame não encontrado");
     const certameDados = await rCertame.json();
-    const escolasDoCertame = new Set((certameDados.escolas || []).map(e => e.nome));
+    const escolasDoCertame = new Set((certameDados.escolas || []).map(e => (e.nome || "").toUpperCase().trim()));
 
     // Busca dados do Apps Script
     const resp = await fetch(url + "?action=relatorio");
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     const dados = await resp.json();
 
-    // Filtra apenas escolas do certame selecionado
-    dados.escolas = (dados.escolas || []).filter(e => escolasDoCertame.has(e.nome));
+    // Filtra apenas escolas do certame selecionado (case-insensitive)
+    dados.escolas = (dados.escolas || []).filter(e => escolasDoCertame.has((e.nome || "").toUpperCase().trim()));
     dados.concurso["Título do Concurso"] = certameTitulo;
     dados.concurso["Data da Prova"]      = certameData;
     dados.concurso["Edital"]             = certameDados.edital || dados.concurso["Edital"] || "";
