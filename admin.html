@@ -374,7 +374,18 @@ async function removerCertame() {
 
     stEl.style.color = "#2e7d32";
     stEl.textContent = `✓ Certame "${id}" excluído com sucesso!`;
-    setTimeout(() => carregarListaCertames(), 1500);
+    // Remove imediatamente dos dois dropdowns (sem esperar CDN atualizar)
+    ["selRemover", "selRelatorio"].forEach(function(selId) {
+      var sel = document.getElementById(selId);
+      if (sel) {
+        var opt = sel.querySelector('option[value="' + id + '"]');
+        if (opt) opt.remove();
+      }
+    });
+    // Também limpa botões individuais se existirem
+    var botoesDiv = document.getElementById("botoesIndividuais");
+    if (botoesDiv) botoesDiv.innerHTML = "";
+    setTimeout(() => { carregarListaCertames(); carregarCertamesRelatorio(); }, 3000);
   } catch(err) {
     stEl.style.color = "#c62828";
     stEl.textContent = "Erro: " + err.message;
