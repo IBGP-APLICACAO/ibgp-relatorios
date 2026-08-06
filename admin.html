@@ -293,12 +293,22 @@ const GH_REPO  = "ibgp-relatorios";
 let coordenadores = [];
 
 // ── Gerenciar certames ────────────────────────────────────────────────
+function ghToken() {
+  return (document.getElementById("fTokenRemover")?.value || document.getElementById("fToken")?.value || "").trim();
+}
+async function fetchCertamesLista() {
+  // Sempre busca da API do GitHub (sem cache CDN)
+  const token = ghToken();
+  const headers = token ? {"Authorization": `token ${token}`, "Accept": "application/vnd.github.v3+json"} : {};
+  const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/dados/certames.json`, {headers});
+  if (!r.ok) throw new Error("HTTP " + r.status);
+  const j = await r.json();
+  return j.content ? JSON.parse(atob(j.content.replace(/\s/g,""))) : [];
+}
 async function carregarListaCertames() {
   const sel = document.getElementById("selRemover");
   try {
-    const r = await fetch("dados/certames.json?_=" + Date.now());
-    if (!r.ok) throw new Error();
-    const lista = await r.json();
+    const lista = await fetchCertamesLista();
     sel.innerHTML = lista.length
       ? '<option value="">— Selecione —</option>' + lista.map(c => `<option value="${c.id}">${c.titulo} — ${c.data}</option>`).join("")
       : '<option value="">Nenhum certame cadastrado</option>';
@@ -809,8 +819,7 @@ function slugify(s) {
 async function carregarCertamesRelatorio() {
   const sel = document.getElementById("selRelatorio");
   try {
-    const r = await fetch("dados/certames.json?_=" + Date.now());
-    const lista = await r.json();
+    const lista = await fetchCertamesLista();
     sel.innerHTML = lista.length
       ? '<option value="">— Selecione o certame —</option>' +
         lista.map(c => `<option value="${c.id}" data-titulo="${c.titulo}" data-data="${c.data}">${c.titulo} — ${c.data}</option>`).join("")
