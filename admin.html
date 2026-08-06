@@ -1002,6 +1002,19 @@ function abrirRelatorioImprimivel(dados) {
       );
     }
 
+    // Registro Fotográfico
+    if (e.foto_url) {
+      html += secao("Registro Fotográfico", corH,
+        `<p style="font-size:13px;margin-bottom:12px;color:#444;">Fotos coletadas durante a aplicação (Sinalização, Abertura do Malote, Andamento, Fechamento):</p>
+         <a href="${e.foto_url}" target="_blank" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;display:inline-block;background:#CF3432;color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">📁 Ver Fotos no Google Drive</a>`
+      );
+    } else {
+      html += secao("Registro Fotográfico", corH,
+        `<p style="font-size:13px;color:#999;font-style:italic;">[ Fotos a serem inseridas a partir do formulário individual deste local ]</p>
+         <p style="font-size:11px;color:#bbb;margin-top:6px;">Categorias: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>`
+      );
+    }
+
     // Rodapé
     html += `<div style="text-align:center;font-size:10px;color:#aaa;margin-top:8px;padding-bottom:8px;">
       Gerado em ${new Date().toLocaleString("pt-BR")} — IBGP Sistema de Aplicação
