@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<!-- v2 -->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IBGP — Admin Certames</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f0f2f5;color:#1a1a1a;min-height:100vh}
+
+/* ── Gate ── */
+#gate{display:flex;align-items:center;justify-content:center;min-height:100vh}
+.gate-card{background:#fff;border-radius:14px;padding:44px 40px;width:360px;box-shadow:0 4px 24px rgba(0,0,0,.12);text-align:center}
+.gate-card .logo{height:48px;margin-bottom:20px}
+.gate-card h1{font-size:17px;font-weight:600;margin-bottom:4px}
+.gate-card p{font-size:13px;color:#666;margin-bottom:24px}
+.err-msg{color:#c62828;font-size:12px;margin-top:10px;display:none}
+
+/* ── Admin ── */
+#admin{display:none}
+header{background:#1F3A6E;color:#fff;padding:14px 32px;display:flex;align-items:center;gap:14px}
+header .logo{height:30px}
+header h1{font-size:15px;font-weight:500}
+
+.container{max-width:960px;margin:32px auto;padding:0 24px}
+
+.card{background:#fff;border-radius:12px;padding:26px 28px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card-title{font-size:14px;font-weight:600;color:#1F3A6E;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.card-title span{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:#1F3A6E;color:#fff;border-radius:50%;font-size:11px;font-weight:700;flex-shrink:0}
+
+/* Inputs */
+input[type=text],input[type=password]{width:100%;border:1px solid #ddd;border-radius:8px;padding:9px 13px;font-size:14px;outline:none;transition:border-color .15s}
+input[type=text]:focus,input[type=password]:focus{border-color:#1F3A6E}
+label.lbl{font-size:11px;color:#666;display:block;margin-bottom:4px;font-weight:500;letter-spacing:.02em}
+
+.field{margin-bottom:12px}
+.row{display:flex;gap:14px;margin-bottom:12px}
+.row .field{flex:1;margin-bottom:0}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s}
+.btn:hover{opacity:.88}
+.btn-primary{background:#1F3A6E;color:#fff;width:100%}
+.btn-publish{background:#2e7d32;color:#fff;width:100%}
+.btn-sm{font-size:12px;padding:6px 14px;width:auto}
+
+/* Drop zone */
+.drop-zone{border:2px dashed #ccc;border-radius:10px;padding:40px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+.drop-zone:hover,.drop-zone.over{border-color:#1F3A6E;background:#f0f4ff}
+.drop-zone svg{opacity:.4;margin-bottom:10px}
+.drop-zone p{font-size:14px;color:#666;margin-bottom:4px}
+.drop-zone small{font-size:12px;color:#aaa}
+.drop-zone.loaded{border-style:solid;border-color:#2e7d32;background:#f1f8e9}
+.drop-zone.loaded p{color:#2e7d32;font-weight:500}
+
+/* Table */
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
+th{background:#f0f4ff;text-align:left;padding:9px 12px;font-weight:600;color:#1F3A6E;font-size:12px}
+th:first-child{border-radius:6px 0 0 6px}
+th:last-child{border-radius:0 6px 6px 0}
+td{padding:8px 12px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+td input{border:1px solid #ddd;border-radius:6px;padding:5px 9px;font-size:13px;width:100%;outline:none}
+td input:focus{border-color:#1F3A6E}
+
+/* Badges */
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-m{background:#e3f2fd;color:#1565c0}
+.badge-t{background:#fce4ec;color:#c62828}
+.badge-mt{background:#ede7f6;color:#4527a0}
+
+/* Status */
+#status{font-size:13px;padding:10px 14px;border-radius:8px;margin-top:14px;display:none}
+#status.ok{background:#e8f5e9;color:#2e7d32}
+#status.err{background:#fdecea;color:#c62828}
+#status.info{background:#e3f2fd;color:#1565c0}
+
+hr{border:none;border-top:1px solid #eee;margin:18px 0}
+.note{font-size:12px;color:#888;margin-top:6px}
+.token-hint{font-size:11px;color:#aaa;margin-top:4px}
+
+/* ── Autocomplete coordenador ── */
+.coord-wrap{position:relative}
+.coord-wrap input{width:100%;padding-right:32px}
+.coord-dropdown{position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);max-height:200px;overflow-y:auto;z-index:999;display:none}
+.coord-dropdown.open{display:block}
+.coord-opt{padding:8px 12px;font-size:13px;cursor:pointer}
+.coord-opt:hover,.coord-opt.focused{background:#f0f4ff;color:#1F3A6E}
+.coord-opt.add-new{color:#2e7d32;font-weight:500;border-top:1px solid #eee}
+.coord-opt.add-new:hover{background:#f1f8e9}
+
+/* ── Gerenciar coordenadores ── */
+.coord-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#f0f4ff;color:#1F3A6E;border-radius:20px;padding:4px 10px 4px 12px;font-size:12px;font-weight:500}
+.chip button{border:none;background:none;color:#999;cursor:pointer;font-size:14px;line-height:1;padding:0}
+.chip button:hover{color:#c62828}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     GATE
+══════════════════════════════════════════ -->
+<div id="gate">
+  <div class="gate-card">
+    <img class="logo" src="https://ibgp-aplicacao.github.io/ibgp-relatorios/ibgp-logo.png"
+         onerror="this.style.display='none'" alt="IBGP">
+    <h1>IBGP — Área Admin</h1>
+    <p>Cadastro de novos certames</p>
+    <div class="field">
+      <input type="password" id="senhaInput" placeholder="Senha de acesso"
+             onkeydown="if(event.key==='Enter')entrar()">
+    </div>
+    <button class="btn btn-primary" onclick="entrar()">Entrar</button>
+    <p class="err-msg" id="gateErr">Senha incorreta. Tente novamente.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ADMIN
+══════════════════════════════════════════ -->
+<div id="admin">
+  <header>
+    <img class="logo" src="https://ibgp-aplicacao.github.io/ibgp-relatorios/ibgp-logo.png"
+         onerror="this.style.display='none'" alt="">
+    <h1>Administração — Cadastro de Certame</h1>
+  </header>
+
+  <div class="container">
+
+    <!-- COORDENADORES -->
+    <div class="card" id="cardCoords">
+      <div class="card-title"><span>★</span> Coordenadores cadastrados</div>
+      <p class="note" style="margin-bottom:14px">Clique no <strong>✕</strong> para remover. Use o campo abaixo para adicionar novos.</p>
+      <div class="coord-chips" id="chipsCoord"></div>
+      <div class="row" style="margin-top:16px;align-items:flex-end">
+        <div class="field" style="flex:1;margin-bottom:0">
+          <label class="lbl">Adicionar coordenador</label>
+          <input type="text" id="novoCoord" placeholder="Digite o nome em maiúsculas"
+                 onkeydown="if(event.key==='Enter'){adicionarCoord();event.preventDefault()}">
+        </div>
+        <div style="flex:0 0 auto;padding-bottom:0">
+          <button class="btn btn-primary btn-sm" style="white-space:nowrap" onclick="adicionarCoord()">+ Adicionar</button>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <button class="btn btn-publish btn-sm" onclick="salvarCoordenadores()">Salvar base de coordenadores no site</button>
+        <div id="statusCoord" style="font-size:12px;margin-top:8px;display:none"></div>
+      </div>
+    </div>
+
+    <!-- GERENCIAR CERTAMES -->
+    <div class="card" id="cardGerenciar">
+      <div class="card-title"><span>✕</span> Remover certame publicado</div>
+      <p class="note" style="margin-bottom:14px">Selecione o certame que deseja excluir do site.</p>
+      <div class="field">
+        <label class="lbl">Token GitHub (PAT)</label>
+        <input type="password" id="fTokenRemover" placeholder="github_pat_...">
+        <p class="token-hint">Cole o token — o mesmo usado no passo 3.</p>
+      </div>
+      <div class="row" style="align-items:flex-end;margin-top:4px">
+        <div class="field" style="flex:1;margin-bottom:0">
+          <label class="lbl">Certame</label>
+          <select id="selRemover"><option value="">— Carregando... —</option></select>
+        </div>
+        <div style="flex:0 0 auto">
+          <button class="btn btn-sm" style="background:#c62828;color:#fff;white-space:nowrap" onclick="removerCertame()">Excluir</button>
+        </div>
+      </div>
+      <div id="statusRemover" style="font-size:12px;margin-top:8px;display:none"></div>
+    </div>
+
+    <!-- PASSO 1 -->
+    <div class="card">
+      <div class="card-title"><span>1</span> Planilha de alocação</div>
+      <div class="drop-zone" id="dropZone"
+           onclick="document.getElementById('fileInput').click()"
+           ondragover="event.preventDefault();this.classList.add('over')"
+           ondragleave="this.classList.remove('over')"
+           ondrop="onDrop(event)">
+        <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 12l-4-4-4 4M12 8v8"/>
+        </svg>
+        <p>Clique ou arraste a planilha .xlsx aqui</p>
+        <small>Formato: MODELO DE ALOCAÇÃO IBGP</small>
+      </div>
+      <input type="file" id="fileInput" accept=".xlsx" style="display:none"
+             onchange="lerArquivo(this.files[0])">
+    </div>
+
+    <!-- PASSO 2 (oculto até carregar arquivo) -->
+    <div class="card" id="cardRevisao" style="display:none">
+      <div class="card-title"><span>2</span> Dados do certame</div>
+
+      <div class="row">
+        <div class="field" style="flex:3">
+          <label class="lbl">Título do certame</label>
+          <input type="text" id="fTitulo">
+        </div>
+      </div>
+      <div class="row">
+        <div class="field" style="flex:2">
+          <label class="lbl">Edital</label>
+          <input type="text" id="fEdital" placeholder="Ex: Edital nº 01/2026">
+        </div>
+        <div class="field" style="flex:2">
+          <label class="lbl">Data da prova (por extenso)</label>
+          <input type="text" id="fData" placeholder="Ex: 26 de julho de 2026">
+        </div>
+        <div class="field" style="flex:2">
+          <label class="lbl">ID (identificador único)</label>
+          <input type="text" id="fId" placeholder="Ex: alto-rio-doce-2026-07-26">
+        </div>
+      </div>
+
+      <hr>
+      <div class="card-title" style="margin-bottom:12px"><span>·</span> Locais de aplicação</div>
+      <p class="note" style="margin-bottom:12px">Coordenadores detectados automaticamente — corrija se necessário.</p>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40%">Escola / Local</th>
+            <th style="width:30%">Coordenador local</th>
+            <th style="width:8%;text-align:center">Salas</th>
+            <th style="width:11%;text-align:center">Turno</th>
+            <th style="width:11%;text-align:center">Candidatos</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaEscolas"></tbody>
+      </table>
+    </div>
+
+    <!-- PASSO 3 -->
+    <div class="card" id="cardPublicar" style="display:none">
+      <div class="card-title"><span>3</span> Publicar no site</div>
+      <p style="font-size:13px;color:#555;margin-bottom:16px">
+        O certame será salvo em <code style="background:#f5f5f5;padding:2px 5px;border-radius:4px">dados/</code>
+        e aparecerá automaticamente no formulário em ~1 minuto.
+      </p>
+      <div class="field">
+        <label class="lbl">Token GitHub (PAT) — guardado na sessão atual</label>
+        <input type="password" id="fToken" placeholder="github_pat_...">
+        <p class="token-hint">Cole o token uma vez; ele será lembrado até fechar o navegador.</p>
+      </div>
+      <button class="btn btn-publish" onclick="publicar()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 8l-4-4-4 4M12 4v12"/>
+        </svg>
+        Publicar certame
+      </button>
+      <div id="status"></div>
+    </div>
+
+    <!-- RELATÓRIO GERAL -->
+    <div class="card">
+      <div class="card-title"><span>📄</span> Relatório Geral</div>
+      <p style="font-size:13px;color:#555;margin-bottom:16px;">
+        Gera o Relatório Geral de Aplicação consolidando os dados enviados pelos coordenadores para o certame selecionado.
+      </p>
+      <div class="row">
+        <div class="field" style="flex:2">
+          <label class="lbl">Certame</label>
+          <select id="selRelatorio" style="border:1px solid #ddd;border-radius:8px;padding:9px 13px;font-size:14px;width:100%;outline:none;background:#fff;">
+            <option value="">— Carregando certames... —</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lbl">URL do Apps Script</label>
+        <input type="text" id="fScriptUrl" placeholder="https://script.google.com/macros/s/..." value="https://script.google.com/macros/s/AKfycbxCWRNetGErTHgaYb-VMOCjMrcIg7GlYtutkHFC-Fo2U6Vd4yF2TBYc0W8t_AqxUI7Ocg/exec">
+      </div>
+      <button class="btn btn-primary" onclick="gerarRelatorioGeral()" id="btnRelatorio">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        Gerar Relatório Geral
+      </button>
+      <div id="statusRelatorio" style="font-size:13px;margin-top:10px;display:none;padding:10px;border-radius:8px;"></div>
+    </div>
+
+  </div><!-- /container -->
+</div><!-- /admin -->
+
+<script>
+// ═══════════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════════
+const SENHA    = "ibgpadmin2026"; // ← altere aqui se quiser
+const GH_OWNER = "IBGP-APLICACAO";
+const GH_REPO  = "ibgp-relatorios";
+
+// ── Lista de coordenadores ────────────────────────────────────────────
+let coordenadores = [];
+
+// ── Gerenciar certames ────────────────────────────────────────────────
+function ghToken() {
+  return (document.getElementById("fTokenRemover")?.value || document.getElementById("fToken")?.value || "").trim();
+}
+async function fetchCertamesLista() {
+  // Sempre busca da API do GitHub (sem cache CDN)
+  const token = ghToken();
+  const headers = token ? {"Authorization": `token ${token}`, "Accept": "application/vnd.github.v3+json"} : {};
+  const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/dados/certames.json`, {headers});
+  if (!r.ok) throw new Error("HTTP " + r.status);
+  const j = await r.json();
+  return j.content ? JSON.parse(atob(j.content.replace(/\s/g,""))) : [];
+}
+async function carregarListaCertames() {
+  const sel = document.getElementById("selRemover");
+  try {
+    const lista = await fetchCertamesLista();
+    sel.innerHTML = lista.length
+      ? '<option value="">— Selecione —</option>' + lista.map(c => `<option value="${c.id}">${c.titulo} — ${c.data}</option>`).join("")
+      : '<option value="">Nenhum certame cadastrado</option>';
+  } catch(_) {
+    sel.innerHTML = '<option value="">Erro ao carregar</option>';
+  }
+}
+
+async function removerCertame() {
+  const id = document.getElementById("selRemover").value;
+  if (!id) return;
+  const token = (document.getElementById("fTokenRemover").value || document.getElementById("fToken").value || "").trim();
+  const stEl = document.getElementById("statusRemover");
+
+  if (!token) {
+    stEl.style.display = "block"; stEl.style.color = "#c62828";
+    stEl.textContent = "Cole o Token GitHub antes de excluir."; return;
+  }
+  if (!confirm(`Excluir o certame "${id}" permanentemente?`)) return;
+
+  stEl.style.display = "block"; stEl.style.color = "#1565c0";
+  stEl.textContent = "Passo 1/2 — Atualizando lista de certames...";
+
+  const headers = {
+    "Authorization": `token ${token}`,
+    "Accept": "application/vnd.github.v3+json",
+    "Content-Type": "application/json"
+  };
+  const base = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/dados`;
+
+  try {
+    // ── Passo 1: remove da lista certames.json ──
+    const r1 = await fetch(`${base}/certames.json`, {headers});
+    if (!r1.ok) throw new Error(`Erro ao ler certames.json (HTTP ${r1.status})`);
+    const j1 = await r1.json();
+    if (!j1.content) throw new Error("Token sem permissão ou arquivo inválido.");
+
+    const lista = JSON.parse(b64decode(j1.content)).filter(c => c.id !== id);
+    const put1 = await fetch(`${base}/certames.json`, {
+      method: "PUT", headers,
+      body: JSON.stringify({
+        message: `chore: remove certame ${id} da lista`,
+        content: b64encode(JSON.stringify(lista, null, 2)),
+        sha: j1.sha
+      })
+    });
+    if (!put1.ok) {
+      const e1 = await put1.json();
+      throw new Error(`Falha ao salvar lista (${put1.status}): ${e1.message || ""}`);
+    }
+
+    // ── Aguarda 2s para o GitHub Actions não conflitar com o próximo commit ──
+    stEl.textContent = "Passo 2/2 — Removendo arquivo do certame...";
+    await new Promise(res => setTimeout(res, 2000));
+
+    // ── Passo 2: deleta arquivo dados/{id}.json ──
+    const r2 = await fetch(`${base}/${id}.json`, {headers});
+    if (r2.ok) {
+      const j2 = await r2.json();
+      const del2 = await fetch(`${base}/${id}.json`, {
+        method: "DELETE", headers,
+        body: JSON.stringify({
+          message: `chore: remove arquivo dados/${id}.json`,
+          sha: j2.sha
+        })
+      });
+      if (!del2.ok) {
+        const e2 = await del2.json();
+        throw new Error(`Arquivo de dados não removido (${del2.status}): ${e2.message || ""}. Tente de novo.`);
+      }
+    }
+    // se r2 não é ok, o arquivo já não existe — ok
+
+    stEl.style.color = "#2e7d32";
+    stEl.textContent = `✓ Certame "${id}" excluído com sucesso!`;
+    // Remove imediatamente dos dois dropdowns (sem esperar CDN atualizar)
+    ["selRemover", "selRelatorio"].forEach(function(selId) {
+      var sel = document.getElementById(selId);
+      if (sel) {
+        var opt = sel.querySelector('option[value="' + id + '"]');
+        if (opt) opt.remove();
+      }
+    });
+    // Também limpa botões individuais se existirem
+    var botoesDiv = document.getElementById("botoesIndividuais");
+    if (botoesDiv) botoesDiv.innerHTML = "";
+    setTimeout(() => { carregarListaCertames(); carregarCertamesRelatorio(); }, 3000);
+  } catch(err) {
+    stEl.style.color = "#c62828";
+    stEl.textContent = "Erro: " + err.message;
+  }
+}
+
+async function carregarCoordenadores() {
+  try {
+    const r = await fetch("dados/coordenadores.json?_=" + Date.now());
+    if (r.ok) coordenadores = await r.json();
+  } catch(_) {}
+  renderChips();
+}
+
+function renderChips() {
+  const el = document.getElementById("chipsCoord");
+  el.innerHTML = "";
+  coordenadores.slice().sort().forEach(nome => {
+    const chip = document.createElement("div");
+    chip.className = "chip";
+    chip.innerHTML = `${nome} <button onclick="removerCoord('${nome.replace(/'/g,"\\'")}')">✕</button>`;
+    el.appendChild(chip);
+  });
+}
+
+function adicionarCoord() {
+  const inp = document.getElementById("novoCoord");
+  const nome = inp.value.trim().toUpperCase();
+  if (!nome) return;
+  if (coordenadores.includes(nome)) { inp.value = ""; return; }
+  coordenadores.push(nome);
+  coordenadores.sort();
+  inp.value = "";
+  renderChips();
+}
+
+function removerCoord(nome) {
+  coordenadores = coordenadores.filter(c => c !== nome);
+  renderChips();
+}
+
+async function salvarCoordenadores() {
+  const token = document.getElementById("fToken").value.trim();
+  const stEl = document.getElementById("statusCoord");
+  if (!token) {
+    stEl.style.display = "block";
+    stEl.style.color = "#c62828";
+    stEl.textContent = "Cole o Token GitHub no passo 3 antes de salvar.";
+    return;
+  }
+  stEl.style.display = "block";
+  stEl.style.color = "#1565c0";
+  stEl.textContent = "Salvando...";
+
+  const headers = {
+    "Authorization": `token ${token}`,
+    "Accept": "application/vnd.github.v3+json",
+    "Content-Type": "application/json"
+  };
+  const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/dados/coordenadores.json`;
+
+  try {
+    let sha;
+    const r0 = await fetch(url, {headers});
+    if (r0.ok) sha = (await r0.json()).sha;
+
+    const body = {message: "chore: atualiza base de coordenadores",
+                  content: b64encode(JSON.stringify(coordenadores, null, 2))};
+    if (sha) body.sha = sha;
+    const r1 = await fetch(url, {method:"PUT", headers, body: JSON.stringify(body)});
+    if (!r1.ok) throw new Error(await r1.text());
+    stEl.style.color = "#2e7d32";
+    stEl.textContent = "✓ Base salva com sucesso!";
+  } catch(err) {
+    stEl.style.color = "#c62828";
+    stEl.textContent = "Erro: " + err.message;
+  }
+}
+
+// ── Autocomplete coordenador ──────────────────────────────────────────
+function filtrarCoords(inputId, dropId) {
+  const inp  = document.getElementById(inputId);
+  const drop = document.getElementById(dropId);
+  const val  = inp.value.trim().toUpperCase();
+  const matches = val
+    ? coordenadores.filter(c => c.includes(val))
+    : coordenadores.slice();
+
+  drop.innerHTML = "";
+  matches.forEach(nome => {
+    const opt = document.createElement("div");
+    opt.className = "coord-opt";
+    opt.textContent = nome;
+    opt.onmousedown = () => { inp.value = nome; fecharDrop(dropId); };
+    drop.appendChild(opt);
+  });
+  // Opção "adicionar novo"
+  if (val && !coordenadores.includes(val)) {
+    const opt = document.createElement("div");
+    opt.className = "coord-opt add-new";
+    opt.textContent = `+ Adicionar "${val}" à base`;
+    opt.onmousedown = () => {
+      coordenadores.push(val);
+      coordenadores.sort();
+      renderChips();
+      inp.value = val;
+      fecharDrop(dropId);
+    };
+    drop.appendChild(opt);
+  }
+  drop.classList.toggle("open", drop.children.length > 0);
+}
+
+function fecharDrop(dropId) {
+  const el = document.getElementById(dropId);
+  if (el) el.classList.remove("open");
+}
+
+// ── Gate ─────────────────────────────────────────────────────────────
+function entrar() {
+  if (document.getElementById("senhaInput").value === SENHA) {
+    document.getElementById("gate").style.display  = "none";
+    document.getElementById("admin").style.display = "block";
+    const t = sessionStorage.getItem("ghToken");
+    if (t) {
+      document.getElementById("fToken").value = t;
+      document.getElementById("fTokenRemover").value = t;
+    }
+    carregarCoordenadores();
+    carregarListaCertames();
+    carregarCertamesRelatorio();
+  } else {
+    document.getElementById("gateErr").style.display = "block";
+  }
+}
+
+// ── Drag & Drop ───────────────────────────────────────────────────────
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById("dropZone").classList.remove("over");
+  const f = e.dataTransfer.files[0];
+  if (f) lerArquivo(f);
+}
+
+// ── Lê o Excel ───────────────────────────────────────────────────────
+let dadosCertame = null;
+
+function lerArquivo(file) {
+  const dz = document.getElementById("dropZone");
+  dz.querySelector("p").textContent = "Lendo arquivo...";
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(new Uint8Array(e.target.result), {type:"array", cellDates:true});
+      processarPlanilha(wb, file.name);
+    } catch(err) {
+      dz.querySelector("p").textContent = "Erro ao ler arquivo: " + err.message;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function processarPlanilha(wb, nomeArquivo) {
+  const wsAlocacao = wb.Sheets["DADOS ALOCAÇÃO"];
+  if (!wsAlocacao) { alert("Aba 'DADOS ALOCAÇÃO' não encontrada."); return; }
+
+  const linhas = XLSX.utils.sheet_to_json(wsAlocacao, {header:1, defval:""});
+  if (linhas.length < 2) { alert("Planilha sem dados."); return; }
+
+  // ── Info do certame (linha 2, índice 1) ──
+  const info = linhas[1];
+  const concursoRaw  = String(info[5]  || "");
+  const dataProvaRaw = info[8];            // Date object (cellDates:true)
+
+  // Separa título e edital
+  const mEdital = concursoRaw.match(/\s*[-–]\s*(EDITAL\s*[Nº°Oo]+\.?\s*[\d/]+[\d]*)/i);
+  const titulo  = mEdital ? concursoRaw.slice(0, mEdital.index).trim() : concursoRaw.trim();
+  const edital  = mEdital ? cap(mEdital[1].trim()) : "";
+
+  // Formata data
+  const MESES = ["janeiro","fevereiro","março","abril","maio","junho",
+                 "julho","agosto","setembro","outubro","novembro","dezembro"];
+  let dataFormatada = "", dataISO = "";
+  if (dataProvaRaw instanceof Date) {
+    const d = dataProvaRaw;
+    dataFormatada = `${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()}`;
+    dataISO = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+
+  // Gera ID a partir do título
+  // "CONCURSO PÚBLICO DO MUNICÍPIO DE ALTO RIO DOCE/MG" → "alto-rio-doce"
+  const mCidade = titulo.match(/(?:MUNIC[IÍ]PIO DE|CIDADE DE|ESTADO DE|GOVERNO DE|CÂMARA DE|PREFEITURA DE)\s+([^/,\n]+)/i);
+  const cidadeId = mCidade
+    ? mCidade[1].trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"")
+    : slugify(titulo.split(" ").slice(-3).join(" "));
+  const id = `${cidadeId}-${dataISO}`;
+
+  // ── Mapa de coordenadores (colunas 22 e 23 da DADOS ALOCAÇÃO) ──
+  const coordMap = {};
+  for (let i = 1; i < linhas.length; i++) {
+    const r = linhas[i];
+    const escCoord = String(r[22] || "").trim();
+    const nomeCoord = String(r[23] || "").trim();
+    if (escCoord && nomeCoord && escCoord !== "ESCOLA") {
+      coordMap[escCoord] = nomeCoord;
+    }
+  }
+
+  // ── Agrega cargos: escola → sala → turno → cargo → count ──
+  // Col 16=ESCOLA, 13=SALA, 12=TURNO, 7=CARGO
+  const escMap = {};
+  for (let i = 1; i < linhas.length; i++) {
+    const r = linhas[i];
+    const escola = String(r[16] || "").trim();
+    if (!escola) continue;
+    const sala  = String(r[13] || "").trim();
+    const turno = String(r[12] || "").trim();
+    const cargo = String(r[7]  || "").trim();
+    if (!sala || !turno || !cargo) continue;
+
+    if (!escMap[escola]) escMap[escola] = {cargosMap:{}, candidatos:0};
+    escMap[escola].candidatos++;
+    const key = `${sala}|${turno}|${cargo}`;
+    escMap[escola].cargosMap[key] = (escMap[escola].cargosMap[key] || 0) + 1;
+  }
+
+  // Monta array de escolas
+  const escolas = Object.keys(escMap).map(nome => {
+    const cargos = Object.entries(escMap[nome].cargosMap).map(([key, inscr]) => {
+      const [sala, turno, cargo] = key.split("|");
+      return { sala, turno: turno === "MANHÃ" ? "Manhã" : "Tarde", cargo, inscr };
+    });
+    cargos.sort((a, b) => {
+      const na = parseInt(a.sala.replace(/\D/g,"")) || 0;
+      const nb = parseInt(b.sala.replace(/\D/g,"")) || 0;
+      return na - nb || a.turno.localeCompare(b.turno) || a.cargo.localeCompare(b.cargo);
+    });
+    const salas = new Set(cargos.map(c => c.sala)).size;
+    const hasManha = cargos.some(c => c.turno === "Manhã");
+    const haTarde  = cargos.some(c => c.turno === "Tarde");
+
+    // Tenta achar coordenador: match exato ou parcial
+    let coord = "";
+    for (const [k, v] of Object.entries(coordMap)) {
+      if (k === nome || nome.startsWith(k.trimEnd()) || k.trimEnd().startsWith(nome.split(" - ")[0])) {
+        coord = v; break;
+      }
+    }
+
+    return { nome, coord_local: coord, salas, cargos, hasManha, haTarde,
+             candidatos: escMap[nome].candidatos };
+  });
+
+  dadosCertame = { id, titulo, edital, data: dataFormatada, dataISO, escolas };
+  renderRevisao(nomeArquivo);
+}
+
+function renderRevisao(nomeArquivo) {
+  document.getElementById("fTitulo").value = dadosCertame.titulo;
+  document.getElementById("fEdital").value = dadosCertame.edital;
+  document.getElementById("fData").value   = dadosCertame.data;
+  document.getElementById("fId").value     = dadosCertame.id;
+
+  const tbody = document.getElementById("tabelaEscolas");
+  tbody.innerHTML = "";
+  dadosCertame.escolas.forEach((e, i) => {
+    const turno = e.hasManha && e.haTarde ? '<span class="badge badge-mt">Manhã e Tarde</span>'
+                : e.hasManha ? '<span class="badge badge-m">Manhã</span>'
+                : '<span class="badge badge-t">Tarde</span>';
+    const dropId  = `drop_${i}`;
+    const inputId = `cinput_${i}`;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${e.nome}</td>
+      <td>
+        <div class="coord-wrap">
+          <input type="text" id="${inputId}" data-idx="${i}" class="coordInput"
+                 value="${e.coord_local}" placeholder="Digite ou selecione..."
+                 autocomplete="off"
+                 oninput="filtrarCoords('${inputId}','${dropId}')"
+                 onfocus="filtrarCoords('${inputId}','${dropId}')"
+                 onblur="setTimeout(()=>fecharDrop('${dropId}'),180)">
+          <div class="coord-dropdown" id="${dropId}"></div>
+        </div>
+      </td>
+      <td style="text-align:center">${e.salas}</td>
+      <td style="text-align:center">${turno}</td>
+      <td style="text-align:center">${e.candidatos}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  const dz = document.getElementById("dropZone");
+  dz.querySelector("p").textContent = `✓ ${nomeArquivo} — ${dadosCertame.escolas.length} locais detectados`;
+  dz.classList.add("loaded");
+
+  document.getElementById("cardRevisao").style.display  = "block";
+  document.getElementById("cardPublicar").style.display = "block";
+}
+
+// ── Publicar ─────────────────────────────────────────────────────────
+async function publicar() {
+  const token = document.getElementById("fToken").value.trim();
+  if (!token) { setStatus("Informe o Token GitHub (PAT).", "err"); return; }
+  sessionStorage.setItem("ghToken", token);
+
+  // Coleta dados do formulário
+  const titulo = document.getElementById("fTitulo").value.trim();
+  const edital = document.getElementById("fEdital").value.trim();
+  const data   = document.getElementById("fData").value.trim();
+  const id     = document.getElementById("fId").value.trim();
+
+  if (!titulo || !data || !id) {
+    setStatus("Preencha título, data e ID antes de publicar.", "err"); return;
+  }
+
+  // Atualiza coordenadores pelo formulário
+  document.querySelectorAll(".coordInput").forEach(inp => {
+    dadosCertame.escolas[parseInt(inp.dataset.idx)].coord_local = inp.value.trim();
+  });
+
+  const certameJSON = {
+    id, titulo, edital, data,
+    escolas: dadosCertame.escolas.map(e => ({
+      nome: e.nome,
+      coord_local: e.coord_local,
+      salas: e.salas,
+      cargos: e.cargos
+    }))
+  };
+
+  const headers = {
+    "Authorization": `token ${token}`,
+    "Accept": "application/vnd.github.v3+json",
+    "Content-Type": "application/json"
+  };
+  const base = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/dados`;
+
+  try {
+    setStatus("Verificando certames existentes...", "info");
+
+    // 1. Lê certames.json
+    const r1 = await fetch(`${base}/certames.json`, {headers});
+    if (!r1.ok) throw new Error("Erro ao ler certames.json: " + r1.status);
+    const j1 = await r1.json();
+    const certames = JSON.parse(b64decode(j1.content));
+    const sha1 = j1.sha;
+
+    // Verifica duplicata
+    const idxExist = certames.findIndex(c => c.id === id);
+    if (idxExist >= 0) {
+      if (!confirm(`O certame "${id}" já existe.\nDeseja substituir?`)) return;
+      certames.splice(idxExist, 1);
+    }
+    certames.push({ id, titulo, edital, data });
+
+    // 2. Verifica se arquivo certame já existe
+    let sha2;
+    const r2 = await fetch(`${base}/${id}.json`, {headers});
+    if (r2.ok) { sha2 = (await r2.json()).sha; }
+
+    setStatus("Salvando dados do certame...", "info");
+
+    // 3. Cria/atualiza {id}.json
+    const put = async (url, content, sha, msg) => {
+      const body = {message: msg, content: b64encode(content)};
+      if (sha) body.sha = sha;
+      const r = await fetch(url, {method:"PUT", headers, body: JSON.stringify(body)});
+      if (!r.ok) throw new Error(await r.text());
+      return r;
+    };
+
+    await put(`${base}/${id}.json`,
+              JSON.stringify(certameJSON, null, 2),
+              sha2,
+              `feat: dados ${id}`);
+
+    setStatus("Atualizando índice de certames...", "info");
+
+    // 4. Atualiza certames.json
+    await put(`${base}/certames.json`,
+              JSON.stringify(certames, null, 2),
+              sha1,
+              `feat: adiciona ${id} ao índice`);
+
+    setStatus(`✓ Certame "${titulo}" publicado com sucesso! O formulário atualizará em cerca de 1 minuto.`, "ok");
+
+  } catch(err) {
+    setStatus("Erro: " + err.message, "err");
+  }
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────
+function setStatus(msg, tipo) {
+  const el = document.getElementById("status");
+  el.textContent = msg;
+  el.className = tipo;
+  el.style.display = "block";
+}
+
+function b64decode(b64) {
+  const bin = atob(b64.replace(/\s/g, ""));
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+function b64encode(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  bytes.forEach(b => bin += String.fromCharCode(b));
+  return btoa(bin);
+}
+function pad(n) { return String(n).padStart(2, "0"); }
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase(); }
+function slugify(s) {
+  return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+          .replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"");
+}
+
+// ── Carrega certames no select do Relatório Geral ────────────────────
+async function carregarCertamesRelatorio() {
+  const sel = document.getElementById("selRelatorio");
+  try {
+    const lista = await fetchCertamesLista();
+    sel.innerHTML = lista.length
+      ? '<option value="">— Selecione o certame —</option>' +
+        lista.map(c => `<option value="${c.id}" data-titulo="${c.titulo}" data-data="${c.data}">${c.titulo} — ${c.data}</option>`).join("")
+      : '<option value="">Nenhum certame publicado</option>';
+  } catch(_) {
+    sel.innerHTML = '<option value="">Erro ao carregar</option>';
+  }
+}
+
+// ── Relatório Geral ───────────────────────────────────────────────────
+async function gerarRelatorioGeral() {
+  const url = document.getElementById("fScriptUrl").value.trim();
+  if (!url || !url.startsWith("https://script.google.com")) {
+    mostrarStatusRelatorio("Informe a URL do Apps Script.", false); return;
+  }
+  const selRel = document.getElementById("selRelatorio");
+  const certameId = selRel.value;
+  if (!certameId) {
+    mostrarStatusRelatorio("Selecione um certame.", false); return;
+  }
+  // Abre a janela ANTES do await para não ser bloqueada pelo browser
+  const reportWin = window.open("", "_blank");
+  if (!reportWin) {
+    mostrarStatusRelatorio("Pop-up bloqueado. Permita pop-ups para este site nas configurações do browser.", false); return;
+  }
+  reportWin.document.write('<html><body style="font-family:Arial;padding:40px;color:#555;text-align:center;"><p style="font-size:16px;margin-top:80px;">⏳ Carregando dados do relatório...</p></body></html>');
+  const certameOpt = selRel.selectedOptions[0];
+  const certameTitulo = certameOpt.dataset.titulo;
+  const certameData   = certameOpt.dataset.data;
+
+  const btn = document.getElementById("btnRelatorio");
+  btn.disabled = true; btn.textContent = "Buscando dados...";
+  mostrarStatusRelatorio("Conectando ao Apps Script...", null);
+
+  try {
+    // Busca lista de escolas do certame selecionado
+    const rCertame = await fetch(`dados/${certameId}.json?_=${Date.now()}`);
+    if (!rCertame.ok) throw new Error("Certame não encontrado");
+    const certameDados = await rCertame.json();
+    const escolasDoCertame = new Set((certameDados.escolas || []).map(e => (e.nome || "").toUpperCase().trim()));
+
+    // Busca dados do Apps Script
+    const resp = await fetch(url + "?action=relatorio");
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    const dados = await resp.json();
+
+    // Filtra apenas escolas do certame selecionado (case-insensitive)
+    dados.escolas = (dados.escolas || []).filter(e => escolasDoCertame.has((e.nome || "").toUpperCase().trim()));
+    dados.concurso["Título do Concurso"] = certameTitulo;
+    dados.concurso["Data da Prova"]      = certameData;
+    dados.concurso["Edital"]             = certameDados.edital || dados.concurso["Edital"] || "";
+
+    btn.disabled = false; btn.innerHTML = "📄 Gerar Relatório Geral";
+
+    _dadosGeral = { escolas: dados.escolas, concurso: dados.concurso };
+    abrirRelatorioGeral(dados, { titulo: certameTitulo, data: certameData, edital: certameDados.edital || "" }, reportWin);
+    mostrarBotoesIndividuais(dados.escolas);
+  } catch(e) {
+    btn.disabled = false; btn.innerHTML = "📄 Gerar Relatório Geral";
+    mostrarStatusRelatorio("Erro: " + e.message, false);
+    if (reportWin && !reportWin.closed) reportWin.close();
+  }
+}
+
+function mostrarStatusRelatorio(msg, ok) {
+  const el = document.getElementById("statusRelatorio");
+  el.style.display = "block";
+  el.style.background = ok === null ? "#e3f2fd" : ok ? "#e8f5e9" : "#fdecea";
+  el.style.color = ok === null ? "#1565c0" : ok ? "#2e7d32" : "#c62828";
+  el.textContent = msg;
+}
+
+function abrirRelatorioImprimivel(dados) {
+  const win = window.open("", "_blank");
+  const conc = dados.concurso || {};
+  const escolas = dados.escolas || [];
+  const corM = "#1F3A6E", corT = "#CF3432", corH = "#2C2C2C";
+
+  // ── Formata hora: converte ISO timestamp ou string para "HH:mm"
+  function fh(val) {
+    if (!val || val === "—") return val || "—";
+    const s = String(val);
+    const m = s.match(/T(\d{2}:\d{2})/);
+    if (m) return m[1];
+    if (/^\d{1,2}:\d{2}/.test(s)) return s.substring(0,5);
+    return s;
+  }
+
+  function secao(titulo, cor, conteudo) {
+    return `<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#fff;border-radius:6px;margin-bottom:12px;overflow:hidden;page-break-inside:avoid;border:1px solid #E0E0E0;border-left:4px solid ${cor};">
+      <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};padding:8px 14px;">
+        <h3 style="color:#fff;font-size:11px;margin:0;text-transform:uppercase;letter-spacing:.6px;font-weight:700;">${titulo}</h3>
+      </div>
+      <div style="padding:12px 16px;">${conteudo}</div>
+    </div>`;
+  }
+
+  function grid2(l1,v1,l2,v2) {
+    const cel = (l,v) => l
+      ? `<div style="padding:6px 0;"><span style="display:block;font-size:9px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;">${l}</span><span style="font-size:12px;color:#1a1a1a;">${v||"—"}</span></div>`
+      : "<div></div>";
+    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;border-bottom:1px solid #F0F0F0;padding:2px 0;">${cel(l1,v1)}${cel(l2,v2)}</div>`;
+  }
+
+  let html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+  <title>Relatório Individual — IBGP</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Arial,sans-serif;background:#EFEFEF;padding:24px;font-size:13px;color:#2C2C2C;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+    th{-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:#fff;}
+    td{padding:6px 10px;border-bottom:1px solid #eee;font-size:12px;}
+    tr:last-child td{border-bottom:none;}
+    .alt td{background:#F7F7F7;}
+    .total-row td{-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#E8E8E8!important;font-weight:700;font-size:12px;}
+    .no-print{display:flex;}
+    @media print{
+      body{background:#fff;padding:12px;}
+      .no-print{display:none!important;}
+      .page-break{page-break-before:always;}
+    }
+  </style></head><body>`;
+
+  // Barra superior (apenas na tela)
+  html += `<div class="no-print" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#1F3A6E;color:#fff;padding:12px 20px;margin-bottom:16px;border-radius:8px;align-items:center;justify-content:space-between;">
+    <span style="font-weight:700;">Relatório Individual — IBGP</span>
+    <button onclick="window.print()" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#CF3432;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">🖨 Imprimir / Salvar PDF</button>
+  </div>`;
+
+  // Por escola
+  escolas.forEach(function(e, ei) {
+    html += `<div class="${ei > 0 ? 'page-break' : ''}">`;
+
+    // Cabeçalho da escola
+    html += `<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#2C2C2C;padding:16px 20px;border-radius:8px 8px 0 0;">
+      <p style="color:#CF3432;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">IBGP — Relatório de Aplicação de Prova</p>
+      <h1 style="color:#fff;font-size:17px;margin:0 0 4px;">${e.nome || "—"}</h1>
+      <p style="color:#bbb;font-size:11px;">${conc["Título do Concurso"]||""} &bull; ${conc["Data da Prova"]||""} &bull; ${conc["Edital"]||""}</p>
+    </div>
+    <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;height:4px;background:#CF3432;margin-bottom:16px;border-radius:0 0 4px 4px;"></div>`;
+
+    // Identificação (sem obs)
+    html += secao("Identificação", corH,
+      grid2("Coordenador Local", e.coord_local, "Turno(s)", e.turno) +
+      grid2("Houve Apoio?", e.houve_apoio, "Nome do Apoio", e.nome_apoio||"—")
+    );
+
+    // Horários por turno
+    (e.horarios||[]).forEach(function(h) {
+      const cor = h.turno==="Manhã" ? corM : corT;
+      html += secao("Horários — " + h.turno, cor,
+        grid2("Chegada da equipe", fh(h.chegada), "Abertura do portão", fh(h.ab_portao)) +
+        grid2("Abertura do malote", fh(h.ab_malote), "Distribuição dos pacotes", fh(h.distrib)) +
+        grid2("Fechamento do portão", fh(h.fch_portao), "Início da aplicação", fh(h.inicio)) +
+        grid2("Encerramento", fh(h.encerr), "Fechamento do malote", fh(h.fch_malote))
+      );
+    });
+
+    // Testemunhas por turno
+    const turnosTest = [...new Set((e.testemunhas||[]).map(t=>t.turno))];
+    turnosTest.forEach(function(turno) {
+      const cor = turno==="Manhã" ? corM : corT;
+      const tt = (e.testemunhas||[]).filter(t=>t.turno===turno);
+      let tHtml = "";
+      tt.forEach(function(t) {
+        tHtml += `<div style="margin-bottom:12px;">
+          <div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">${t.tipo}</div>
+          <div style="font-size:12px;line-height:1.8;">
+            1. ${t.t1_nome||"—"} — ${t.t1_cpf||"—"}<br>
+            2. ${t.t2_nome||"—"} — ${t.t2_cpf||"—"}<br>
+            3. ${t.t3_nome||"—"} — ${t.t3_cpf||"—"}
+          </div>
+        </div>`;
+      });
+      if (tHtml) html += secao("Testemunhas — " + turno, cor, tHtml);
+    });
+
+    // Estatística por turno
+    const turnosRes = [...new Set((e.resultados||[]).map(r=>r.turno))];
+    turnosRes.forEach(function(turno) {
+      const cor = turno==="Manhã" ? corM : corT;
+      const rows = (e.resultados||[]).filter(r=>r.turno===turno);
+      let tI=0,tP=0,tA=0,tIn=0;
+      let tabela = `<table><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
+        <th style="background:${cor};">Cargo</th>
+        <th style="background:${cor};text-align:center;">Inscritos</th>
+        <th style="background:${cor};text-align:center;">Presentes</th>
+        <th style="background:${cor};text-align:center;">Ausentes</th>
+        <th style="background:${cor};text-align:center;">Inclusões</th>
+      </tr></thead><tbody>`;
+      rows.forEach(function(r, i){
+        tI+=Number(r.inscr)||0; tP+=Number(r.pres)||0; tA+=Number(r.aus)||0; tIn+=Number(r.incl)||0;
+        tabela+=`<tr class="${i%2===1?'alt':''}"><td>${r.sala} — ${(r.cargo||"").replace(/^\d+\s+-\s+/,"")}</td>
+          <td style="text-align:center;">${r.inscr}</td><td style="text-align:center;">${r.pres}</td>
+          <td style="text-align:center;">${r.aus}</td><td style="text-align:center;">${r.incl||0}</td></tr>`;
+      });
+      tabela+=`<tr class="total-row"><td><strong>TOTAL</strong></td>
+        <td style="text-align:center;">${tI}</td><td style="text-align:center;">${tP}</td>
+        <td style="text-align:center;">${tA}</td><td style="text-align:center;">${tIn}</td></tr>`;
+      tabela += "</tbody></table>";
+      html += secao("Estatística por Cargo — " + turno, cor, tabela);
+    });
+
+    // Ocorrências por turno
+    (e.ocorrencias||[]).forEach(function(o) {
+      const cor = o.turno==="Manhã" ? corM : corT;
+      const cands = (e.candidatos||[]).filter(c=>c.turno===o.turno);
+      let oHtml = grid2("Ocorrências em sala", o.sala, "Prova condicional", o.cond) +
+                  grid2("Toque de celular", o.toque, "Declaração de comparecimento", o.decl);
+      if (cands.length > 0) {
+        oHtml += `<table style="margin-top:12px;"><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
+          <th style="background:${cor};">Tipo</th>
+          <th style="background:${cor};">Inscrição</th>
+          <th style="background:${cor};">Candidato</th>
+          <th style="background:${cor};">Sala</th>
+        </tr></thead><tbody>`;
+        cands.forEach(function(c, i){
+          oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.tipo}</td><td>${c.inscricao}</td><td>${c.candidato}</td><td>${c.sala}</td></tr>`;
+        });
+        oHtml += "</tbody></table>";
+      }
+      html += secao("Ocorrências — " + o.turno, cor, oHtml);
+    });
+
+    // Observações — ao final
+    if (e.obs) {
+      html += secao("Observações Gerais", corH,
+        `<p style="font-size:13px;line-height:1.6;color:#2C2C2C;">${e.obs}</p>`
+      );
+    }
+
+    // Registro Fotográfico
+    if (e.foto_url) {
+      html += secao("Registro Fotográfico", corH,
+        `<p style="font-size:13px;margin-bottom:12px;color:#444;">Fotos coletadas durante a aplicação (Sinalização, Abertura do Malote, Andamento, Fechamento):</p>
+         <a href="${e.foto_url}" target="_blank" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;display:inline-block;background:#CF3432;color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">📁 Ver Fotos no Google Drive</a>`
+      );
+    } else {
+      html += secao("Registro Fotográfico", corH,
+        `<p style="font-size:13px;color:#999;font-style:italic;">[ Fotos a serem inseridas a partir do formulário individual deste local ]</p>
+         <p style="font-size:11px;color:#bbb;margin-top:6px;">Categorias: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>`
+      );
+    }
+
+    // Rodapé
+    html += `<div style="text-align:center;font-size:10px;color:#aaa;margin-top:8px;padding-bottom:8px;">
+      Gerado em ${new Date().toLocaleString("pt-BR")} — IBGP Sistema de Aplicação
+    </div>`;
+
+    html += "</div>"; // fim escola
+  });
+
+  html += "</body></html>";
+  win.document.write(html);
+  win.document.close();
+}
+
+// ── Cache para relatórios individuais ────────────────────────────────
+var _dadosGeral = null;
+
+function mostrarBotoesIndividuais(escolas) {
+  if (!escolas || escolas.length === 0) return;
+  var el = document.getElementById("statusRelatorio");
+  el.style.display = "block";
+  el.style.background = "#EFF3FB";
+  el.style.color = "#1F3A6E";
+  el.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">📄 Relatórios Individuais por Local</div>'
+    + '<div style="display:flex;flex-wrap:wrap;gap:8px;">'
+    + escolas.map(function(e, i) {
+        return '<button onclick="abrirIndividualPorIdx(' + i + ')" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#1F3A6E;color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">' + e.nome + '</button>';
+      }).join("")
+    + '</div>';
+}
+
+function abrirIndividualPorIdx(i) {
+  if (!_dadosGeral) return;
+  abrirRelatorioImprimivel({ concurso: _dadosGeral.concurso, escolas: [_dadosGeral.escolas[i]] });
+}
+
+// ── Relatório Técnico Consolidado (Geral) ────────────────────────────
+function abrirRelatorioGeral(dados, meta, win) {
+  if (!win) win = window.open("", "_blank");
+  win.document.open(); // reseta documento (remove tela de carregamento)
+  var conc = dados.concurso || {};
+  var escolas = dados.escolas || [];
+
+  // ── Cálculos globais ──
+  var totI=0, totP=0, totA=0, totIn=0, totSalas=0;
+  var cargosMap = {};
+  escolas.forEach(function(e) {
+    totSalas += Number(e.salas)||0;
+    var eI=0, eP=0, eA=0, eIn=0;
+    var melhorCargo=null, maxPct=-1;
+    (e.resultados||[]).forEach(function(r) {
+      var ins=Number(r.inscr)||0, pre=Number(r.pres)||0, aus=Number(r.aus)||0, inc=Number(r.incl)||0;
+      totI+=ins; totP+=pre; totA+=aus; totIn+=inc;
+      eI+=ins; eP+=pre; eA+=aus; eIn+=inc;
+      if(ins>0 && aus/ins>maxPct){ maxPct=aus/ins; melhorCargo=r; }
+      var cargo = (r.cargo||"").replace(/^\d+\s*[-—]\s*/,'').trim();
+      if(!cargosMap[cargo]) cargosMap[cargo]={inscr:0,pres:0,aus:0,incl:0};
+      cargosMap[cargo].inscr+=ins; cargosMap[cargo].pres+=pre; cargosMap[cargo].aus+=aus; cargosMap[cargo].incl+=inc;
+    });
+    e._tot = {ins:eI, pre:eP, aus:eA, inc:eIn};
+    e._cargoMaiorAus = melhorCargo;
+    e._hasOcorr = (e.ocorrencias||[]).some(function(o){ return Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0; });
+  });
+
+  function pct(a,b){ return b>0?(a/b*100).toFixed(1)+"%":"—"; }
+  function pct2(a,b){ return b>0?(a/b*100).toFixed(2)+"%":"—"; }
+  var n=escolas.length;
+  var nCargos=Object.keys(cargosMap).length;
+  var top5Locais=escolas.slice().sort(function(a,b){return (b._tot.ins||0)-(a._tot.ins||0);}).slice(0,Math.min(5,n));
+  var cargosArr=Object.keys(cargosMap).map(function(nome){return Object.assign({nome:nome},cargosMap[nome]);});
+  var top5Aus=cargosArr.filter(function(c){return c.inscr>0;}).sort(function(a,b){return b.aus/b.inscr-a.aus/a.inscr;}).slice(0,5);
+
+  var titulo   = meta.titulo   || conc["Título do Concurso"] || "";
+  var edital   = meta.edital   || conc["Edital"] || "";
+  var dataProva= meta.data     || conc["Data da Prova"] || "";
+  var coordPed = conc["Coordenador Pedagógico"] || "—";
+  var coordLog = conc["Coordenador Logístico"]  || "—";
+  var turnosSet={};
+  escolas.forEach(function(e){if(e.turno)String(e.turno).split(/\s+e\s+|\//).forEach(function(t){if(t.trim())turnosSet[t.trim()]=1;});});
+  var turnosStr=Object.keys(turnosSet).filter(Boolean).join(" e ")||"—";
+  var hoje=new Date().toLocaleDateString("pt-BR");
+  var corP="#1F3A6E", corR="#CF3432", corE="#2C2C2C";
+
+  // ── Helpers de HTML ──
+  var PC='-webkit-print-color-adjust:exact;print-color-adjust:exact;';
+  function thS(extra){ return 'style="'+PC+'background:'+corP+';color:#fff;padding:10px 12px;text-align:left;font-size:11px;font-weight:700;'+(extra||'')+'"'; }
+  function td(bg,extra){ return 'style="'+PC+'background:'+(bg||'#fff')+'!important;padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;'+(extra||'')+'"'; }
+  function tdZ(i,extra){ return td(i%2?'#F5F7FC':'#fff',extra); }
+  function secH(num,t){ return '<h2 style="font-size:15px;font-weight:700;color:'+corP+';border-bottom:3px solid '+corR+';padding-bottom:10px;margin:36px 0 18px;letter-spacing:.3px;">'+num+'. '+t+'</h2>'; }
+  function infoCell(l,v){ return '<div style="padding:4px 0;"><span style="display:block;color:#aaa;font-size:9px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;">'+l+'</span><span style="color:#fff;font-size:12px;font-weight:600;">'+(v||"—")+'</span></div>'; }
+  function indCard(v,l){ return '<td style="'+PC+'background:#fff;padding:20px 14px;text-align:center;border:1px solid #D8DEEC;width:25%;"><div style="'+PC+'font-size:30px;font-weight:700;color:'+corP+';line-height:1;">'+v+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#777;margin-top:8px;line-height:1.3;">'+l+'</div></td>'; }
+  function totalRow(cols){ return '<tr>'+cols.map(function(c){ var attr=c[2]?' '+c[2]:''; return '<td'+attr+' style="'+PC+'background:'+corE+'!important;color:#fff!important;padding:10px 12px;font-weight:700;font-size:12px;'+(c[1]||'')+'">'+(c[0])+'</td>'; }).join('')+'</tr>'; }
+
+  // ── HTML ──
+  var html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>IBGP</title>'
+    +'<style>*{box-sizing:border-box;margin:0;padding:0;}'
+    +'body{font-family:Arial,sans-serif;background:#F2F4F8;padding:28px;font-size:13px;color:#2C2C2C;'+PC+'}'
+    +'table{width:100%;border-collapse:collapse;}'
+    +'.card{background:#fff;border-radius:6px;border:1px solid #DDE3EE;margin-bottom:24px;overflow:hidden;}'
+    +'.no-print{display:flex;}'
+    +'p{line-height:1.8;color:#444;font-size:13px;margin-bottom:12px;}'
+    +'@media print{body{background:#fff;padding:14px;}.no-print{display:none!important;}.pb{page-break-before:always;}}'
+    +'</style></head><body>';
+
+  // Barra (só tela)
+  html+='<div class="no-print" style="'+PC+'background:'+corP+';padding:12px 20px;margin-bottom:20px;border-radius:8px;align-items:center;justify-content:flex-end;">'
+    +'<button onclick="window.print()" style="'+PC+'background:'+corR+';color:#fff;border:none;padding:9px 24px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">🖨 Imprimir / Salvar PDF</button>'
+    +'</div>';
+
+  // ── CAPA ──
+  html+='<div style="'+PC+'background:'+corE+';padding:36px 36px 28px;border-radius:8px 8px 0 0;margin-bottom:0;">'
+    +'<p style="'+PC+'color:'+corR+';font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">Instituto Brasileiro de Gestão e Pesquisa</p>'
+    +'<h1 style="color:#fff;font-size:26px;font-weight:700;margin-bottom:8px;letter-spacing:.5px;">RELATÓRIO TÉCNICO CONSOLIDADO</h1>'
+    +'<h2 style="color:#BBBBBB;font-size:15px;font-weight:400;margin-bottom:28px;">'+titulo+'</h2>'
+    +'<div style="border-top:1px solid #3D3D3D;padding-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px 32px;">'
+    +infoCell("Edital",edital)
+    +infoCell("Data da Prova",dataProva)
+    +infoCell("Turno(s)",turnosStr)
+    +infoCell("Total de Locais",n)
+    +infoCell("Coordenador Pedagógico",coordPed)
+    +infoCell("Coordenador Logístico",coordLog)
+    +infoCell("Gerado em",hoje)
+    +'</div></div>'
+    +'<div style="'+PC+'height:5px;background:'+corR+';margin-bottom:32px;border-radius:0 0 8px 8px;"></div>';
+
+  // ── 1. APRESENTAÇÃO ──
+  html+=secH("1","Apresentação");
+  html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corP+';">'
+    +'<p>Este relatório consolida as informações de <strong>'+n+(n===1?" local":" locais")+'</strong> de aplicação das provas objetivas do <strong>'+titulo+'</strong> — '+edital+', realizadas em '+dataProva+', turno'+(Object.keys(turnosSet).length>1?"s":"")+" "+turnosStr+'.</p>'
+    +'<p>'+(n===1?"O local dispõe":"Os "+n+" locais dispõem")+' de relatório técnico individual, arquivado separadamente. Os quantitativos de candidatos inscritos, presentes e ausentes apresentados neste documento têm como fonte autoritativa a base de leitura do IBGP, totalizando <strong>'+nCargos+(nCargos===1?" cargo":" cargos")+'</strong> distribuídos em <strong>'+totSalas+' salas</strong> de prova.</p>'
+    +'<p>Em todos os locais a aplicação transcorreu conforme o cronograma definido no edital. Os procedimentos padronizados do IBGP foram aplicados integralmente, incluindo controle de acesso, distribuição de provas, identificação de candidatos e encerramento com lacre de malotes.</p>'
+    +'</div>';
+
+  // ── 2. RESUMO EXECUTIVO (2ª página) ──
+  html+='<div class="pb">';
+  html+=secH("2","Resumo Executivo");
+
+  // Texto resumo
+  var pctPres=pct2(totP,totI), pctAus=pct2(totA,totI);
+  html+='<div class="card" style="padding:24px 28px;">'
+    +'<p>A aplicação foi conduzida simultaneamente em <strong>'+n+'</strong> '+(n===1?"local":"locais")+', totalizando <strong>'+totSalas+'</strong> salas. Foram registrados <strong>'+totI+'</strong> candidatos inscritos, <strong>'+totP+'</strong> presentes ('+pctPres+') e <strong>'+totA+'</strong> ausentes ('+pctAus+').</p>'
+    +'</div>';
+
+  // Indicadores Globais (tabela 2×4 como no Word)
+  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Indicadores Globais</p>';
+  html+='<div class="card" style="margin-bottom:28px;"><table><tbody>'
+    +'<tr>'+indCard(n,"Locais de Aplicação")+indCard(nCargos,"Cargos")+indCard(totSalas,"Salas Utilizadas")+indCard(totI,"Candidatos Inscritos")+'</tr>'
+    +'<tr>'+indCard(totP,"Candidatos Presentes")+indCard(totA,"Candidatos Ausentes")+indCard(pctPres,"Taxa de Presença")+indCard(pctAus,"Taxa de Ausência")+'</tr>'
+    +'</tbody></table></div>';
+
+  // Top 5 locais (inscritos)
+  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Top '+Math.min(5,n)+' Cargos com Maior Número de Inscritos</p>';
+  html+='<div class="card" style="margin-bottom:24px;"><table><thead><tr>'
+    +'<th '+thS()+'>Cargo / Função</th>'
+    +'<th '+thS("text-align:center;")+'>Inscritos</th>'
+    +'<th '+thS("text-align:center;")+'>Presentes</th>'
+    +'<th '+thS("text-align:center;")+'>Ausentes</th>'
+    +'<th '+thS("text-align:center;")+'>% Aus.</th>'
+    +'</tr></thead><tbody>';
+  top5Locais.forEach(function(e,i){
+    var t=e._tot||{ins:0,pre:0,aus:0};
+    html+='<tr><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.ins+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.pre+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(t.aus,t.ins)+'</td></tr>';
+  });
+  html+='</tbody></table></div>';
+
+  // Top 5 cargos (ausência)
+  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Top 5 Cargos com Maior Taxa de Ausência</p>';
+  html+='<div class="card" style="margin-bottom:24px;"><table><thead><tr>'
+    +'<th '+thS()+'>Cargo / Função</th>'
+    +'<th '+thS("text-align:center;")+'>Inscritos</th>'
+    +'<th '+thS("text-align:center;")+'>Ausentes</th>'
+    +'<th '+thS("text-align:center;")+'>% Ausência</th>'
+    +'</tr></thead><tbody>';
+  if(top5Aus.length>0){
+    top5Aus.forEach(function(c,i){
+      html+='<tr><td '+tdZ(i)+'>'+c.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.inscr+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(c.aus,c.inscr)+'</td></tr>';
+    });
+  } else {
+    html+='<tr><td colspan="4" '+td()+' style="text-align:center;color:#999;">Dados insuficientes</td></tr>';
+  }
+  html+='</tbody></table></div>';
+
+  // Procedimentos Padronizados
+  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Procedimentos Padronizados — Aplicados em Todos os Locais</p>';
+  html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corR+';">'
+    +'<ol style="padding-left:20px;font-size:13px;line-height:2.2;color:#333;">'
+    +'<li>Reunião de alinhamento com a equipe: 05h50 às 06h45.</li>'
+    +'<li>Abertura do portão às 07h00, com conferência de documentos e lista de presença da equipe.</li>'
+    +'<li>Abertura dos malotes de provas com testemunhas e registro fotográfico.</li>'
+    +'<li>Distribuição dos pacotes de provas às 07h30, com capa virada para a carteira.</li>'
+    +'<li>Fechamento do portão pontualmente às 08h00, com lavratura do Termo de Fechamento.</li>'
+    +'<li>Início das provas às 08h30, conforme cronograma do edital.</li>'
+    +'<li>Identificação dos candidatos mediante documento oficial com foto.</li>'
+    +'<li>Proibição e recolhimento de dispositivos eletrônicos antes do início.</li>'
+    +'<li>Aplicação de prova condicional com protocolo e registro em formulário.</li>'
+    +'<li>Fechamento e lacre dos malotes com folhas de respostas, sob testemunho dos coordenadores locais.</li>'
+    +'<li>Encaminhamento de formulários, atas e malotes à coordenação logística.</li>'
+    +'</ol></div>';
+
+  html+='</div>'; // fecha div pb da seção 2
+
+  // ── 3. LOCAIS DE APLICAÇÃO (3ª página) ──
+  html+='<div class="pb">';
+  html+=secH("3","Locais de Aplicação");
+  html+='<p>A tabela abaixo lista os '+n+' '+(n===1?"local":"locais")+' de aplicação das provas, com o número de salas utilizadas e a coordenação local responsável.</p>';
+  html+='<div class="card"><table><thead><tr>'
+    +'<th '+thS("width:40px;text-align:center;")+'>#</th>'
+    +'<th '+thS()+'>Local de Aplicação</th>'
+    +'<th '+thS()+'>Data</th>'
+    +'<th '+thS("text-align:center;")+'>Salas</th>'
+    +'<th '+thS()+'>Coord. Local</th>'
+    +'</tr></thead><tbody>';
+  escolas.forEach(function(e,i){
+    html+='<tr><td '+tdZ(i,"text-align:center;font-weight:700;")+'>'+(i+1)+'</td><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i)+'>'+dataProva+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"—")+'</td><td '+tdZ(i)+'>'+(e.coord_local||"—")+'</td></tr>';
+  });
+  html+=totalRow([["TOTAL — "+n+(n===1?" LOCAL":" LOCAIS"),"font-weight:700;","colspan='2'"],
+    [dataProva,""],
+    [totSalas,"text-align:center;"],
+    [n+(n===1?" coordenador":" coordenadores"),""]
+  ]);
+  html+='</tbody></table></div></div>';
+
+  // ── 4. QUADRO CONSOLIDADO POR CARGO (sem quebra — continua na mesma área) ──
+  html+=secH("4","Quadro Consolidado por Cargo");
+  html+='<p>Consolidação dos '+nCargos+' '+(nCargos===1?"cargo":"cargos")+' do certame. Linhas com taxa de ausência igual ou superior a 50% são destacadas em vermelho.</p>';
+  html+='<div class="card"><table><thead><tr>'
+    +'<th '+thS("width:36px;text-align:center;")+'>#</th>'
+    +'<th '+thS()+'>Cargo / Função</th>'
+    +'<th '+thS("text-align:center;")+'>Inscritos</th>'
+    +'<th '+thS("text-align:center;")+'>Presentes</th>'
+    +'<th '+thS("text-align:center;")+'>Ausentes</th>'
+    +'<th '+thS("text-align:center;")+'>Inclusão</th>'
+    +'<th '+thS("text-align:center;")+'>% Aus.</th>'
+    +'</tr></thead><tbody>';
+  var tCI=0,tCP=0,tCA=0,tCIn=0;
+  cargosArr.slice().sort(function(a,b){return a.nome.localeCompare(b.nome,"pt");}).forEach(function(c,i){
+    tCI+=c.inscr; tCP+=c.pres; tCA+=c.aus; tCIn+=c.incl;
+    var pA=c.inscr>0?c.aus/c.inscr:0, hi=pA>=0.5;
+    var bg=hi?"#FFEBEE":(i%2?"#F5F7FC":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
+    var s=PC+'background:'+bg+'!important;color:'+tc+';padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;';
+    html+='<tr>'
+      +'<td style="'+s+'text-align:center;font-weight:600;">'+(i+1)+'</td>'
+      +'<td style="'+s+'">'+c.nome+'</td>'
+      +'<td style="'+s+'text-align:center;">'+c.inscr+'</td>'
+      +'<td style="'+s+'text-align:center;">'+c.pres+'</td>'
+      +'<td style="'+s+'text-align:center;">'+c.aus+'</td>'
+      +'<td style="'+s+'text-align:center;">'+c.incl+'</td>'
+      +'<td style="'+s+'text-align:center;font-weight:'+(hi?"700":"400")+';">'+(pA*100).toFixed(1)+'%</td>'
+      +'</tr>';
+  });
+  html+=totalRow([["TOTAL — "+nCargos+(nCargos===1?" CARGO":" CARGOS"),"","colspan='2'"],
+    [tCI,"text-align:center;"],
+    [tCP,"text-align:center;"],
+    [tCA,"text-align:center;"],
+    [tCIn,"text-align:center;"],
+    [pct(tCA,tCI),"text-align:center;"]
+  ]);
+  html+='</tbody></table></div></div>';
+
+  // ── 5. RESULTADO POR LOCAL (sem quebra — continua na mesma área) ──
+  html+=secH("5","Resultado por Local");
+  html+='<p>Resultado consolidado por local de aplicação: salas utilizadas, quantitativos, taxa de ausência, ocorrências e cargo com maior taxa de ausência.</p>';
+  html+='<div class="card"><table><thead><tr>'
+    +'<th '+thS("width:36px;text-align:center;")+'>#</th>'
+    +'<th '+thS()+'>Local</th>'
+    +'<th '+thS("text-align:center;")+'>Salas</th>'
+    +'<th '+thS("text-align:center;")+'>Prev.</th>'
+    +'<th '+thS("text-align:center;")+'>Pres.</th>'
+    +'<th '+thS("text-align:center;")+'>Aus.</th>'
+    +'<th '+thS("text-align:center;")+'>% Aus.</th>'
+    +'<th '+thS("text-align:center;")+'>Ocorr.</th>'
+    +'<th '+thS()+'>Cargo c/ Maior Aus.</th>'
+    +'</tr></thead><tbody>';
+  escolas.forEach(function(e,i){
+    var t=e._tot||{ins:0,pre:0,aus:0};
+    var mc=e._cargoMaiorAus;
+    var mcStr=mc?(mc.cargo||"").replace(/^\d+\s*[-—]\s*/,"").trim()+" ("+pct(Number(mc.aus)||0,Number(mc.inscr)||1)+")":"—";
+    var ocorrStr=e._hasOcorr?'<span style="'+PC+'background:#FFEBEE!important;color:#B71C1C;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;">Sim</span>':'<span style="color:#888;font-size:11px;">Não</span>';
+    html+='<tr><td '+tdZ(i,"text-align:center;font-weight:600;")+'>'+(i+1)+'</td><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"—")+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.ins+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.pre+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(t.aus,t.ins)+'</td><td '+tdZ(i,"text-align:center;")+'>'+ocorrStr+'</td><td '+tdZ(i)+'>'+mcStr+'</td></tr>';
+  });
+  html+=totalRow([
+    ["TOTAL — "+n+(n===1?" LOCAL":" LOCAIS"),"","colspan='2'"],
+    [totSalas,"text-align:center;"],
+    [totI,"text-align:center;"],
+    [totP,"text-align:center;"],
+    [totA,"text-align:center;"],
+    [pct(totA,totI),"text-align:center;"],
+    ["",""],
+    ["",""]
+  ]);
+  html+='</tbody></table></div></div>';
+
+  html+='</div>'; // fecha div pb da seção 3
+
+  // ── 4. DETALHAMENTO OPERACIONAL POR LOCAL (nova página) ──
+  html+='<div class="pb">';
+  html+=secH("4","Detalhamento Operacional por Local");
+  html+='<p>Para cada local são apresentadas as informações operacionais e os quantitativos por cargo.</p>';
+
+  escolas.forEach(function(e,ei){
+    html+='<div style="margin-bottom:28px;">';
+    // Cabeçalho do local
+    html+='<div style="'+PC+'background:'+corP+';color:#fff;padding:12px 18px;border-radius:6px 6px 0 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">'
+      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Local '+(ei+1)+'</span><strong style="font-size:13px;">'+e.nome+'</strong></div>'
+      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Data da aplicação</span><span style="font-size:12px;">'+dataProva+'</span></div>'
+      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Salas utilizadas</span><span style="font-size:12px;">'+(e.salas||"—")+' salas</span></div>'
+      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Coordenador Pedagógico</span><span style="font-size:12px;">'+coordPed+'</span></div>'
+      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Coordenador Logístico</span><span style="font-size:12px;">'+coordLog+'</span></div>'
+      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Coord. Local</span><span style="font-size:12px;">'+(e.coord_local||"—")+'</span></div>'
+      +'</div>';
+    // Tabela de resultados
+    var rows=e.resultados||[];
+    var eCI=0,eCP=0,eCA=0,eCIn=0;
+    html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;overflow:hidden;"><table><thead><tr>'
+      +'<th '+thS()+'>Cargo / Função</th>'
+      +'<th '+thS("text-align:center;")+'>Previstos</th>'
+      +'<th '+thS("text-align:center;")+'>Presentes</th>'
+      +'<th '+thS("text-align:center;")+'>Ausentes</th>'
+      +'<th '+thS("text-align:center;")+'>Inclusão</th>'
+      +'<th '+thS("text-align:center;")+'>% Ausência</th>'
+      +'</tr></thead><tbody>';
+    rows.forEach(function(r,i){
+      var ins=Number(r.inscr)||0,pre=Number(r.pres)||0,aus=Number(r.aus)||0,inc=Number(r.incl)||0;
+      eCI+=ins; eCP+=pre; eCA+=aus; eCIn+=inc;
+      var pA=ins>0?aus/ins:0, hi=pA>=0.5;
+      var bg=hi?"#FFEBEE":(i%2?"#F5F7FC":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
+      var s=PC+'background:'+bg+'!important;color:'+tc+';padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;';
+      html+='<tr>'
+        +'<td style="'+s+'">'+(r.cargo||"").replace(/^\d+\s*[-—]\s*/,"").trim()+'</td>'
+        +'<td style="'+s+'text-align:center;">'+ins+'</td>'
+        +'<td style="'+s+'text-align:center;">'+pre+'</td>'
+        +'<td style="'+s+'text-align:center;">'+aus+'</td>'
+        +'<td style="'+s+'text-align:center;">'+inc+'</td>'
+        +'<td style="'+s+'text-align:center;font-weight:'+(hi?"700":"400")+';">'+(pA*100).toFixed(1)+'%</td>'
+        +'</tr>';
+    });
+    if(rows.length===0){
+      html+='<tr><td colspan="6" '+td()+' style="text-align:center;color:#999;padding:16px;">Nenhum resultado registrado</td></tr>';
+    } else {
+      html+=totalRow([["TOTAL",""],
+        [eCI,"text-align:center;"],
+        [eCP,"text-align:center;"],
+        [eCA,"text-align:center;"],
+        [eCIn,"text-align:center;"],
+        [pct(eCA,eCI),"text-align:center;"]
+      ]);
+    }
+    html+='</tbody></table></div>';
+    html+='</div>'; // fim local
+  });
+
+  html+='</div>'; // fim div pb detalhamento
+
+  // ── 5. REGISTRO FOTOGRÁFICO POR LOCAL ──
+  html+='<div class="pb">';
+  html+=secH("5","Registro Fotográfico por Local");
+  html+='<p>Imagens coletadas pelos coordenadores locais durante a aplicação, documentando: Sinalização da Escola, Abertura do Malote, Andamento da Aplicação e Fechamento do Malote.</p>';
+
+  escolas.forEach(function(e, ei) {
+    html+='<div style="margin-bottom:24px;">';
+    html+='<div style="'+PC+'background:'+corP+';color:#fff;padding:10px 18px;border-radius:6px 6px 0 0;">'
+      +'<strong style="font-size:13px;">'+(ei+1)+'. '+e.nome+'</strong>'
+      +'</div>';
+    if (e.foto_url) {
+      html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;padding:16px 20px;background:#fff;">'
+        +'<p style="margin-bottom:10px;color:#444;">Fotos disponíveis no Google Drive:</p>'
+        +'<a href="'+e.foto_url+'" target="_blank" style="'+PC+'display:inline-block;background:'+corR+';color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">📁 Ver Fotos no Google Drive</a>'
+        +'<p style="margin-top:10px;font-size:11px;color:#888;">Categorias: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>'
+        +'</div>';
+    } else {
+      html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;padding:16px 20px;background:#fff;">'
+        +'<p style="color:#999;font-style:italic;">[ Fotos a serem inseridas a partir do formulário individual do local ]</p>'
+        +'<p style="font-size:11px;color:#aaa;margin-top:6px;">Categorias: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>'
+        +'</div>';
+    }
+    html+='</div>';
+  });
+
+  html+='</div>'; // fim pb sec5 fotos
+  html+='</body></html>';
+  win.document.write(html);
+  win.document.close();
+}
+</script>
+</body>
+</html>
