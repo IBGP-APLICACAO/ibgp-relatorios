@@ -1095,7 +1095,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   function totalRow(cols){ return '<tr>'+cols.map(function(c){ var attr=c[2]?' '+c[2]:''; return '<td'+attr+' style="'+PC+'background:'+corE+'!important;color:#fff!important;padding:10px 12px;font-weight:700;font-size:12px;'+(c[1]||'')+'">'+(c[0])+'</td>'; }).join('')+'</tr>'; }
 
   // ── HTML ──
-  var html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório Técnico Consolidado — IBGP</title>'
+  var html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>IBGP</title>'
     +'<style>*{box-sizing:border-box;margin:0;padding:0;}'
     +'body{font-family:Arial,sans-serif;background:#F2F4F8;padding:28px;font-size:13px;color:#2C2C2C;'+PC+'}'
     +'table{width:100%;border-collapse:collapse;}'
@@ -1134,7 +1134,8 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'<p>Em todos os locais a aplicação transcorreu conforme o cronograma definido no edital. Os procedimentos padronizados do IBGP foram aplicados integralmente, incluindo controle de acesso, distribuição de provas, identificação de candidatos e encerramento com lacre de malotes.</p>'
     +'</div>';
 
-  // ── 2. RESUMO EXECUTIVO ──
+  // ── 2. RESUMO EXECUTIVO (2ª página) ──
+  html+='<div class="pb">';
   html+=secH("2","Resumo Executivo");
 
   // Texto resumo
@@ -1199,7 +1200,9 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'<li>Encaminhamento de formulários, atas e malotes à coordenação logística.</li>'
     +'</ol></div>';
 
-  // ── 3. LOCAIS DE APLICAÇÃO ──
+  html+='</div>'; // fecha div pb da seção 2
+
+  // ── 3. LOCAIS DE APLICAÇÃO (3ª página) ──
   html+='<div class="pb">';
   html+=secH("3","Locais de Aplicação");
   html+='<p>A tabela abaixo lista os '+n+' '+(n===1?"local":"locais")+' de aplicação das provas, com o número de salas utilizadas e a coordenação local responsável.</p>';
@@ -1220,8 +1223,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   ]);
   html+='</tbody></table></div></div>';
 
-  // ── 4. QUADRO CONSOLIDADO POR CARGO ──
-  html+='<div class="pb">';
+  // ── 4. QUADRO CONSOLIDADO POR CARGO (sem quebra — continua na mesma área) ──
   html+=secH("4","Quadro Consolidado por Cargo");
   html+='<p>Consolidação dos '+nCargos+' '+(nCargos===1?"cargo":"cargos")+' do certame. Linhas com taxa de ausência igual ou superior a 50% são destacadas em vermelho.</p>';
   html+='<div class="card"><table><thead><tr>'
@@ -1258,8 +1260,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   ]);
   html+='</tbody></table></div></div>';
 
-  // ── 5. RESULTADO POR LOCAL ──
-  html+='<div class="pb">';
+  // ── 5. RESULTADO POR LOCAL (sem quebra — continua na mesma área) ──
   html+=secH("5","Resultado por Local");
   html+='<p>Resultado consolidado por local de aplicação: salas utilizadas, quantitativos, taxa de ausência, ocorrências e cargo com maior taxa de ausência.</p>';
   html+='<div class="card"><table><thead><tr>'
@@ -1292,9 +1293,11 @@ function abrirRelatorioGeral(dados, meta, win) {
   ]);
   html+='</tbody></table></div></div>';
 
-  // ── 6. DETALHAMENTO OPERACIONAL POR LOCAL ──
+  html+='</div>'; // fecha div pb da seção 3
+
+  // ── 4. DETALHAMENTO OPERACIONAL POR LOCAL (nova página) ──
   html+='<div class="pb">';
-  html+=secH("6","Detalhamento Operacional por Local");
+  html+=secH("4","Detalhamento Operacional por Local");
   html+='<p>Para cada local são apresentadas as informações operacionais e os quantitativos por cargo.</p>';
 
   escolas.forEach(function(e,ei){
@@ -1349,7 +1352,34 @@ function abrirRelatorioGeral(dados, meta, win) {
     html+='</div>'; // fim local
   });
 
-  html+='</div>'; // fim pb sec6
+  html+='</div>'; // fim div pb detalhamento
+
+  // ── 5. REGISTRO FOTOGRÁFICO POR LOCAL ──
+  html+='<div class="pb">';
+  html+=secH("5","Registro Fotográfico por Local");
+  html+='<p>Imagens coletadas pelos coordenadores locais durante a aplicação, documentando: Sinalização da Escola, Abertura do Malote, Andamento da Aplicação e Fechamento do Malote.</p>';
+
+  escolas.forEach(function(e, ei) {
+    html+='<div style="margin-bottom:24px;">';
+    html+='<div style="'+PC+'background:'+corP+';color:#fff;padding:10px 18px;border-radius:6px 6px 0 0;">'
+      +'<strong style="font-size:13px;">'+(ei+1)+'. '+e.nome+'</strong>'
+      +'</div>';
+    if (e.foto_url) {
+      html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;padding:16px 20px;background:#fff;">'
+        +'<p style="margin-bottom:10px;color:#444;">Fotos disponíveis no Google Drive:</p>'
+        +'<a href="'+e.foto_url+'" target="_blank" style="'+PC+'display:inline-block;background:'+corR+';color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">📁 Ver Fotos no Google Drive</a>'
+        +'<p style="margin-top:10px;font-size:11px;color:#888;">Categorias: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>'
+        +'</div>';
+    } else {
+      html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;padding:16px 20px;background:#fff;">'
+        +'<p style="color:#999;font-style:italic;">[ Fotos a serem inseridas a partir do formulário individual do local ]</p>'
+        +'<p style="font-size:11px;color:#aaa;margin-top:6px;">Categorias: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>'
+        +'</div>';
+    }
+    html+='</div>';
+  });
+
+  html+='</div>'; // fim pb sec5 fotos
   html+='</body></html>';
   win.document.write(html);
   win.document.close();

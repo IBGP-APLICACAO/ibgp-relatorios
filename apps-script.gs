@@ -85,12 +85,13 @@ function coletarDadosRelatorio() {
   var wsLocais = ss.getSheetByName("LOCAIS");
   var escolas = {};
   if (wsLocais && wsLocais.getLastRow() > 1) {
-    var lRows = wsLocais.getRange(2, 1, wsLocais.getLastRow() - 1, 8).getValues();
+    var lRows = wsLocais.getRange(2, 1, wsLocais.getLastRow() - 1, 9).getValues();
     lRows.forEach(function(r) {
       if (!r[0]) return;
       escolas[r[0]] = {
         nome: r[0], coord_local: r[1], salas: r[2], turno: r[3],
         houve_apoio: r[4], nome_apoio: r[5], obs: r[6], enviado_em: r[7],
+        foto_url: r[8] || "",
         horarios: [], resultados: [], testemunhas: [], ocorrencias: [], candidatos: []
       };
     });
@@ -499,5 +500,22 @@ function salvarFotos(data) {
 
   // Retorna link público para a pasta
   escolaFolder.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  return "https://drive.google.com/drive/folders/" + escolaFolder.getId();
+  var link = "https://drive.google.com/drive/folders/" + escolaFolder.getId();
+
+  // Salva o link na aba LOCAIS (coluna 9) para uso no Relatório Geral
+  try {
+    var ss2 = SpreadsheetApp.getActiveSpreadsheet();
+    var wsL = ss2.getSheetByName("LOCAIS");
+    if (wsL && wsL.getLastRow() > 1) {
+      var nomes = wsL.getRange(2, 1, wsL.getLastRow() - 1, 1).getValues();
+      for (var i = 0; i < nomes.length; i++) {
+        if (String(nomes[i][0]).trim() === String(data.escola).trim()) {
+          wsL.getRange(i + 2, 9).setValue(link);
+          break;
+        }
+      }
+    }
+  } catch(e2) {}
+
+  return link;
 }
