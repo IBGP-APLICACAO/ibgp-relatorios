@@ -963,7 +963,7 @@ function abrirRelatorioImprimivel(dados) {
       </tr></thead><tbody>`;
       rows.forEach(function(r, i){
         tI+=Number(r.inscr)||0; tP+=Number(r.pres)||0; tA+=Number(r.aus)||0; tIn+=Number(r.incl)||0;
-        tabela+=`<tr class="${i%2===1?'alt':''}"><td>${r.sala} — ${r.cargo.replace(/^\d+\s+-\s+/,"")}</td>
+        tabela+=`<tr class="${i%2===1?'alt':''}"><td>${r.sala} — ${(r.cargo||"").replace(/^\d+\s+-\s+/,"")}</td>
           <td style="text-align:center;">${r.inscr}</td><td style="text-align:center;">${r.pres}</td>
           <td style="text-align:center;">${r.aus}</td><td style="text-align:center;">${r.incl||0}</td></tr>`;
       });
@@ -1069,7 +1069,7 @@ function abrirRelatorioGeral(dados, meta, win) {
       totI+=ins; totP+=pre; totA+=aus; totIn+=inc;
       eI+=ins; eP+=pre; eA+=aus; eIn+=inc;
       if(ins>0 && aus/ins>maxPct){ maxPct=aus/ins; melhorCargo=r; }
-      var cargo = r.cargo.replace(/^\d+\s*[-—]\s*/,'').trim();
+      var cargo = (r.cargo||"").replace(/^\d+\s*[-—]\s*/,'').trim();
       if(!cargosMap[cargo]) cargosMap[cargo]={inscr:0,pres:0,aus:0,incl:0};
       cargosMap[cargo].inscr+=ins; cargosMap[cargo].pres+=pre; cargosMap[cargo].aus+=aus; cargosMap[cargo].incl+=inc;
     });
@@ -1290,7 +1290,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   escolas.forEach(function(e,i){
     var t=e._tot||{ins:0,pre:0,aus:0};
     var mc=e._cargoMaiorAus;
-    var mcStr=mc?mc.cargo.replace(/^\d+\s*[-—]\s*/,"").trim()+" ("+pct(Number(mc.aus)||0,Number(mc.inscr)||1)+")":"—";
+    var mcStr=mc?(mc.cargo||"").replace(/^\d+\s*[-—]\s*/,"").trim()+" ("+pct(Number(mc.aus)||0,Number(mc.inscr)||1)+")":"—";
     var ocorrStr=e._hasOcorr?'<span style="'+PC+'background:#FFEBEE!important;color:#B71C1C;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;">Sim</span>':'<span style="color:#888;font-size:11px;">Não</span>';
     html+='<tr><td '+tdZ(i,"text-align:center;font-weight:600;")+'>'+(i+1)+'</td><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"—")+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.ins+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.pre+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(t.aus,t.ins)+'</td><td '+tdZ(i,"text-align:center;")+'>'+ocorrStr+'</td><td '+tdZ(i)+'>'+mcStr+'</td></tr>';
   });
@@ -1342,7 +1342,7 @@ function abrirRelatorioGeral(dados, meta, win) {
       var bg=hi?"#FFEBEE":(i%2?"#F5F7FC":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
       var s=PC+'background:'+bg+'!important;color:'+tc+';padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;';
       html+='<tr>'
-        +'<td style="'+s+'">'+r.cargo.replace(/^\d+\s*[-—]\s*/,"").trim()+'</td>'
+        +'<td style="'+s+'">'+(r.cargo||"").replace(/^\d+\s*[-—]\s*/,"").trim()+'</td>'
         +'<td style="'+s+'text-align:center;">'+ins+'</td>'
         +'<td style="'+s+'text-align:center;">'+pre+'</td>'
         +'<td style="'+s+'text-align:center;">'+aus+'</td>'

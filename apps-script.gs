@@ -117,8 +117,9 @@ function coletarDadosRelatorio() {
   if (wsRes && wsRes.getLastRow() > 1) {
     wsRes.getRange(2, 1, wsRes.getLastRow() - 1, 9).getValues().forEach(function(r) {
       if (!escolas[r[0]]) return;
+      if (!r[3]) return; // ignora linhas sem cargo
       escolas[r[0]].resultados.push({
-        sala: r[1], turno: r[2], cargo: r[3],
+        sala: r[1], turno: r[2], cargo: String(r[3]),
         inscr: r[4], pres: r[5], aus: r[6], incl: r[7]
       });
     });
