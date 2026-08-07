@@ -254,12 +254,6 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
 
     <!-- RELATÓRIO GERAL -->
     <div class="card">
-      <div class="card-title"><span>📋</span> Relatório Individual</div>
-      <p style="color:#555;margin:0 0 16px;font-size:14px;">Gera o Relatório Individual de Aplicação de Prova por local de aplicação.</p>
-      <a href="admin-v2.html" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#1F3A6E;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:600;">📋 Abrir Gerador de Relatório Individual</a>
-    </div>
-
-    <div class="card">
       <div class="card-title"><span>📄</span> Relatório Geral</div>
       <p style="font-size:13px;color:#555;margin-bottom:16px;">
         Gera o Relatório Geral de Aplicação consolidando os dados enviados pelos coordenadores para o certame selecionado.
@@ -837,7 +831,13 @@ async function carregarCertamesRelatorio() {
 }
 
 // ── Relatório Geral ───────────────────────────────────────────────────
-async function gerarRelatorioGeral() {
+async function fixUtf8Double(o){
+  if(typeof o==='string'){try{return new TextDecoder('utf-8').decode(Uint8Array.from(o,c=>c.charCodeAt(0)));}catch(e){return o;}}
+  if(Array.isArray(o))return o.map(fixUtf8Double);
+  if(o&&typeof o==='object'){const r={};for(const k in o)r[k]=fixUtf8Double(o[k]);return r;}
+  return o;
+}
+function gerarRelatorioGeral() {
   const url = document.getElementById("fScriptUrl").value.trim();
   if (!url || !url.startsWith("https://script.google.com")) {
     mostrarStatusRelatorio("Informe a URL do Apps Script.", false); return;
@@ -865,13 +865,13 @@ async function gerarRelatorioGeral() {
     // Busca lista de escolas do certame selecionado
     const rCertame = await fetch(`dados/${certameId}.json?_=${Date.now()}`);
     if (!rCertame.ok) throw new Error("Certame não encontrado");
-    const certameDados = await rCertame.json();
+    const certameDados = fixUtf8Double(await rCertame.json());
     const escolasDoCertame = new Set((certameDados.escolas || []).map(e => (e.nome || "").toUpperCase().trim()));
 
     // Busca dados do Apps Script
     const resp = await fetch(url + "?action=relatorio");
     if (!resp.ok) throw new Error("HTTP " + resp.status);
-    const dados = await resp.json();
+    const dados = fixUtf8Double(await resp.json());
 
     // Filtra apenas escolas do certame selecionado (case-insensitive)
     dados.escolas = (dados.escolas || []).filter(e => escolasDoCertame.has((e.nome || "").toUpperCase().trim()));
