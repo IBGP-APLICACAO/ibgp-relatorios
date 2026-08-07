@@ -993,9 +993,9 @@ function abrirRelatorioImprimivel(dados) {
   
     #print-header{display:none;}
     @media print{
-      @page{margin:0;}
-      body{margin:1.5cm;padding-top:1.7cm;}
-      #print-header{display:flex;position:fixed;top:0;left:0;right:0;height:1.4cm;background:#F0F0F0;-webkit-print-color-adjust:exact;print-color-adjust:exact;align-items:center;padding:0 1.5cm;border-bottom:1.5px solid #BEC6D4;box-sizing:border-box;}
+      @page{margin-top:1.5cm;margin-bottom:1.5cm;margin-left:1.5cm;margin-right:1.5cm;}
+      body{margin:0!important;padding:0!important;}
+      #print-header{display:flex;position:fixed;top:-1.5cm;left:-1.5cm;right:-1.5cm;height:1.4cm;background:#F0F0F0;-webkit-print-color-adjust:exact;print-color-adjust:exact;align-items:center;padding:0 1.5cm;border-bottom:1.5px solid #BEC6D4;box-sizing:border-box;}
       #print-header img{height:22px;margin-right:10px;}
       #print-header .phdr-t{font-size:10px;font-weight:700;color:#1F3A6E;font-family:Arial,sans-serif;letter-spacing:.3px;}
     }
