@@ -990,12 +990,21 @@ function abrirRelatorioImprimivel(dados) {
       .page-break{page-break-before:always;}
     }
   
-  </style></head><body>`;
+  
+    #print-header{display:none;}
+    @media print{
+      @page{margin:0;}
+      body{margin:1.5cm;padding-top:1.7cm;}
+      #print-header{display:flex;position:fixed;top:0;left:0;right:0;height:1.4cm;background:#F0F0F0;-webkit-print-color-adjust:exact;print-color-adjust:exact;align-items:center;padding:0 1.5cm;border-bottom:1.5px solid #BEC6D4;box-sizing:border-box;}
+      #print-header img{height:22px;margin-right:10px;}
+      #print-header .phdr-t{font-size:10px;font-weight:700;color:#1F3A6E;font-family:Arial,sans-serif;letter-spacing:.3px;}
+    }
+  </style></head><body><div id="print-header"><img src="https://ibgp-aplicacao.github.io/ibgp-relatorios/IBGP.png" alt="IBGP"><span class="phdr-t">RELATÓRIO INDIVIDUAL DE APLICAÇÃO DE PROVA</span></div>`;
 
   // Barra superior (apenas na tela)
-  html += `<div class="no-print" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#1F3A6E;color:#fff;padding:12px 20px;margin-bottom:16px;border-radius:8px;align-items:center;justify-content:space-between;">
+  html += `<div class="no-print" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#F0F0F0;color:#1F3A6E;padding:12px 20px;margin-bottom:16px;border-radius:8px;align-items:center;justify-content:space-between;">
     <img src="https://ibgp-aplicacao.github.io/ibgp-relatorios/IBGP.png" alt="IBGP" style="height:30px;margin-right:12px;vertical-align:middle;"><span style="font-weight:700;">Relatório Individual — IBGP</span>
-    <button onclick="window.print()" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#CF3432;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">🖨 Imprimir / Salvar PDF</button>
+    <button onclick="(function(){const t=document.title;document.title=' ';window.print();setTimeout(()=>document.title=t,500);})()" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#CF3432;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">🖨 Imprimir / Salvar PDF</button>
   </div>`;
 
   // Por escola
@@ -1139,7 +1148,7 @@ function mostrarBotoesIndividuais(escolas) {
   el.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">📄 Relatórios Individuais por Local</div>'
     + '<div style="display:flex;flex-wrap:wrap;gap:8px;">'
     + escolas.map(function(e, i) {
-        return '<button onclick="abrirIndividualPorIdx(' + i + ')" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#F0F0F0;color:#1F3A6E;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">' + e.nome + '</button>';
+        return '<button onclick="abrirIndividualPorIdx(' + i + ')" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#1F3A6E;color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">' + e.nome + '</button>';
       }).join("")
     + '</div>';
 }
