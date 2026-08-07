@@ -991,15 +991,10 @@ function abrirRelatorioImprimivel(dados) {
     }
   
   
-    #print-header{display:none;}
     @media print{
-      @page{margin-top:1.5cm;margin-bottom:1.5cm;margin-left:1.5cm;margin-right:1.5cm;}
-      body{margin:0!important;padding:0!important;}
-      #print-header{display:flex;position:fixed;top:-1.5cm;left:-1.5cm;right:-1.5cm;height:1.4cm;background:#F0F0F0;-webkit-print-color-adjust:exact;print-color-adjust:exact;align-items:center;padding:0 1.5cm;border-bottom:1.5px solid #BEC6D4;box-sizing:border-box;}
-      #print-header img{height:22px;margin-right:10px;}
-      #print-header .phdr-t{font-size:10px;font-weight:700;color:#1F3A6E;font-family:Arial,sans-serif;letter-spacing:.3px;}
+      @page{margin:1.5cm;}
     }
-  </style></head><body><div id="print-header"><img src="https://ibgp-aplicacao.github.io/ibgp-relatorios/IBGP.png" alt="IBGP"><span class="phdr-t">RELATÓRIO INDIVIDUAL DE APLICAÇÃO DE PROVA</span></div>`;
+  </style></head><body><table style="width:100%;border-collapse:collapse;table-layout:fixed;"><thead><tr><td style="background:#F0F0F0;height:1.4cm;border-bottom:1.5px solid #BEC6D4;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:0 8px;"><div style="display:flex;align-items:center;height:100%;"><img src="https://ibgp-aplicacao.github.io/ibgp-relatorios/IBGP.png" alt="IBGP" style="height:22px;margin-right:10px;"><span style="font-size:10px;font-weight:700;color:#1F3A6E;font-family:Arial,sans-serif;letter-spacing:.3px;">RELATÓRIO INDIVIDUAL DE APLICAÇÃO DE PROVA</span></div></td></tr></thead><tbody><tr><td style="padding:0;vertical-align:top;">`;
 
   // Barra superior (apenas na tela)
   html += `<div class="no-print" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#F0F0F0;color:#1F3A6E;padding:12px 20px;margin-bottom:16px;border-radius:8px;align-items:center;justify-content:space-between;">
@@ -1501,7 +1496,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   });
 
   html+='</div>'; // fim pb sec5 fotos
-  html+='</body></html>';
+  html+='</td></tr></tbody></table></body></html>';
   win.document.write(html);
   win.document.close();
 }
