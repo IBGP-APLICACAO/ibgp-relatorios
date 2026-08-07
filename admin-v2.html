@@ -915,7 +915,7 @@ async function carregarIndividuais() {
       const rc = await fetch("https://api.github.com/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/dados/" + certameId + ".json", {headers: ghHdrs});
       if (rc.ok) {
         const jc = await rc.json();
-        const certameDados = JSON.parse(atob(jc.content.replace(/\s/g,"")));
+        const _b = Uint8Array.from(atob(jc.content.replace(/\s/g,"")), c=>c.charCodeAt(0)); const certameDados = JSON.parse(new TextDecoder('utf-8').decode(_b));
         (certameDados.escolas || []).forEach(function(n){ escolasDoCertame.add((n.nome || n || "").toUpperCase().trim()); });
       }
     } catch(_) {}
