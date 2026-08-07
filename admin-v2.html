@@ -1083,9 +1083,10 @@ function abrirRelatorioImprimivel(dados) {
           <th style="background:${cor};">Inscrição</th>
           <th style="background:${cor};">Candidato</th>
           <th style="background:${cor};">Sala</th>
+          <th style="background:${cor};">Descrição</th>
         </tr></thead><tbody>`;
         cands.forEach(function(c, i){
-          oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.tipo}</td><td>${c.inscricao}</td><td>${c.candidato}</td><td>${c.sala}</td></tr>`;
+          oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.tipo}</td><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.sala||"—"}</td><td>${c.desc||"—"}</td></tr>`;
         });
         oHtml += "</tbody></table>";
       }
@@ -1114,7 +1115,7 @@ function abrirRelatorioImprimivel(dados) {
 
     // Rodapé
     html += `<div style="text-align:center;font-size:10px;color:#aaa;margin-top:8px;padding-bottom:8px;">
-      Gerado em ${new Date().toLocaleString("pt-BR")} — IBGP Sistema de Aplicação
+      IBGP — Sistema de Aplicação de Provas
     </div>`;
 
     html += "</div>"; // fim escola
