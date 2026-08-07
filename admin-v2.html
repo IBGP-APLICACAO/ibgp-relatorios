@@ -270,12 +270,20 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
         <label class="lbl">URL do Apps Script</label>
         <input type="text" id="fScriptUrl" placeholder="https://script.google.com/macros/s/..." value="https://script.google.com/macros/s/AKfycbxCWRNetGErTHgaYb-VMOCjMrcIg7GlYtutkHFC-Fo2U6Vd4yF2TBYc0W8t_AqxUI7Ocg/exec">
       </div>
-      <button class="btn btn-primary" onclick="gerarRelatorioGeral()" id="btnRelatorio">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
-        </svg>
-        Gerar Relatório Geral
-      </button>
+      <div style="display:flex;gap:10px;margin-top:4px;">
+        <button class="btn btn-primary" onclick="gerarRelatorioGeral()" id="btnRelatorio" style="flex:1;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          Gerar Relatório Geral
+        </button>
+        <button class="btn" onclick="carregarIndividuais()" id="btnIndividuais" style="flex:1;background:#1F3A6E;color:#fff;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+          </svg>
+          Ver Individuais
+        </button>
+      </div>
       <div id="statusRelatorio" style="font-size:13px;margin-top:10px;display:none;padding:10px;border-radius:8px;"></div>
     </div>
 
@@ -882,6 +890,45 @@ async function gerarRelatorioGeral() {
     btn.disabled = false; btn.innerHTML = "📄 Gerar Relatório Geral";
     mostrarStatusRelatorio("Erro: " + e.message, false);
     if (reportWin && !reportWin.closed) reportWin.close();
+  }
+}
+
+// ── Ver relatórios individuais sem gerar o geral ─────────────────────
+async function carregarIndividuais() {
+  const sel = document.getElementById("selRelatorio");
+  const certameId = sel.value;
+  if (!certameId) { mostrarStatusRelatorio("Selecione um certame primeiro.", false); return; }
+  const btn = document.getElementById("btnIndividuais");
+  btn.disabled = true; btn.textContent = "⏳ Carregando...";
+  mostrarStatusRelatorio("⏳ Buscando dados das escolas...", true);
+  try {
+    const scriptUrl = (document.getElementById("fScriptUrl")?.value || "").trim() || APPS_URL;
+    const resp = await fetch(scriptUrl + "?action=relatorio&id=" + certameId);
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    const dados = await resp.json();
+    const opt = sel.selectedOptions[0];
+    // Filtra escolas do certame
+    const tk = (document.getElementById("fToken")?.value || "").trim();
+    const ghHdrs = tk ? {"Authorization": "token " + tk, "Accept": "application/vnd.github.v3+json"} : {};
+    let escolasDoCertame = new Set();
+    try {
+      const rc = await fetch("https://api.github.com/repos/" + GH_OWNER + "/" + GH_REPO + "/contents/dados/" + certameId + ".json", {headers: ghHdrs});
+      if (rc.ok) {
+        const jc = await rc.json();
+        const certameDados = JSON.parse(atob(jc.content.replace(/\s/g,"")));
+        (certameDados.escolas || []).forEach(function(n){ escolasDoCertame.add(n.toUpperCase().trim()); });
+      }
+    } catch(_) {}
+    if (escolasDoCertame.size > 0) {
+      dados.escolas = (dados.escolas || []).filter(function(e){ return escolasDoCertame.has((e.nome||"").toUpperCase().trim()); });
+    }
+    _dadosGeral = { escolas: dados.escolas, concurso: dados.concurso };
+    mostrarBotoesIndividuais(dados.escolas);
+  } catch(e) {
+    mostrarStatusRelatorio("Erro ao carregar: " + e.message, false);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg> Ver Individuais';
   }
 }
 
