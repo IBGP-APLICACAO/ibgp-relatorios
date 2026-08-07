@@ -401,6 +401,114 @@ document.addEventListener('input', function(e){
 // ════════════════════════════════════════════════════════════════
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCWRNetGErTHgaYb-VMOCjMrcIg7GlYtutkHFC-Fo2U6Vd4yF2TBYc0W8t_AqxUI7Ocg/exec";
 
+
+// ══════════════════════════════════════════════════════════════════════
+//  RASCUNHO AUTOMÁTICO (localStorage)
+// ══════════════════════════════════════════════════════════════════════
+function _rascunhoKey(){
+  if(!CONCURSO||sel.value==='') return null;
+  return 'ibgp_rascunho_'+CONCURSO.id+'_'+sel.value;
+}
+function salvarRascunho(){
+  const k=_rascunhoKey(); if(!k) return;
+  const d={};
+  document.querySelectorAll('input[id],textarea[id],select[id]').forEach(el=>{
+    if(el.type==='radio'||el.type==='file'||['selCertame','sel'].includes(el.id)) return;
+    d[el.id]=el.value;
+  });
+  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl'].forEach(n=>{
+    const el=document.querySelector('input[name="'+n+'"]:checked');
+    if(el) d['r_'+n]=el.value;
+  });
+  d['_apoio']=Array.from(document.querySelectorAll('#apoio_entries input')).map(i=>i.value);
+  ['m_ocorr_sala_entries','m_cond_entries','t_ocorr_sala_entries','t_cond_entries'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    d['_'+id]=Array.from(el.querySelectorAll('.entry-sala-block')).map(b=>{
+      const ins=b.querySelectorAll('input'),ta=b.querySelector('textarea');
+      return{a:ins[0]?.value||'',b:ins[1]?.value||'',c:ins[2]?.value||'',d:ta?.value||''};
+    });
+  });
+  ['m_toque_entries','m_decl_entries','t_toque_entries','t_decl_entries'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    d['_'+id]=Array.from(el.querySelectorAll('.entry-row')).map(r=>{
+      const ins=r.querySelectorAll('input');
+      return{a:ins[0]?.value||'',b:ins[1]?.value||'',c:ins[2]?.value||''};
+    });
+  });
+  try{localStorage.setItem(k,JSON.stringify(d));}catch(e){}
+  _rascunhoToast('💾 Rascunho salvo');
+}
+let _rascunhoToastT;
+function _rascunhoToast(msg,cor){
+  cor=cor||'#1E6B3B';
+  let el=document.getElementById('_rascunhoToast');
+  if(!el){
+    el=document.createElement('div'); el.id='_rascunhoToast';
+    el.style.cssText='position:fixed;bottom:24px;right:24px;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;color:#FFF;opacity:0;transition:opacity .4s;z-index:9999;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.25);';
+    document.body.appendChild(el);
+  }
+  el.textContent=msg; el.style.background=cor; el.style.opacity='1';
+  clearTimeout(_rascunhoToastT); _rascunhoToastT=setTimeout(()=>el.style.opacity='0',2500);
+}
+function restaurarRascunho(){
+  const k=_rascunhoKey(); if(!k) return;
+  let d; try{d=JSON.parse(localStorage.getItem(k)||'null');}catch(e){return;}
+  if(!d) return;
+  Object.entries(d).forEach(([id,val])=>{
+    if(id.startsWith('_')||id.startsWith('r_')) return;
+    const el=document.getElementById(id);
+    if(el&&el.type!=='file') el.value=val;
+  });
+  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl'].forEach(n=>{
+    const val=d['r_'+n]; if(!val) return;
+    const el=document.querySelector('input[name="'+n+'"][value="'+val+'"]');
+    if(el){el.checked=true; el.dispatchEvent(new Event('change'));}
+  });
+  if(d['_apoio']&&d['_apoio'].length){
+    const list=document.getElementById('apoio_entries');
+    if(list){
+      list.innerHTML='';
+      d['_apoio'].forEach(v=>{
+        const div=document.createElement('div'); div.style.marginBottom='6px';
+        const inp=document.createElement('input'); inp.type='text'; inp.placeholder='Nome completo'; inp.value=v;
+        Object.assign(inp.style,{width:'100%',padding:'9px 12px',border:'1px solid #CCC',borderRadius:'6px',fontSize:'13px',background:'#FAFAFA'});
+        div.appendChild(inp); list.appendChild(div);
+      });
+    }
+  }
+  ['m_ocorr_sala_entries','m_cond_entries','t_ocorr_sala_entries','t_cond_entries'].forEach(id=>{
+    const entries=d['_'+id]; if(!entries||!entries.length) return;
+    const list=document.getElementById(id); if(!list) return; list.innerHTML='';
+    entries.forEach(e=>{
+      const block=document.createElement('div'); block.className='entry-sala-block';
+      const row=document.createElement('div'); row.className='entry-row';
+      [['a','Nº Inscrição'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
+        const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; row.appendChild(inp);
+      });
+      const ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='Descrição da ocorrência...'; ta.value=e.d||'';
+      block.appendChild(row); block.appendChild(ta); list.appendChild(block);
+    });
+  });
+  ['m_toque_entries','m_decl_entries','t_toque_entries','t_decl_entries'].forEach(id=>{
+    const entries=d['_'+id]; if(!entries||!entries.length) return;
+    const list=document.getElementById(id); if(!list) return; list.innerHTML='';
+    entries.forEach(e=>{
+      const row=document.createElement('div'); row.className='entry-row';
+      [['a','Nº Inscrição'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
+        const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; row.appendChild(inp);
+      });
+      list.appendChild(row);
+    });
+  });
+  _rascunhoToast('📋 Rascunho restaurado!','#1F3A6E');
+}
+function limparRascunho(){
+  const k=_rascunhoKey(); if(k) localStorage.removeItem(k);
+}
+let _rascunhoSaveT;
+document.addEventListener('input',()=>{clearTimeout(_rascunhoSaveT);_rascunhoSaveT=setTimeout(salvarRascunho,1500);});
+document.addEventListener('change',()=>{clearTimeout(_rascunhoSaveT);_rascunhoSaveT=setTimeout(salvarRascunho,800);});
+
 let CONCURSO = null;
 const selCertame = document.getElementById("selCertame");
 const sel = document.getElementById("selEscola");
@@ -482,6 +590,7 @@ function onEscolaChange(){
   selCertame.disabled = true;
   sel.disabled = true;
   document.getElementById("btnAlterar").style.display = "inline";
+  setTimeout(restaurarRascunho, 200);
 }
 
 function alterarEscola(){
@@ -833,6 +942,7 @@ async function enviar(){
       headers:{"Content-Type":"text/plain"},
       body: JSON.stringify(payload)
     });
+    limparRascunho();
     document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
     ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
     document.getElementById("cardSucesso").classList.remove("hidden");
