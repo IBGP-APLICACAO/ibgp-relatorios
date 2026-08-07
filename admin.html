@@ -937,8 +937,8 @@ function abrirRelatorioImprimivel(dados) {
     .alt td{background:#F7F7F7;}
     .total-row td{-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#E8E8E8!important;font-weight:700;font-size:12px;}
     .no-print{display:flex;}
+    @page{margin:0;}
     @media print{
-      @page{margin:0;}
       body{background:#fff;padding:1.5cm!important;}
       .no-print{display:none!important;}
       .page-break{page-break-before:always;}
@@ -1166,7 +1166,7 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'.card{background:#fff;border-radius:6px;border:1px solid #DDE3EE;margin-bottom:24px;overflow:hidden;}'
     +'.no-print{display:flex;}'
     +'p{line-height:1.8;color:#444;font-size:13px;margin-bottom:12px;}'
-    +'@media print{@page{margin:0;}body{background:#fff;padding:1.5cm!important;}.no-print{display:none!important;}.pb{page-break-before:always;}}'
+    +'@page{margin:0;}@media print{body{background:#fff;padding:1.5cm!important;}.no-print{display:none!important;}.pb{page-break-before:always;}}'
     +'</style></head><body><table style="width:100%;border-collapse:collapse;table-layout:fixed;"><thead><tr><td style="background:#F0F0F0;height:1.4cm;border-bottom:1.5px solid #BEC6D4;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:0 8px;"><div style="display:flex;align-items:center;height:100%;"><img src="https://ibgp-aplicacao.github.io/ibgp-relatorios/IBGP.png" alt="IBGP" style="height:22px;margin-right:10px;"><span style="font-size:10px;font-weight:700;color:#1F3A6E;font-family:Arial,sans-serif;letter-spacing:.3px;">RELATÓRIO GERAL DE APLICAÇÃO DE PROVA</span></div></td></tr></thead><tbody><tr><td style="padding:0;vertical-align:top;">';
 
   // Barra (sÃ³ tela)
