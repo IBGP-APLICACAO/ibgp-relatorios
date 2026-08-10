@@ -831,13 +831,13 @@ async function carregarCertamesRelatorio() {
 }
 
 // ── Relatório Geral ───────────────────────────────────────────────────
-async function fixUtf8Double(o){
+function fixUtf8Double(o){
   if(typeof o==='string'){try{return new TextDecoder('utf-8').decode(Uint8Array.from(o,c=>c.charCodeAt(0)));}catch(e){return o;}}
   if(Array.isArray(o))return o.map(fixUtf8Double);
   if(o&&typeof o==='object'){const r={};for(const k in o)r[k]=fixUtf8Double(o[k]);return r;}
   return o;
 }
-function gerarRelatorioGeral() {
+async function gerarRelatorioGeral() {
   const url = document.getElementById("fScriptUrl").value.trim();
   if (!url || !url.startsWith("https://script.google.com")) {
     mostrarStatusRelatorio("Informe a URL do Apps Script.", false); return;
