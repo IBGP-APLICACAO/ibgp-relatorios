@@ -1145,8 +1145,8 @@ function abrirRelatorioGeral(dados, meta, win) {
   function pct2(a,b){ return b>0?(a/b*100).toFixed(2)+"%":"—"; }
   var n=escolas.length;
   var nCargos=Object.keys(cargosMap).length;
-  var top5Locais=escolas.slice().sort(function(a,b){return (b._tot.ins||0)-(a._tot.ins||0);}).slice(0,Math.min(5,n));
   var cargosArr=Object.keys(cargosMap).map(function(nome){return Object.assign({nome:nome},cargosMap[nome]);});
+  var top5Inscritos=cargosArr.slice().sort(function(a,b){return (b.inscr||0)-(a.inscr||0);}).slice(0,Math.min(5,cargosArr.length));
   var top5Aus=cargosArr.filter(function(c){return c.inscr>0;}).sort(function(a,b){return b.aus/b.inscr-a.aus/a.inscr;}).slice(0,5);
 
   var titulo   = meta.titulo   || conc["Título do Concurso"] || "";
@@ -1228,7 +1228,7 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'</tbody></table></div>';
 
   // Top 5 locais (inscritos)
-  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Top '+Math.min(5,n)+' Cargos com Maior Número de Inscritos</p>';
+  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Top '+Math.min(5,cargosArr.length)+' Cargos com Maior Número de Inscritos</p>';
   html+='<div class="card" style="margin-bottom:24px;"><table><thead><tr>'
     +'<th '+thS()+'>Cargo / Função</th>'
     +'<th '+thS("text-align:center;")+'>Inscritos</th>'
@@ -1236,9 +1236,8 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'<th '+thS("text-align:center;")+'>Ausentes</th>'
     +'<th '+thS("text-align:center;")+'>% Aus.</th>'
     +'</tr></thead><tbody>';
-  top5Locais.forEach(function(e,i){
-    var t=e._tot||{ins:0,pre:0,aus:0};
-    html+='<tr><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.ins+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.pre+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(t.aus,t.ins)+'</td></tr>';
+  top5Inscritos.forEach(function(c,i){
+    html+='<tr><td '+tdZ(i)+'>'+c.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.inscr+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.pres+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(c.aus,c.inscr)+'</td></tr>';
   });
   html+='</tbody></table></div>';
 
