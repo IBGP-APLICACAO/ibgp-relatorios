@@ -832,7 +832,13 @@ async function carregarCertamesRelatorio() {
 
 // ── Relatório Geral ───────────────────────────────────────────────────
 function fixUtf8Double(o){
-  if(typeof o==='string'){try{return new TextDecoder('utf-8').decode(Uint8Array.from(o,c=>c.charCodeAt(0)));}catch(e){return o;}}
+  if(typeof o==='string'){
+    try{
+      const b=new Uint8Array(o.length);
+      for(let i=0;i<o.length;i++){const c=o.charCodeAt(i);if(c>255)return o;b[i]=c;}
+      return new TextDecoder('utf-8',{fatal:true}).decode(b);
+    }catch(e){return o;}
+  }
   if(Array.isArray(o))return o.map(fixUtf8Double);
   if(o&&typeof o==='object'){const r={};for(const k in o)r[k]=fixUtf8Double(o[k]);return r;}
   return o;
