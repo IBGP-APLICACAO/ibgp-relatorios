@@ -509,6 +509,18 @@ let _rascunhoSaveT;
 document.addEventListener('input',()=>{clearTimeout(_rascunhoSaveT);_rascunhoSaveT=setTimeout(salvarRascunho,1500);});
 document.addEventListener('change',()=>{clearTimeout(_rascunhoSaveT);_rascunhoSaveT=setTimeout(salvarRascunho,800);});
 
+function fixUtf8Double(o){
+  if(typeof o==='string'){
+    try{
+      const b=new Uint8Array(o.length);
+      for(let i=0;i<o.length;i++){const c=o.charCodeAt(i);if(c>255)return o;b[i]=c;}
+      return new TextDecoder('utf-8',{fatal:true}).decode(b);
+    }catch(e){return o;}
+  }
+  if(Array.isArray(o))return o.map(fixUtf8Double);
+  if(o&&typeof o==='object'){const r={};for(const k in o)r[k]=fixUtf8Double(o[k]);return r;}
+  return o;
+}
 let CONCURSO = null;
 const selCertame = document.getElementById("selCertame");
 const sel = document.getElementById("selEscola");
@@ -545,9 +557,8 @@ function onCertameChange(){
     .forEach(id => { const el = document.getElementById(id); if(el) el.classList.add("hidden"); });
 
   fetch("dados/" + info.id + ".json")
-    .then(r => r.text())
-    .then(t => { const _b=Uint8Array.from(t,c=>c.charCodeAt(0)); return JSON.parse(new TextDecoder('utf-8').decode(_b)); })
-    .then(dados => {
+    .then(r => r.json())
+    .then(dados => { dados = fixUtf8Double(dados);
       CONCURSO = dados;
       dados.escolas.forEach((e, i) => {
         const o = document.createElement("option");
