@@ -172,7 +172,7 @@
       <div class="card-title manha">4. Turno Manhã — Estatística por Cargo</div>
       <div class="aviso">Previstos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
       <div style="overflow-x:auto;"><table class="stat-table" id="tabelaManha">
-        <thead><tr><th>Cargo / Função</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th><th>% Ausência</th></tr></thead>
+        <thead><tr><th>Cargo / Função</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th><th>% Ausência</th></tr></thead><tfoot></tfoot>
         <tbody></tbody>
       </table></div>
     </div>
@@ -279,7 +279,7 @@
       <div class="card-title tarde">8. Turno Tarde — Estatística por Cargo</div>
       <div class="aviso">Previstos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
       <div style="overflow-x:auto;"><table class="stat-table" id="tabelaTarde">
-        <thead><tr><th>Cargo / Função</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th><th>% Ausência</th></tr></thead>
+        <thead><tr><th>Cargo / Função</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th><th>% Ausência</th></tr></thead><tfoot></tfoot>
         <tbody></tbody>
       </table></div>
     </div>
@@ -639,6 +639,31 @@ function renderStat(tableId, cargos){
       <td><span id="${tableId}_pct_${i}" style="${sp}">—</span></td>
     </tr>`;
   });
+  recalcTotal(tableId, cargos.length);
+}
+
+function recalcTotal(tableId, count){
+  const tf = document.querySelector("#"+tableId+" tfoot");
+  if(!tf) return;
+  let totPrev=0, totPres=0, totAus=0, totIncl=0;
+  for(let i=0;i<count;i++){
+    totPrev += parseInt(document.getElementById(tableId+'_inscr_'+i)?.value)||0;
+    totPres += parseInt(document.getElementById(tableId+'_pres_'+i)?.value)||0;
+    totAus  += parseInt(document.getElementById(tableId+'_aus_'+i)?.value)||0;
+    totIncl += parseInt(document.getElementById(tableId+'_incl_'+i)?.value)||0;
+  }
+  const pct = totPrev>0 ? (totAus/totPrev*100).toFixed(1)+'%' : '—';
+  const st = "font-weight:700;background:#1F3A6E;color:#fff;padding:7px 6px;text-align:center;font-size:13px;";
+  const stl = "font-weight:700;background:#1F3A6E;color:#fff;padding:7px 10px;font-size:13px;";
+  const stp = "font-weight:700;background:#0F2A5E;color:#AAC4E8;padding:7px 6px;text-align:center;font-size:13px;";
+  tf.innerHTML = '<tr>'
+    +'<td style="'+stl+'">TOTAL</td>'
+    +'<td style="'+st+'">'+totPrev+'</td>'
+    +'<td style="'+st+'">'+totPres+'</td>'
+    +'<td style="'+st+'">'+totAus+'</td>'
+    +'<td style="'+st+'">'+totIncl+'</td>'
+    +'<td style="'+stp+'">'+pct+'</td>'
+    +'</tr>';
 }
 
 function recalcStat(tbl, i, changed){
@@ -664,6 +689,9 @@ function recalcStat(tbl, i, changed){
   const aus = parseInt(ausEl.value);
   pctEl.textContent = (!isNaN(aus) && ausEl.value!=='' && inscr>0)
     ? (aus/inscr*100).toFixed(1)+'%' : '—';
+  // Atualiza linha de totais
+  const rows = document.querySelectorAll('#'+tbl+' tbody tr').length;
+  recalcTotal(tbl, rows);
 }
 
 function getTxt(id){ const el=document.getElementById(id); return el ? el.value.trim() : ""; }
