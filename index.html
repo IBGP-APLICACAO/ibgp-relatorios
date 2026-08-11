@@ -230,7 +230,7 @@
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="m_ocorr_sala_entries">
             <div class="entry-sala-block">
-              <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
               <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
             </div>
           </div>
@@ -244,7 +244,7 @@
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="m_cond_entries">
             <div class="entry-sala-block">
-              <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
               <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
             </div>
           </div>
@@ -257,7 +257,7 @@
         <div id="m_toque_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="m_toque_entries">
-            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
           <button type="button" class="add-btn" onclick="addEntry('m_toque_entries')">+ Adicionar</button>
         </div>
@@ -268,7 +268,7 @@
         <div id="m_decl_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="m_decl_entries">
-            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
           <button type="button" class="add-btn" onclick="addEntry('m_decl_entries')">+ Adicionar</button>
         </div>
@@ -371,7 +371,7 @@
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="t_ocorr_sala_entries">
             <div class="entry-sala-block">
-              <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
               <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
             </div>
           </div>
@@ -385,7 +385,7 @@
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="t_cond_entries">
             <div class="entry-sala-block">
-              <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
               <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
             </div>
           </div>
@@ -398,7 +398,7 @@
         <div id="t_toque_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="t_toque_entries">
-            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
           <button type="button" class="add-btn" onclick="addEntry('t_toque_entries')">+ Adicionar</button>
         </div>
@@ -409,7 +409,7 @@
         <div id="t_decl_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="t_decl_entries">
-            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
           <button type="button" class="add-btn" onclick="addEntry('t_decl_entries')">+ Adicionar</button>
         </div>
@@ -653,6 +653,7 @@ function onCertameChange(){
     .then(dados => { dados = fixUtf8Double(dados);
       CONCURSO = dados;
       window._cpfIndex = null; // reseta índice CPF ao trocar escola
+      window._inscrIndex = null; // reseta índice inscrição
       dados.escolas.forEach((e, i) => {
         const o = document.createElement("option");
         o.value = i; o.textContent = e.nome;
@@ -844,7 +845,7 @@ function addEntry(listId){
   const list = document.getElementById(listId);
   const row = document.createElement('div');
   row.className = 'entry-row';
-  row.innerHTML = '<input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala">';
+  row.innerHTML = '<input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala">';
   list.appendChild(row);
 }
 
@@ -852,7 +853,7 @@ function addSalaEntry(listId){
   const list = document.getElementById(listId);
   const block = document.createElement('div');
   block.className = 'entry-sala-block';
-  block.innerHTML = '<div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>';
+  block.innerHTML = '<div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>';
   list.appendChild(block);
 }
 
@@ -888,6 +889,38 @@ function addApoioEntry(){
   list.appendChild(div);
 }
 
+
+
+function buildInscrIndex(){
+  if(window._inscrIndex) return;
+  window._inscrIndex = {};
+  const idx = document.getElementById('selEscola')?.value;
+  const escola = CONCURSO && idx !== '' ? CONCURSO.escolas[parseInt(idx)] : null;
+  (escola?.candidatos || []).forEach(c => {
+    const k = String(c.inscricao || '').trim().replace(/\D/g,'');
+    if(k) window._inscrIndex[k] = {nome: c.nome||'', sala: c.sala||''};
+  });
+}
+
+function lookupInscricao(inscrEl){
+  buildInscrIndex();
+  const row  = inscrEl.closest('.entry-row');
+  if(!row) return;
+  const inputs = row.querySelectorAll('input');
+  if(inputs.length < 3) return;
+  const nomeEl = inputs[1];
+  const salaEl = inputs[2];
+  const key = inscrEl.value.trim().replace(/\D/g,'');
+  if(!key){ nomeEl.readOnly=false; nomeEl.style.background=''; salaEl.readOnly=false; salaEl.style.background=''; return; }
+  const found = window._inscrIndex && window._inscrIndex[key];
+  if(found){
+    nomeEl.value = found.nome; nomeEl.readOnly = true; nomeEl.style.background='#EEF3FB';
+    salaEl.value = found.sala; salaEl.readOnly = true; salaEl.style.background='#EEF3FB';
+  } else {
+    nomeEl.value = ''; nomeEl.readOnly = false; nomeEl.style.background='#FFF9EC';
+    salaEl.value = ''; salaEl.readOnly = false; salaEl.style.background='#FFF9EC';
+  }
+}
 
 function toggleCheckDesc(checkId, wrapId){
   const checked = document.getElementById(checkId)?.checked;

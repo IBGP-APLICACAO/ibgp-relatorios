@@ -647,11 +647,13 @@ function processarPlanilha(wb, nomeArquivo) {
 
     // Coleta candidato se houver colunas de CPF e Nome
     if (colCPF >= 0 && colNome >= 0) {
-      const cpf  = String(r[colCPF]  || "").trim().replace(/\D/g,"");
-      const nome = String(r[colNome] || "").trim();
+      const cpf     = String(r[colCPF]  || "").trim().replace(/\D/g,"");
+      const nome    = String(r[colNome] || "").trim();
+      const inscr   = String(r[1]  || "").trim();   // col B = INSCRIÇÃO
+      const sala    = String(r[13] || "").trim();   // col N = SALA
       if (cpf && nome && !escMap[escola]._cpfSeen.has(cpf)) {
         escMap[escola]._cpfSeen.add(cpf);
-        escMap[escola].candidatosLista.push({cpf, nome});
+        escMap[escola].candidatosLista.push({cpf, nome, inscricao: inscr, sala});
       }
     }
   }
