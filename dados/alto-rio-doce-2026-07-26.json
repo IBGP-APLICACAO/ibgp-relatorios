@@ -1,0 +1,1050 @@
+{
+  "id": "alto-rio-doce-2026-07-26",
+  "titulo": "CONCURSO PÚBLICO DO MUNICÍPIO DE ALTO RIO DOCE/MG",
+  "edital": "Edital nº 01/2026",
+  "data": "26 de julho de 2026",
+  "escolas": [
+    {
+      "nome": "EM. PROFESSOR ARISTIDES DA MOTA MARINHO - ARD",
+      "coord_local": "JORDAN DE FREITAS",
+      "salas": 8,
+      "cargos": [
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "109 - SERVENTE ESCOLAR",
+          "inscr": 20
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "109 - SERVENTE ESCOLAR",
+          "inscr": 20
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Manhã",
+          "cargo": "104 - MOTORISTA (D)",
+          "inscr": 11
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Manhã",
+          "cargo": "106 - OFICIAL SERVIÇO PÚBLICO – PEDREIRO",
+          "inscr": 6
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Manhã",
+          "cargo": "109 - SERVENTE ESCOLAR",
+          "inscr": 3
+        },
+        {
+          "sala": "SALA 04",
+          "turno": "Manhã",
+          "cargo": "104 - MOTORISTA (D)",
+          "inscr": 20
+        },
+        {
+          "sala": "SALA 05",
+          "turno": "Manhã",
+          "cargo": "104 - MOTORISTA (D)",
+          "inscr": 20
+        },
+        {
+          "sala": "SALA 06",
+          "turno": "Manhã",
+          "cargo": "102 - AUXILIAR DE SERVIÇOS GERAIS",
+          "inscr": 16
+        },
+        {
+          "sala": "SALA 06",
+          "turno": "Manhã",
+          "cargo": "104 - MOTORISTA (D)",
+          "inscr": 4
+        },
+        {
+          "sala": "SALA 07",
+          "turno": "Manhã",
+          "cargo": "102 - AUXILIAR DE SERVIÇOS GERAIS",
+          "inscr": 20
+        },
+        {
+          "sala": "SALA 08",
+          "turno": "Manhã",
+          "cargo": "102 - AUXILIAR DE SERVIÇOS GERAIS",
+          "inscr": 20
+        }
+      ]
+    },
+    {
+      "nome": "EM. RAUL SOARES - ARD",
+      "coord_local": "KENIA SOIANE",
+      "salas": 9,
+      "cargos": [
+        {
+          "sala": "SALA AMAM",
+          "turno": "Manhã",
+          "cargo": "524 - PSICÓLOGO ESCOLAR",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "520 - PROFESSOR DE EDUCAÇÃO FÍSICA",
+          "inscr": 6
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "522 - PROFESSOR II – INGLÊS",
+          "inscr": 7
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "524 - PSICÓLOGO ESCOLAR",
+          "inscr": 3
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "525 -  SUPERVISOR PEDAGÓGICO",
+          "inscr": 14
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Tarde",
+          "cargo": "503 - ASSISTENTE TÉCNICO ADMINISTRATIVO",
+          "inscr": 11
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Tarde",
+          "cargo": "505 - DENTISTA",
+          "inscr": 5
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Tarde",
+          "cargo": "506 -  EDUCADOR FÍSICO ESF",
+          "inscr": 3
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Tarde",
+          "cargo": "516 - MÉDICO DE SAÚDE DA FAMÍLIA ESF",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Tarde",
+          "cargo": "523 - PSICÓLOGO",
+          "inscr": 5
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Tarde",
+          "cargo": "526 - TÉCNICO DE REFERÊNCIA – ASSISTENTE SOCIAL",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Tarde",
+          "cargo": "527 -  TÉCNICO DE REFERÊNCIA – PSICÓLOGO",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Tarde",
+          "cargo": "606 - MÉDICO PEDIATRA",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "511 - FISIOTERAPEUTA",
+          "inscr": 4
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "513 - GESTOR AMBIENTAL",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "514 - MÉDICO CLÍNICO GERAL 12 H",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "515 - MÉDICO CLÍNICO GERAL 20 H",
+          "inscr": 3
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "517 - MÉDICO VETERINÁRIO 40 H",
+          "inscr": 5
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "518 - NUTRICIONISTA SAÚDE",
+          "inscr": 8
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "519 - ORIENTADOR PEDAGÓGICO",
+          "inscr": 3
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "520 - PROFESSOR DE EDUCAÇÃO FÍSICA",
+          "inscr": 3
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Tarde",
+          "cargo": "501 - ADVOGADO",
+          "inscr": 8
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Tarde",
+          "cargo": "503 - ASSISTENTE TÉCNICO ADMINISTRATIVO",
+          "inscr": 22
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Manhã",
+          "cargo": "507 - ENFERMEIRO ESF",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Manhã",
+          "cargo": "508 - ENFERMEIRO RT",
+          "inscr": 12
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Manhã",
+          "cargo": "509 - ENGENHEIRO CIVIL",
+          "inscr": 4
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Manhã",
+          "cargo": "510 - FARMACÊUTICO",
+          "inscr": 4
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Manhã",
+          "cargo": "511 - FISIOTERAPEUTA",
+          "inscr": 8
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Tarde",
+          "cargo": "403 - TÉCNICO DE ENFERMAGEM ESF",
+          "inscr": 27
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Tarde",
+          "cargo": "404 - TÉCNICO EM TECNOLOGIA DA INFORMAÇÃO",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Tarde",
+          "cargo": "501 - ADVOGADO",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 04",
+          "turno": "Manhã",
+          "cargo": "307 - PROFESSOR I",
+          "inscr": 11
+        },
+        {
+          "sala": "SALA 04",
+          "turno": "Manhã",
+          "cargo": "502 - ASSISTENTE SOCIAL ESF",
+          "inscr": 4
+        },
+        {
+          "sala": "SALA 04",
+          "turno": "Manhã",
+          "cargo": "504 - CIRURGIÃO DENTISTA ESF",
+          "inscr": 8
+        },
+        {
+          "sala": "SALA 04",
+          "turno": "Manhã",
+          "cargo": "507 - ENFERMEIRO ESF",
+          "inscr": 7
+        },
+        {
+          "sala": "SALA 04",
+          "turno": "Tarde",
+          "cargo": "306 - PROFISSIONAL DE REGULAÇÃO",
+          "inscr": 13
+        },
+        {
+          "sala": "SALA 04",
+          "turno": "Tarde",
+          "cargo": "401 - TÉCNICO AGRÍCOLA",
+          "inscr": 3
+        },
+        {
+          "sala": "SALA 04",
+          "turno": "Tarde",
+          "cargo": "402 - TÉCNICO DE ENFERMAGEM",
+          "inscr": 10
+        },
+        {
+          "sala": "SALA 04",
+          "turno": "Tarde",
+          "cargo": "403 - TÉCNICO DE ENFERMAGEM ESF",
+          "inscr": 4
+        },
+        {
+          "sala": "SALA 05",
+          "turno": "Manhã",
+          "cargo": "307 - PROFESSOR I",
+          "inscr": 30
+        },
+        {
+          "sala": "SALA 05",
+          "turno": "Tarde",
+          "cargo": "201 - AUXILIAR DE SERVIÇOS ADM. E GERAIS",
+          "inscr": 24
+        },
+        {
+          "sala": "SALA 05",
+          "turno": "Tarde",
+          "cargo": "306 - PROFISSIONAL DE REGULAÇÃO",
+          "inscr": 6
+        },
+        {
+          "sala": "SALA 06",
+          "turno": "Manhã",
+          "cargo": "307 - PROFESSOR I",
+          "inscr": 30
+        },
+        {
+          "sala": "SALA 06",
+          "turno": "Tarde",
+          "cargo": "108 - OPERÁRIO",
+          "inscr": 27
+        },
+        {
+          "sala": "SALA 06",
+          "turno": "Tarde",
+          "cargo": "201 - AUXILIAR DE SERVIÇOS ADM. E GERAIS",
+          "inscr": 3
+        },
+        {
+          "sala": "SALA 07",
+          "turno": "Manhã",
+          "cargo": "304 - FISCAL DE POSTURAS",
+          "inscr": 11
+        },
+        {
+          "sala": "SALA 07",
+          "turno": "Manhã",
+          "cargo": "305 - FISCAL SANITÁRIO E DE EVENTOS",
+          "inscr": 3
+        },
+        {
+          "sala": "SALA 07",
+          "turno": "Manhã",
+          "cargo": "307 - PROFESSOR I",
+          "inscr": 16
+        },
+        {
+          "sala": "SALA 07",
+          "turno": "Tarde",
+          "cargo": "103 - AUXILIAR DE TRANSPORTE ESCOLAR",
+          "inscr": 4
+        },
+        {
+          "sala": "SALA 07",
+          "turno": "Tarde",
+          "cargo": "105 - OFICIAL SERVIÇO PÚBLICO – ELETRICISTA",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 07",
+          "turno": "Tarde",
+          "cargo": "107 - OPERADOR DE MÁQUINAS",
+          "inscr": 19
+        },
+        {
+          "sala": "SALA 07",
+          "turno": "Tarde",
+          "cargo": "108 - OPERÁRIO",
+          "inscr": 5
+        },
+        {
+          "sala": "SALA 08",
+          "turno": "Manhã",
+          "cargo": "304 - FISCAL DE POSTURAS",
+          "inscr": 30
+        },
+        {
+          "sala": "SALA 08",
+          "turno": "Tarde",
+          "cargo": "103 - AUXILIAR DE TRANSPORTE ESCOLAR",
+          "inscr": 30
+        }
+      ]
+    },
+    {
+      "nome": "SECRETARIA MUNICIPAL DE EDUCAÇÃO - ARD",
+      "coord_local": "NATÁLIA MATIAS",
+      "salas": 5,
+      "cargos": [
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "301 - AUXILIAR ADMINISTRATIVO",
+          "inscr": 19
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "302 - AUXILIAR EM SAÚDE BUCAL ESF",
+          "inscr": 13
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "304 - FISCAL DE POSTURAS",
+          "inscr": 8
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Tarde",
+          "cargo": "103 - AUXILIAR DE TRANSPORTE ESCOLAR",
+          "inscr": 40
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "109 - SERVENTE ESCOLAR",
+          "inscr": 8
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "301 - AUXILIAR ADMINISTRATIVO",
+          "inscr": 22
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "304 - FISCAL DE POSTURAS",
+          "inscr": 10
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Tarde",
+          "cargo": "103 - AUXILIAR DE TRANSPORTE ESCOLAR",
+          "inscr": 40
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Manhã",
+          "cargo": "109 - SERVENTE ESCOLAR",
+          "inscr": 15
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Manhã",
+          "cargo": "301 - AUXILIAR ADMINISTRATIVO",
+          "inscr": 20
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Tarde",
+          "cargo": "103 - AUXILIAR DE TRANSPORTE ESCOLAR",
+          "inscr": 24
+        },
+        {
+          "sala": "SALA 04",
+          "turno": "Manhã",
+          "cargo": "109 - SERVENTE ESCOLAR",
+          "inscr": 35
+        },
+        {
+          "sala": "SALA 05",
+          "turno": "Manhã",
+          "cargo": "109 - SERVENTE ESCOLAR",
+          "inscr": 20
+        }
+      ]
+    },
+    {
+      "nome": "UNIPAC BARBACENA - CAMPUS BONIFÁCIO DE ANDRADA",
+      "coord_local": "LARYSSA FUGÊNCIO",
+      "salas": 24,
+      "cargos": [
+        {
+          "sala": "SALA TRANS.",
+          "turno": "Manhã",
+          "cargo": "301 - AUXILIAR ADMINISTRATIVO",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA AMAM",
+          "turno": "Manhã",
+          "cargo": "510 - FARMACÊUTICO",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA TRANS.",
+          "turno": "Tarde",
+          "cargo": "103 - AUXILIAR DE TRANSPORTE ESCOLAR",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA AMP",
+          "turno": "Tarde",
+          "cargo": "501 - ADVOGADO",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA 15MIN",
+          "turno": "Tarde",
+          "cargo": "501 - ADVOGADO",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA 1204",
+          "turno": "Manhã",
+          "cargo": "524 - PSICÓLOGO ESCOLAR",
+          "inscr": 6
+        },
+        {
+          "sala": "SALA 1204",
+          "turno": "Manhã",
+          "cargo": "525 -  SUPERVISOR PEDAGÓGICO",
+          "inscr": 18
+        },
+        {
+          "sala": "SALA 1204",
+          "turno": "Tarde",
+          "cargo": "601 - MÉDICO CARDIOLOGISTA",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 1204",
+          "turno": "Tarde",
+          "cargo": "602 - MÉDICO DERMATOLOGISTA",
+          "inscr": 7
+        },
+        {
+          "sala": "SALA 1204",
+          "turno": "Tarde",
+          "cargo": "603 -  MÉDICO ENDOCRINOLOGISTA",
+          "inscr": 3
+        },
+        {
+          "sala": "SALA 1204",
+          "turno": "Tarde",
+          "cargo": "604 -  MÉDICO GINECOLOGISTA",
+          "inscr": 6
+        },
+        {
+          "sala": "SALA 1204",
+          "turno": "Tarde",
+          "cargo": "606 - MÉDICO PEDIATRA",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 1204",
+          "turno": "Tarde",
+          "cargo": "607 - MÉDICO PSIQUIATRA",
+          "inscr": 5
+        },
+        {
+          "sala": "SALA 1205",
+          "turno": "Manhã",
+          "cargo": "522 - PROFESSOR II – INGLÊS",
+          "inscr": 4
+        },
+        {
+          "sala": "SALA 1205",
+          "turno": "Manhã",
+          "cargo": "524 - PSICÓLOGO ESCOLAR",
+          "inscr": 36
+        },
+        {
+          "sala": "SALA 1205",
+          "turno": "Tarde",
+          "cargo": "523 - PSICÓLOGO",
+          "inscr": 28
+        },
+        {
+          "sala": "SALA 1205",
+          "turno": "Tarde",
+          "cargo": "526 - TÉCNICO DE REFERÊNCIA – ASSISTENTE SOCIAL",
+          "inscr": 9
+        },
+        {
+          "sala": "SALA 1205",
+          "turno": "Tarde",
+          "cargo": "527 -  TÉCNICO DE REFERÊNCIA – PSICÓLOGO",
+          "inscr": 3
+        },
+        {
+          "sala": "SALA 1206",
+          "turno": "Manhã",
+          "cargo": "519 - ORIENTADOR PEDAGÓGICO",
+          "inscr": 3
+        },
+        {
+          "sala": "SALA 1206",
+          "turno": "Manhã",
+          "cargo": "520 - PROFESSOR DE EDUCAÇÃO FÍSICA",
+          "inscr": 15
+        },
+        {
+          "sala": "SALA 1206",
+          "turno": "Tarde",
+          "cargo": "516 - MÉDICO DE SAÚDE DA FAMÍLIA ESF",
+          "inscr": 10
+        },
+        {
+          "sala": "SALA 1206",
+          "turno": "Tarde",
+          "cargo": "523 - PSICÓLOGO",
+          "inscr": 8
+        },
+        {
+          "sala": "SALA 1207",
+          "turno": "Manhã",
+          "cargo": "517 - MÉDICO VETERINÁRIO 40 H",
+          "inscr": 14
+        },
+        {
+          "sala": "SALA 1207",
+          "turno": "Manhã",
+          "cargo": "518 - NUTRICIONISTA SAÚDE",
+          "inscr": 24
+        },
+        {
+          "sala": "SALA 1207",
+          "turno": "Manhã",
+          "cargo": "519 - ORIENTADOR PEDAGÓGICO",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 1207",
+          "turno": "Tarde",
+          "cargo": "506 -  EDUCADOR FÍSICO ESF",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 1207",
+          "turno": "Tarde",
+          "cargo": "516 - MÉDICO DE SAÚDE DA FAMÍLIA ESF",
+          "inscr": 38
+        },
+        {
+          "sala": "SALA 1208",
+          "turno": "Manhã",
+          "cargo": "515 - MÉDICO CLÍNICO GERAL 20 H",
+          "inscr": 5
+        },
+        {
+          "sala": "SALA 1208",
+          "turno": "Manhã",
+          "cargo": "517 - MÉDICO VETERINÁRIO 40 H",
+          "inscr": 20
+        },
+        {
+          "sala": "SALA 1208",
+          "turno": "Tarde",
+          "cargo": "505 - DENTISTA",
+          "inscr": 24
+        },
+        {
+          "sala": "SALA 1208",
+          "turno": "Tarde",
+          "cargo": "506 -  EDUCADOR FÍSICO ESF",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA 1209",
+          "turno": "Manhã",
+          "cargo": "515 - MÉDICO CLÍNICO GERAL 20 H",
+          "inscr": 40
+        },
+        {
+          "sala": "SALA 1209",
+          "turno": "Tarde",
+          "cargo": "503 - ASSISTENTE TÉCNICO ADMINISTRATIVO",
+          "inscr": 19
+        },
+        {
+          "sala": "SALA 1209",
+          "turno": "Tarde",
+          "cargo": "505 - DENTISTA",
+          "inscr": 21
+        },
+        {
+          "sala": "SALA 1210",
+          "turno": "Manhã",
+          "cargo": "514 - MÉDICO CLÍNICO GERAL 12 H",
+          "inscr": 29
+        },
+        {
+          "sala": "SALA 1210",
+          "turno": "Manhã",
+          "cargo": "515 - MÉDICO CLÍNICO GERAL 20 H",
+          "inscr": 11
+        },
+        {
+          "sala": "SALA 1210",
+          "turno": "Tarde",
+          "cargo": "503 - ASSISTENTE TÉCNICO ADMINISTRATIVO",
+          "inscr": 40
+        },
+        {
+          "sala": "SALA 1212",
+          "turno": "Manhã",
+          "cargo": "510 - FARMACÊUTICO",
+          "inscr": 4
+        },
+        {
+          "sala": "SALA 1212",
+          "turno": "Manhã",
+          "cargo": "511 - FISIOTERAPEUTA",
+          "inscr": 38
+        },
+        {
+          "sala": "SALA 1212",
+          "turno": "Manhã",
+          "cargo": "512 - FONOAUDIÓLOGO",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 1212",
+          "turno": "Manhã",
+          "cargo": "513 - GESTOR AMBIENTAL",
+          "inscr": 8
+        },
+        {
+          "sala": "SALA 1212",
+          "turno": "Manhã",
+          "cargo": "514 - MÉDICO CLÍNICO GERAL 12 H",
+          "inscr": 17
+        },
+        {
+          "sala": "SALA 1212",
+          "turno": "Tarde",
+          "cargo": "501 - ADVOGADO",
+          "inscr": 31
+        },
+        {
+          "sala": "SALA 1212",
+          "turno": "Tarde",
+          "cargo": "503 - ASSISTENTE TÉCNICO ADMINISTRATIVO",
+          "inscr": 39
+        },
+        {
+          "sala": "SALA 1214",
+          "turno": "Manhã",
+          "cargo": "509 - ENGENHEIRO CIVIL",
+          "inscr": 38
+        },
+        {
+          "sala": "SALA 1214",
+          "turno": "Manhã",
+          "cargo": "510 - FARMACÊUTICO",
+          "inscr": 17
+        },
+        {
+          "sala": "SALA 1214",
+          "turno": "Tarde",
+          "cargo": "501 - ADVOGADO",
+          "inscr": 55
+        },
+        {
+          "sala": "SALA 1215",
+          "turno": "Manhã",
+          "cargo": "508 - ENFERMEIRO RT",
+          "inscr": 23
+        },
+        {
+          "sala": "SALA 1215",
+          "turno": "Manhã",
+          "cargo": "509 - ENGENHEIRO CIVIL",
+          "inscr": 22
+        },
+        {
+          "sala": "SALA 1215",
+          "turno": "Tarde",
+          "cargo": "501 - ADVOGADO",
+          "inscr": 45
+        },
+        {
+          "sala": "SALA 1216",
+          "turno": "Manhã",
+          "cargo": "507 - ENFERMEIRO ESF",
+          "inscr": 43
+        },
+        {
+          "sala": "SALA 1216",
+          "turno": "Manhã",
+          "cargo": "508 - ENFERMEIRO RT",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 1216",
+          "turno": "Tarde",
+          "cargo": "501 - ADVOGADO",
+          "inscr": 44
+        },
+        {
+          "sala": "SALA 1217",
+          "turno": "Manhã",
+          "cargo": "504 - CIRURGIÃO DENTISTA ESF",
+          "inscr": 34
+        },
+        {
+          "sala": "SALA 1217",
+          "turno": "Manhã",
+          "cargo": "507 - ENFERMEIRO ESF",
+          "inscr": 11
+        },
+        {
+          "sala": "SALA 1217",
+          "turno": "Tarde",
+          "cargo": "403 - TÉCNICO DE ENFERMAGEM ESF",
+          "inscr": 6
+        },
+        {
+          "sala": "SALA 1217",
+          "turno": "Tarde",
+          "cargo": "404 - TÉCNICO EM TECNOLOGIA DA INFORMAÇÃO",
+          "inscr": 9
+        },
+        {
+          "sala": "SALA 1217",
+          "turno": "Tarde",
+          "cargo": "501 - ADVOGADO",
+          "inscr": 29
+        },
+        {
+          "sala": "SALA 1218",
+          "turno": "Manhã",
+          "cargo": "504 - CIRURGIÃO DENTISTA ESF",
+          "inscr": 21
+        },
+        {
+          "sala": "SALA 1218",
+          "turno": "Tarde",
+          "cargo": "403 - TÉCNICO DE ENFERMAGEM ESF",
+          "inscr": 21
+        },
+        {
+          "sala": "SALA 1219",
+          "turno": "Manhã",
+          "cargo": "307 - PROFESSOR I",
+          "inscr": 9
+        },
+        {
+          "sala": "SALA 1219",
+          "turno": "Manhã",
+          "cargo": "502 - ASSISTENTE SOCIAL ESF",
+          "inscr": 10
+        },
+        {
+          "sala": "SALA 1219",
+          "turno": "Manhã",
+          "cargo": "504 - CIRURGIÃO DENTISTA ESF",
+          "inscr": 11
+        },
+        {
+          "sala": "SALA 1219",
+          "turno": "Tarde",
+          "cargo": "403 - TÉCNICO DE ENFERMAGEM ESF",
+          "inscr": 30
+        },
+        {
+          "sala": "SALA 1220",
+          "turno": "Manhã",
+          "cargo": "307 - PROFESSOR I",
+          "inscr": 20
+        },
+        {
+          "sala": "SALA 1220",
+          "turno": "Tarde",
+          "cargo": "402 - TÉCNICO DE ENFERMAGEM",
+          "inscr": 20
+        },
+        {
+          "sala": "SALA 1221",
+          "turno": "Manhã",
+          "cargo": "307 - PROFESSOR I",
+          "inscr": 20
+        },
+        {
+          "sala": "SALA 1221",
+          "turno": "Tarde",
+          "cargo": "402 - TÉCNICO DE ENFERMAGEM",
+          "inscr": 20
+        },
+        {
+          "sala": "SALA 1301",
+          "turno": "Manhã",
+          "cargo": "304 - FISCAL DE POSTURAS",
+          "inscr": 36
+        },
+        {
+          "sala": "SALA 1301",
+          "turno": "Manhã",
+          "cargo": "305 - FISCAL SANITÁRIO E DE EVENTOS",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA 1301",
+          "turno": "Manhã",
+          "cargo": "307 - PROFESSOR I",
+          "inscr": 23
+        },
+        {
+          "sala": "SALA 1301",
+          "turno": "Tarde",
+          "cargo": "107 - OPERADOR DE MÁQUINAS",
+          "inscr": 1
+        },
+        {
+          "sala": "SALA 1301",
+          "turno": "Tarde",
+          "cargo": "108 - OPERÁRIO",
+          "inscr": 7
+        },
+        {
+          "sala": "SALA 1301",
+          "turno": "Tarde",
+          "cargo": "201 - AUXILIAR DE SERVIÇOS ADM. E GERAIS",
+          "inscr": 17
+        },
+        {
+          "sala": "SALA 1301",
+          "turno": "Tarde",
+          "cargo": "306 - PROFISSIONAL DE REGULAÇÃO",
+          "inscr": 23
+        },
+        {
+          "sala": "SALA 1301",
+          "turno": "Tarde",
+          "cargo": "401 - TÉCNICO AGRÍCOLA",
+          "inscr": 5
+        },
+        {
+          "sala": "SALA 1301",
+          "turno": "Tarde",
+          "cargo": "402 - TÉCNICO DE ENFERMAGEM",
+          "inscr": 7
+        },
+        {
+          "sala": "SALA 1302",
+          "turno": "Manhã",
+          "cargo": "301 - AUXILIAR ADMINISTRATIVO",
+          "inscr": 9
+        },
+        {
+          "sala": "SALA 1302",
+          "turno": "Manhã",
+          "cargo": "302 - AUXILIAR EM SAÚDE BUCAL ESF",
+          "inscr": 7
+        },
+        {
+          "sala": "SALA 1302",
+          "turno": "Manhã",
+          "cargo": "303 - DIGITADOR DE PROGRAMA DE INFORMAÇÕES DE SAÚDE PÚBLICA",
+          "inscr": 7
+        },
+        {
+          "sala": "SALA 1302",
+          "turno": "Manhã",
+          "cargo": "304 - FISCAL DE POSTURAS",
+          "inscr": 27
+        },
+        {
+          "sala": "SALA 1302",
+          "turno": "Tarde",
+          "cargo": "103 - AUXILIAR DE TRANSPORTE ESCOLAR",
+          "inscr": 5
+        },
+        {
+          "sala": "SALA 1302",
+          "turno": "Tarde",
+          "cargo": "105 - OFICIAL SERVIÇO PÚBLICO – ELETRICISTA",
+          "inscr": 5
+        },
+        {
+          "sala": "SALA 1302",
+          "turno": "Tarde",
+          "cargo": "107 - OPERADOR DE MÁQUINAS",
+          "inscr": 40
+        },
+        {
+          "sala": "SALA 1303",
+          "turno": "Manhã",
+          "cargo": "104 - MOTORISTA (D)",
+          "inscr": 20
+        },
+        {
+          "sala": "SALA 1303",
+          "turno": "Manhã",
+          "cargo": "106 - OFICIAL SERVIÇO PÚBLICO – PEDREIRO",
+          "inscr": 2
+        },
+        {
+          "sala": "SALA 1303",
+          "turno": "Manhã",
+          "cargo": "109 - SERVENTE ESCOLAR",
+          "inscr": 26
+        },
+        {
+          "sala": "SALA 1303",
+          "turno": "Manhã",
+          "cargo": "301 - AUXILIAR ADMINISTRATIVO",
+          "inscr": 46
+        },
+        {
+          "sala": "SALA 1303",
+          "turno": "Tarde",
+          "cargo": "103 - AUXILIAR DE TRANSPORTE ESCOLAR",
+          "inscr": 42
+        },
+        {
+          "sala": "SALA 1304",
+          "turno": "Manhã",
+          "cargo": "102 - AUXILIAR DE SERVIÇOS GERAIS",
+          "inscr": 16
+        },
+        {
+          "sala": "SALA 1304",
+          "turno": "Manhã",
+          "cargo": "104 - MOTORISTA (D)",
+          "inscr": 26
+        }
+      ]
+    }
+  ]
+}
