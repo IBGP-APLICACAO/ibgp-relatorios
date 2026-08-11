@@ -109,7 +109,7 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
   <div class="gate-card">
     <img class="logo" src="https://ibgp-aplicacao.github.io/ibgp-relatorios/ibgp-logo.png"
          onerror="this.style.display='none'" alt="IBGP">
-    <h1>IBGP — Área Admin</h1>
+    <h1>IBGP — Área Admin <span style="font-size:11px;opacity:.6">v8</span></h1>
     <p>Cadastro de novos certames</p>
     <div class="field">
       <input type="password" id="senhaInput" placeholder="Senha de acesso"
@@ -726,7 +726,9 @@ function renderRevisao(nomeArquivo) {
   });
 
   const dz = document.getElementById("dropZone");
-  dz.querySelector("p").textContent = `✓ ${nomeArquivo} — ${dadosCertame.escolas.length} locais detectados`;
+  const totCands = dadosCertame.escolas.reduce((s,e)=>s+(e.candidatos||[]).length,0);
+  dz.querySelector("p").textContent = `✓ ${nomeArquivo} — ${dadosCertame.escolas.length} locais | ${totCands} candidatos detectados`;
+  if(totCands === 0) setStatus("⚠️ Nenhum candidato (CPF/Nome) encontrado na planilha. Verifique os cabeçalhos da aba DADOS ALOCAÇÃO.", "err");
   dz.classList.add("loaded");
 
   document.getElementById("cardRevisao").style.display  = "block";
