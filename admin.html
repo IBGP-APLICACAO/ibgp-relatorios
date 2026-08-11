@@ -606,9 +606,28 @@ function processarPlanilha(wb, nomeArquivo) {
   }
 
   // ── Detecta colunas CPF e Nome pelo cabeçalho ──
-  const header = linhas[0].map(h => String(h||"").toUpperCase().trim());
-  const colCPF  = header.findIndex(h => h.includes("CPF"));
-  const colNome = header.findIndex(h => h.includes("NOME") && !h.includes("ESCOLA") && !h.includes("COORD"));
+  const header = linhas[0].map(h => String(h||"").toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g,""));
+  console.log("Cabeçalho DADOS ALOCAÇÃO:", header);
+
+  // Tenta encontrar coluna CPF
+  let colCPF = header.findIndex(h => h.includes("CPF"));
+
+  // Tenta encontrar coluna Nome (candidato — evita colunas de escola/coord)
+  const EXCL = /ESCOLA|LOCAL|COORD|MUNICIPIO|CONCURSO|CARGO|SALA|TURNO/;
+  let colNome = header.findIndex(h => h.includes("NOME") && !EXCL.test(h));
+  // Fallback: primeira coluna com "CANDIDATO"
+  if(colNome < 0) colNome = header.findIndex(h => h.includes("CANDIDATO") && !EXCL.test(h));
+
+  console.log(`Coluna CPF: ${colCPF} (${header[colCPF]||"não encontrado"})`);
+  console.log(`Coluna Nome: ${colNome} (${header[colNome]||"não encontrado"})`);
+
+  // Aviso visual se não detectou
+  if(colCPF < 0 || colNome < 0){
+    const aviso = [];
+    if(colCPF < 0) aviso.push("CPF");
+    if(colNome < 0) aviso.push("Nome do candidato");
+    setStatus(`⚠️ Colunas não encontradas: ${aviso.join(", ")}. CPF automático desativado. Verifique o cabeçalho da aba "DADOS ALOCAÇÃO". Cabeçalho detectado: ${header.slice(0,10).join(" | ")}`, "err");
+  }
 
   // ── Agrega cargos e coleta candidatos por escola ──
   // Col 16=ESCOLA, 13=SALA, 12=TURNO, 7=CARGO
