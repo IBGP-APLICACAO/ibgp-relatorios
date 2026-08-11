@@ -191,9 +191,9 @@
         <div class="radio-row"><label><input type="radio" name="m_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="m_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Sim</label></div>
         <div id="m_ocorr_sala_wrap" class="hidden">
           <div class="ocorr-tipos">
-            <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_falt"> Folha de resposta faltando</label>
-            <label class="check-tipo"><input type="checkbox" id="m_ocorr_banheiro"> Candidato foi ao banheiro antes do período de sigilo</label>
-            <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_erro"> Folha de resposta entregue erroneamente pelo fiscal, e preenchida por outro candidato</label>
+            <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_falt"> Ausência de folha de resposta</label>
+            <label class="check-tipo"><input type="checkbox" id="m_ocorr_banheiro"> Saída de candidato para sanitário antes do encerramento do período de sigilo</label>
+            <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_erro"> Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</label>
             <label class="check-tipo"><input type="checkbox" id="m_ocorr_errata" onchange="toggleErrata('m_ocorr_errata','m_ocorr_errata_wrap')"> Errata de questão</label>
             <div id="m_ocorr_errata_wrap" class="hidden" style="margin:4px 0 0 26px;">
               <label style="font-size:13px;color:#555;">Questão(ões): <input type="text" id="m_ocorr_errata_q" placeholder="Ex: 15, 23" style="width:200px;padding:5px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></label>
@@ -307,9 +307,9 @@
         <div class="radio-row"><label><input type="radio" name="t_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="t_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Sim</label></div>
         <div id="t_ocorr_sala_wrap" class="hidden">
           <div class="ocorr-tipos">
-            <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_falt"> Folha de resposta faltando</label>
-            <label class="check-tipo"><input type="checkbox" id="t_ocorr_banheiro"> Candidato foi ao banheiro antes do período de sigilo</label>
-            <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_erro"> Folha de resposta entregue erroneamente pelo fiscal, e preenchida por outro candidato</label>
+            <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_falt"> Ausência de folha de resposta</label>
+            <label class="check-tipo"><input type="checkbox" id="t_ocorr_banheiro"> Saída de candidato para sanitário antes do encerramento do período de sigilo</label>
+            <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_erro"> Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</label>
             <label class="check-tipo"><input type="checkbox" id="t_ocorr_errata" onchange="toggleErrata('t_ocorr_errata','t_ocorr_errata_wrap')"> Errata de questão</label>
             <div id="t_ocorr_errata_wrap" class="hidden" style="margin:4px 0 0 26px;">
               <label style="font-size:13px;color:#555;">Questão(ões): <input type="text" id="t_ocorr_errata_q" placeholder="Ex: 15, 23" style="width:200px;padding:5px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></label>
