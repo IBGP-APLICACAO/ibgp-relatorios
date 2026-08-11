@@ -4,7 +4,7 @@
 <head>
 <script>
 /* cache-bust: força reload se URL não tiver v=9 */
-(function(){var p=new URLSearchParams(location.search);if(p.get('v')!=='9'){p.set('v','9');location.replace(location.pathname+'?'+p.toString());}})();
+(function(){var p=new URLSearchParams(location.search);if(p.get('v')!=='10'){p.set('v','10');location.replace(location.pathname+'?'+p.toString());}})();
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -110,7 +110,7 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
   <div class="gate-card">
     <img class="logo" src="https://ibgp-aplicacao.github.io/ibgp-relatorios/ibgp-logo.png"
          onerror="this.style.display='none'" alt="IBGP">
-    <h1>IBGP — Área Admin <span style="font-size:11px;opacity:.6">v8</span></h1>
+    <h1>IBGP — Área Admin <span style="font-size:11px;opacity:.6">v10</span></h1>
     <p>Cadastro de novos certames</p>
     <div class="field">
       <input type="password" id="senhaInput" placeholder="Senha de acesso"
@@ -184,7 +184,7 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
            ondragleave="this.classList.remove('over')"
            ondrop="onDrop(event)">
         <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-          <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 12l-4-4-4 4M12 8v8"/>
+          <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 12l-4-4-4 4M12 8v10"/>
         </svg>
         <p>Clique ou arraste a planilha .xlsx aqui</p>
         <small>Formato: MODELO DE ALOCAÇÃO IBGP</small>
@@ -721,7 +721,7 @@ function renderRevisao(nomeArquivo) {
       </td>
       <td style="text-align:center">${e.salas}</td>
       <td style="text-align:center">${turno}</td>
-      <td style="text-align:center">${e.candidatos}</td>
+      <td style="text-align:center">${(e.candidatos||[]).length}</td>
     `;
     tbody.appendChild(tr);
   });
