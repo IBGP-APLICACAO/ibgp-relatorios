@@ -904,8 +904,8 @@ function addOcorrItem(listId, prefix){
 
 let _outrosIdx = 0;
 function toggleOutrosCand(radio){
-  const block = radio.closest('.outros-block');
-  const fields = block.querySelector('.outros-cand-fields');
+  const block = radio.closest('.outros-block') || radio.closest('.ocorr-fields') || radio.closest('.check-desc-wrap');
+  const fields = block ? block.querySelector('.outros-cand-fields') : null;
   if(fields) fields.style.display = radio.value === 'cand' ? 'block' : 'none';
 }
 function addOutrosEntry(listId, prefix){
