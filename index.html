@@ -85,9 +85,12 @@
     .add-btn { background: none; border: 1px dashed #CF3432; color: #CF3432; border-radius: 4px; padding: 5px 14px; cursor: pointer; font-size: 12px; font-weight: 700; margin-top: 6px; transition: all .2s; }
     .add-btn:hover { background: #CF3432; color: #FFF; }
   
-.ocorr-tipos{margin-bottom:10px;display:flex;flex-direction:column;gap:6px;}
+.ocorr-tipos{margin-bottom:10px;display:flex;flex-direction:column;gap:4px;}
+.check-tipo-block{display:flex;flex-direction:column;}
 .check-tipo{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#333;cursor:pointer;line-height:1.4;}
 .check-tipo input[type=checkbox]{margin-top:2px;width:16px;height:16px;flex-shrink:0;accent-color:#1F3A6E;}
+.check-desc-wrap{margin:6px 0 6px 24px;display:flex;flex-direction:column;gap:4px;}
+.check-desc-wrap textarea{width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;}
 </style>
 </head>
 <body>
@@ -191,12 +194,37 @@
         <div class="radio-row"><label><input type="radio" name="m_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="m_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Sim</label></div>
         <div id="m_ocorr_sala_wrap" class="hidden">
           <div class="ocorr-tipos">
-            <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_falt"> Ausência de folha de resposta</label>
-            <label class="check-tipo"><input type="checkbox" id="m_ocorr_banheiro"> Saída de candidato para sanitário antes do encerramento do período de sigilo</label>
-            <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_erro"> Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</label>
-            <label class="check-tipo"><input type="checkbox" id="m_ocorr_errata" onchange="toggleErrata('m_ocorr_errata','m_ocorr_errata_wrap')"> Errata de questão</label>
-            <div id="m_ocorr_errata_wrap" class="hidden" style="margin:4px 0 0 26px;">
-              <label style="font-size:13px;color:#555;">Questão(ões): <input type="text" id="m_ocorr_errata_q" placeholder="Ex: 15, 23" style="width:200px;padding:5px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></label>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_falt" onchange="toggleCheckDesc('m_ocorr_folha_falt','m_ocorr_folha_falt_wrap')"> Ausência de folha de resposta</label>
+              <div id="m_ocorr_folha_falt_wrap" class="hidden check-desc-wrap">
+                <textarea id="m_ocorr_folha_falt_desc" rows="2" placeholder="Descrição / detalhamento..."></textarea>
+              </div>
+            </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="m_ocorr_banheiro" onchange="toggleCheckDesc('m_ocorr_banheiro','m_ocorr_banheiro_wrap')"> Saída de candidato para sanitário antes do encerramento do período de sigilo</label>
+              <div id="m_ocorr_banheiro_wrap" class="hidden check-desc-wrap">
+                <textarea id="m_ocorr_banheiro_desc" rows="2" placeholder="Descrição / detalhamento..."></textarea>
+              </div>
+            </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_erro" onchange="toggleCheckDesc('m_ocorr_folha_erro','m_ocorr_folha_erro_wrap')"> Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</label>
+              <div id="m_ocorr_folha_erro_wrap" class="hidden check-desc-wrap">
+                <textarea id="m_ocorr_folha_erro_desc" rows="2" placeholder="Descrição / detalhamento..."></textarea>
+              </div>
+            </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="m_ocorr_errata" onchange="toggleCheckDesc('m_ocorr_errata','m_ocorr_errata_wrap')"> Errata de questão</label>
+              <div id="m_ocorr_errata_wrap" class="hidden check-desc-wrap">
+                <label style="font-size:12px;color:#555;margin-bottom:4px;display:block;">Questão(ões): <input type="text" id="m_ocorr_errata_q" placeholder="Ex: 15, 23" style="width:200px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;margin-left:4px;"></label>
+                <textarea id="m_ocorr_errata_desc" rows="2" placeholder="Descrição / detalhamento..."></textarea>
+              </div>
+            </div>
+          </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="m_ocorr_outros" onchange="toggleCheckDesc('m_ocorr_outros','m_ocorr_outros_wrap')"> Outros</label>
+              <div id="m_ocorr_outros_wrap" class="hidden check-desc-wrap">
+                <textarea id="m_ocorr_outros_desc" rows="2" placeholder="Descreva a ocorrência..."></textarea>
+              </div>
             </div>
           </div>
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
@@ -307,12 +335,37 @@
         <div class="radio-row"><label><input type="radio" name="t_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="t_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Sim</label></div>
         <div id="t_ocorr_sala_wrap" class="hidden">
           <div class="ocorr-tipos">
-            <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_falt"> Ausência de folha de resposta</label>
-            <label class="check-tipo"><input type="checkbox" id="t_ocorr_banheiro"> Saída de candidato para sanitário antes do encerramento do período de sigilo</label>
-            <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_erro"> Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</label>
-            <label class="check-tipo"><input type="checkbox" id="t_ocorr_errata" onchange="toggleErrata('t_ocorr_errata','t_ocorr_errata_wrap')"> Errata de questão</label>
-            <div id="t_ocorr_errata_wrap" class="hidden" style="margin:4px 0 0 26px;">
-              <label style="font-size:13px;color:#555;">Questão(ões): <input type="text" id="t_ocorr_errata_q" placeholder="Ex: 15, 23" style="width:200px;padding:5px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></label>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_falt" onchange="toggleCheckDesc('t_ocorr_folha_falt','t_ocorr_folha_falt_wrap')"> Ausência de folha de resposta</label>
+              <div id="t_ocorr_folha_falt_wrap" class="hidden check-desc-wrap">
+                <textarea id="t_ocorr_folha_falt_desc" rows="2" placeholder="Descrição / detalhamento..."></textarea>
+              </div>
+            </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="t_ocorr_banheiro" onchange="toggleCheckDesc('t_ocorr_banheiro','t_ocorr_banheiro_wrap')"> Saída de candidato para sanitário antes do encerramento do período de sigilo</label>
+              <div id="t_ocorr_banheiro_wrap" class="hidden check-desc-wrap">
+                <textarea id="t_ocorr_banheiro_desc" rows="2" placeholder="Descrição / detalhamento..."></textarea>
+              </div>
+            </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_erro" onchange="toggleCheckDesc('t_ocorr_folha_erro','t_ocorr_folha_erro_wrap')"> Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</label>
+              <div id="t_ocorr_folha_erro_wrap" class="hidden check-desc-wrap">
+                <textarea id="t_ocorr_folha_erro_desc" rows="2" placeholder="Descrição / detalhamento..."></textarea>
+              </div>
+            </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="t_ocorr_errata" onchange="toggleCheckDesc('t_ocorr_errata','t_ocorr_errata_wrap')"> Errata de questão</label>
+              <div id="t_ocorr_errata_wrap" class="hidden check-desc-wrap">
+                <label style="font-size:12px;color:#555;margin-bottom:4px;display:block;">Questão(ões): <input type="text" id="t_ocorr_errata_q" placeholder="Ex: 15, 23" style="width:200px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;margin-left:4px;"></label>
+                <textarea id="t_ocorr_errata_desc" rows="2" placeholder="Descrição / detalhamento..."></textarea>
+              </div>
+            </div>
+          </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="t_ocorr_outros" onchange="toggleCheckDesc('t_ocorr_outros','t_ocorr_outros_wrap')"> Outros</label>
+              <div id="t_ocorr_outros_wrap" class="hidden check-desc-wrap">
+                <textarea id="t_ocorr_outros_desc" rows="2" placeholder="Descreva a ocorrência..."></textarea>
+              </div>
             </div>
           </div>
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
@@ -805,13 +858,15 @@ function addSalaEntry(listId){
 
 
 function coletarTiposOcorr(prefix){
-  const get = id => document.getElementById(id)?.checked || false;
+  const get  = id => document.getElementById(id)?.checked || false;
+  const desc = id => document.getElementById(id)?.value.trim() || '';
   return {
-    folha_falt:  get(prefix+'_folha_falt'),
-    banheiro:    get(prefix+'_banheiro'),
-    folha_erro:  get(prefix+'_folha_erro'),
-    errata:      get(prefix+'_errata'),
+    folha_falt:  get(prefix+'_folha_falt'),  folha_falt_desc:  desc(prefix+'_folha_falt_desc'),
+    banheiro:    get(prefix+'_banheiro'),     banheiro_desc:    desc(prefix+'_banheiro_desc'),
+    folha_erro:  get(prefix+'_folha_erro'),   folha_erro_desc:  desc(prefix+'_folha_erro_desc'),
+    errata:      get(prefix+'_errata'),       errata_desc:      desc(prefix+'_errata_desc'),
     errata_q:    get(prefix+'_errata') ? (document.getElementById(prefix+'_errata_q')?.value||'') : '',
+    outros:      get(prefix+'_outros'),       outros_desc: desc(prefix+'_outros_desc'),
   };
 }
 
@@ -834,11 +889,12 @@ function addApoioEntry(){
 }
 
 
-function toggleErrata(checkId, wrapId){
+function toggleCheckDesc(checkId, wrapId){
   const checked = document.getElementById(checkId)?.checked;
   const wrap = document.getElementById(wrapId);
   if(wrap) wrap.classList.toggle('hidden', !checked);
 }
+function toggleErrata(checkId, wrapId){ toggleCheckDesc(checkId, wrapId); }
 
 function toggleOcorrEntries(name, wrapId){
   const sim = document.querySelector(`input[name="${name}"]:checked`).value === "Sim";
