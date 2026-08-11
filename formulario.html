@@ -197,19 +197,22 @@
             <div class="check-tipo-block">
               <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_falt" onchange="toggleCheckDesc('m_ocorr_folha_falt','m_ocorr_folha_falt_wrap')"> Ausência de folha de resposta</label>
               <div id="m_ocorr_folha_falt_wrap" class="hidden check-desc-wrap">
-                <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                <div id="m_ocorr_folha_falt_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <button type="button" class="add-btn" onclick="addEntry('m_ocorr_folha_falt_entries')">+ Adicionar</button>
               </div>
             </div>
             <div class="check-tipo-block">
               <label class="check-tipo"><input type="checkbox" id="m_ocorr_banheiro" onchange="toggleCheckDesc('m_ocorr_banheiro','m_ocorr_banheiro_wrap')"> Saída de candidato para sanitário antes do encerramento do período de sigilo</label>
               <div id="m_ocorr_banheiro_wrap" class="hidden check-desc-wrap">
-                <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                <div id="m_ocorr_banheiro_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <button type="button" class="add-btn" onclick="addEntry('m_ocorr_banheiro_entries')">+ Adicionar</button>
               </div>
             </div>
             <div class="check-tipo-block">
               <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_erro" onchange="toggleCheckDesc('m_ocorr_folha_erro','m_ocorr_folha_erro_wrap')"> Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</label>
               <div id="m_ocorr_folha_erro_wrap" class="hidden check-desc-wrap">
-                <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                <div id="m_ocorr_folha_erro_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <button type="button" class="add-btn" onclick="addEntry('m_ocorr_folha_erro_entries')">+ Adicionar</button>
               </div>
             </div>
             <div class="check-tipo-block">
@@ -226,15 +229,6 @@
                 <textarea id="m_ocorr_outros_desc" rows="2" placeholder="Descreva a ocorrência..."></textarea>
               </div>
             </div>
-          </div>
-          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-          <div id="m_ocorr_sala_entries">
-            <div class="entry-sala-block">
-              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-              <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
-            </div>
-          </div>
-          <button type="button" class="add-btn" onclick="addSalaEntry('m_ocorr_sala_entries')">+ Adicionar</button>
         </div>
       <div class="ocorr-block">
         <h4>Prova condicional</h4>
@@ -337,19 +331,22 @@
             <div class="check-tipo-block">
               <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_falt" onchange="toggleCheckDesc('t_ocorr_folha_falt','t_ocorr_folha_falt_wrap')"> Ausência de folha de resposta</label>
               <div id="t_ocorr_folha_falt_wrap" class="hidden check-desc-wrap">
-                <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                <div id="t_ocorr_folha_falt_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <button type="button" class="add-btn" onclick="addEntry('t_ocorr_folha_falt_entries')">+ Adicionar</button>
               </div>
             </div>
             <div class="check-tipo-block">
               <label class="check-tipo"><input type="checkbox" id="t_ocorr_banheiro" onchange="toggleCheckDesc('t_ocorr_banheiro','t_ocorr_banheiro_wrap')"> Saída de candidato para sanitário antes do encerramento do período de sigilo</label>
               <div id="t_ocorr_banheiro_wrap" class="hidden check-desc-wrap">
-                <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                <div id="t_ocorr_banheiro_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <button type="button" class="add-btn" onclick="addEntry('t_ocorr_banheiro_entries')">+ Adicionar</button>
               </div>
             </div>
             <div class="check-tipo-block">
               <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_erro" onchange="toggleCheckDesc('t_ocorr_folha_erro','t_ocorr_folha_erro_wrap')"> Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</label>
               <div id="t_ocorr_folha_erro_wrap" class="hidden check-desc-wrap">
-                <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                <div id="t_ocorr_folha_erro_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <button type="button" class="add-btn" onclick="addEntry('t_ocorr_folha_erro_entries')">+ Adicionar</button>
               </div>
             </div>
             <div class="check-tipo-block">
@@ -366,15 +363,6 @@
                 <textarea id="t_ocorr_outros_desc" rows="2" placeholder="Descreva a ocorrência..."></textarea>
               </div>
             </div>
-          </div>
-          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-          <div id="t_ocorr_sala_entries">
-            <div class="entry-sala-block">
-              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-              <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
-            </div>
-          </div>
-          <button type="button" class="add-btn" onclick="addSalaEntry('t_ocorr_sala_entries')">+ Adicionar</button>
         </div>
       <div class="ocorr-block">
         <h4>Prova condicional</h4>
@@ -879,23 +867,24 @@ function addSalaEntry(listId){
 }
 
 
-function coletarEntryRow(wrapId){
-  const wrap = document.getElementById(wrapId);
-  if(!wrap) return null;
-  const ins = wrap.querySelectorAll('input');
-  if(!ins.length) return null;
-  return {inscricao: ins[0].value.trim(), candidato: ins[1]?.value.trim()||'', sala: ins[2]?.value.trim()||''};
+function coletarEntriesFromList(listId){
+  const list = document.getElementById(listId);
+  if(!list) return [];
+  return Array.from(list.querySelectorAll('.entry-row')).map(row=>{
+    const ins = row.querySelectorAll('input');
+    return {inscricao:(ins[0]?.value||'').trim(), candidato:(ins[1]?.value||'').trim(), sala:(ins[2]?.value||'').trim()};
+  }).filter(e=>e.inscricao||e.candidato||e.sala);
 }
 function coletarTiposOcorr(prefix){
   const get  = id => document.getElementById(id)?.checked || false;
   const desc = id => document.getElementById(id)?.value.trim() || '';
   return {
     folha_falt:       get(prefix+'_folha_falt'),
-    folha_falt_cand:  get(prefix+'_folha_falt')  ? coletarEntryRow(prefix+'_folha_falt_wrap')  : null,
+    folha_falt_cands: get(prefix+'_folha_falt')  ? coletarEntriesFromList(prefix+'_folha_falt_entries')  : [],
     banheiro:         get(prefix+'_banheiro'),
-    banheiro_cand:    get(prefix+'_banheiro')     ? coletarEntryRow(prefix+'_banheiro_wrap')    : null,
+    banheiro_cands:   get(prefix+'_banheiro')     ? coletarEntriesFromList(prefix+'_banheiro_entries')    : [],
     folha_erro:       get(prefix+'_folha_erro'),
-    folha_erro_cand:  get(prefix+'_folha_erro')   ? coletarEntryRow(prefix+'_folha_erro_wrap')  : null,
+    folha_erro_cands: get(prefix+'_folha_erro')   ? coletarEntriesFromList(prefix+'_folha_erro_entries')  : [],
     errata:           get(prefix+'_errata'),
     errata_q:          get(prefix+'_errata') ? (document.getElementById(prefix+'_errata_q')?.value||'') : '',
     errata_cargo:      get(prefix+'_errata') ? (document.getElementById(prefix+'_errata_cargo')?.value||'') : '',
