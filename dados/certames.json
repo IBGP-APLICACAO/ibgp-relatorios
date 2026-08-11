@@ -1,14 +1,14 @@
 [
   {
-    "id": "de-pouso-alegremg-2026-08-02",
-    "titulo": "CONCURSO PÚBLICO DA GUARDA CIVIL MUNICIPAL DE POUSO ALEGRE/MG",
-    "edital": "Edital nº 01/2026",
-    "data": "2 de agosto de 2026"
-  },
-  {
     "id": "alto-rio-doce-2026-07-26",
     "titulo": "CONCURSO PÚBLICO DO MUNICÍPIO DE ALTO RIO DOCE/MG",
     "edital": "Edital nº 01/2026",
     "data": "26 de julho de 2026"
+  },
+  {
+    "id": "de-pouso-alegremg-2026-08-02",
+    "titulo": "CONCURSO PÚBLICO DA GUARDA CIVIL MUNICIPAL DE POUSO ALEGRE/MG",
+    "edital": "Edital nº 01/2026",
+    "data": "2 de agosto de 2026"
   }
 ]
