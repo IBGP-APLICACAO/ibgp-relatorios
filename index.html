@@ -541,7 +541,7 @@ const sel = document.getElementById("selEscola");
 // ════════════════════════════════════════════════════════════════
 //  INIT — carrega lista de certames
 // ════════════════════════════════════════════════════════════════
-fetch("dados/certames.json")
+fetch("dados/certames.json?v="+Date.now())
   .then(r => r.json())
   .then(certames => {
     certames.forEach((c, i) => {
@@ -569,7 +569,7 @@ function onCertameChange(){
   ["rowEscola","rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"]
     .forEach(id => { const el = document.getElementById(id); if(el) el.classList.add("hidden"); });
 
-  fetch("dados/" + info.id + ".json")
+  fetch("dados/" + info.id + ".json?v="+Date.now())
     .then(r => r.json())
     .then(dados => { dados = fixUtf8Double(dados);
       CONCURSO = dados;
