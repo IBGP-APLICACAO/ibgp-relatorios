@@ -781,6 +781,27 @@ function formatCPF(input){
   input.value=v;
 }
 
+function validarCPFsDuplicados(prefix, sufixo, secoes){
+  const cpfs = [1,2,3].map(i => {
+    const el = document.getElementById(`${prefix}_t${i}_${sufixo}_cpf`);
+    return {el, val: (el?.value||'').replace(/\D/g,'')};
+  });
+  const vals = cpfs.map(c => c.val).filter(v => v.length > 0);
+  const hasDup = vals.length !== new Set(vals).size;
+  cpfs.forEach(c => {
+    if(c.el) c.el.classList.toggle('campo-invalido', hasDup && c.val.length > 0);
+  });
+  return hasDup;
+}
+
+function checkCPFDupGroup(cpfId){
+  // Determina o grupo de testemunhas e valida duplicados em tempo real
+  // cpfId pattern: {prefix}_t{n}_{sufixo}_cpf
+  const m = cpfId.match(/^([mt])_t\d+_(.+)_cpf$/);
+  if(!m) return;
+  validarCPFsDuplicados(m[1], m[2]);
+}
+
 function lookupCPF(cpfId, nomeId){
   const cpfEl=document.getElementById(cpfId);
   const nomeEl=document.getElementById(nomeId);
@@ -813,6 +834,8 @@ function lookupCPF(cpfId, nomeId){
     nomeEl.placeholder='CPF não encontrado — digite o nome';
     nomeEl.focus();
   }
+  // Verifica duplicados no grupo de testemunhas em tempo real
+  checkCPFDupGroup(cpfId);
 }
 
 function getTxt(id){ const el=document.getElementById(id); return el ? el.value.trim() : ""; }
@@ -1077,6 +1100,16 @@ function validar(){
       checar(document.getElementById(`t_t${i}_ab_malote_nome`),  'Testemunhas Abertura Malote — Tarde');
       checar(document.getElementById(`t_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote — Tarde');
     }
+  }
+
+  // ── CPFs duplicados nas testemunhas ──
+  if(hasManha){
+    if(validarCPFsDuplicados('m','ab_malote',secoes))  { if(!secoes.includes('Testemunhas Abertura Malote — Manhã (CPFs duplicados)'))  secoes.push('Testemunhas Abertura Malote — Manhã (CPFs duplicados)');  }
+    if(validarCPFsDuplicados('m','fch_malote',secoes)) { if(!secoes.includes('Testemunhas Fechamento Malote — Manhã (CPFs duplicados)')) secoes.push('Testemunhas Fechamento Malote — Manhã (CPFs duplicados)'); }
+  }
+  if(haTarde){
+    if(validarCPFsDuplicados('t','ab_malote',secoes))  { if(!secoes.includes('Testemunhas Abertura Malote — Tarde (CPFs duplicados)'))  secoes.push('Testemunhas Abertura Malote — Tarde (CPFs duplicados)');  }
+    if(validarCPFsDuplicados('t','fch_malote',secoes)) { if(!secoes.includes('Testemunhas Fechamento Malote — Tarde (CPFs duplicados)')) secoes.push('Testemunhas Fechamento Malote — Tarde (CPFs duplicados)'); }
   }
 
   // ── Estatística (pres / aus / incl) ──
