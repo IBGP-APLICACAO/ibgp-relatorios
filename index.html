@@ -575,7 +575,7 @@ function restaurarRascunho(){
       });
     }
   }
-  ['m_ocorr_sala_entries','m_cond_entries','t_ocorr_sala_entries','t_cond_entries'].forEach(id=>{
+  ['m_ocorr_sala_entries','t_ocorr_sala_entries'].forEach(id=>{
     const entries=d['_'+id]; if(!entries||!entries.length) return;
     const list=document.getElementById(id); if(!list) return; list.innerHTML='';
     entries.forEach(e=>{
@@ -586,6 +586,17 @@ function restaurarRascunho(){
       });
       const ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='Descrição da ocorrência...'; ta.value=e.d||'';
       block.appendChild(row); block.appendChild(ta); list.appendChild(block);
+    });
+  });
+  ['m_cond_entries','t_cond_entries'].forEach(id=>{
+    const entries=d['_'+id]; if(!entries||!entries.length) return;
+    const list=document.getElementById(id); if(!list) return; list.innerHTML='';
+    entries.forEach(e=>{
+      const row=document.createElement('div'); row.className='entry-row';
+      [['a','Nº Inscrição'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
+        const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; row.appendChild(inp);
+      });
+      list.appendChild(row);
     });
   });
   ['m_decl_entries','t_decl_entries'].forEach(id=>{
