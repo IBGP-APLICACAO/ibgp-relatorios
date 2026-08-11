@@ -734,6 +734,7 @@ async function publicar() {
 
   const certameJSON = {
     id, titulo, edital, data,
+    gerado_em: new Date().toISOString(),
     escolas: dadosCertame.escolas.map(e => ({
       nome: e.nome,
       coord_local: e.coord_local,

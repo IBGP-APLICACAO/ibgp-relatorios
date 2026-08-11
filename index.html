@@ -435,6 +435,7 @@ function salvarRascunho(){
       return{a:ins[0]?.value||'',b:ins[1]?.value||'',c:ins[2]?.value||''};
     });
   });
+  d['_gerado_em'] = CONCURSO?.gerado_em || '';
   try{localStorage.setItem(k,JSON.stringify(d));}catch(e){}
   _rascunhoToast('💾 Rascunho salvo');
 }
@@ -453,6 +454,13 @@ function _rascunhoToast(msg,cor){
 function restaurarRascunho(){
   const k=_rascunhoKey(); if(!k) return;
   let d; try{d=JSON.parse(localStorage.getItem(k)||'null');}catch(e){return;}
+  if(!d) return;
+  // Se o certame foi republicado, invalida o rascunho anterior
+  if(d._gerado_em && CONCURSO?.gerado_em && d._gerado_em !== CONCURSO.gerado_em){
+    localStorage.removeItem(k);
+    _rascunhoToast('⚠️ Certame atualizado — rascunho anterior descartado','#CF3432');
+    return;
+  }
   if(!d) return;
   Object.entries(d).forEach(([id,val])=>{
     if(id.startsWith('_')||id.startsWith('r_')) return;
