@@ -159,11 +159,11 @@
       <div class="card-title manha">3. Turno Manhã — Testemunhas</div>
       <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Malote</p>
       <table class="test-table">
-        <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
+        <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
         <tbody>
-          <tr><td><input type="text" id="m_t1_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t1_ab_malote_cpf" placeholder="000.000.000-00"></td></tr>
-          <tr><td><input type="text" id="m_t2_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t2_ab_malote_cpf" placeholder="000.000.000-00"></td></tr>
-          <tr><td><input type="text" id="m_t3_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t3_ab_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="m_t1_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('m_t1_ab_malote_cpf','m_t1_ab_malote_nome')"></td><td><input type="text" id="m_t1_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="m_t2_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('m_t2_ab_malote_cpf','m_t2_ab_malote_nome')"></td><td><input type="text" id="m_t2_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="m_t3_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('m_t3_ab_malote_cpf','m_t3_ab_malote_nome')"></td><td><input type="text" id="m_t3_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
         </tbody>
       </table>
     </div>
@@ -234,11 +234,11 @@
     <div class="card">
       <div class="card-title manha">6. Turno Manhã — Testemunhas — Fechamento do Malote</div>
       <table class="test-table">
-        <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
+        <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
         <tbody>
-          <tr><td><input type="text" id="m_t1_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t1_fch_malote_cpf" placeholder="000.000.000-00"></td></tr>
-          <tr><td><input type="text" id="m_t2_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t2_fch_malote_cpf" placeholder="000.000.000-00"></td></tr>
-          <tr><td><input type="text" id="m_t3_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="m_t3_fch_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="m_t1_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('m_t1_fch_malote_cpf','m_t1_fch_malote_nome')"></td><td><input type="text" id="m_t1_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="m_t2_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('m_t2_fch_malote_cpf','m_t2_fch_malote_nome')"></td><td><input type="text" id="m_t2_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="m_t3_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('m_t3_fch_malote_cpf','m_t3_fch_malote_nome')"></td><td><input type="text" id="m_t3_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
         </tbody>
       </table>
     </div>
@@ -266,11 +266,11 @@
       <div class="card-title tarde">7. Turno Tarde — Testemunhas</div>
       <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Malote</p>
       <table class="test-table">
-        <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
+        <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
         <tbody>
-          <tr><td><input type="text" id="t_t1_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t1_ab_malote_cpf" placeholder="000.000.000-00"></td></tr>
-          <tr><td><input type="text" id="t_t2_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t2_ab_malote_cpf" placeholder="000.000.000-00"></td></tr>
-          <tr><td><input type="text" id="t_t3_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t3_ab_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="t_t1_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('t_t1_ab_malote_cpf','t_t1_ab_malote_nome')"></td><td><input type="text" id="t_t1_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="t_t2_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('t_t2_ab_malote_cpf','t_t2_ab_malote_nome')"></td><td><input type="text" id="t_t2_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="t_t3_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('t_t3_ab_malote_cpf','t_t3_ab_malote_nome')"></td><td><input type="text" id="t_t3_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
         </tbody>
       </table>
     </div>
@@ -341,11 +341,11 @@
     <div class="card">
       <div class="card-title tarde">10. Turno Tarde — Testemunhas — Fechamento do Malote</div>
       <table class="test-table">
-        <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
+        <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
         <tbody>
-          <tr><td><input type="text" id="t_t1_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t1_fch_malote_cpf" placeholder="000.000.000-00"></td></tr>
-          <tr><td><input type="text" id="t_t2_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t2_fch_malote_cpf" placeholder="000.000.000-00"></td></tr>
-          <tr><td><input type="text" id="t_t3_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="t_t3_fch_malote_cpf" placeholder="000.000.000-00"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="t_t1_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('t_t1_fch_malote_cpf','t_t1_fch_malote_nome')"></td><td><input type="text" id="t_t1_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="t_t2_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('t_t2_fch_malote_cpf','t_t2_fch_malote_nome')"></td><td><input type="text" id="t_t2_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="t_t3_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('t_t3_fch_malote_cpf','t_t3_fch_malote_nome')"></td><td><input type="text" id="t_t3_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
         </tbody>
       </table>
     </div>
@@ -565,6 +565,7 @@ function onCertameChange(){
     .then(r => r.json())
     .then(dados => { dados = fixUtf8Double(dados);
       CONCURSO = dados;
+      window._cpfIndex = null; // reseta índice CPF ao trocar escola
       dados.escolas.forEach((e, i) => {
         const o = document.createElement("option");
         o.value = i; o.textContent = e.nome;
@@ -692,6 +693,48 @@ function recalcStat(tbl, i, changed){
   // Atualiza linha de totais
   const rows = document.querySelectorAll('#'+tbl+' tbody tr').length;
   recalcTotal(tbl, rows);
+}
+
+
+function formatCPF(input){
+  let v=input.value.replace(/\D/g,'');
+  if(v.length>11) v=v.slice(0,11);
+  v=v.replace(/(\d{3})(\d)/,'$1.$2');
+  v=v.replace(/(\d{3})(\d)/,'$1.$2');
+  v=v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  input.value=v;
+}
+
+function lookupCPF(cpfId, nomeId){
+  const cpfEl=document.getElementById(cpfId);
+  const nomeEl=document.getElementById(nomeId);
+  if(!cpfEl||!nomeEl) return;
+  const cpf=cpfEl.value.replace(/\D/g,'');
+  if(cpf.length<11){ nomeEl.readOnly=false; nomeEl.style.background=''; return; }
+  // Constrói índice CPF→nome a partir da alocação
+  if(!window._cpfIndex && CONCURSO){
+    window._cpfIndex={};
+    (CONCURSO.candidatos||[]).forEach(c=>{
+      const k=(c.cpf||'').replace(/\D/g,'');
+      if(k) window._cpfIndex[k]=c.nome||'';
+    });
+  }
+  const nome=window._cpfIndex&&window._cpfIndex[cpf];
+  if(nome){
+    nomeEl.value=nome;
+    nomeEl.readOnly=true;
+    nomeEl.style.background='#EEF3FB';
+    nomeEl.style.color='#1F3A6E';
+    nomeEl.title='Candidato identificado pela alocação';
+  } else {
+    nomeEl.value='';
+    nomeEl.readOnly=false;
+    nomeEl.style.background='#FFF9EC';
+    nomeEl.style.color='';
+    nomeEl.title='CPF não encontrado — digite o nome manualmente';
+    nomeEl.placeholder='CPF não encontrado — digite o nome';
+    nomeEl.focus();
+  }
 }
 
 function getTxt(id){ const el=document.getElementById(id); return el ? el.value.trim() : ""; }
