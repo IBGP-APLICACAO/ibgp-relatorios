@@ -711,10 +711,12 @@ function lookupCPF(cpfId, nomeId){
   if(!cpfEl||!nomeEl) return;
   const cpf=cpfEl.value.replace(/\D/g,'');
   if(cpf.length<11){ nomeEl.readOnly=false; nomeEl.style.background=''; return; }
-  // Constrói índice CPF→nome a partir da alocação
-  if(!window._cpfIndex && CONCURSO){
+  // Constrói índice CPF→nome a partir dos candidatos da escola selecionada
+  if(!window._cpfIndex){
     window._cpfIndex={};
-    (CONCURSO.candidatos||[]).forEach(c=>{
+    const idx=document.getElementById('selEscola')?.value;
+    const escola=CONCURSO&&idx!==''?CONCURSO.escolas[parseInt(idx)]:null;
+    (escola?.candidatos||[]).forEach(c=>{
       const k=(c.cpf||'').replace(/\D/g,'');
       if(k) window._cpfIndex[k]=c.nome||'';
     });

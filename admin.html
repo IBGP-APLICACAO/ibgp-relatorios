@@ -605,7 +605,12 @@ function processarPlanilha(wb, nomeArquivo) {
     }
   }
 
-  // ── Agrega cargos: escola → sala → turno → cargo → count ──
+  // ── Detecta colunas CPF e Nome pelo cabeçalho ──
+  const header = linhas[0].map(h => String(h||"").toUpperCase().trim());
+  const colCPF  = header.findIndex(h => h.includes("CPF"));
+  const colNome = header.findIndex(h => h.includes("NOME") && !h.includes("ESCOLA") && !h.includes("COORD"));
+
+  // ── Agrega cargos e coleta candidatos por escola ──
   // Col 16=ESCOLA, 13=SALA, 12=TURNO, 7=CARGO
   const escMap = {};
   for (let i = 1; i < linhas.length; i++) {
@@ -617,10 +622,19 @@ function processarPlanilha(wb, nomeArquivo) {
     const cargo = String(r[7]  || "").trim();
     if (!sala || !turno || !cargo) continue;
 
-    if (!escMap[escola]) escMap[escola] = {cargosMap:{}, candidatos:0};
-    escMap[escola].candidatos++;
+    if (!escMap[escola]) escMap[escola] = {cargosMap:{}, candidatosLista:[], _cpfSeen:new Set()};
     const key = `${sala}|${turno}|${cargo}`;
     escMap[escola].cargosMap[key] = (escMap[escola].cargosMap[key] || 0) + 1;
+
+    // Coleta candidato se houver colunas de CPF e Nome
+    if (colCPF >= 0 && colNome >= 0) {
+      const cpf  = String(r[colCPF]  || "").trim().replace(/\D/g,"");
+      const nome = String(r[colNome] || "").trim();
+      if (cpf && nome && !escMap[escola]._cpfSeen.has(cpf)) {
+        escMap[escola]._cpfSeen.add(cpf);
+        escMap[escola].candidatosLista.push({cpf, nome});
+      }
+    }
   }
 
   // Monta array de escolas
@@ -647,7 +661,7 @@ function processarPlanilha(wb, nomeArquivo) {
     }
 
     return { nome, coord_local: coord, salas, cargos, hasManha, haTarde,
-             candidatos: escMap[nome].candidatos };
+             candidatos: escMap[nome].candidatosLista || [] };
   });
 
   dadosCertame = { id, titulo, edital, data: dataFormatada, dataISO, escolas };
@@ -724,7 +738,8 @@ async function publicar() {
       nome: e.nome,
       coord_local: e.coord_local,
       salas: e.salas,
-      cargos: e.cargos
+      cargos: e.cargos,
+      candidatos: e.candidatos || []
     }))
   };
 
