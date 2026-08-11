@@ -243,25 +243,27 @@
         <h4>Toque de celular</h4>
         <div class="radio-row"><label><input type="radio" name="m_toque" value="Não" checked onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Não</label><label><input type="radio" name="m_toque" value="Sim" onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Sim</label></div>
         <div id="m_toque_wrap" class="hidden">
-          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="m_toque_entries">
-            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="toque-entry-block" style="border:1px solid #d8d8d8;border-radius:6px;padding:10px;margin-bottom:8px;">
+              <div class="entry-header" style="margin-bottom:4px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <div class="toque-radios" style="margin-top:8px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:#333;">
+                <div><strong>Estado do aparelho:</strong>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_estado_1" value="Ligado"> Ligado</label>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_estado_1" value="Desligado"> Desligado</label>
+                </div>
+                <div><strong>Lacração:</strong>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_lacrado_1" value="Lacrado"> Lacrado</label>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_lacrado_1" value="Não lacrado"> Não lacrado</label>
+                </div>
+                <div><strong>Local do aparelho:</strong>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_local_1" value="Com o candidato"> Com o candidato</label>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_local_1" value="No local indicado pelo fiscal"> No local indicado pelo fiscal</label>
+                </div>
+              </div>
+            </div>
           </div>
-          <button type="button" class="add-btn" onclick="addEntry('m_toque_entries')">+ Adicionar</button>
-          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:#333;">
-            <div><strong>Estado do aparelho:</strong>
-              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_estado" value="Ligado"> Ligado</label>
-              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_estado" value="Desligado"> Desligado</label>
-            </div>
-            <div><strong>Lacração:</strong>
-              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_lacrado" value="Lacrado"> Lacrado</label>
-              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_lacrado" value="Não lacrado"> Não lacrado</label>
-            </div>
-            <div><strong>Local do aparelho:</strong>
-              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_local" value="Com o candidato"> Com o candidato</label>
-              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_local" value="No local indicado pelo fiscal"> No local indicado pelo fiscal</label>
-            </div>
-          </div>
+          <button type="button" class="add-btn" onclick="addToqueEntry('m_toque_entries','m')">+ Adicionar</button>
         </div>
       </div>
       <div class="ocorr-block">
@@ -386,25 +388,27 @@
         <h4>Toque de celular</h4>
         <div class="radio-row"><label><input type="radio" name="t_toque" value="Não" checked onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Não</label><label><input type="radio" name="t_toque" value="Sim" onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Sim</label></div>
         <div id="t_toque_wrap" class="hidden">
-          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="t_toque_entries">
-            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="toque-entry-block" style="border:1px solid #d8d8d8;border-radius:6px;padding:10px;margin-bottom:8px;">
+              <div class="entry-header" style="margin-bottom:4px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <div class="toque-radios" style="margin-top:8px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:#333;">
+                <div><strong>Estado do aparelho:</strong>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_estado_1" value="Ligado"> Ligado</label>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_estado_1" value="Desligado"> Desligado</label>
+                </div>
+                <div><strong>Lacração:</strong>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_lacrado_1" value="Lacrado"> Lacrado</label>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_lacrado_1" value="Não lacrado"> Não lacrado</label>
+                </div>
+                <div><strong>Local do aparelho:</strong>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_local_1" value="Com o candidato"> Com o candidato</label>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_local_1" value="No local indicado pelo fiscal"> No local indicado pelo fiscal</label>
+                </div>
+              </div>
+            </div>
           </div>
-          <button type="button" class="add-btn" onclick="addEntry('t_toque_entries')">+ Adicionar</button>
-          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:#333;">
-            <div><strong>Estado do aparelho:</strong>
-              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_estado" value="Ligado"> Ligado</label>
-              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_estado" value="Desligado"> Desligado</label>
-            </div>
-            <div><strong>Lacração:</strong>
-              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_lacrado" value="Lacrado"> Lacrado</label>
-              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_lacrado" value="Não lacrado"> Não lacrado</label>
-            </div>
-            <div><strong>Local do aparelho:</strong>
-              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_local" value="Com o candidato"> Com o candidato</label>
-              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_local" value="No local indicado pelo fiscal"> No local indicado pelo fiscal</label>
-            </div>
-          </div>
+          <button type="button" class="add-btn" onclick="addToqueEntry('t_toque_entries','t')">+ Adicionar</button>
         </div>
       </div>
       <div class="ocorr-block">
@@ -511,11 +515,25 @@ function salvarRascunho(){
       return{a:ins[0]?.value||'',b:ins[1]?.value||'',c:ins[2]?.value||'',d:ta?.value||''};
     });
   });
-  ['m_cond_entries','m_toque_entries','m_decl_entries','t_cond_entries','t_toque_entries','t_decl_entries'].forEach(id=>{
+  ['m_cond_entries','m_decl_entries','t_cond_entries','t_decl_entries'].forEach(id=>{
     const el=document.getElementById(id); if(!el) return;
     d['_'+id]=Array.from(el.querySelectorAll('.entry-row')).map(r=>{
       const ins=r.querySelectorAll('input');
       return{a:ins[0]?.value||'',b:ins[1]?.value||'',c:ins[2]?.value||''};
+    });
+  });
+  ['m_toque_entries','t_toque_entries'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    d['_'+id]=Array.from(el.querySelectorAll('.toque-entry-block')).map(block=>{
+      const ins=block.querySelectorAll('.entry-row input');
+      const radios=block.querySelectorAll('.toque-radios input[type=radio]');
+      const names=new Set(Array.from(radios).map(r=>r.name));
+      const namesArr=Array.from(names);
+      const gR=n=>{const r=block.querySelector('input[name="'+n+'"]:checked');return r?r.value:'';};
+      const eN=namesArr.find(n=>n.includes('_estado_'))||'';
+      const laN=namesArr.find(n=>n.includes('_lacrado_'))||'';
+      const loN=namesArr.find(n=>n.includes('_local_'))||'';
+      return{a:ins[0]?.value||'',b:ins[1]?.value||'',c:ins[2]?.value||'',estado:gR(eN),lacrado:gR(laN),local:gR(loN)};
     });
   });
   d['_gerado_em'] = CONCURSO?.gerado_em || '';
@@ -580,7 +598,7 @@ function restaurarRascunho(){
       block.appendChild(row); block.appendChild(ta); list.appendChild(block);
     });
   });
-  ['m_toque_entries','m_decl_entries','t_toque_entries','t_decl_entries'].forEach(id=>{
+  ['m_decl_entries','t_decl_entries'].forEach(id=>{
     const entries=d['_'+id]; if(!entries||!entries.length) return;
     const list=document.getElementById(id); if(!list) return; list.innerHTML='';
     entries.forEach(e=>{
@@ -589,6 +607,31 @@ function restaurarRascunho(){
         const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; row.appendChild(inp);
       });
       list.appendChild(row);
+    });
+  });
+  ['m_toque_entries','t_toque_entries'].forEach(id=>{
+    const entries=d['_'+id]; if(!entries||!entries.length) return;
+    const list=document.getElementById(id); if(!list) return; list.innerHTML='';
+    const px=id.startsWith('m')?'m':'t';
+    entries.forEach((e,i)=>{
+      _toqueIdx++;
+      const idx=_toqueIdx;
+      const block=document.createElement('div');
+      block.className='toque-entry-block';
+      block.style.cssText='border:1px solid #d8d8d8;border-radius:6px;padding:10px;margin-bottom:8px;';
+      block.innerHTML=
+        '<div class="entry-header" style="margin-bottom:4px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>'+
+        '<div class="entry-row">'+
+          '<input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text" value="'+(e.a||'')+'">'+
+          '<input type="text" placeholder="Nome do Candidato" value="'+(e.b||'')+'">'+
+          '<input type="text" placeholder="Sala" value="'+(e.c||'')+'">'+
+        '</div>'+
+        _buildToqueRadios(px,idx);
+      // Restore radio selections
+      if(e.estado) { const r=block.querySelector('input[name="'+px+'_toque_estado_'+idx+'"][value="'+e.estado+'"]'); if(r) r.checked=true; }
+      if(e.lacrado){ const r=block.querySelector('input[name="'+px+'_toque_lacrado_'+idx+'"][value="'+e.lacrado+'"]'); if(r) r.checked=true; }
+      if(e.local)  { const r=block.querySelector('input[name="'+px+'_toque_local_'+idx+'"][value="'+e.local+'"]');   if(r) r.checked=true; }
+      list.appendChild(block);
     });
   });
   _rascunhoToast('📋 Rascunho restaurado!','#1F3A6E');
@@ -870,6 +913,39 @@ function coletarStat(tableId, cargos){
 
 
 let _ocorrIdx = 0;
+let _toqueIdx = 1;
+function _buildToqueRadios(prefix, idx){
+  return '<div class="toque-radios" style="margin-top:8px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:#333;">' +
+    '<div><strong>Estado do aparelho:</strong>' +
+      '<label style="margin-left:10px;cursor:pointer;"><input type="radio" name="' + prefix + '_toque_estado_' + idx + '" value="Ligado"> Ligado</label>' +
+      '<label style="margin-left:10px;cursor:pointer;"><input type="radio" name="' + prefix + '_toque_estado_' + idx + '" value="Desligado"> Desligado</label>' +
+    '</div>' +
+    '<div><strong>Lacração:</strong>' +
+      '<label style="margin-left:10px;cursor:pointer;"><input type="radio" name="' + prefix + '_toque_lacrado_' + idx + '" value="Lacrado"> Lacrado</label>' +
+      '<label style="margin-left:10px;cursor:pointer;"><input type="radio" name="' + prefix + '_toque_lacrado_' + idx + '" value="Não lacrado"> Não lacrado</label>' +
+    '</div>' +
+    '<div><strong>Local do aparelho:</strong>' +
+      '<label style="margin-left:10px;cursor:pointer;"><input type="radio" name="' + prefix + '_toque_local_' + idx + '" value="Com o candidato"> Com o candidato</label>' +
+      '<label style="margin-left:10px;cursor:pointer;"><input type="radio" name="' + prefix + '_toque_local_' + idx + '" value="No local indicado pelo fiscal"> No local indicado pelo fiscal</label>' +
+    '</div>' +
+  '</div>';
+}
+function addToqueEntry(listId, prefix){
+  _toqueIdx++;
+  const list = document.getElementById(listId);
+  const block = document.createElement('div');
+  block.className = 'toque-entry-block';
+  block.style.cssText = 'border:1px solid #d8d8d8;border-radius:6px;padding:10px;margin-bottom:8px;';
+  block.innerHTML =
+    '<div class="entry-header" style="margin-bottom:4px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>' +
+    '<div class="entry-row">' +
+      '<input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text">' +
+      '<input type="text" placeholder="Nome do Candidato">' +
+      '<input type="text" placeholder="Sala">' +
+    '</div>' +
+    _buildToqueRadios(prefix, _toqueIdx);
+  list.appendChild(block);
+}
 function selectOcorrTipo(sel){
   const item = sel.closest('.ocorr-item-block');
   item.querySelectorAll('.ocorr-fields').forEach(f => f.classList.add('hidden'));
@@ -1062,6 +1138,29 @@ function coletarEntries(listId){
   return Array.from(list.querySelectorAll('.entry-row')).map(row=>{
     const ins = row.querySelectorAll('input');
     return {inscricao: ins[0].value.trim(), candidato: ins[1].value.trim(), sala: ins[2].value.trim()};
+  }).filter(e=>e.inscricao||e.candidato||e.sala);
+}
+function coletarToqueEntries(listId){
+  const list = document.getElementById(listId);
+  if(!list) return [];
+  return Array.from(list.querySelectorAll('.toque-entry-block')).map(block=>{
+    const ins = block.querySelectorAll('.entry-row input');
+    const getRad = name => { const r = block.querySelector('input[name="'+name+'"]:checked'); return r ? r.value : ''; };
+    const radios = block.querySelectorAll('.toque-radios input[type=radio]');
+    // Extract radio group names from the block
+    const names = new Set(Array.from(radios).map(r=>r.name));
+    const namesArr = Array.from(names);
+    const estado  = namesArr.find(n=>n.includes('_estado_'))  || '';
+    const lacrado = namesArr.find(n=>n.includes('_lacrado_')) || '';
+    const local   = namesArr.find(n=>n.includes('_local_'))   || '';
+    return {
+      inscricao: ins[0]?.value.trim()||'',
+      candidato: ins[1]?.value.trim()||'',
+      sala:      ins[2]?.value.trim()||'',
+      estado:    getRad(estado),
+      lacrado:   getRad(lacrado),
+      local:     getRad(local)
+    };
   }).filter(e=>e.inscricao||e.candidato||e.sala);
 }
 
@@ -1283,7 +1382,7 @@ async function enviar(){
         sala:  {resp:getRad("m_ocorr_sala"), candidatos:coletarSalaEntries("m_ocorr_sala_entries"),
           tipos: coletarTiposOcorr("m_ocorr"),},
         cond:  {resp:getRad("m_cond"),       candidatos:coletarSalaEntries("m_cond_entries")},
-        toque: {resp:getRad("m_toque"),      candidatos:coletarEntries("m_toque_entries")},
+        toque: {resp:getRad("m_toque"),      candidatos:coletarToqueEntries("m_toque_entries")},
         decl:  {resp:getRad("m_decl"),       candidatos:coletarEntries("m_decl_entries")},
       },
     },
@@ -1312,7 +1411,7 @@ async function enviar(){
         sala:  {resp:getRad("t_ocorr_sala"), candidatos:coletarSalaEntries("t_ocorr_sala_entries"),
           tipos: coletarTiposOcorr("t_ocorr"),},
         cond:  {resp:getRad("t_cond"),       candidatos:coletarSalaEntries("t_cond_entries")},
-        toque: {resp:getRad("t_toque"),      candidatos:coletarEntries("t_toque_entries")},
+        toque: {resp:getRad("t_toque"),      candidatos:coletarToqueEntries("t_toque_entries")},
         decl:  {resp:getRad("t_decl"),       candidatos:coletarEntries("t_decl_entries")},
       },
     },
