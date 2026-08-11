@@ -226,7 +226,9 @@
             <div class="check-tipo-block">
               <label class="check-tipo"><input type="checkbox" id="m_ocorr_outros" onchange="toggleCheckDesc('m_ocorr_outros','m_ocorr_outros_wrap')"> Outros</label>
               <div id="m_ocorr_outros_wrap" class="hidden check-desc-wrap">
-                <textarea id="m_ocorr_outros_desc" rows="2" placeholder="Descreva a ocorrência..."></textarea>
+                <div id="m_ocorr_outros_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <button type="button" class="add-btn" onclick="addEntry('m_ocorr_outros_entries')">+ Adicionar</button>
+                <textarea id="m_ocorr_outros_desc" rows="2" placeholder="Descreva a ocorrência..." style="margin-top:6px"></textarea>
               </div>
             </div>
         </div>
@@ -360,7 +362,9 @@
             <div class="check-tipo-block">
               <label class="check-tipo"><input type="checkbox" id="t_ocorr_outros" onchange="toggleCheckDesc('t_ocorr_outros','t_ocorr_outros_wrap')"> Outros</label>
               <div id="t_ocorr_outros_wrap" class="hidden check-desc-wrap">
-                <textarea id="t_ocorr_outros_desc" rows="2" placeholder="Descreva a ocorrência..."></textarea>
+                <div id="t_ocorr_outros_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <button type="button" class="add-btn" onclick="addEntry('t_ocorr_outros_entries')">+ Adicionar</button>
+                <textarea id="t_ocorr_outros_desc" rows="2" placeholder="Descreva a ocorrência..." style="margin-top:6px"></textarea>
               </div>
             </div>
         </div>
