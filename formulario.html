@@ -198,14 +198,14 @@
                 <select style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;background:#fafafa;" onchange="selectOcorrTipo(this)">
                   <option value="">— Selecione o tipo de ocorrência —</option>
                   <option value="folha_falt">Ausência de folha de resposta</option>
-                  <option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>
+                  <option value="cand_fiscal">Candidato assinou no local do fiscal</option>
+                  <option value="cond_esp">Condição Especial em Caráter Excepcional</option>
                   <option value="folha_erro">Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</option>
                   <option value="errata">Errata de questão</option>
-                  <option value="outros">Outros</option>
-                  <option value="cond_esp">Condição Especial em Caráter Excepcional</option>
                   <option value="fiscal_cand">Fiscal assinou no local do candidato</option>
-                  <option value="cand_fiscal">Candidato assinou no local do fiscal</option>
                   <option value="folha_imp">Folha de resposta com erro de impressão</option>
+                  <option value="outros">Outros</option>
+                  <option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>
                 </select>
                 <div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:8px;">
                   <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
@@ -343,14 +343,14 @@
                 <select style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;background:#fafafa;" onchange="selectOcorrTipo(this)">
                   <option value="">— Selecione o tipo de ocorrência —</option>
                   <option value="folha_falt">Ausência de folha de resposta</option>
-                  <option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>
+                  <option value="cand_fiscal">Candidato assinou no local do fiscal</option>
+                  <option value="cond_esp">Condição Especial em Caráter Excepcional</option>
                   <option value="folha_erro">Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</option>
                   <option value="errata">Errata de questão</option>
-                  <option value="outros">Outros</option>
-                  <option value="cond_esp">Condição Especial em Caráter Excepcional</option>
                   <option value="fiscal_cand">Fiscal assinou no local do candidato</option>
-                  <option value="cand_fiscal">Candidato assinou no local do fiscal</option>
                   <option value="folha_imp">Folha de resposta com erro de impressão</option>
+                  <option value="outros">Outros</option>
+                  <option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>
                 </select>
                 <div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:8px;">
                   <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
@@ -976,14 +976,14 @@ function addOcorrItem(listId, prefix){
     '<select style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;background:#fafafa;" onchange="selectOcorrTipo(this)">' +
     '<option value="">— Selecione o tipo de ocorrência —</option>' +
     '<option value="folha_falt">Ausência de folha de resposta</option>' +
-    '<option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>' +
+    '<option value="cand_fiscal">Candidato assinou no local do fiscal</option>' +
+    '<option value="cond_esp">Condição Especial em Caráter Excepcional</option>' +
     '<option value="folha_erro">Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</option>' +
     '<option value="errata">Errata de questão</option>' +
-    '<option value="outros">Outros</option>' +
-    '<option value="cond_esp">Condição Especial em Caráter Excepcional</option>' +
     '<option value="fiscal_cand">Fiscal assinou no local do candidato</option>' +
-    '<option value="cand_fiscal">Candidato assinou no local do fiscal</option>' +
     '<option value="folha_imp">Folha de resposta com erro de impressão</option>' +
+    '<option value="outros">Outros</option>' +
+    '<option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>' +
     '</select>' +
     '<div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
     '<div class="ocorr-fields hidden" data-tipo="banheiro" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
