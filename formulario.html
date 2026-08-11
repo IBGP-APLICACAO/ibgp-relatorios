@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBGP — Formulário de Aplicação de Prova</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #F2F2F2; color: #393939; }
+
+    .header { background: #393939; padding: 14px 28px; display: flex; align-items: center; gap: 18px; }
+    .header img { height: 46px; }
+    .header-text h1 { color: #FFF; font-size: 15px; font-weight: 700; }
+    .header-text p  { color: #BBB; font-size: 12px; margin-top: 3px; }
+    .red-bar { height: 4px; background: #CF3432; }
+
+    .container { max-width: 900px; margin: 28px auto; padding: 0 16px 60px; }
+
+    .card { background: #FFF; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); padding: 24px 28px; margin-bottom: 18px; }
+    .card-title { font-size: 14px; font-weight: 700; color: #FFF; background: #7A1A1A; padding: 8px 14px; margin: -24px -28px 20px; border-radius: 8px 8px 0 0; letter-spacing: .4px; text-transform: uppercase; }
+    .card-title.manha { background: #1F3A6E; }
+    .card-title.tarde  { background: #CF3432; }
+    .card-title.neutra { background: #393939; }
+
+    label { display: block; font-size: 11px; font-weight: 700; color: #666; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .4px; }
+    select, input[type="text"], input[type="time"], textarea {
+      width: 100%; padding: 9px 12px; border: 1px solid #CCC; border-radius: 6px;
+      font-size: 13px; color: #393939; background: #FAFAFA; transition: border-color .2s;
+    }
+    select:focus, input:focus, textarea:focus { outline: none; border-color: #CF3432; background: #FFF; }
+    select:disabled { background: #f0f0f0; color: #555; cursor: not-allowed; opacity: 1; }
+    .btn-alterar { font-size: 12px; color: #888; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; margin-top: 4px; }
+    .btn-alterar:hover { color: #CF3432; }
+    .form-row  { display: flex; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+    .form-group { flex: 1; min-width: 160px; }
+
+    .horarios-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 8px; }
+    @media(max-width:600px){ .horarios-grid { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:420px){ .horarios-grid { grid-template-columns: 1fr; } }
+
+    .test-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+    .test-table th { background: #555; color: #FFF; padding: 7px 10px; text-align: left; font-size: 12px; }
+    .test-table td { padding: 6px 4px; }
+    .test-table .cpf-col { width: 160px; }
+
+    .stat-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+    .stat-table th { background: #393939; color: #FFF; padding: 9px 8px; text-align: center; }
+    .stat-table th:first-child { text-align: left; }
+    .stat-table td { padding: 7px 8px; border-bottom: 1px solid #EEE; vertical-align: middle; }
+    .stat-table tr:nth-child(even) td { background: #F8F8F8; }
+    .stat-table input[type="number"] { width: 68px; padding: 5px 6px; text-align: center; border: 1px solid #CCC; border-radius: 4px; font-size: 13px; }
+
+    .ocorr-block { border: 1px solid #EEE; border-radius: 6px; padding: 14px; margin-bottom: 12px; }
+    .ocorr-block h4 { font-size: 13px; color: #CF3432; margin-bottom: 10px; font-weight: 700; }
+    .radio-row { display: flex; gap: 20px; margin-bottom: 8px; flex-wrap: wrap; }
+    .radio-row label { display: flex; align-items: center; gap: 6px; font-weight: normal; text-transform: none; letter-spacing: 0; font-size: 13px; cursor: pointer; }
+    input[type="radio"] { accent-color: #CF3432; width: 15px; height: 15px; }
+
+    .aviso { background: #FFFBEA; border: 1px solid #F0D060; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #6B5600; margin-bottom: 16px; }
+
+    .btn { display: block; width: 100%; padding: 15px; background: #CF3432; color: #FFF; border: none; border-radius: 7px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .2s; }
+    .btn:hover { background: #B02C2A; }
+    .btn:disabled { background: #CCC; cursor: not-allowed; }
+    .campo-invalido { border-color: #CF3432 !important; background: #fff5f5 !important; }
+    .aviso-obrig { color: #CF3432; font-size: 12px; margin-top: 4px; display: none; }
+    #msgValidacao { background: #fdecea; color: #c62828; border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-bottom: 16px; display: none; }
+
+    .success-box { text-align: center; padding: 52px 24px; }
+    .check-circle { width: 68px; height: 68px; background: #1E6B3B; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 34px; color: #FFF; }
+    .success-box h2 { color: #1E6B3B; font-size: 20px; margin-bottom: 10px; }
+    .success-box p  { color: #555; font-size: 14px; line-height: 1.6; }
+
+    .hidden { display: none !important; }
+    .sec-label { font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .5px; margin: 16px 0 8px; border-top: 1px solid #EEE; padding-top: 12px; }
+
+    .entry-row { display: grid; grid-template-columns: 130px 1fr 90px; gap: 8px; margin-bottom: 6px; align-items: center; }
+    @media(max-width:600px){ .entry-row { grid-template-columns: 1fr 1fr; } }
+    .entry-row input { font-size: 12px; padding: 6px 8px; }
+    .entry-header { display: grid; grid-template-columns: 130px 1fr 90px; gap: 8px; margin-bottom: 4px; font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .4px; }
+    .entry-sala-block { border-left: 3px solid #ddd; padding-left: 10px; margin-bottom: 12px; }
+    .entry-sala-block textarea { margin-top: 6px; font-size: 12px; padding: 6px 8px; }
+    .add-btn { background: none; border: 1px dashed #CF3432; color: #CF3432; border-radius: 4px; padding: 5px 14px; cursor: pointer; font-size: 12px; font-weight: 700; margin-top: 6px; transition: all .2s; }
+    .add-btn:hover { background: #CF3432; color: #FFF; }
+  
+.ocorr-tipos{margin-bottom:10px;display:flex;flex-direction:column;gap:4px;}
+.check-tipo-block{display:flex;flex-direction:column;}
+.check-tipo{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#333;cursor:pointer;line-height:1.4;}
+.check-tipo input[type=checkbox]{margin-top:2px;width:16px;height:16px;flex-shrink:0;accent-color:#1F3A6E;}
+.check-desc-wrap{margin:6px 0 6px 24px;display:flex;flex-direction:column;gap:4px;}
+.check-desc-wrap textarea{width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="IBGP.png" alt="IBGP" onerror="this.style.display='none'">
+  <div class="header-text">
+    <h1>IBGP — Formulário de Aplicação de Prova</h1>
+    <p id="headerSub">Carregando...</p>
+  </div>
+</div>
+<div class="red-bar"></div>
+
+<div class="container">
+
+  <!-- 1. IDENTIFICAÇÃO -->
+  <div class="card" id="cardIdent">
+    <div class="card-title neutra">1. Identificação</div>
+    <div class="form-row">
+      <div class="form-group" style="flex:2;">
+        <label>Certame</label>
+        <select id="selCertame" onchange="onCertameChange()">
+          <option value="">— Selecione o certame —</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row hidden" id="rowEscola">
+      <div class="form-group" style="flex:2;">
+        <label>Local / Escola</label>
+        <select id="selEscola" onchange="onEscolaChange()">
+          <option value="">— Selecione seu local de aplicação —</option>
+        </select>
+        <button class="btn-alterar" id="btnAlterar" style="display:none" onclick="alterarEscola()">✎ Alterar escola</button>
+      </div>
+    </div>
+    <div class="form-row hidden" id="rowIdent2">
+      <div class="form-group" style="flex:2;">
+        <label>Coordenação Local</label>
+        <input type="text" id="inputCoord" placeholder="Nome completo">
+      </div>
+      <div class="form-group">
+        <label>Houve apoio?</label>
+        <div class="radio-row" style="margin-top:8px;">
+          <label><input type="radio" name="apoio" value="Não" checked onchange="toggleApoio()"> Não</label>
+          <label><input type="radio" name="apoio" value="Sim" onchange="toggleApoio()"> Sim</label>
+        </div>
+      </div>
+    </div>
+    <div class="hidden" id="rowApoioNome">
+      <label style="margin-bottom:6px;">Nome do Apoio</label>
+      <div id="apoio_entries">
+        <div style="margin-bottom:6px;"><input type="text" placeholder="Nome completo" style="width:100%;padding:9px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;background:#FAFAFA;"></div>
+      </div>
+      <button type="button" class="add-btn" onclick="addApoioEntry()" style="margin-bottom:4px;">+ Adicionar apoio</button>
+    </div>
+  </div>
+
+  <!-- TURNO MANHÃ -->
+  <div class="hidden" id="secManha">
+
+    <div class="card">
+      <div class="card-title manha">2. Turno Manhã — Horários</div>
+      <div class="horarios-grid">
+        <div class="form-group"><label>Chegada da equipe</label><input type="time" id="m_chegada"></div>
+        <div class="form-group"><label>Abertura do portão</label><input type="time" id="m_ab_portao"></div>
+        <div class="form-group"><label>Abertura do malote</label><input type="time" id="m_ab_malote"></div>
+        <div class="form-group"><label>Distribuição dos pacotes</label><input type="time" id="m_distrib"></div>
+        <div class="form-group"><label>Fechamento do portão</label><input type="time" id="m_fch_portao"></div>
+        <div class="form-group"><label>Início da aplicação</label><input type="time" id="m_inicio"></div>
+        <div class="form-group"><label>Encerramento</label><input type="time" id="m_encerr"></div>
+        <div class="form-group"><label>Fechamento do malote</label><input type="time" id="m_fch_malote"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title manha">3. Turno Manhã — Testemunhas</div>
+      <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Malote</p>
+      <table class="test-table">
+        <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
+        <tbody>
+          <tr><td class="cpf-col"><input type="text" id="m_t1_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('m_t1_ab_malote_cpf','m_t1_ab_malote_nome')"></td><td><input type="text" id="m_t1_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="m_t2_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('m_t2_ab_malote_cpf','m_t2_ab_malote_nome')"></td><td><input type="text" id="m_t2_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="m_t3_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('m_t3_ab_malote_cpf','m_t3_ab_malote_nome')"></td><td><input type="text" id="m_t3_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title manha">4. Turno Manhã — Estatística por Cargo</div>
+      <div class="aviso">Previstos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
+      <div style="overflow-x:auto;"><table class="stat-table" id="tabelaManha">
+        <thead><tr><th>Cargo / Função</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th><th>% Ausência</th></tr></thead><tfoot></tfoot>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title manha">5. Turno Manhã — Ocorrências</div>
+      <div class="ocorr-block">
+        <h4>Ocorrências em sala</h4>
+        <div class="radio-row"><label><input type="radio" name="m_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="m_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Sim</label></div>
+        <div id="m_ocorr_sala_wrap" class="hidden">
+          <div class="ocorr-tipos">
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_falt" > Ausência de folha de resposta</label>
+              
+            </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="m_ocorr_banheiro" > Saída de candidato para sanitário antes do encerramento do período de sigilo</label>
+              
+            </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_erro" > Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</label>
+              
+            </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="m_ocorr_errata" onchange="toggleCheckDesc('m_ocorr_errata','m_ocorr_errata_wrap')"> Errata de questão</label>
+              <div id="m_ocorr_errata_wrap" class="hidden check-desc-wrap">
+                <label style="font-size:12px;color:#555;margin-bottom:6px;display:block;">Questão(ões): <input type="text" id="m_ocorr_errata_q" placeholder="Ex: 15, 23" style="width:200px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;margin-left:4px;"></label><label style="font-size:12px;color:#555;display:block;">Cargo: <input type="text" id="m_ocorr_errata_cargo" placeholder="Nome do cargo" style="width:260px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;margin-left:4px;"></label>
+                
+              </div>
+            </div>
+          </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="m_ocorr_outros" onchange="toggleCheckDesc('m_ocorr_outros','m_ocorr_outros_wrap')"> Outros</label>
+              <div id="m_ocorr_outros_wrap" class="hidden check-desc-wrap">
+                <textarea id="m_ocorr_outros_desc" rows="2" placeholder="Descreva a ocorrência..."></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="m_ocorr_sala_entries">
+            <div class="entry-sala-block">
+              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
+            </div>
+          </div>
+          <button type="button" class="add-btn" onclick="addSalaEntry('m_ocorr_sala_entries')">+ Adicionar</button>
+        </div>
+      <div class="ocorr-block">
+        <h4>Prova condicional</h4>
+        <div class="radio-row"><label><input type="radio" name="m_cond" value="Não" checked onchange="toggleOcorrEntries('m_cond','m_cond_wrap')"> Não</label><label><input type="radio" name="m_cond" value="Sim" onchange="toggleOcorrEntries('m_cond','m_cond_wrap')"> Sim</label></div>
+        <div id="m_cond_wrap" class="hidden">
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="m_cond_entries">
+            <div class="entry-sala-block">
+              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
+            </div>
+          </div>
+          <button type="button" class="add-btn" onclick="addSalaEntry('m_cond_entries')">+ Adicionar</button>
+        </div>
+      </div>
+      <div class="ocorr-block">
+        <h4>Toque de celular</h4>
+        <div class="radio-row"><label><input type="radio" name="m_toque" value="Não" checked onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Não</label><label><input type="radio" name="m_toque" value="Sim" onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Sim</label></div>
+        <div id="m_toque_wrap" class="hidden">
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="m_toque_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('m_toque_entries')">+ Adicionar</button>
+        </div>
+      </div>
+      <div class="ocorr-block">
+        <h4>Declaração de comparecimento</h4>
+        <div class="radio-row"><label><input type="radio" name="m_decl" value="Não" checked onchange="toggleOcorrEntries('m_decl','m_decl_wrap')"> Não</label><label><input type="radio" name="m_decl" value="Sim" onchange="toggleOcorrEntries('m_decl','m_decl_wrap')"> Sim</label></div>
+        <div id="m_decl_wrap" class="hidden">
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="m_decl_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('m_decl_entries')">+ Adicionar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title manha">6. Turno Manhã — Testemunhas — Fechamento do Malote</div>
+      <table class="test-table">
+        <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
+        <tbody>
+          <tr><td class="cpf-col"><input type="text" id="m_t1_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('m_t1_fch_malote_cpf','m_t1_fch_malote_nome')"></td><td><input type="text" id="m_t1_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="m_t2_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('m_t2_fch_malote_cpf','m_t2_fch_malote_nome')"></td><td><input type="text" id="m_t2_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="m_t3_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('m_t3_fch_malote_cpf','m_t3_fch_malote_nome')"></td><td><input type="text" id="m_t3_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /secManha -->
+
+  <!-- TURNO TARDE -->
+  <div class="hidden" id="secTarde">
+
+    <div class="card">
+      <div class="card-title tarde">6. Turno Tarde — Horários</div>
+      <div class="horarios-grid">
+        <div class="form-group"><label>Chegada da equipe</label><input type="time" id="t_chegada"></div>
+        <div class="form-group"><label>Abertura do portão</label><input type="time" id="t_ab_portao"></div>
+        <div class="form-group"><label>Abertura do malote</label><input type="time" id="t_ab_malote"></div>
+        <div class="form-group"><label>Distribuição dos pacotes</label><input type="time" id="t_distrib"></div>
+        <div class="form-group"><label>Fechamento do portão</label><input type="time" id="t_fch_portao"></div>
+        <div class="form-group"><label>Início da aplicação</label><input type="time" id="t_inicio"></div>
+        <div class="form-group"><label>Encerramento</label><input type="time" id="t_encerr"></div>
+        <div class="form-group"><label>Fechamento do malote</label><input type="time" id="t_fch_malote"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title tarde">7. Turno Tarde — Testemunhas</div>
+      <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Malote</p>
+      <table class="test-table">
+        <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
+        <tbody>
+          <tr><td class="cpf-col"><input type="text" id="t_t1_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('t_t1_ab_malote_cpf','t_t1_ab_malote_nome')"></td><td><input type="text" id="t_t1_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="t_t2_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('t_t2_ab_malote_cpf','t_t2_ab_malote_nome')"></td><td><input type="text" id="t_t2_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="t_t3_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('t_t3_ab_malote_cpf','t_t3_ab_malote_nome')"></td><td><input type="text" id="t_t3_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title tarde">8. Turno Tarde — Estatística por Cargo</div>
+      <div class="aviso">Previstos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
+      <div style="overflow-x:auto;"><table class="stat-table" id="tabelaTarde">
+        <thead><tr><th>Cargo / Função</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th><th>% Ausência</th></tr></thead><tfoot></tfoot>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title tarde">9. Turno Tarde — Ocorrências</div>
+      <div class="ocorr-block">
+        <h4>Ocorrências em sala</h4>
+        <div class="radio-row"><label><input type="radio" name="t_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="t_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Sim</label></div>
+        <div id="t_ocorr_sala_wrap" class="hidden">
+          <div class="ocorr-tipos">
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_falt" > Ausência de folha de resposta</label>
+              
+            </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="t_ocorr_banheiro" > Saída de candidato para sanitário antes do encerramento do período de sigilo</label>
+              
+            </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_erro" > Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</label>
+              
+            </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="t_ocorr_errata" onchange="toggleCheckDesc('t_ocorr_errata','t_ocorr_errata_wrap')"> Errata de questão</label>
+              <div id="t_ocorr_errata_wrap" class="hidden check-desc-wrap">
+                <label style="font-size:12px;color:#555;margin-bottom:6px;display:block;">Questão(ões): <input type="text" id="t_ocorr_errata_q" placeholder="Ex: 15, 23" style="width:200px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;margin-left:4px;"></label><label style="font-size:12px;color:#555;display:block;">Cargo: <input type="text" id="t_ocorr_errata_cargo" placeholder="Nome do cargo" style="width:260px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;margin-left:4px;"></label>
+                
+              </div>
+            </div>
+          </div>
+            <div class="check-tipo-block">
+              <label class="check-tipo"><input type="checkbox" id="t_ocorr_outros" onchange="toggleCheckDesc('t_ocorr_outros','t_ocorr_outros_wrap')"> Outros</label>
+              <div id="t_ocorr_outros_wrap" class="hidden check-desc-wrap">
+                <textarea id="t_ocorr_outros_desc" rows="2" placeholder="Descreva a ocorrência..."></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="t_ocorr_sala_entries">
+            <div class="entry-sala-block">
+              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
+            </div>
+          </div>
+          <button type="button" class="add-btn" onclick="addSalaEntry('t_ocorr_sala_entries')">+ Adicionar</button>
+        </div>
+      <div class="ocorr-block">
+        <h4>Prova condicional</h4>
+        <div class="radio-row"><label><input type="radio" name="t_cond" value="Não" checked onchange="toggleOcorrEntries('t_cond','t_cond_wrap')"> Não</label><label><input type="radio" name="t_cond" value="Sim" onchange="toggleOcorrEntries('t_cond','t_cond_wrap')"> Sim</label></div>
+        <div id="t_cond_wrap" class="hidden">
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="t_cond_entries">
+            <div class="entry-sala-block">
+              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
+            </div>
+          </div>
+          <button type="button" class="add-btn" onclick="addSalaEntry('t_cond_entries')">+ Adicionar</button>
+        </div>
+      </div>
+      <div class="ocorr-block">
+        <h4>Toque de celular</h4>
+        <div class="radio-row"><label><input type="radio" name="t_toque" value="Não" checked onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Não</label><label><input type="radio" name="t_toque" value="Sim" onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Sim</label></div>
+        <div id="t_toque_wrap" class="hidden">
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="t_toque_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('t_toque_entries')">+ Adicionar</button>
+        </div>
+      </div>
+      <div class="ocorr-block">
+        <h4>Declaração de comparecimento</h4>
+        <div class="radio-row"><label><input type="radio" name="t_decl" value="Não" checked onchange="toggleOcorrEntries('t_decl','t_decl_wrap')"> Não</label><label><input type="radio" name="t_decl" value="Sim" onchange="toggleOcorrEntries('t_decl','t_decl_wrap')"> Sim</label></div>
+        <div id="t_decl_wrap" class="hidden">
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="t_decl_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('t_decl_entries')">+ Adicionar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title tarde">10. Turno Tarde — Testemunhas — Fechamento do Malote</div>
+      <table class="test-table">
+        <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
+        <tbody>
+          <tr><td class="cpf-col"><input type="text" id="t_t1_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('t_t1_fch_malote_cpf','t_t1_fch_malote_nome')"></td><td><input type="text" id="t_t1_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="t_t2_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('t_t2_fch_malote_cpf','t_t2_fch_malote_nome')"></td><td><input type="text" id="t_t2_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="t_t3_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('t_t3_fch_malote_cpf','t_t3_fch_malote_nome')"></td><td><input type="text" id="t_t3_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /secTarde -->
+
+  <!-- REGISTRO FOTOGRÁFICO -->
+  <div class="card hidden" id="cardFotos">
+    <div class="card-title neutra">Registro Fotográfico</div>
+    <p style="font-size:13px;color:#666;margin-bottom:16px;">Selecione 2 fotos para cada categoria. Elas serão salvas automaticamente no Google Drive.</p>
+    <div id="fotosGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"></div>
+  </div>
+
+  <!-- OBSERVAÇÕES GERAIS -->
+  <div class="card hidden" id="cardObs">
+    <div class="card-title neutra">10. Observações Gerais</div>
+    <div class="form-group">
+      <label>Informações adicionais relevantes</label>
+      <textarea id="textObs" rows="4" placeholder="Descreva qualquer informação adicional. Se não houver, deixe em branco."></textarea>
+    </div>
+  </div>
+
+  <div class="hidden" id="divBtn">
+    <div id="msgValidacao"></div>
+    <button class="btn" id="btnEnviar" onclick="enviar()">Enviar Formulário</button>
+  </div>
+
+  <div class="card success-box hidden" id="cardSucesso">
+    <div class="check-circle">✓</div>
+    <h2>Formulário enviado com sucesso!</h2>
+    <p>Os dados de <strong id="nomeEscolaSucesso"></strong><br>foram registrados. Obrigado!</p>
+  </div>
+
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+//  MAIÚSCULAS — campos de nome
+// ════════════════════════════════════════════════════════════════
+document.addEventListener('input', function(e){
+  const el = e.target;
+  if(el.tagName !== 'INPUT' || el.type !== 'text') return;
+  const ph = (el.placeholder || '').toLowerCase();
+  if(ph.includes('nome') || ph.includes('candidato')){
+    const pos = el.selectionStart;
+    el.value = el.value.toUpperCase();
+    el.setSelectionRange(pos, pos);
+  }
+});
+
+// ════════════════════════════════════════════════════════════════
+//  CONFIGURAÇÃO
+// ════════════════════════════════════════════════════════════════
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCWRNetGErTHgaYb-VMOCjMrcIg7GlYtutkHFC-Fo2U6Vd4yF2TBYc0W8t_AqxUI7Ocg/exec";
+
+
+// ══════════════════════════════════════════════════════════════════════
+//  RASCUNHO AUTOMÁTICO (localStorage)
+// ══════════════════════════════════════════════════════════════════════
+function _rascunhoKey(){
+  if(!CONCURSO||sel.value==='') return null;
+  return 'ibgp_rascunho_'+CONCURSO.id+'_'+sel.value;
+}
+function salvarRascunho(){
+  const k=_rascunhoKey(); if(!k) return;
+  const d={};
+  document.querySelectorAll('input[id],textarea[id],select[id]').forEach(el=>{
+    if(el.type==='checkbox'){ d[el.id]=el.checked; return; }
+    if(el.type==='radio'||el.type==='file'||['selCertame','sel'].includes(el.id)) return;
+    d[el.id]=el.value;
+  });
+  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl'].forEach(n=>{
+    const el=document.querySelector('input[name="'+n+'"]:checked');
+    if(el) d['r_'+n]=el.value;
+  });
+  d['_apoio']=Array.from(document.querySelectorAll('#apoio_entries input')).map(i=>i.value);
+  ['m_ocorr_sala_entries','m_cond_entries','t_ocorr_sala_entries','t_cond_entries'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    d['_'+id]=Array.from(el.querySelectorAll('.entry-sala-block')).map(b=>{
+      const ins=b.querySelectorAll('input'),ta=b.querySelector('textarea');
+      return{a:ins[0]?.value||'',b:ins[1]?.value||'',c:ins[2]?.value||'',d:ta?.value||''};
+    });
+  });
+  ['m_toque_entries','m_decl_entries','t_toque_entries','t_decl_entries'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    d['_'+id]=Array.from(el.querySelectorAll('.entry-row')).map(r=>{
+      const ins=r.querySelectorAll('input');
+      return{a:ins[0]?.value||'',b:ins[1]?.value||'',c:ins[2]?.value||''};
+    });
+  });
+  d['_gerado_em'] = CONCURSO?.gerado_em || '';
+  try{localStorage.setItem(k,JSON.stringify(d));}catch(e){}
+  _rascunhoToast('💾 Rascunho salvo');
+}
+let _rascunhoToastT;
+function _rascunhoToast(msg,cor){
+  cor=cor||'#1E6B3B';
+  let el=document.getElementById('_rascunhoToast');
+  if(!el){
+    el=document.createElement('div'); el.id='_rascunhoToast';
+    el.style.cssText='position:fixed;bottom:24px;right:24px;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;color:#FFF;opacity:0;transition:opacity .4s;z-index:9999;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.25);';
+    document.body.appendChild(el);
+  }
+  el.textContent=msg; el.style.background=cor; el.style.opacity='1';
+  clearTimeout(_rascunhoToastT); _rascunhoToastT=setTimeout(()=>el.style.opacity='0',2500);
+}
+function restaurarRascunho(){
+  const k=_rascunhoKey(); if(!k) return;
+  let d; try{d=JSON.parse(localStorage.getItem(k)||'null');}catch(e){return;}
+  if(!d) return;
+  // Se o certame foi republicado, invalida o rascunho anterior
+  if(d._gerado_em && CONCURSO?.gerado_em && d._gerado_em !== CONCURSO.gerado_em){
+    localStorage.removeItem(k);
+    _rascunhoToast('⚠️ Certame atualizado — rascunho anterior descartado','#CF3432');
+    return;
+  }
+  if(!d) return;
+  Object.entries(d).forEach(([id,val])=>{
+    if(id.startsWith('_')||id.startsWith('r_')) return;
+    const el=document.getElementById(id);
+    if(el&&el.type!=='file') el.value=val;
+  });
+  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl'].forEach(n=>{
+    const val=d['r_'+n]; if(!val) return;
+    const el=document.querySelector('input[name="'+n+'"][value="'+val+'"]');
+    if(el){el.checked=true; el.dispatchEvent(new Event('change'));}
+  });
+  if(d['_apoio']&&d['_apoio'].length){
+    const list=document.getElementById('apoio_entries');
+    if(list){
+      list.innerHTML='';
+      d['_apoio'].forEach(v=>{
+        const div=document.createElement('div'); div.style.marginBottom='6px';
+        const inp=document.createElement('input'); inp.type='text'; inp.placeholder='Nome completo'; inp.value=v;
+        Object.assign(inp.style,{width:'100%',padding:'9px 12px',border:'1px solid #CCC',borderRadius:'6px',fontSize:'13px',background:'#FAFAFA'});
+        div.appendChild(inp); list.appendChild(div);
+      });
+    }
+  }
+  ['m_ocorr_sala_entries','m_cond_entries','t_ocorr_sala_entries','t_cond_entries'].forEach(id=>{
+    const entries=d['_'+id]; if(!entries||!entries.length) return;
+    const list=document.getElementById(id); if(!list) return; list.innerHTML='';
+    entries.forEach(e=>{
+      const block=document.createElement('div'); block.className='entry-sala-block';
+      const row=document.createElement('div'); row.className='entry-row';
+      [['a','Nº Inscrição'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
+        const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; row.appendChild(inp);
+      });
+      const ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='Descrição da ocorrência...'; ta.value=e.d||'';
+      block.appendChild(row); block.appendChild(ta); list.appendChild(block);
+    });
+  });
+  ['m_toque_entries','m_decl_entries','t_toque_entries','t_decl_entries'].forEach(id=>{
+    const entries=d['_'+id]; if(!entries||!entries.length) return;
+    const list=document.getElementById(id); if(!list) return; list.innerHTML='';
+    entries.forEach(e=>{
+      const row=document.createElement('div'); row.className='entry-row';
+      [['a','Nº Inscrição'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
+        const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; row.appendChild(inp);
+      });
+      list.appendChild(row);
+    });
+  });
+  _rascunhoToast('📋 Rascunho restaurado!','#1F3A6E');
+  // Recalcula % ausência após restaurar
+  document.querySelectorAll('[id*="_pct_"]').forEach(el=>{
+    const m=el.id.match(/^(.+)_pct_(\d+)$/);
+    if(m) recalcStat(m[1],parseInt(m[2]),null);
+  });
+}
+function limparRascunho(){
+  const k=_rascunhoKey(); if(k) localStorage.removeItem(k);
+}
+let _rascunhoSaveT;
+document.addEventListener('input',()=>{clearTimeout(_rascunhoSaveT);_rascunhoSaveT=setTimeout(salvarRascunho,1500);});
+document.addEventListener('change',()=>{clearTimeout(_rascunhoSaveT);_rascunhoSaveT=setTimeout(salvarRascunho,800);});
+
+function fixUtf8Double(o){
+  if(typeof o==='string'){
+    try{
+      const b=new Uint8Array(o.length);
+      for(let i=0;i<o.length;i++){const c=o.charCodeAt(i);if(c>255)return o;b[i]=c;}
+      return new TextDecoder('utf-8',{fatal:true}).decode(b);
+    }catch(e){return o;}
+  }
+  if(Array.isArray(o))return o.map(fixUtf8Double);
+  if(o&&typeof o==='object'){const r={};for(const k in o)r[k]=fixUtf8Double(o[k]);return r;}
+  return o;
+}
+let CONCURSO = null;
+const selCertame = document.getElementById("selCertame");
+const sel = document.getElementById("selEscola");
+
+// ════════════════════════════════════════════════════════════════
+//  INIT — carrega lista de certames
+// ════════════════════════════════════════════════════════════════
+fetch("dados/certames.json?v="+Date.now())
+  .then(r => r.json())
+  .then(certames => {
+    certames.forEach((c, i) => {
+      const o = document.createElement("option");
+      o.value = i;
+      o.textContent = c.titulo + " — " + c.data;
+      o.dataset.id = c.id;
+      selCertame.appendChild(o);
+    });
+    window._certamesIndex = certames;
+    if(certames.length === 1){ selCertame.value = 0; onCertameChange(); }
+  })
+  .catch(() => {
+    document.getElementById("headerSub").textContent = "Erro ao carregar certames";
+  });
+
+function onCertameChange(){
+  const idx = selCertame.value;
+  if(idx === "") return;
+  const info = window._certamesIndex[parseInt(idx)];
+  document.getElementById("headerSub").textContent = info.titulo + "  •  " + info.data;
+
+  // Reseta escola
+  sel.innerHTML = '<option value="">— Selecione seu local de aplicação —</option>';
+  ["rowEscola","rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"]
+    .forEach(id => { const el = document.getElementById(id); if(el) el.classList.add("hidden"); });
+
+  fetch("dados/" + info.id + ".json?v="+Date.now())
+    .then(r => r.json())
+    .then(dados => { dados = fixUtf8Double(dados);
+      CONCURSO = dados;
+      window._cpfIndex = null; // reseta índice CPF ao trocar escola
+      window._inscrIndex = null; // reseta índice inscrição
+      dados.escolas.forEach((e, i) => {
+        const o = document.createElement("option");
+        o.value = i; o.textContent = e.nome;
+        sel.appendChild(o);
+      });
+      document.getElementById("rowEscola").classList.remove("hidden");
+    });
+}
+
+function toggleApoio(){
+  const sim = document.querySelector('input[name="apoio"]:checked').value === "Sim";
+  document.getElementById("rowApoioNome").classList.toggle("hidden", !sim);
+}
+
+function onEscolaChange(){
+  const idx = sel.value;
+  if(idx === "" || !CONCURSO){
+    ["rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+    return;
+  }
+  const escola = CONCURSO.escolas[parseInt(idx)];
+  document.getElementById("inputCoord").value = escola.coord_local;
+  document.getElementById("rowIdent2").classList.remove("hidden");
+
+  const hasManha = escola.cargos.some(c=>c.turno==="Manhã");
+  const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
+
+  document.getElementById("secManha").classList.toggle("hidden", !hasManha);
+  document.getElementById("secTarde").classList.toggle("hidden", !haTarde);
+
+  if(hasManha) renderStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã"));
+  if(haTarde)  renderStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde"));
+
+  renderFotosCategorias(hasManha, haTarde);
+  document.getElementById("cardFotos").classList.remove("hidden");
+  document.getElementById("cardObs").classList.remove("hidden");
+  document.getElementById("divBtn").classList.remove("hidden");
+
+  // Trava os selects após a escolha
+  selCertame.disabled = true;
+  sel.disabled = true;
+  document.getElementById("btnAlterar").style.display = "inline";
+  setTimeout(restaurarRascunho, 200);
+}
+
+function alterarEscola(){
+  if(!confirm("Tem certeza que deseja alterar a escola?\nTodos os dados preenchidos serão perdidos.")) return;
+  // Destrava
+  selCertame.disabled = false;
+  sel.disabled = false;
+  document.getElementById("btnAlterar").style.display = "none";
+  // Reseta form
+  sel.value = "";
+  ["rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"]
+    .forEach(id => document.getElementById(id).classList.add("hidden"));
+}
+
+function renderStat(tableId, cargos){
+  const tbody = document.querySelector("#"+tableId+" tbody");
+  tbody.innerHTML = "";
+  const s  = "width:68px;padding:5px;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:13px;";
+  const sr = "width:68px;padding:5px;text-align:center;border:1px solid #d0d0d0;border-radius:4px;font-size:13px;background:#f5f5f5;color:#222;cursor:not-allowed;";
+  const sp = "width:72px;padding:5px;text-align:center;background:#EEF3FB;border:1px solid #B0C4E0;border-radius:4px;font-size:13px;color:#1F3A6E;font-weight:600;display:inline-block;";
+  cargos.forEach((c,i)=>{
+    const nome = c.cargo.replace(/^01\s+/,"");
+    tbody.innerHTML += `<tr>
+      <td>${c.sala} — ${nome}</td>
+      <td><input type="number" id="${tableId}_inscr_${i}" value="${c.inscr}" min="0" style="${sr}" readonly tabindex="-1"></td>
+      <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'pres')"></td>
+      <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'aus')"></td>
+      <td><input type="number" id="${tableId}_incl_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig></td>
+      <td><span id="${tableId}_pct_${i}" style="${sp}">—</span></td>
+    </tr>`;
+  });
+  recalcTotal(tableId, cargos.length);
+}
+
+function recalcTotal(tableId, count){
+  const tf = document.querySelector("#"+tableId+" tfoot");
+  if(!tf) return;
+  let totPrev=0, totPres=0, totAus=0, totIncl=0;
+  for(let i=0;i<count;i++){
+    totPrev += parseInt(document.getElementById(tableId+'_inscr_'+i)?.value)||0;
+    totPres += parseInt(document.getElementById(tableId+'_pres_'+i)?.value)||0;
+    totAus  += parseInt(document.getElementById(tableId+'_aus_'+i)?.value)||0;
+    totIncl += parseInt(document.getElementById(tableId+'_incl_'+i)?.value)||0;
+  }
+  const pct = totPrev>0 ? (totAus/totPrev*100).toFixed(1)+'%' : '—';
+  const st = "font-weight:700;background:#1F3A6E;color:#fff;padding:7px 6px;text-align:center;font-size:13px;";
+  const stl = "font-weight:700;background:#1F3A6E;color:#fff;padding:7px 10px;font-size:13px;";
+  const stp = "font-weight:700;background:#0F2A5E;color:#AAC4E8;padding:7px 6px;text-align:center;font-size:13px;";
+  tf.innerHTML = '<tr>'
+    +'<td style="'+stl+'">TOTAL</td>'
+    +'<td style="'+st+'">'+totPrev+'</td>'
+    +'<td style="'+st+'">'+totPres+'</td>'
+    +'<td style="'+st+'">'+totAus+'</td>'
+    +'<td style="'+st+'">'+totIncl+'</td>'
+    +'<td style="'+stp+'">'+pct+'</td>'
+    +'</tr>';
+}
+
+function recalcStat(tbl, i, changed){
+  const inscr = parseInt(document.getElementById(tbl+'_inscr_'+i)?.value)||0;
+  const presEl = document.getElementById(tbl+'_pres_'+i);
+  const ausEl  = document.getElementById(tbl+'_aus_'+i);
+  const pctEl  = document.getElementById(tbl+'_pct_'+i);
+  if(!presEl||!ausEl||!pctEl) return;
+
+  if(changed==='pres'){
+    const pres = parseInt(presEl.value)||0;
+    if(inscr>0) ausEl.value = Math.max(0, inscr-pres);
+  } else if(changed==='aus'){
+    const aus = parseInt(ausEl.value)||0;
+    if(inscr>0) presEl.value = Math.max(0, inscr-aus);
+  } else if(changed==='inscr'){
+    const pres = presEl.value!=='' ? parseInt(presEl.value)||0 : null;
+    const aus  = ausEl.value !=='' ? parseInt(ausEl.value)||0  : null;
+    if(pres!==null) ausEl.value  = Math.max(0, inscr-pres);
+    else if(aus!==null) presEl.value = Math.max(0, inscr-aus);
+  }
+
+  const aus = parseInt(ausEl.value);
+  pctEl.textContent = (!isNaN(aus) && ausEl.value!=='' && inscr>0)
+    ? (aus/inscr*100).toFixed(1)+'%' : '—';
+  // Atualiza linha de totais
+  const rows = document.querySelectorAll('#'+tbl+' tbody tr').length;
+  recalcTotal(tbl, rows);
+}
+
+
+function formatCPF(input){
+  let v=input.value.replace(/\D/g,'');
+  if(v.length>11) v=v.slice(0,11);
+  v=v.replace(/(\d{3})(\d)/,'$1.$2');
+  v=v.replace(/(\d{3})(\d)/,'$1.$2');
+  v=v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  input.value=v;
+}
+
+function validarCPFsDuplicados(prefix, sufixo, secoes){
+  const cpfs = [1,2,3].map(i => {
+    const el = document.getElementById(`${prefix}_t${i}_${sufixo}_cpf`);
+    return {el, val: (el?.value||'').replace(/\D/g,'')};
+  });
+  const vals = cpfs.map(c => c.val).filter(v => v.length > 0);
+  const hasDup = vals.length !== new Set(vals).size;
+  cpfs.forEach(c => {
+    if(c.el) c.el.classList.toggle('campo-invalido', hasDup && c.val.length > 0);
+  });
+  return hasDup;
+}
+
+function checkCPFDupGroup(cpfId){
+  // Determina o grupo de testemunhas e valida duplicados em tempo real
+  // cpfId pattern: {prefix}_t{n}_{sufixo}_cpf
+  const m = cpfId.match(/^([mt])_t\d+_(.+)_cpf$/);
+  if(!m) return;
+  validarCPFsDuplicados(m[1], m[2]);
+}
+
+function lookupCPF(cpfId, nomeId){
+  const cpfEl=document.getElementById(cpfId);
+  const nomeEl=document.getElementById(nomeId);
+  if(!cpfEl||!nomeEl) return;
+  const cpf=cpfEl.value.replace(/\D/g,'');
+  if(cpf.length<11){ nomeEl.readOnly=false; nomeEl.style.background=''; return; }
+  // Constrói índice CPF→nome a partir dos candidatos da escola selecionada
+  if(!window._cpfIndex){
+    window._cpfIndex={};
+    const idx=document.getElementById('selEscola')?.value;
+    const escola=CONCURSO&&idx!==''?CONCURSO.escolas[parseInt(idx)]:null;
+    (escola?.candidatos||[]).forEach(c=>{
+      const k=(c.cpf||'').replace(/\D/g,'');
+      if(k) window._cpfIndex[k]=c.nome||'';
+    });
+  }
+  const nome=window._cpfIndex&&window._cpfIndex[cpf];
+  if(nome){
+    nomeEl.value=nome;
+    nomeEl.readOnly=true;
+    nomeEl.style.background='#EEF3FB';
+    nomeEl.style.color='#1F3A6E';
+    nomeEl.title='Candidato identificado pela alocação';
+  } else {
+    nomeEl.value='';
+    nomeEl.readOnly=false;
+    nomeEl.style.background='#FFF9EC';
+    nomeEl.style.color='';
+    nomeEl.title='CPF não encontrado — digite o nome manualmente';
+    nomeEl.placeholder='CPF não encontrado — digite o nome';
+    nomeEl.focus();
+  }
+  // Verifica duplicados no grupo de testemunhas em tempo real
+  checkCPFDupGroup(cpfId);
+}
+
+function getTxt(id){ const el=document.getElementById(id); return el ? el.value.trim() : ""; }
+function getNum(id){ const el=document.getElementById(id); return el ? (parseInt(el.value)||0) : 0; }
+function getRad(name){ const el=document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : "Não"; }
+
+function coletarStat(tableId, cargos){
+  return cargos.map((c,i)=>({
+    sala: c.sala, cargo: c.cargo, turno: c.turno,
+    inscr: getNum(`${tableId}_inscr_${i}`),
+    pres:  getNum(`${tableId}_pres_${i}`),
+    aus:   getNum(`${tableId}_aus_${i}`),
+    incl:  getNum(`${tableId}_incl_${i}`),
+  }));
+}
+
+function addEntry(listId){
+  const list = document.getElementById(listId);
+  const row = document.createElement('div');
+  row.className = 'entry-row';
+  row.innerHTML = '<input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala">';
+  list.appendChild(row);
+}
+
+function addSalaEntry(listId){
+  const list = document.getElementById(listId);
+  const block = document.createElement('div');
+  block.className = 'entry-sala-block';
+  block.innerHTML = '<div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>';
+  list.appendChild(block);
+}
+
+
+function coletarTiposOcorr(prefix){
+  const get  = id => document.getElementById(id)?.checked || false;
+  const desc = id => document.getElementById(id)?.value.trim() || '';
+  return {
+    folha_falt:  get(prefix+'_folha_falt'),
+    banheiro:    get(prefix+'_banheiro'),
+    folha_erro:  get(prefix+'_folha_erro'),
+    errata:      get(prefix+'_errata'),
+    errata_q:     get(prefix+'_errata') ? (document.getElementById(prefix+'_errata_q')?.value||'') : '',
+    errata_cargo: get(prefix+'_errata') ? (document.getElementById(prefix+'_errata_cargo')?.value||'') : '',
+    outros:      get(prefix+'_outros'),  outros_desc: desc(prefix+'_outros_desc'),
+  };
+}
+
+function coletarSalaEntries(listId){
+  const list = document.getElementById(listId);
+  if(!list) return [];
+  return Array.from(list.querySelectorAll('.entry-sala-block')).map(block=>{
+    const ins = block.querySelectorAll('input');
+    const ta  = block.querySelector('textarea');
+    return {inscricao: ins[0].value.trim(), candidato: ins[1].value.trim(), sala: ins[2].value.trim(), desc: ta ? ta.value.trim() : ''};
+  }).filter(e=>e.inscricao||e.candidato||e.sala||e.desc);
+}
+
+function addApoioEntry(){
+  const list = document.getElementById('apoio_entries');
+  const div = document.createElement('div');
+  div.style.cssText = 'margin-bottom:6px;';
+  div.innerHTML = '<input type="text" placeholder="Nome completo" style="width:100%;padding:9px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;background:#FAFAFA;">';
+  list.appendChild(div);
+}
+
+
+
+function buildInscrIndex(){
+  if(window._inscrIndex) return;
+  window._inscrIndex = {};
+  const idx = document.getElementById('selEscola')?.value;
+  const escola = CONCURSO && idx !== '' ? CONCURSO.escolas[parseInt(idx)] : null;
+  (escola?.candidatos || []).forEach(c => {
+    const k = String(c.inscricao || '').trim().replace(/\D/g,'');
+    if(k) window._inscrIndex[k] = {nome: c.nome||'', sala: c.sala||''};
+  });
+}
+
+function lookupInscricao(inscrEl){
+  buildInscrIndex();
+  const row  = inscrEl.closest('.entry-row');
+  if(!row) return;
+  const inputs = row.querySelectorAll('input');
+  if(inputs.length < 3) return;
+  const nomeEl = inputs[1];
+  const salaEl = inputs[2];
+  const key = inscrEl.value.trim().replace(/\D/g,'');
+  if(!key){ nomeEl.readOnly=false; nomeEl.style.background=''; salaEl.readOnly=false; salaEl.style.background=''; return; }
+  const found = window._inscrIndex && window._inscrIndex[key];
+  if(found){
+    nomeEl.value = found.nome; nomeEl.readOnly = true; nomeEl.style.background='#EEF3FB';
+    salaEl.value = found.sala; salaEl.readOnly = true; salaEl.style.background='#EEF3FB';
+  } else {
+    nomeEl.value = ''; nomeEl.readOnly = false; nomeEl.style.background='#FFF9EC';
+    salaEl.value = ''; salaEl.readOnly = false; salaEl.style.background='#FFF9EC';
+  }
+}
+
+function toggleCheckDesc(checkId, wrapId){
+  const checked = document.getElementById(checkId)?.checked;
+  const wrap = document.getElementById(wrapId);
+  if(wrap) wrap.classList.toggle('hidden', !checked);
+}
+function toggleErrata(checkId, wrapId){ toggleCheckDesc(checkId, wrapId); }
+
+function toggleOcorrEntries(name, wrapId){
+  const sim = document.querySelector(`input[name="${name}"]:checked`).value === "Sim";
+  document.getElementById(wrapId).classList.toggle("hidden", !sim);
+}
+
+function coletarEntries(listId){
+  const list = document.getElementById(listId);
+  if(!list) return [];
+  return Array.from(list.querySelectorAll('.entry-row')).map(row=>{
+    const ins = row.querySelectorAll('input');
+    return {inscricao: ins[0].value.trim(), candidato: ins[1].value.trim(), sala: ins[2].value.trim()};
+  }).filter(e=>e.inscricao||e.candidato||e.sala);
+}
+
+// ════════════════════════════════════════════════════════════════
+//  FOTOS
+// ════════════════════════════════════════════════════════════════
+let fotosMap = {};
+let fotasCats = [];
+
+function renderFotosCategorias(hasManha, haTarde){
+  fotosMap = {};
+  fotasCats = [];
+
+  const cats = [];
+  cats.push({id:'fc_sinal_m',   label:'📌 Sinalização — Manhã',          cor:'#393939'});
+  if(hasManha){
+    cats.push({id:'fc_aplic_m', label:'📝 Aplicação — Manhã',             cor:'#1F3A6E'});
+    cats.push({id:'fc_abm_m',   label:'📦 Abertura do Malote — Manhã',    cor:'#1F3A6E'});
+    cats.push({id:'fc_fchm_m',  label:'📦 Fechamento do Malote — Manhã',  cor:'#1F3A6E'});
+  }
+  if(haTarde){
+    cats.push({id:'fc_aplic_t', label:'📝 Aplicação — Tarde',             cor:'#CF3432'});
+    cats.push({id:'fc_abm_t',   label:'📦 Abertura do Malote — Tarde',    cor:'#CF3432'});
+    cats.push({id:'fc_fchm_t',  label:'📦 Fechamento do Malote — Tarde',  cor:'#CF3432'});
+  }
+
+  fotasCats = cats;
+  cats.forEach(c => fotosMap[c.id] = []);
+
+  const grid = document.getElementById('fotosGrid');
+  grid.innerHTML = '';
+  cats.forEach(c => {
+    const labelText = c.label.replace(/^[^\s]+\s/, ''); // sem emoji para o input label
+    grid.innerHTML += `
+      <div style="border:1px solid #EEE;border-radius:8px;padding:14px;">
+        <p style="font-size:11px;font-weight:700;color:${c.cor};text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;">${c.label} <span style="color:#888;font-weight:400;">(2 fotos)</span></p>
+        <label for="${c.id}" style="display:inline-block;padding:7px 14px;background:${c.cor};color:#FFF;border-radius:5px;cursor:pointer;font-size:12px;font-weight:700;margin-bottom:8px;">Selecionar</label>
+        <input type="file" id="${c.id}" multiple accept="image/*" onchange="previewCat('${c.id}','prev_${c.id}')" style="display:none;">
+        <div id="prev_${c.id}" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>`;
+  });
+}
+
+function previewCat(inputId, previewId){
+  const files = Array.from(document.getElementById(inputId).files);
+  fotosMap[inputId] = [...(fotosMap[inputId]||[]), ...files];
+  renderPreview(inputId, previewId);
+}
+
+function renderPreview(inputId, previewId){
+  const preview = document.getElementById(previewId);
+  preview.innerHTML = '';
+  fotosMap[inputId].forEach((file, idx) => {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:relative;display:inline-block;';
+    const img = document.createElement('img');
+    img.style.cssText = 'width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #DDD;display:block;';
+    const reader = new FileReader();
+    reader.onload = e => img.src = e.target.result;
+    reader.readAsDataURL(file);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = '✕';
+    btn.style.cssText = 'position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.6);color:#FFF;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;line-height:1;padding:0;';
+    btn.onclick = () => { fotosMap[inputId].splice(idx, 1); renderPreview(inputId, previewId); };
+    wrap.appendChild(img);
+    wrap.appendChild(btn);
+    preview.appendChild(wrap);
+  });
+}
+
+function comprimirImagem(file, categoria){
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 1200;
+        let w = img.width, h = img.height;
+        if(w > MAX){ h = Math.round(h * MAX / w); w = MAX; }
+        if(h > MAX){ w = Math.round(w * MAX / h); h = MAX; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve({ categoria, nome: file.name, b64: canvas.toDataURL('image/jpeg', 0.75).split(',')[1] });
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function coletarFotos(){
+  const fotos = [];
+  for(const cat of fotasCats)
+    for(const f of (fotosMap[cat.id]||[]))
+      fotos.push(await comprimirImagem(f, cat.label.replace(/^[^\s]+\s/,'')));
+  return fotos;
+}
+
+// ════════════════════════════════════════════════════════════════
+//  ENVIO
+// ════════════════════════════════════════════════════════════════
+function validar(){
+  // Limpa marcações anteriores
+  document.querySelectorAll('.campo-invalido').forEach(el => el.classList.remove('campo-invalido'));
+  const msg = document.getElementById('msgValidacao');
+  msg.style.display = 'none';
+
+  const secoes = [];
+  let primeiro = null;
+
+  function checar(el, secao){
+    if(!el) return;
+    const vazio = el.value === '' || el.value.trim() === '';
+    if(vazio){
+      el.classList.add('campo-invalido');
+      el.addEventListener('input', () => el.classList.remove('campo-invalido'), {once: true});
+      if(!secoes.includes(secao)) secoes.push(secao);
+      if(!primeiro) primeiro = el;
+    }
+  }
+
+  const hasManha = !document.getElementById('secManha').classList.contains('hidden');
+  const haTarde  = !document.getElementById('secTarde').classList.contains('hidden');
+
+  // ── Horários ──
+  if(hasManha){
+    ['m_chegada','m_ab_portao','m_ab_malote','m_distrib','m_fch_portao','m_inicio','m_encerr','m_fch_malote']
+      .forEach(id => checar(document.getElementById(id), 'Horários — Manhã'));
+  }
+  if(haTarde){
+    ['t_chegada','t_ab_portao','t_ab_malote','t_distrib','t_fch_portao','t_inicio','t_encerr','t_fch_malote']
+      .forEach(id => checar(document.getElementById(id), 'Horários — Tarde'));
+  }
+
+  // ── Testemunhas ──
+  if(hasManha){
+    for(let i=1;i<=3;i++){
+      checar(document.getElementById(`m_t${i}_ab_malote_nome`),  'Testemunhas Abertura Malote — Manhã');
+      checar(document.getElementById(`m_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote — Manhã');
+    }
+  }
+  if(haTarde){
+    for(let i=1;i<=3;i++){
+      checar(document.getElementById(`t_t${i}_ab_malote_nome`),  'Testemunhas Abertura Malote — Tarde');
+      checar(document.getElementById(`t_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote — Tarde');
+    }
+  }
+
+  // ── CPFs duplicados nas testemunhas ──
+  if(hasManha){
+    if(validarCPFsDuplicados('m','ab_malote',secoes))  { if(!secoes.includes('Testemunhas Abertura Malote — Manhã (CPFs duplicados)'))  secoes.push('Testemunhas Abertura Malote — Manhã (CPFs duplicados)');  }
+    if(validarCPFsDuplicados('m','fch_malote',secoes)) { if(!secoes.includes('Testemunhas Fechamento Malote — Manhã (CPFs duplicados)')) secoes.push('Testemunhas Fechamento Malote — Manhã (CPFs duplicados)'); }
+  }
+  if(haTarde){
+    if(validarCPFsDuplicados('t','ab_malote',secoes))  { if(!secoes.includes('Testemunhas Abertura Malote — Tarde (CPFs duplicados)'))  secoes.push('Testemunhas Abertura Malote — Tarde (CPFs duplicados)');  }
+    if(validarCPFsDuplicados('t','fch_malote',secoes)) { if(!secoes.includes('Testemunhas Fechamento Malote — Tarde (CPFs duplicados)')) secoes.push('Testemunhas Fechamento Malote — Tarde (CPFs duplicados)'); }
+  }
+
+  // ── Estatística (pres / aus / incl) ──
+  document.querySelectorAll('[data-obrig]').forEach(el => {
+    const inManha = !!el.closest('#secManha');
+    const inTarde = !!el.closest('#secTarde');
+    if(inManha && hasManha) checar(el, 'Estatística — Manhã');
+    if(inTarde && haTarde)  checar(el, 'Estatística — Tarde');
+  });
+
+  if(secoes.length > 0){
+    msg.textContent = '⚠ Preencha os campos obrigatórios: ' + secoes.join(' · ');
+    msg.style.display = 'block';
+    if(primeiro) primeiro.scrollIntoView({behavior:'smooth', block:'center'});
+    return false;
+  }
+  return true;
+}
+
+async function enviar(){
+  if(!validar()) return;
+  const idx = sel.value;
+  if(idx === ""){ alert("Selecione uma escola."); return; }
+  const escola = CONCURSO.escolas[parseInt(idx)];
+  const hasManha = escola.cargos.some(c=>c.turno==="Manhã");
+  const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
+
+  const payload = {
+    escola:      escola.nome,
+    coord_local: getTxt("inputCoord"),
+    salas:       escola.salas,
+    houve_apoio:   getRad("apoio"),
+    nome_apoio:    Array.from(document.querySelectorAll('#apoio_entries input')).map(i=>i.value.trim()).filter(v=>v).join("; "),
+    concurso:    CONCURSO.titulo,
+    edital:      CONCURSO.edital,
+    data:        CONCURSO.data,
+    enviado_em:  new Date().toLocaleString("pt-BR"),
+    obs:         getTxt("textObs"),
+
+    manha: !hasManha ? null : {
+      horarios: {
+        chegada:    getTxt("m_chegada"),    ab_portao:  getTxt("m_ab_portao"),
+        fch_portao: getTxt("m_fch_portao"), distrib:    getTxt("m_distrib"),
+        inicio:     getTxt("m_inicio"),     encerr:     getTxt("m_encerr"),
+        fch_malote: getTxt("m_fch_malote"), ab_malote:  getTxt("m_ab_malote"),
+      },
+      testemunhas: {
+        ab_malote: [
+          {nome:getTxt("m_t1_ab_malote_nome"), cpf:getTxt("m_t1_ab_malote_cpf")},
+          {nome:getTxt("m_t2_ab_malote_nome"), cpf:getTxt("m_t2_ab_malote_cpf")},
+          {nome:getTxt("m_t3_ab_malote_nome"), cpf:getTxt("m_t3_ab_malote_cpf")},
+        ],
+        fch_malote: [
+          {nome:getTxt("m_t1_fch_malote_nome"), cpf:getTxt("m_t1_fch_malote_cpf")},
+          {nome:getTxt("m_t2_fch_malote_nome"), cpf:getTxt("m_t2_fch_malote_cpf")},
+          {nome:getTxt("m_t3_fch_malote_nome"), cpf:getTxt("m_t3_fch_malote_cpf")},
+        ],
+      },
+      estatistica: coletarStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã")),
+      ocorrencias: {
+        sala:  {resp:getRad("m_ocorr_sala"), candidatos:coletarSalaEntries("m_ocorr_sala_entries"),
+          tipos: coletarTiposOcorr("m_ocorr"),},
+        cond:  {resp:getRad("m_cond"),       candidatos:coletarSalaEntries("m_cond_entries")},
+        toque: {resp:getRad("m_toque"),      candidatos:coletarEntries("m_toque_entries")},
+        decl:  {resp:getRad("m_decl"),       candidatos:coletarEntries("m_decl_entries")},
+      },
+    },
+
+    tarde: !haTarde ? null : {
+      horarios: {
+        chegada:    getTxt("t_chegada"),    ab_portao:  getTxt("t_ab_portao"),
+        fch_portao: getTxt("t_fch_portao"), distrib:    getTxt("t_distrib"),
+        inicio:     getTxt("t_inicio"),     encerr:     getTxt("t_encerr"),
+        fch_malote: getTxt("t_fch_malote"), ab_malote:  getTxt("t_ab_malote"),
+      },
+      testemunhas: {
+        ab_malote: [
+          {nome:getTxt("t_t1_ab_malote_nome"), cpf:getTxt("t_t1_ab_malote_cpf")},
+          {nome:getTxt("t_t2_ab_malote_nome"), cpf:getTxt("t_t2_ab_malote_cpf")},
+          {nome:getTxt("t_t3_ab_malote_nome"), cpf:getTxt("t_t3_ab_malote_cpf")},
+        ],
+        fch_malote: [
+          {nome:getTxt("t_t1_fch_malote_nome"), cpf:getTxt("t_t1_fch_malote_cpf")},
+          {nome:getTxt("t_t2_fch_malote_nome"), cpf:getTxt("t_t2_fch_malote_cpf")},
+          {nome:getTxt("t_t3_fch_malote_nome"), cpf:getTxt("t_t3_fch_malote_cpf")},
+        ],
+      },
+      estatistica: coletarStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde")),
+      ocorrencias: {
+        sala:  {resp:getRad("t_ocorr_sala"), candidatos:coletarSalaEntries("t_ocorr_sala_entries"),
+          tipos: coletarTiposOcorr("t_ocorr"),},
+        cond:  {resp:getRad("t_cond"),       candidatos:coletarSalaEntries("t_cond_entries")},
+        toque: {resp:getRad("t_toque"),      candidatos:coletarEntries("t_toque_entries")},
+        decl:  {resp:getRad("t_decl"),       candidatos:coletarEntries("t_decl_entries")},
+      },
+    },
+  };
+
+  const btn = document.getElementById("btnEnviar");
+  btn.disabled = true; btn.textContent = "Comprimindo fotos...";
+
+  try {
+    payload.fotos = await coletarFotos();
+  } catch(e) {
+    btn.disabled = false; btn.textContent = "Enviar Formulário";
+    alert("Erro ao processar fotos: " + e.message); return;
+  }
+
+  btn.textContent = "Enviando...";
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method:"POST", mode:"no-cors",
+      headers:{"Content-Type":"text/plain"},
+      body: JSON.stringify(payload)
+    });
+    limparRascunho();
+    document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
+    ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+    document.getElementById("cardSucesso").classList.remove("hidden");
+  } catch(e) {
+    btn.disabled = false; btn.textContent = "Enviar Formulário";
+    alert("Erro ao enviar: " + e.message + "\n\nVerifique sua conexão e tente novamente.");
+  }
+}
+</script>
+</body>
+</html>
