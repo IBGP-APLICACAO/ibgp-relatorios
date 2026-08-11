@@ -2,6 +2,10 @@
 <!-- v3 -->
 <html lang="pt-BR">
 <head>
+<script>
+/* cache-bust: força reload se URL não tiver v=9 */
+(function(){var p=new URLSearchParams(location.search);if(p.get('v')!=='9'){p.set('v','9');location.replace(location.pathname+'?'+p.toString());}})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>IBGP — Admin Certames</title>
