@@ -170,9 +170,9 @@
 
     <div class="card">
       <div class="card-title manha">4. Turno Manhã — Estatística por Cargo</div>
-      <div class="aviso">Inscritos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
+      <div class="aviso">Previstos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
       <div style="overflow-x:auto;"><table class="stat-table" id="tabelaManha">
-        <thead><tr><th>Cargo / Função</th><th>Inscritos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th></tr></thead>
+        <thead><tr><th>Cargo / Função</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th><th>% Ausência</th></tr></thead>
         <tbody></tbody>
       </table></div>
     </div>
@@ -277,9 +277,9 @@
 
     <div class="card">
       <div class="card-title tarde">8. Turno Tarde — Estatística por Cargo</div>
-      <div class="aviso">Inscritos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
+      <div class="aviso">Previstos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
       <div style="overflow-x:auto;"><table class="stat-table" id="tabelaTarde">
-        <thead><tr><th>Cargo / Função</th><th>Inscritos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th></tr></thead>
+        <thead><tr><th>Cargo / Função</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th><th>% Ausência</th></tr></thead>
         <tbody></tbody>
       </table></div>
     </div>
@@ -501,6 +501,11 @@ function restaurarRascunho(){
     });
   });
   _rascunhoToast('📋 Rascunho restaurado!','#1F3A6E');
+  // Recalcula % ausência após restaurar
+  document.querySelectorAll('[id*="_pct_"]').forEach(el=>{
+    const m=el.id.match(/^(.+)_pct_(\d+)$/);
+    if(m) recalcStat(m[1],parseInt(m[2]),null);
+  });
 }
 function limparRascunho(){
   const k=_rascunhoKey(); if(k) localStorage.removeItem(k);
@@ -620,17 +625,44 @@ function alterarEscola(){
 function renderStat(tableId, cargos){
   const tbody = document.querySelector("#"+tableId+" tbody");
   tbody.innerHTML = "";
-  const s = "width:68px;padding:5px;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:13px;";
+  const s  = "width:68px;padding:5px;text-align:center;border:1px solid #ccc;border-radius:4px;font-size:13px;";
+  const sp = "width:72px;padding:5px;text-align:center;background:#EEF3FB;border:1px solid #B0C4E0;border-radius:4px;font-size:13px;color:#1F3A6E;font-weight:600;display:inline-block;";
   cargos.forEach((c,i)=>{
     const nome = c.cargo.replace(/^01\s+/,"");
     tbody.innerHTML += `<tr>
       <td>${c.sala} — ${nome}</td>
-      <td><input type="number" id="${tableId}_inscr_${i}" value="${c.inscr}" min="0" style="${s}"></td>
-      <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig></td>
-      <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" placeholder="0" style="${s}" data-obrig></td>
+      <td><input type="number" id="${tableId}_inscr_${i}" value="${c.inscr}" min="0" style="${s}" oninput="recalcStat('${tableId}',${i},'inscr')"></td>
+      <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'pres')"></td>
+      <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'aus')"></td>
       <td><input type="number" id="${tableId}_incl_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig></td>
+      <td><span id="${tableId}_pct_${i}" style="${sp}">—</span></td>
     </tr>`;
   });
+}
+
+function recalcStat(tbl, i, changed){
+  const inscr = parseInt(document.getElementById(tbl+'_inscr_'+i)?.value)||0;
+  const presEl = document.getElementById(tbl+'_pres_'+i);
+  const ausEl  = document.getElementById(tbl+'_aus_'+i);
+  const pctEl  = document.getElementById(tbl+'_pct_'+i);
+  if(!presEl||!ausEl||!pctEl) return;
+
+  if(changed==='pres'){
+    const pres = parseInt(presEl.value)||0;
+    if(inscr>0) ausEl.value = Math.max(0, inscr-pres);
+  } else if(changed==='aus'){
+    const aus = parseInt(ausEl.value)||0;
+    if(inscr>0) presEl.value = Math.max(0, inscr-aus);
+  } else if(changed==='inscr'){
+    const pres = presEl.value!=='' ? parseInt(presEl.value)||0 : null;
+    const aus  = ausEl.value !=='' ? parseInt(ausEl.value)||0  : null;
+    if(pres!==null) ausEl.value  = Math.max(0, inscr-pres);
+    else if(aus!==null) presEl.value = Math.max(0, inscr-aus);
+  }
+
+  const aus = parseInt(ausEl.value);
+  pctEl.textContent = (!isNaN(aus) && ausEl.value!=='' && inscr>0)
+    ? (aus/inscr*100).toFixed(1)+'%' : '—';
 }
 
 function getTxt(id){ const el=document.getElementById(id); return el ? el.value.trim() : ""; }
