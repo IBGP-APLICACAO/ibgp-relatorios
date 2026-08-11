@@ -1205,14 +1205,18 @@ function renderFotosCategorias(hasManha, haTarde){
   const cats = [];
   cats.push({id:'fc_sinal_m',   label:'📌 Sinalização — Manhã',          cor:'#393939'});
   if(hasManha){
-    cats.push({id:'fc_aplic_m', label:'📝 Aplicação — Manhã',             cor:'#1F3A6E'});
-    cats.push({id:'fc_abm_m',   label:'📦 Abertura do Malote — Manhã',    cor:'#1F3A6E'});
-    cats.push({id:'fc_fchm_m',  label:'📦 Fechamento do Malote — Manhã',  cor:'#1F3A6E'});
+    cats.push({id:'fc_portao_ab_m',  label:'🚪 Abertura do Portão — Manhã',    cor:'#1F3A6E'});
+    cats.push({id:'fc_aplic_m',      label:'📝 Aplicação — Manhã',             cor:'#1F3A6E'});
+    cats.push({id:'fc_abm_m',        label:'📦 Abertura do Malote — Manhã',    cor:'#1F3A6E'});
+    cats.push({id:'fc_fchm_m',       label:'📦 Fechamento do Malote — Manhã',  cor:'#1F3A6E'});
+    cats.push({id:'fc_portao_fch_m', label:'🚪 Fechamento do Portão — Manhã',  cor:'#1F3A6E'});
   }
   if(haTarde){
-    cats.push({id:'fc_aplic_t', label:'📝 Aplicação — Tarde',             cor:'#CF3432'});
-    cats.push({id:'fc_abm_t',   label:'📦 Abertura do Malote — Tarde',    cor:'#CF3432'});
-    cats.push({id:'fc_fchm_t',  label:'📦 Fechamento do Malote — Tarde',  cor:'#CF3432'});
+    cats.push({id:'fc_portao_ab_t',  label:'🚪 Abertura do Portão — Tarde',    cor:'#CF3432'});
+    cats.push({id:'fc_aplic_t',      label:'📝 Aplicação — Tarde',             cor:'#CF3432'});
+    cats.push({id:'fc_abm_t',        label:'📦 Abertura do Malote — Tarde',    cor:'#CF3432'});
+    cats.push({id:'fc_fchm_t',       label:'📦 Fechamento do Malote — Tarde',  cor:'#CF3432'});
+    cats.push({id:'fc_portao_fch_t', label:'🚪 Fechamento do Portão — Tarde',  cor:'#CF3432'});
   }
 
   fotasCats = cats;
