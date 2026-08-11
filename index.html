@@ -191,7 +191,7 @@
       <div class="card-title manha">5. Turno Manhã — Ocorrências</div>
       <div class="ocorr-block">
         <h4>Ocorrências em sala</h4>
-        <div class="radio-row"><label><input type="radio" name="m_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="m_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Sim</label></div>
+        <select id="sel_m_ocorr_sala" class="escola-sel" style="width:100%;padding:9px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;background:#FAFAFA;margin-bottom:4px;" onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"><option value="">— Houve ocorrências em sala? —</option><option value="Não">Não</option><option value="Sim">Sim</option></select>
         <div id="m_ocorr_sala_wrap" class="hidden">
           <div class="ocorr-tipos">
             <div class="check-tipo-block">
@@ -245,7 +245,7 @@
         </div>
       <div class="ocorr-block">
         <h4>Prova condicional</h4>
-        <div class="radio-row"><label><input type="radio" name="m_cond" value="Não" checked onchange="toggleOcorrEntries('m_cond','m_cond_wrap')"> Não</label><label><input type="radio" name="m_cond" value="Sim" onchange="toggleOcorrEntries('m_cond','m_cond_wrap')"> Sim</label></div>
+        <select id="sel_m_cond" class="escola-sel" style="width:100%;padding:9px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;background:#FAFAFA;margin-bottom:4px;" onchange="toggleOcorrEntries('m_cond','m_cond_wrap')"><option value="">— Houve prova condicional? —</option><option value="Não">Não</option><option value="Sim">Sim</option></select>
         <div id="m_cond_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="m_cond_entries">
@@ -256,7 +256,7 @@
       </div>
       <div class="ocorr-block">
         <h4>Toque de celular</h4>
-        <div class="radio-row"><label><input type="radio" name="m_toque" value="Não" checked onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Não</label><label><input type="radio" name="m_toque" value="Sim" onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Sim</label></div>
+        <select id="sel_m_toque" class="escola-sel" style="width:100%;padding:9px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;background:#FAFAFA;margin-bottom:4px;" onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"><option value="">— Houve toque de celular? —</option><option value="Não">Não</option><option value="Sim">Sim</option></select>
         <div id="m_toque_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="m_toque_entries">
@@ -267,7 +267,7 @@
       </div>
       <div class="ocorr-block">
         <h4>Declaração de comparecimento</h4>
-        <div class="radio-row"><label><input type="radio" name="m_decl" value="Não" checked onchange="toggleOcorrEntries('m_decl','m_decl_wrap')"> Não</label><label><input type="radio" name="m_decl" value="Sim" onchange="toggleOcorrEntries('m_decl','m_decl_wrap')"> Sim</label></div>
+        <select id="sel_m_decl" class="escola-sel" style="width:100%;padding:9px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;background:#FAFAFA;margin-bottom:4px;" onchange="toggleOcorrEntries('m_decl','m_decl_wrap')"><option value="">— Houve declaração de comparecimento? —</option><option value="Não">Não</option><option value="Sim">Sim</option></select>
         <div id="m_decl_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="m_decl_entries">
@@ -335,7 +335,7 @@
       <div class="card-title tarde">9. Turno Tarde — Ocorrências</div>
       <div class="ocorr-block">
         <h4>Ocorrências em sala</h4>
-        <div class="radio-row"><label><input type="radio" name="t_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="t_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Sim</label></div>
+        <select id="sel_t_ocorr_sala" class="escola-sel" style="width:100%;padding:9px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;background:#FAFAFA;margin-bottom:4px;" onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"><option value="">— Houve ocorrências em sala? —</option><option value="Não">Não</option><option value="Sim">Sim</option></select>
         <div id="t_ocorr_sala_wrap" class="hidden">
           <div class="ocorr-tipos">
             <div class="check-tipo-block">
@@ -389,7 +389,7 @@
         </div>
       <div class="ocorr-block">
         <h4>Prova condicional</h4>
-        <div class="radio-row"><label><input type="radio" name="t_cond" value="Não" checked onchange="toggleOcorrEntries('t_cond','t_cond_wrap')"> Não</label><label><input type="radio" name="t_cond" value="Sim" onchange="toggleOcorrEntries('t_cond','t_cond_wrap')"> Sim</label></div>
+        <select id="sel_t_cond" class="escola-sel" style="width:100%;padding:9px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;background:#FAFAFA;margin-bottom:4px;" onchange="toggleOcorrEntries('t_cond','t_cond_wrap')"><option value="">— Houve prova condicional? —</option><option value="Não">Não</option><option value="Sim">Sim</option></select>
         <div id="t_cond_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="t_cond_entries">
@@ -400,7 +400,7 @@
       </div>
       <div class="ocorr-block">
         <h4>Toque de celular</h4>
-        <div class="radio-row"><label><input type="radio" name="t_toque" value="Não" checked onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Não</label><label><input type="radio" name="t_toque" value="Sim" onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Sim</label></div>
+        <select id="sel_t_toque" class="escola-sel" style="width:100%;padding:9px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;background:#FAFAFA;margin-bottom:4px;" onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"><option value="">— Houve toque de celular? —</option><option value="Não">Não</option><option value="Sim">Sim</option></select>
         <div id="t_toque_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="t_toque_entries">
@@ -411,7 +411,7 @@
       </div>
       <div class="ocorr-block">
         <h4>Declaração de comparecimento</h4>
-        <div class="radio-row"><label><input type="radio" name="t_decl" value="Não" checked onchange="toggleOcorrEntries('t_decl','t_decl_wrap')"> Não</label><label><input type="radio" name="t_decl" value="Sim" onchange="toggleOcorrEntries('t_decl','t_decl_wrap')"> Sim</label></div>
+        <select id="sel_t_decl" class="escola-sel" style="width:100%;padding:9px 12px;border:1px solid #CCC;border-radius:6px;font-size:13px;background:#FAFAFA;margin-bottom:4px;" onchange="toggleOcorrEntries('t_decl','t_decl_wrap')"><option value="">— Houve declaração de comparecimento? —</option><option value="Não">Não</option><option value="Sim">Sim</option></select>
         <div id="t_decl_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="t_decl_entries">
@@ -554,6 +554,8 @@ function restaurarRascunho(){
   });
   ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl'].forEach(n=>{
     const val=d['r_'+n]; if(!val) return;
+    const sel=document.getElementById('sel_'+n);
+    if(sel){ sel.value=val; sel.dispatchEvent(new Event('change')); return; }
     const el=document.querySelector('input[name="'+n+'"][value="'+val+'"]');
     if(el){el.checked=true; el.dispatchEvent(new Event('change'));}
   });
@@ -858,7 +860,12 @@ function lookupCPF(cpfId, nomeId){
 
 function getTxt(id){ const el=document.getElementById(id); return el ? el.value.trim() : ""; }
 function getNum(id){ const el=document.getElementById(id); return el ? (parseInt(el.value)||0) : 0; }
-function getRad(name){ const el=document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : "Não"; }
+function getRad(name){
+  const sel = document.getElementById('sel_' + name);
+  if(sel) return sel.value || "Não";
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : "Não";
+}
 
 function coletarStat(tableId, cargos){
   return cargos.map((c,i)=>({
@@ -1020,7 +1027,8 @@ function toggleCheckDesc(checkId, wrapId){
 function toggleErrata(checkId, wrapId){ toggleCheckDesc(checkId, wrapId); }
 
 function toggleOcorrEntries(name, wrapId){
-  const sim = document.querySelector(`input[name="${name}"]:checked`).value === "Sim";
+  const sel = document.getElementById('sel_' + name);
+  const sim = sel ? sel.value === "Sim" : document.querySelector(`input[name="${name}"]:checked`)?.value === "Sim";
   document.getElementById(wrapId).classList.toggle("hidden", !sim);
 }
 
