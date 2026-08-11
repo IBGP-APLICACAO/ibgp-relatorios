@@ -1,0 +1,32 @@
+{
+  "id": "de-pouso-alegremg-2026-08-01",
+  "titulo": "CONCURSO PÚBLICO DA GUARDA CIVIL MUNICIPAL DE POUSO ALEGRE/MG",
+  "edital": "Edital nº 01/2026",
+  "data": "1 de agosto de 2026",
+  "gerado_em": "2026-08-11T18:28:47.578Z",
+  "escolas": [
+    {
+      "nome": "EE. PRESIDENTE BERNARDES",
+      "coord_local": "João Coord",
+      "salas": 1,
+      "cargos": [
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "01 GUARDA MUNICIPAL",
+          "inscr": 2
+        }
+      ],
+      "candidatos": [
+        {
+          "cpf": "12345678901",
+          "nome": "MARIA SILVA"
+        },
+        {
+          "cpf": "98765432100",
+          "nome": "PEDRO SANTOS"
+        }
+      ]
+    }
+  ]
+}
