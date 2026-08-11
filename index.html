@@ -247,6 +247,20 @@
             <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
           <button type="button" class="add-btn" onclick="addEntry('m_toque_entries')">+ Adicionar</button>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:#333;">
+            <div><strong>Estado do aparelho:</strong>
+              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_estado" value="Ligado"> Ligado</label>
+              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_estado" value="Desligado"> Desligado</label>
+            </div>
+            <div><strong>Lacração:</strong>
+              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_lacrado" value="Lacrado"> Lacrado</label>
+              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_lacrado" value="Não lacrado"> Não lacrado</label>
+            </div>
+            <div><strong>Local do aparelho:</strong>
+              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_local" value="Com o candidato"> Com o candidato</label>
+              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_local" value="No local indicado pelo fiscal"> No local indicado pelo fiscal</label>
+            </div>
+          </div>
         </div>
       </div>
       <div class="ocorr-block">
@@ -375,6 +389,20 @@
             <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
           <button type="button" class="add-btn" onclick="addEntry('t_toque_entries')">+ Adicionar</button>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:#333;">
+            <div><strong>Estado do aparelho:</strong>
+              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_estado" value="Ligado"> Ligado</label>
+              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_estado" value="Desligado"> Desligado</label>
+            </div>
+            <div><strong>Lacração:</strong>
+              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_lacrado" value="Lacrado"> Lacrado</label>
+              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_lacrado" value="Não lacrado"> Não lacrado</label>
+            </div>
+            <div><strong>Local do aparelho:</strong>
+              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_local" value="Com o candidato"> Com o candidato</label>
+              <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_local" value="No local indicado pelo fiscal"> No local indicado pelo fiscal</label>
+            </div>
+          </div>
         </div>
       </div>
       <div class="ocorr-block">
