@@ -231,9 +231,15 @@
             <div class="check-tipo-block">
               <label class="check-tipo"><input type="checkbox" id="m_ocorr_outros" onchange="toggleCheckDesc('m_ocorr_outros','m_ocorr_outros_wrap')"> Outros</label>
               <div id="m_ocorr_outros_wrap" class="hidden check-desc-wrap">
-                <div id="m_ocorr_outros_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-                <button type="button" class="add-btn" onclick="addEntry('m_ocorr_outros_entries')">+ Adicionar</button>
-                <textarea id="m_ocorr_outros_desc" rows="2" placeholder="Descreva a ocorrência..." style="margin-top:6px"></textarea>
+                <div id="m_ocorr_outros_entries"><div class="outros-block" style="border:1px solid #e0e0e0;border-radius:6px;padding:8px;margin-bottom:6px;">
+                    <div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo de ocorrência:
+                      <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_m_outros_0" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label>
+                      <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_m_outros_0" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label>
+                    </div>
+                    <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                    <textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
+                  </div></div>
+                <button type="button" class="add-btn" onclick="addOutrosEntry('m_ocorr_outros_entries', 'm')">+ Adicionar</button>
               </div>
             </div>
         </div>
@@ -369,9 +375,15 @@
             <div class="check-tipo-block">
               <label class="check-tipo"><input type="checkbox" id="t_ocorr_outros" onchange="toggleCheckDesc('t_ocorr_outros','t_ocorr_outros_wrap')"> Outros</label>
               <div id="t_ocorr_outros_wrap" class="hidden check-desc-wrap">
-                <div id="t_ocorr_outros_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-                <button type="button" class="add-btn" onclick="addEntry('t_ocorr_outros_entries')">+ Adicionar</button>
-                <textarea id="t_ocorr_outros_desc" rows="2" placeholder="Descreva a ocorrência..." style="margin-top:6px"></textarea>
+                <div id="t_ocorr_outros_entries"><div class="outros-block" style="border:1px solid #e0e0e0;border-radius:6px;padding:8px;margin-bottom:6px;">
+                    <div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo de ocorrência:
+                      <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_t_outros_0" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label>
+                      <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_t_outros_0" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label>
+                    </div>
+                    <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                    <textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
+                  </div></div>
+                <button type="button" class="add-btn" onclick="addOutrosEntry('t_ocorr_outros_entries', 't')">+ Adicionar</button>
               </div>
             </div>
         </div>
@@ -856,6 +868,28 @@ function coletarStat(tableId, cargos){
     aus:   getNum(`${tableId}_aus_${i}`),
     incl:  getNum(`${tableId}_incl_${i}`),
   }));
+}
+
+let _outrosIdx = 0;
+function toggleOutrosCand(radio){
+  const block = radio.closest('.outros-block');
+  const fields = block.querySelector('.outros-cand-fields');
+  if(fields) fields.style.display = radio.value === 'cand' ? 'block' : 'none';
+}
+function addOutrosEntry(listId, prefix){
+  _outrosIdx++;
+  const uid = prefix + '_outros_' + _outrosIdx;
+  const list = document.getElementById(listId);
+  const div = document.createElement('div');
+  div.className = 'outros-block';
+  div.style.cssText = 'border:1px solid #e0e0e0;border-radius:6px;padding:8px;margin-bottom:6px;';
+  div.innerHTML = `<div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo de ocorrência:
+    <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_${uid}" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label>
+    <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_${uid}" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label>
+  </div>
+  <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+  <textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>`;
+  list.appendChild(div);
 }
 
 function addFolhaErroEntry(listId){
