@@ -193,56 +193,39 @@
         <h4>Ocorrências em sala</h4>
         <div class="radio-row"><label><input type="radio" name="m_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="m_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Sim</label></div>
         <div id="m_ocorr_sala_wrap" class="hidden">
-          <div class="ocorr-tipos">
-            <div class="check-tipo-block">
-              <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_falt" onchange="toggleCheckDesc('m_ocorr_folha_falt','m_ocorr_folha_falt_wrap')"> Ausência de folha de resposta</label>
-              <div id="m_ocorr_folha_falt_wrap" class="hidden check-desc-wrap">
-                <div id="m_ocorr_folha_falt_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-                <button type="button" class="add-btn" onclick="addEntry('m_ocorr_folha_falt_entries')">+ Adicionar</button>
+          <div id="m_ocorr_sala_items">
+            <div class="ocorr-item-block" style="border:1px solid #d0d0d0;border-radius:6px;padding:10px;margin-bottom:8px;">
+                <select style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;background:#fafafa;" onchange="selectOcorrTipo(this)">
+                  <option value="">— Selecione o tipo de ocorrência —</option>
+                  <option value="folha_falt">Ausência de folha de resposta</option>
+                  <option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>
+                  <option value="folha_erro">Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</option>
+                  <option value="errata">Errata de questão</option>
+                  <option value="outros">Outros</option>
+                </select>
+                <div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:8px;">
+                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                </div>
+                <div class="ocorr-fields hidden" data-tipo="banheiro" style="margin-top:8px;">
+                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                </div>
+                <div class="ocorr-fields hidden" data-tipo="folha_erro" style="margin-top:8px;">
+                  <div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;">Candidato correto</div>
+                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                  <div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.3px;">Candidato incorreto (utilizou a folha)</div>
+                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                </div>
+                <div class="ocorr-fields hidden" data-tipo="errata" style="margin-top:8px;">
+                  <div style="display:flex;gap:8px;margin-bottom:4px;"><input type="text" placeholder="Questão(ões)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div>
+                </div>
+                <div class="ocorr-fields hidden" data-tipo="outros" style="margin-top:8px;">
+                  <div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo:<label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_m_0_ou" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_m_0_ou" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label></div>
+                  <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                  <textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
+                </div>
               </div>
-            </div>
-            <div class="check-tipo-block">
-              <label class="check-tipo"><input type="checkbox" id="m_ocorr_banheiro" onchange="toggleCheckDesc('m_ocorr_banheiro','m_ocorr_banheiro_wrap')"> Saída do candidato de sala antes do período de sigilo</label>
-              <div id="m_ocorr_banheiro_wrap" class="hidden check-desc-wrap">
-                <div id="m_ocorr_banheiro_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-                <button type="button" class="add-btn" onclick="addEntry('m_ocorr_banheiro_entries')">+ Adicionar</button>
-              </div>
-            </div>
-            <div class="check-tipo-block">
-              <label class="check-tipo"><input type="checkbox" id="m_ocorr_folha_erro" onchange="toggleCheckDesc('m_ocorr_folha_erro','m_ocorr_folha_erro_wrap')"> Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</label>
-              <div id="m_ocorr_folha_erro_wrap" class="hidden check-desc-wrap">
-                <div id="m_ocorr_folha_erro_entries"><div class="folha-erro-block" style="border:1px solid #e0e0e0;border-radius:6px;padding:8px;margin-bottom:6px;">
-                    <div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;">Candidato correto</div>
-                    <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-                    <div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.3px;">Candidato incorreto (utilizou a folha)</div>
-                    <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-                  </div></div>
-                <button type="button" class="add-btn" onclick="addFolhaErroEntry('m_ocorr_folha_erro_entries')">+ Adicionar</button>
-              </div>
-            </div>
-            <div class="check-tipo-block">
-              <label class="check-tipo"><input type="checkbox" id="m_ocorr_errata" onchange="toggleCheckDesc('m_ocorr_errata','m_ocorr_errata_wrap')"> Errata de questão</label>
-              <div id="m_ocorr_errata_wrap" class="hidden check-desc-wrap">
-                <div id="m_ocorr_errata_entries"><div class="errata-row" style="display:flex;gap:8px;margin-bottom:4px;"><input type="text" placeholder="Questão(ões)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div></div>
-                <button type="button" class="add-btn" onclick="addErrataEntry('m_ocorr_errata_entries')">+ Adicionar</button>
-                <textarea id="m_ocorr_errata_desc" rows="2" placeholder="Descrição da errata..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
-              </div>
-            </div>
           </div>
-            <div class="check-tipo-block">
-              <label class="check-tipo"><input type="checkbox" id="m_ocorr_outros" onchange="toggleCheckDesc('m_ocorr_outros','m_ocorr_outros_wrap')"> Outros</label>
-              <div id="m_ocorr_outros_wrap" class="hidden check-desc-wrap">
-                <div id="m_ocorr_outros_entries"><div class="outros-block" style="border:1px solid #e0e0e0;border-radius:6px;padding:8px;margin-bottom:6px;">
-                    <div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo de ocorrência:
-                      <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_m_outros_0" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label>
-                      <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_m_outros_0" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label>
-                    </div>
-                    <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-                    <textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
-                  </div></div>
-                <button type="button" class="add-btn" onclick="addOutrosEntry('m_ocorr_outros_entries', 'm')">+ Adicionar</button>
-              </div>
-            </div>
+          <button type="button" class="add-btn" style="margin-top:4px;" onclick="addOcorrItem('m_ocorr_sala_items','m')">+ Adicionar ocorrência</button>
         </div>
       <div class="ocorr-block">
         <h4>Prova condicional</h4>
@@ -338,56 +321,39 @@
         <h4>Ocorrências em sala</h4>
         <div class="radio-row"><label><input type="radio" name="t_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="t_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Sim</label></div>
         <div id="t_ocorr_sala_wrap" class="hidden">
-          <div class="ocorr-tipos">
-            <div class="check-tipo-block">
-              <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_falt" onchange="toggleCheckDesc('t_ocorr_folha_falt','t_ocorr_folha_falt_wrap')"> Ausência de folha de resposta</label>
-              <div id="t_ocorr_folha_falt_wrap" class="hidden check-desc-wrap">
-                <div id="t_ocorr_folha_falt_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-                <button type="button" class="add-btn" onclick="addEntry('t_ocorr_folha_falt_entries')">+ Adicionar</button>
+          <div id="t_ocorr_sala_items">
+            <div class="ocorr-item-block" style="border:1px solid #d0d0d0;border-radius:6px;padding:10px;margin-bottom:8px;">
+                <select style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;background:#fafafa;" onchange="selectOcorrTipo(this)">
+                  <option value="">— Selecione o tipo de ocorrência —</option>
+                  <option value="folha_falt">Ausência de folha de resposta</option>
+                  <option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>
+                  <option value="folha_erro">Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</option>
+                  <option value="errata">Errata de questão</option>
+                  <option value="outros">Outros</option>
+                </select>
+                <div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:8px;">
+                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                </div>
+                <div class="ocorr-fields hidden" data-tipo="banheiro" style="margin-top:8px;">
+                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                </div>
+                <div class="ocorr-fields hidden" data-tipo="folha_erro" style="margin-top:8px;">
+                  <div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;">Candidato correto</div>
+                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                  <div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.3px;">Candidato incorreto (utilizou a folha)</div>
+                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                </div>
+                <div class="ocorr-fields hidden" data-tipo="errata" style="margin-top:8px;">
+                  <div style="display:flex;gap:8px;margin-bottom:4px;"><input type="text" placeholder="Questão(ões)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div>
+                </div>
+                <div class="ocorr-fields hidden" data-tipo="outros" style="margin-top:8px;">
+                  <div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo:<label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_t_0_ou" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_t_0_ou" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label></div>
+                  <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                  <textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
+                </div>
               </div>
-            </div>
-            <div class="check-tipo-block">
-              <label class="check-tipo"><input type="checkbox" id="t_ocorr_banheiro" onchange="toggleCheckDesc('t_ocorr_banheiro','t_ocorr_banheiro_wrap')"> Saída do candidato de sala antes do período de sigilo</label>
-              <div id="t_ocorr_banheiro_wrap" class="hidden check-desc-wrap">
-                <div id="t_ocorr_banheiro_entries"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-                <button type="button" class="add-btn" onclick="addEntry('t_ocorr_banheiro_entries')">+ Adicionar</button>
-              </div>
-            </div>
-            <div class="check-tipo-block">
-              <label class="check-tipo"><input type="checkbox" id="t_ocorr_folha_erro" onchange="toggleCheckDesc('t_ocorr_folha_erro','t_ocorr_folha_erro_wrap')"> Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</label>
-              <div id="t_ocorr_folha_erro_wrap" class="hidden check-desc-wrap">
-                <div id="t_ocorr_folha_erro_entries"><div class="folha-erro-block" style="border:1px solid #e0e0e0;border-radius:6px;padding:8px;margin-bottom:6px;">
-                    <div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;">Candidato correto</div>
-                    <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-                    <div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.3px;">Candidato incorreto (utilizou a folha)</div>
-                    <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-                  </div></div>
-                <button type="button" class="add-btn" onclick="addFolhaErroEntry('t_ocorr_folha_erro_entries')">+ Adicionar</button>
-              </div>
-            </div>
-            <div class="check-tipo-block">
-              <label class="check-tipo"><input type="checkbox" id="t_ocorr_errata" onchange="toggleCheckDesc('t_ocorr_errata','t_ocorr_errata_wrap')"> Errata de questão</label>
-              <div id="t_ocorr_errata_wrap" class="hidden check-desc-wrap">
-                <div id="t_ocorr_errata_entries"><div class="errata-row" style="display:flex;gap:8px;margin-bottom:4px;"><input type="text" placeholder="Questão(ões)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div></div>
-                <button type="button" class="add-btn" onclick="addErrataEntry('t_ocorr_errata_entries')">+ Adicionar</button>
-                <textarea id="t_ocorr_errata_desc" rows="2" placeholder="Descrição da errata..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
-              </div>
-            </div>
           </div>
-            <div class="check-tipo-block">
-              <label class="check-tipo"><input type="checkbox" id="t_ocorr_outros" onchange="toggleCheckDesc('t_ocorr_outros','t_ocorr_outros_wrap')"> Outros</label>
-              <div id="t_ocorr_outros_wrap" class="hidden check-desc-wrap">
-                <div id="t_ocorr_outros_entries"><div class="outros-block" style="border:1px solid #e0e0e0;border-radius:6px;padding:8px;margin-bottom:6px;">
-                    <div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo de ocorrência:
-                      <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_t_outros_0" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label>
-                      <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_t_outros_0" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label>
-                    </div>
-                    <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-                    <textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
-                  </div></div>
-                <button type="button" class="add-btn" onclick="addOutrosEntry('t_ocorr_outros_entries', 't')">+ Adicionar</button>
-              </div>
-            </div>
+          <button type="button" class="add-btn" style="margin-top:4px;" onclick="addOcorrItem('t_ocorr_sala_items','t')">+ Adicionar ocorrência</button>
         </div>
       <div class="ocorr-block">
         <h4>Prova condicional</h4>
@@ -870,6 +836,40 @@ function coletarStat(tableId, cargos){
     aus:   getNum(`${tableId}_aus_${i}`),
     incl:  getNum(`${tableId}_incl_${i}`),
   }));
+}
+
+
+let _ocorrIdx = 0;
+function selectOcorrTipo(sel){
+  const item = sel.closest('.ocorr-item-block');
+  item.querySelectorAll('.ocorr-fields').forEach(f => f.classList.add('hidden'));
+  if(sel.value){
+    const target = item.querySelector('.ocorr-fields[data-tipo="'+sel.value+'"]');
+    if(target) target.classList.remove('hidden');
+  }
+}
+function addOcorrItem(listId, prefix){
+  _ocorrIdx++;
+  const uid = prefix + '_' + _ocorrIdx;
+  const list = document.getElementById(listId);
+  const wrap = document.createElement('div');
+  wrap.className = 'ocorr-item-block';
+  wrap.style.cssText = 'border:1px solid #d0d0d0;border-radius:6px;padding:10px;margin-bottom:8px;';
+  wrap.innerHTML =
+    '<select style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;background:#fafafa;" onchange="selectOcorrTipo(this)">' +
+    '<option value="">— Selecione o tipo de ocorrência —</option>' +
+    '<option value="folha_falt">Ausência de folha de resposta</option>' +
+    '<option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>' +
+    '<option value="folha_erro">Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</option>' +
+    '<option value="errata">Errata de questão</option>' +
+    '<option value="outros">Outros</option>' +
+    '</select>' +
+    '<div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="banheiro" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="folha_erro" style="margin-top:8px;"><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;">Candidato correto</div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;">Candidato incorreto (utilizou a folha)</div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="errata" style="margin-top:8px;"><div style="display:flex;gap:8px;"><input type="text" placeholder="Questão(ões)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="outros" style="margin-top:8px;"><div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo:<label style="margin-left:8px;cursor:pointer;"><input type=\"radio\" name=\"tipo_'+uid+'_ou\" value=\"sala\" checked onchange=\"toggleOutrosCand(this)\"> Sala toda</label><label style=\"margin-left:8px;cursor:pointer;\"><input type=\"radio\" name=\"tipo_'+uid+'_ou\" value=\"cand\" onchange=\"toggleOutrosCand(this)\"> Candidato específico</label></div><div class=\"outros-cand-fields\" style=\"display:none\"><div class=\"entry-row\"><input type=\"text\" placeholder=\"Nº Inscrição\" oninput=\"lookupInscricao(this)\" style=\"cursor:text\"><input type=\"text\" placeholder=\"Nome do Candidato\"><input type=\"text\" placeholder=\"Sala\"></div></div><textarea rows=\"2\" placeholder=\"Descreva a ocorrência...\" style=\"width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;\"></textarea></div>';
+  list.appendChild(wrap);
 }
 
 let _outrosIdx = 0;
