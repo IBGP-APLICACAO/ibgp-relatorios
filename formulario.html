@@ -462,7 +462,10 @@
 
   <div class="hidden" id="divBtn">
     <div id="msgValidacao"></div>
-    <button class="btn" id="btnEnviar" onclick="enviar()">Enviar Formulário</button>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <button class="btn" id="btnEnviar" onclick="enviar()">Enviar Formulário</button>
+      <button type="button" onclick="descartarRascunho()" style="background:none;border:1px solid #CF3432;color:#CF3432;padding:10px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">🗑 Limpar preenchimento</button>
+    </div>
   </div>
 
   <div class="card success-box hidden" id="cardSucesso">
@@ -661,6 +664,14 @@ function restaurarRascunho(){
 function limparRascunho(){
   const k=_rascunhoKey(); if(k) localStorage.removeItem(k);
 }
+function descartarRascunho() {
+  if (!confirm("Limpar todo o preenchimento e começar do zero?")) return;
+  const k = _rascunhoKey();
+  if (k) localStorage.removeItem(k);
+  // Reload the page keeping certame/escola selection
+  location.reload();
+}
+
 let _rascunhoSaveT;
 document.addEventListener('input',()=>{clearTimeout(_rascunhoSaveT);_rascunhoSaveT=setTimeout(salvarRascunho,1500);});
 document.addEventListener('change',()=>{clearTimeout(_rascunhoSaveT);_rascunhoSaveT=setTimeout(salvarRascunho,800);});
