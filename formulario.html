@@ -712,28 +712,34 @@ function onCertameChange(){
   ["rowEscola","rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"]
     .forEach(id => { const el = document.getElementById(id); if(el) el.classList.add("hidden"); });
 
-  // Carrega lista de coordenadores para expandir nomes abreviados
-  let _coordsGlobais = [];
-  fetch("dados/coordenadores.json?v="+Date.now())
-    .then(r => r.json())
-    .then(lista => { _coordsGlobais = lista || []; })
-    .catch(() => {});
-
-  function expandirCoord(nome) {
-    if (!nome || !_coordsGlobais.length) return nome;
-    const nUp = nome.toUpperCase().trim();
-    const exato = _coordsGlobais.find(c => c.toUpperCase().trim() === nUp);
+  function normStr(s) {
+    return (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase().trim();
+  }
+  function expandirCoord(nome, lista) {
+    if (!nome || !lista || !lista.length) return nome;
+    const nNorm = normStr(nome);
+    const exato   = lista.find(c => normStr(c) === nNorm);
     if (exato) return exato;
-    const contido = _coordsGlobais.find(c => c.toUpperCase().trim().includes(nUp));
+    const contido = lista.find(c => normStr(c).includes(nNorm));
     if (contido) return contido;
+    const inverso = lista.find(c => nNorm.includes(normStr(c)));
+    if (inverso) return inverso;
     return nome;
   }
 
-  fetch("dados/" + info.id + ".json?v="+Date.now())
-    .then(r => r.json())
-    .then(dados => { dados = fixUtf8Double(dados);
-      // Expande coord_local abreviado para nome completo da lista cadastrada
-      (dados.escolas || []).forEach(e => { e.coord_local = expandirCoord(e.coord_local); });
+  // Carrega coordenadores PRIMEIRO, depois o certame (evita race condition)
+  fetch("dados/coordenadores.json?v="+Date.now())
+    .then(r => r.ok ? r.json() : [])
+    .catch(() => [])
+    .then(coordsGlobais => {
+      return fetch("dados/" + info.id + ".json?v="+Date.now())
+        .then(r => r.json())
+        .then(dados => { dados = fixUtf8Double(dados);
+          (dados.escolas || []).forEach(e => { e.coord_local = expandirCoord(e.coord_local, coordsGlobais); });
+          return dados;
+        });
+    })
+    .then(dados => {
       CONCURSO = dados;
       window._cpfIndex = null; // reseta índice CPF ao trocar escola
       window._inscrIndex = null; // reseta índice inscrição

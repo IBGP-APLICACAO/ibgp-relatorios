@@ -938,17 +938,17 @@ async function gerarRelatorioGeral() {
       coordMapCertame[(ce.nome || "").toUpperCase().trim()] = ce.coord_local || "";
     });
     // Eleva nomes abreviados para o nome completo da lista global de coordenadores
+    function normStr(s) {
+      return (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase().trim();
+    }
     function expandirNomeCoord(nome) {
       if (!nome || !coordenadores || !coordenadores.length) return nome;
-      const nUp = nome.toUpperCase().trim();
-      // 1. correspondência exata
-      const exato = coordenadores.find(c => c.toUpperCase().trim() === nUp);
+      const nNorm = normStr(nome);
+      const exato   = coordenadores.find(c => normStr(c) === nNorm);
       if (exato) return exato;
-      // 2. nome cadastrado contém o valor armazenado (abreviado)
-      const contido = coordenadores.find(c => c.toUpperCase().trim().includes(nUp));
+      const contido = coordenadores.find(c => normStr(c).includes(nNorm));
       if (contido) return contido;
-      // 3. valor armazenado contém um nome cadastrado (nome completo gravado parcialmente)
-      const inverso = coordenadores.find(c => nUp.includes(c.toUpperCase().trim()));
+      const inverso = coordenadores.find(c => nNorm.includes(normStr(c)));
       if (inverso) return inverso;
       return nome;
     }
