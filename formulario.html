@@ -570,7 +570,7 @@ function restaurarRascunho(){
   }
   if(!d) return;
   Object.entries(d).forEach(([id,val])=>{
-    if(id.startsWith('_')||id.startsWith('r_')) return;
+    if(id.startsWith('_')||id.startsWith('r_')||id==='inputCoord') return;
     const el=document.getElementById(id);
     if(el&&el.type!=='file') el.value=val;
   });
