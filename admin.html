@@ -144,6 +144,11 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
         </div>
       </div>
       <div style="margin-top:14px">
+        <div class="field" style="margin-bottom:10px">
+          <label class="lbl">Token GitHub (PAT)</label>
+          <input type="password" id="fTokenCoord" placeholder="github_pat_...">
+          <p class="token-hint">Cole o token para salvar no site.</p>
+        </div>
         <button class="btn btn-publish btn-sm" onclick="salvarCoordenadores()">Salvar base de coordenadores no site</button>
         <div id="statusCoord" style="font-size:12px;margin-top:8px;display:none"></div>
       </div>
@@ -402,7 +407,7 @@ function removerCoord(nome) {
 }
 
 async function salvarCoordenadores() {
-  const token = document.getElementById("fToken").value.trim();
+  const token = (document.getElementById("fTokenCoord").value || document.getElementById("fToken").value || "").trim();
   const stEl = document.getElementById("statusCoord");
   if (!token) {
     stEl.style.display = "block";
