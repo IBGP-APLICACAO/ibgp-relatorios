@@ -181,6 +181,37 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
       <div id="statusLimpar" style="font-size:12px;margin-top:8px;display:none"></div>
     </div>
 
+    <!-- EDITAR COORDS DE CERTAME -->
+    <div class="card" id="cardEditarCoords">
+      <div class="card-title"><span>✎</span> Editar coordenadores de certame publicado</div>
+      <p class="note" style="margin-bottom:14px">Atualize os nomes dos coordenadores locais sem precisar republicar o certame.</p>
+      <div class="row" style="align-items:flex-end;gap:10px">
+        <div class="field" style="flex:2;margin-bottom:0">
+          <label class="lbl">Certame</label>
+          <select id="selEditarCoords" style="border:1px solid #ddd;border-radius:8px;padding:9px 13px;font-size:14px;width:100%;outline:none;background:#fff;">
+            <option value="">— Carregando... —</option>
+          </select>
+        </div>
+        <div style="flex:0 0 auto;padding-bottom:0">
+          <button class="btn btn-primary btn-sm" onclick="carregarCertameParaEditar()">Carregar locais</button>
+        </div>
+      </div>
+      <div id="tabelaEditarCoords" style="display:none;margin-top:16px">
+        <table>
+          <thead><tr><th style="width:55%">Escola / Local</th><th style="width:45%">Coordenador local</th></tr></thead>
+          <tbody id="tbodyEditarCoords"></tbody>
+        </table>
+        <div style="margin-top:14px">
+          <div class="field" style="margin-bottom:10px">
+            <label class="lbl">Token GitHub (PAT)</label>
+            <input type="password" id="fTokenEditarCoords" placeholder="github_pat_...">
+          </div>
+          <button class="btn btn-publish btn-sm" onclick="salvarCoordsNoCertame()">Salvar coordenadores no certame</button>
+        </div>
+      </div>
+      <div id="statusEditarCoords" style="font-size:12px;margin-top:8px;display:none"></div>
+    </div>
+
     <!-- PASSO 1 -->
     <div class="card">
       <div class="card-title"><span>1</span> Planilha de alocação</div>
@@ -318,11 +349,14 @@ async function carregarListaCertames() {
     const r = await fetch("dados/certames.json?_=" + Date.now());
     if (!r.ok) throw new Error();
     const lista = await r.json();
-    sel.innerHTML = lista.length
+    const opts = lista.length
       ? '<option value="">— Selecione —</option>' + lista.map(c => `<option value="${c.id}">${c.titulo} — ${c.data}</option>`).join("")
       : '<option value="">Nenhum certame cadastrado</option>';
+    sel.innerHTML = opts;
+    document.getElementById("selEditarCoords").innerHTML = opts;
   } catch(_) {
     sel.innerHTML = '<option value="">Erro ao carregar</option>';
+    document.getElementById("selEditarCoords").innerHTML = '<option value="">Erro ao carregar</option>';
   }
 }
 
@@ -841,10 +875,18 @@ async function carregarCertamesRelatorio() {
   try {
     const r = await fetch("dados/certames.json?_=" + Date.now());
     const lista = await r.json();
-    sel.innerHTML = lista.length
+    const optsRel = lista.length
       ? '<option value="">— Selecione o certame —</option>' +
         lista.map(c => `<option value="${c.id}" data-titulo="${c.titulo}" data-data="${c.data}">${c.titulo} — ${c.data}</option>`).join("")
       : '<option value="">Nenhum certame publicado</option>';
+    sel.innerHTML = optsRel;
+    // Populate edit-coords select too (simpler options without data attrs)
+    const selE = document.getElementById("selEditarCoords");
+    if (selE) {
+      selE.innerHTML = lista.length
+        ? '<option value="">— Selecione —</option>' + lista.map(c => `<option value="${c.id}">${c.titulo} — ${c.data}</option>`).join("")
+        : '<option value="">Nenhum certame publicado</option>';
+    }
   } catch(_) {
     sel.innerHTML = '<option value="">Erro ao carregar</option>';
   }
@@ -1097,6 +1139,78 @@ function abrirRelatorioImprimivel(dados) {
   html += "</body></html>";
   win.document.write(html);
   win.document.close();
+}
+
+
+// ── Editar coordenadores de certame publicado ─────────────────────────
+var _certameEditando = null;
+
+async function carregarCertameParaEditar() {
+  const id = document.getElementById("selEditarCoords").value;
+  const st  = document.getElementById("statusEditarCoords");
+  const div = document.getElementById("tabelaEditarCoords");
+  if (!id) { st.style.display="block"; st.style.color="#c62828"; st.textContent="Selecione um certame."; return; }
+  st.style.display="block"; st.style.color="#1565c0"; st.textContent="Carregando...";
+  div.style.display="none";
+  try {
+    const r = await fetch(`dados/${id}.json?_=${Date.now()}`);
+    if (!r.ok) throw new Error("Certame não encontrado");
+    const dados = await r.json();
+    _certameEditando = { id, dados };
+    const tbody = document.getElementById("tbodyEditarCoords");
+    tbody.innerHTML = "";
+    (dados.escolas || []).forEach((e, i) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td style="font-size:13px">${e.nome}</td>`
+        + `<td><input type="text" class="coordEditInput" data-idx="${i}" value="${e.coord_local || ''}"
+             style="width:100%;border:1px solid #ddd;border-radius:6px;padding:7px 10px;font-size:13px;box-sizing:border-box;"
+             placeholder="Nome do coordenador"></td>`;
+      tbody.appendChild(tr);
+    });
+    // Pre-fill token if already set elsewhere
+    const t = document.getElementById("fTokenCoord").value || document.getElementById("fToken").value || sessionStorage.getItem("ghToken") || "";
+    if (t) document.getElementById("fTokenEditarCoords").value = t;
+    div.style.display="block";
+    st.style.display="none";
+  } catch(e) {
+    st.style.color="#c62828"; st.textContent="Erro: " + e.message;
+  }
+}
+
+async function salvarCoordsNoCertame() {
+  if (!_certameEditando) return;
+  const token = (document.getElementById("fTokenEditarCoords").value
+    || document.getElementById("fTokenCoord").value
+    || document.getElementById("fToken").value
+    || sessionStorage.getItem("ghToken") || "").trim();
+  const st = document.getElementById("statusEditarCoords");
+  if (!token) { st.style.display="block"; st.style.color="#c62828"; st.textContent="Cole o Token GitHub."; return; }
+  st.style.display="block"; st.style.color="#1565c0"; st.textContent="Salvando...";
+  // Collect edited values
+  document.querySelectorAll(".coordEditInput").forEach(inp => {
+    _certameEditando.dados.escolas[parseInt(inp.dataset.idx)].coord_local = inp.value.trim();
+  });
+  const headers = {
+    "Authorization": `token ${token}`,
+    "Accept": "application/vnd.github.v3+json",
+    "Content-Type": "application/json"
+  };
+  const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/dados/${_certameEditando.id}.json`;
+  try {
+    const r0 = await fetch(url, { headers });
+    if (!r0.ok) throw new Error("Erro ao buscar arquivo: " + r0.status);
+    const sha = (await r0.json()).sha;
+    const body = {
+      message: `chore: atualiza coordenadores — ${_certameEditando.id}`,
+      content: b64encode(JSON.stringify(_certameEditando.dados, null, 2)),
+      sha
+    };
+    const r1 = await fetch(url, { method: "PUT", headers, body: JSON.stringify(body) });
+    if (!r1.ok) throw new Error(await r1.text());
+    st.style.color="#2e7d32"; st.textContent="✓ Coordenadores atualizados com sucesso!";
+  } catch(e) {
+    st.style.color="#c62828"; st.textContent="Erro: " + e.message;
+  }
 }
 
 
