@@ -184,7 +184,7 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
     <!-- EDITAR COORDS DE CERTAME -->
     <div class="card" id="cardEditarCoords">
       <div class="card-title"><span>✎</span> Editar coordenadores de certame publicado</div>
-      <p class="note" style="margin-bottom:14px">Atualize os nomes dos coordenadores locais sem precisar republicar o certame.</p>
+      <p class="note" style="margin-bottom:14px">Os coordenadores já estão cadastrados na lista global, mas o certame foi publicado com os nomes antigos. Use este card para corrigir os nomes sem republicar.</p>
       <div class="row" style="align-items:flex-end;gap:10px">
         <div class="field" style="flex:2;margin-bottom:0">
           <label class="lbl">Certame</label>
@@ -1161,10 +1161,20 @@ async function carregarCertameParaEditar() {
     tbody.innerHTML = "";
     (dados.escolas || []).forEach((e, i) => {
       const tr = document.createElement("tr");
+      // build datalist once
+      if (!document.getElementById("coordEditList")) {
+        const dl = document.createElement("datalist");
+        dl.id = "coordEditList";
+        dl.innerHTML = coordenadores.map(c => `<option value="${c}">`).join("");
+        document.body.appendChild(dl);
+      } else {
+        document.getElementById("coordEditList").innerHTML = coordenadores.map(c => `<option value="${c}">`).join("");
+      }
       tr.innerHTML = `<td style="font-size:13px">${e.nome}</td>`
         + `<td><input type="text" class="coordEditInput" data-idx="${i}" value="${e.coord_local || ''}"
+             list="coordEditList"
              style="width:100%;border:1px solid #ddd;border-radius:6px;padding:7px 10px;font-size:13px;box-sizing:border-box;"
-             placeholder="Nome do coordenador"></td>`;
+             placeholder="Selecione ou digite o nome"></td>`;
       tbody.appendChild(tr);
     });
     // Pre-fill token if already set elsewhere
