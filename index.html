@@ -1073,26 +1073,75 @@ function coletarEntriesFromList(listId){
   }).filter(e=>e.inscricao||e.candidato||e.sala);
 }
 function coletarTiposOcorr(prefix){
-  const get  = id => document.getElementById(id)?.checked || false;
-  const desc = id => document.getElementById(id)?.value.trim() || '';
-  return {
-    folha_falt:       get(prefix+'_folha_falt'),
-    folha_falt_cands: get(prefix+'_folha_falt')  ? coletarEntriesFromList(prefix+'_folha_falt_entries')  : [],
-    banheiro:         get(prefix+'_banheiro'),
-    banheiro_cands:   get(prefix+'_banheiro')     ? coletarEntriesFromList(prefix+'_banheiro_entries')    : [],
-    folha_erro:       get(prefix+'_folha_erro'),
-    folha_erro_cands: get(prefix+'_folha_erro')   ? coletarEntriesFromList(prefix+'_folha_erro_entries')  : [],
-    errata:           get(prefix+'_errata'),
-    errata_items:      get(prefix+'_errata') ? (()=>{
-      const list=document.getElementById(prefix+'_errata_entries');
-      if(!list) return [];
-      return Array.from(list.querySelectorAll('.errata-row')).map(r=>{
-        const ins=r.querySelectorAll('input');
-        return {questao:(ins[0]?.value||'').trim(), cargo:(ins[1]?.value||'').trim()};
-      }).filter(e=>e.questao||e.cargo);
-    })() : [],
-    outros:           get(prefix+'_outros'),  outros_desc: desc(prefix+'_outros_desc'),
-  };
+  const listId = prefix + '_sala_items';
+  const list = document.getElementById(listId);
+  if(!list) return [];
+  const items = [];
+  list.querySelectorAll('.ocorr-item-block').forEach(block => {
+    const sel = block.querySelector('select');
+    const tipo = sel ? sel.value : '';
+    if(!tipo) return;
+    const fields = block.querySelector('.ocorr-fields[data-tipo="'+tipo+'"]');
+    if(!fields) return;
+
+    function entryRow(n){
+      const rows = fields.querySelectorAll('.entry-row');
+      const row = rows[n];
+      if(!row) return {inscricao:'',candidato:'',sala:''};
+      const ins = row.querySelectorAll('input');
+      return {
+        inscricao: (ins[0]?.value||'').trim(),
+        candidato: (ins[1]?.value||'').trim(),
+        sala:      (ins[2]?.value||'').trim()
+      };
+    }
+
+    const item = {tipo};
+    const simples = ['folha_falt','banheiro','fiscal_cand','cand_fiscal','test_fiscal'];
+    if(simples.includes(tipo)){
+      Object.assign(item, entryRow(0));
+    } else if(tipo === 'cond_esp'){
+      const ataIn = fields.querySelector('input[placeholder="Nome da ata reserva"]');
+      item.ata_reserva = ataIn ? ataIn.value.trim() : '';
+      Object.assign(item, entryRow(0));
+    } else if(tipo === 'folha_imp'){
+      const r = fields.querySelector('input[type=radio]:checked');
+      item.folha_reserva = r ? r.value : '';
+      Object.assign(item, entryRow(0));
+    } else if(tipo === 'folha_erro'){
+      item.candidato_correto   = entryRow(0);
+      item.candidato_incorreto = entryRow(1);
+      const checks = fields.querySelectorAll('input[type=checkbox]');
+      item.marcou_assinatura   = checks[0]?.checked || false;
+      item.marcou_tipo_prova   = checks[1]?.checked || false;
+      if(item.marcou_tipo_prova){
+        const fts = fields.querySelector('.folha-tipo-sub') || fields.querySelector('[id^="FTS_"]');
+        const tpIns = fts ? fts.querySelectorAll('input[type=text]') : [];
+        item.tipo_prova_marcado = (tpIns[0]?.value||'').trim();
+        item.tipo_prova_correto = (tpIns[1]?.value||'').trim();
+      }
+      item.marcou_alternativas = checks[2]?.checked || false;
+      const rr = fields.querySelectorAll('input[type=radio]');
+      const rrChk = Array.from(rr).find(r => r.checked);
+      item.folha_reserva = rrChk ? rrChk.value : '';
+    } else if(tipo === 'errata'){
+      const ins = fields.querySelectorAll('input[type=text]');
+      item.questao   = (ins[0]?.value||'').trim();
+      item.cargo     = (ins[1]?.value||'').trim();
+      item.descricao = (fields.querySelector('textarea')?.value||'').trim();
+    } else if(tipo === 'pacote_danif'){
+      const ins = fields.querySelectorAll('input[type=text]');
+      item.novo_pacote = (ins[0]?.value||'').trim();
+      item.sala        = (ins[1]?.value||'').trim();
+    } else if(tipo === 'outros'){
+      const rOu = block.querySelector('input[type=radio][name*="_ou"]:checked');
+      item.tipo_outros = rOu ? rOu.value : 'sala';
+      if(item.tipo_outros === 'cand') Object.assign(item, entryRow(0));
+      item.descricao = (fields.querySelector('textarea')?.value||'').trim();
+    }
+    items.push(item);
+  });
+  return items;
 }
 
 function coletarSalaEntries(listId){

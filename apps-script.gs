@@ -23,9 +23,9 @@ function doPost(e) {
     salvarTestemunhas(ss, data);
     salvarOcorrencias(ss, data);
     salvarCandidatos(ss, data);
-    var linkFotos = salvarFotos(data);
+    var fotoResult = salvarFotos(data);
 
-    enviarEmailRelatorio(data, linkFotos);
+    enviarEmailRelatorio(data, fotoResult.link, fotoResult.urls);
 
     return ContentService
       .createTextOutput(JSON.stringify({ status: "ok" }))
@@ -169,15 +169,104 @@ function coletarDadosRelatorio() {
 // ────────────────────────────────────────────────────────────────
 //  E-mail — envia relatório do coordenador após cada envio
 // ────────────────────────────────────────────────────────────────
-function enviarEmailRelatorio(data, linkFotos) {
+function enviarEmailRelatorio(data, linkFotos, fotoUrls) {
   try {
     var assunto = "Relatório de Aplicação — " + data.escola + " — " + data.data;
-    var html = montarHtmlEmail(data, linkFotos);
+    var html = montarHtmlEmail(data, linkFotos, fotoUrls);
     MailApp.sendEmail({ to: EMAIL_DESTINO, subject: assunto, htmlBody: html });
   } catch(e) { /* não bloqueia o fluxo principal */ }
 }
 
-function montarHtmlEmail(data, linkFotos) {
+// Rótulos dos tipos de ocorrência
+var TIPO_LABELS = {
+  folha_falt:   "Ausência de folha de resposta",
+  cand_fiscal:  "Candidato assinou no local do fiscal",
+  cond_esp:     "Condição Especial em Caráter Excepcional",
+  folha_erro:   "Entrega incorreta de folha de resposta",
+  errata:       "Errata de questão",
+  fiscal_cand:  "Fiscal assinou no local do candidato",
+  folha_imp:    "Folha de resposta com erro de impressão",
+  pacote_danif: "Pacote de retorno danificado — novo pacote",
+  banheiro:     "Saída do candidato antes do período de sigilo",
+  test_fiscal:  "Testemunha assinou no campo do fiscal na ata",
+  outros:       "Outros"
+};
+
+function renderCand(c) {
+  if (!c || (!c.candidato && !c.inscricao)) return "";
+  var s = "";
+  if (c.candidato) s += c.candidato;
+  if (c.inscricao) s += " (Insc. " + c.inscricao + ")";
+  if (c.sala)      s += " — Sala " + c.sala;
+  return s;
+}
+
+function renderOcorrItem(item) {
+  var tipo  = item.tipo;
+  var label = TIPO_LABELS[tipo] || tipo;
+  var h  = '<div style="margin-bottom:8px;padding:8px 10px;background:#FEF9F9;border-radius:6px;border-left:3px solid #CF3432;">';
+  h += '<div style="font-size:11px;font-weight:700;color:#CF3432;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">' + label + '</div>';
+
+  var simples = ["folha_falt","banheiro","fiscal_cand","cand_fiscal","test_fiscal"];
+  if (simples.indexOf(tipo) > -1) {
+    var cs = renderCand(item);
+    if (cs) h += '<div style="font-size:13px;color:#333;">' + cs + '</div>';
+
+  } else if (tipo === "cond_esp") {
+    if (item.ata_reserva) h += '<div style="font-size:12px;color:#555;">Ata reserva: ' + item.ata_reserva + '</div>';
+    var cs2 = renderCand(item);
+    if (cs2) h += '<div style="font-size:13px;color:#333;">' + cs2 + '</div>';
+
+  } else if (tipo === "folha_imp") {
+    if (item.folha_reserva) h += '<div style="font-size:12px;color:#555;">Utilizou folha reserva: ' + item.folha_reserva + '</div>';
+    var cs3 = renderCand(item);
+    if (cs3) h += '<div style="font-size:13px;color:#333;">' + cs3 + '</div>';
+
+  } else if (tipo === "folha_erro") {
+    var c1 = item.candidato_correto   || {};
+    var c2 = item.candidato_incorreto || {};
+    if (renderCand(c1)) {
+      h += '<div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-top:4px;">Candidato correto:</div>';
+      h += '<div style="font-size:13px;color:#333;">' + renderCand(c1) + '</div>';
+    }
+    if (renderCand(c2)) {
+      h += '<div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-top:4px;">Candidato incorreto (utilizou a folha):</div>';
+      h += '<div style="font-size:13px;color:#333;">' + renderCand(c2) + '</div>';
+    }
+    var marcacoes = [];
+    if (item.marcou_assinatura)  marcacoes.push("Assinatura");
+    if (item.marcou_tipo_prova) {
+      var tp = "Tipo de prova";
+      if (item.tipo_prova_marcado || item.tipo_prova_correto)
+        tp += " (marcado: " + (item.tipo_prova_marcado || "—") + ", correto: " + (item.tipo_prova_correto || "—") + ")";
+      marcacoes.push(tp);
+    }
+    if (item.marcou_alternativas) marcacoes.push("Marcou alternativas na questão");
+    if (marcacoes.length) h += '<div style="font-size:12px;color:#555;margin-top:4px;">Marcações: ' + marcacoes.join(", ") + '</div>';
+    if (item.folha_reserva)      h += '<div style="font-size:12px;color:#555;">Utilizou folha reserva: ' + item.folha_reserva + '</div>';
+
+  } else if (tipo === "errata") {
+    if (item.questao)   h += '<div style="font-size:12px;color:#555;">Questão(ões): ' + item.questao + '</div>';
+    if (item.cargo)     h += '<div style="font-size:12px;color:#555;">Cargo: ' + item.cargo + '</div>';
+    if (item.descricao) h += '<div style="font-size:13px;color:#333;margin-top:4px;">' + item.descricao + '</div>';
+
+  } else if (tipo === "pacote_danif") {
+    if (item.novo_pacote) h += '<div style="font-size:12px;color:#555;">Novo pacote nº: ' + item.novo_pacote + '</div>';
+    if (item.sala)        h += '<div style="font-size:12px;color:#555;">Sala: ' + item.sala + '</div>';
+
+  } else if (tipo === "outros") {
+    h += '<div style="font-size:12px;color:#555;">Tipo: ' + (item.tipo_outros === "cand" ? "Candidato específico" : "Sala toda") + '</div>';
+    if (item.tipo_outros === "cand" && renderCand(item)) {
+      h += '<div style="font-size:13px;color:#333;">' + renderCand(item) + '</div>';
+    }
+    if (item.descricao) h += '<div style="font-size:13px;color:#333;margin-top:4px;">' + item.descricao + '</div>';
+  }
+
+  h += '</div>';
+  return h;
+}
+
+function montarHtmlEmail(data, linkFotos, fotoUrls) {
   var s = [];
   var cor = { manha: "#1F3A6E", tarde: "#CF3432", header: "#393939" };
 
@@ -249,13 +338,50 @@ function montarHtmlEmail(data, linkFotos) {
       row2col("Ocorrências em sala", o.sala.resp, "Prova condicional", o.cond.resp),
       row2col("Toque de celular", o.toque.resp, "Declaração de comparecimento", o.decl.resp)
     ];
-    ["sala","cond","toque","decl"].forEach(function(tipo) {
-      var cands = o[tipo].candidatos || [];
-      if(cands.length > 0) {
-        var lista = cands.map(function(c){ return c.candidato + (c.inscricao?" ("+c.inscricao+")":"") + (c.sala?" — Sala "+c.sala:"") + (c.desc?" — "+c.desc:""); }).join("<br>");
-        linhasOcorr.push('<div style="padding:6px 0;font-size:13px;color:#555;">' + lista + '</div>');
-      }
-    });
+
+    // Ocorrências em sala — nova estrutura com tipos
+    var tiposOcorr = o.sala.tipos || [];
+    if (tiposOcorr.length > 0) {
+      var blocoOcorr = '<div style="margin-top:8px;">';
+      tiposOcorr.forEach(function(item) { blocoOcorr += renderOcorrItem(item); });
+      blocoOcorr += '</div>';
+      linhasOcorr.push(blocoOcorr);
+    }
+
+    // Prova condicional
+    var candsCond = (o.cond && o.cond.candidatos) || [];
+    if (candsCond.length > 0) {
+      var listaCond = candsCond.map(function(cv) {
+        return renderCand(cv) || cv.candidato || cv.inscricao;
+      }).join("<br>");
+      linhasOcorr.push('<div style="margin-top:4px;padding:6px 0;font-size:13px;color:#555;"><strong>Prova condicional:</strong><br>' + listaCond + '</div>');
+    }
+
+    // Toque de celular — campos estado, lacrado, local
+    var candsToque = (o.toque && o.toque.candidatos) || [];
+    if (candsToque.length > 0) {
+      var blocoToque = '<div style="margin-top:8px;">';
+      candsToque.forEach(function(cv) {
+        blocoToque += '<div style="margin-bottom:6px;padding:6px 10px;background:#FEF9F9;border-radius:6px;border-left:3px solid #CF3432;">';
+        blocoToque += '<div style="font-size:13px;color:#333;">' + renderCand(cv) + '</div>';
+        var det = [];
+        if (cv.estado)  det.push("Estado: " + cv.estado);
+        if (cv.lacrado) det.push("Lacração: " + cv.lacrado);
+        if (cv.local)   det.push("Local: " + cv.local);
+        if (det.length) blocoToque += '<div style="font-size:12px;color:#555;margin-top:2px;">' + det.join(" &nbsp;|&nbsp; ") + '</div>';
+        blocoToque += '</div>';
+      });
+      blocoToque += '</div>';
+      linhasOcorr.push(blocoToque);
+    }
+
+    // Declaração de comparecimento
+    var candsDecl = (o.decl && o.decl.candidatos) || [];
+    if (candsDecl.length > 0) {
+      var listaDecl = candsDecl.map(function(cv) { return renderCand(cv) || cv.candidato || cv.inscricao; }).join("<br>");
+      linhasOcorr.push('<div style="margin-top:4px;padding:6px 0;font-size:13px;color:#555;"><strong>Declaração de comparecimento:</strong><br>' + listaDecl + '</div>');
+    }
+
     s.push(card("Turno " + label + " — Ocorrências", c, linhasOcorr, true));
   });
 
@@ -267,7 +393,21 @@ function montarHtmlEmail(data, linkFotos) {
   }
 
   // Fotos
-  if (linkFotos) {
+  fotoUrls = fotoUrls || [];
+  if (fotoUrls.length > 0) {
+    var fotosHtml = '<div style="display:flex;flex-wrap:wrap;gap:8px;">';
+    fotoUrls.forEach(function(foto) {
+      fotosHtml += '<div style="text-align:center;max-width:180px;">';
+      fotosHtml += '<img src="' + foto.url + '" width="180" height="135" style="width:180px;height:135px;object-fit:cover;border-radius:4px;border:1px solid #ddd;" alt="' + foto.categoria + '">';
+      fotosHtml += '<div style="font-size:10px;color:#666;margin-top:3px;">' + foto.categoria + '</div>';
+      fotosHtml += '</div>';
+    });
+    fotosHtml += '</div>';
+    if (linkFotos) {
+      fotosHtml += '<p style="font-size:12px;margin-top:10px;"><a href="' + linkFotos + '" style="color:#CF3432;">Ver todas as fotos no Google Drive →</a></p>';
+    }
+    s.push(card("Registro Fotográfico", cor.header, [fotosHtml], true));
+  } else if (linkFotos) {
     s.push(card("Registro Fotográfico", cor.header, [
       '<p style="font-size:13px;"><a href="' + linkFotos + '" style="color:#CF3432;">Ver fotos no Google Drive →</a></p>'
     ], true));
@@ -477,7 +617,7 @@ function salvarCandidatos(ss, data) {
 }
 
 function salvarFotos(data) {
-  if (!data.fotos || data.fotos.length === 0) return null;
+  if (!data.fotos || data.fotos.length === 0) return {link: null, urls: []};
 
   var root = DriveApp.getRootFolder();
   var ibgpFolder;
@@ -489,18 +629,26 @@ function salvarFotos(data) {
   var escolaIt = ibgpFolder.getFoldersByName(nomeEscola);
   escolaFolder = escolaIt.hasNext() ? escolaIt.next() : ibgpFolder.createFolder(nomeEscola);
 
+  // Compartilha a pasta
+  escolaFolder.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+  var fotoUrls = [];
   data.fotos.forEach(function(foto, idx) {
     try {
       var bytes = Utilities.base64Decode(foto.b64);
       var cat   = (foto.categoria || "Foto").replace(/[\/\\:*?"<>|]/g, "_");
       var nome  = cat + "_" + (idx + 1) + "_" + foto.nome;
       var blob  = Utilities.newBlob(bytes, "image/jpeg", nome);
-      escolaFolder.createFile(blob);
+      var file  = escolaFolder.createFile(blob);
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      fotoUrls.push({
+        url:       "https://drive.google.com/uc?export=view&id=" + file.getId(),
+        nome:      nome,
+        categoria: foto.categoria || ""
+      });
     } catch(e) {}
   });
 
-  // Retorna link público para a pasta
-  escolaFolder.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   var link = "https://drive.google.com/drive/folders/" + escolaFolder.getId();
 
   // Salva o link na aba LOCAIS (coluna 9) para uso no Relatório Geral
@@ -518,5 +666,5 @@ function salvarFotos(data) {
     }
   } catch(e2) {}
 
-  return link;
+  return {link: link, urls: fotoUrls};
 }
