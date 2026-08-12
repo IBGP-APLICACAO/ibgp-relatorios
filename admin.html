@@ -1135,6 +1135,18 @@ function abrirRelatorioImprimivel(dados) {
       );
     }
 
+    // Registro Fotográfico
+    html += secao("Registro Fotográfico", corM,
+      e.foto_url
+        ? `<p style="font-size:13px;margin-bottom:12px;color:#444;">Fotos registradas pelo coordenador e armazenadas no Google Drive:</p>
+           <a href="${e.foto_url}" target="_blank"
+              style="-webkit-print-color-adjust:exact;print-color-adjust:exact;display:inline-block;background:#CF3432;color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">
+             📁 Ver Fotos no Google Drive
+           </a>
+           <p style="margin-top:10px;font-size:11px;color:#888;">Categorias: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>`
+        : `<p style="color:#999;font-style:italic;font-size:13px;">Fotos não enviadas ou ainda não processadas pelo sistema.</p>`
+    );
+
     // Rodapé
     html += `<div style="text-align:center;font-size:10px;color:#aaa;margin-top:8px;padding-bottom:8px;">
       Gerado em ${new Date().toLocaleString("pt-BR")} — IBGP Sistema de Aplicação
