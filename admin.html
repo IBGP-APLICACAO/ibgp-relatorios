@@ -838,6 +838,18 @@ async function gerarRelatorioGeral() {
 
     // Filtra apenas escolas do certame selecionado (case-insensitive)
     dados.escolas = (dados.escolas || []).filter(e => escolasDoCertame.has((e.nome || "").toUpperCase().trim()));
+
+    // Sobrescreve coord_local com o valor do certame JSON (nome atualizado)
+    const coordMapCertame = {};
+    (certameDados.escolas || []).forEach(ce => {
+      coordMapCertame[(ce.nome || "").toUpperCase().trim()] = ce.coord_local || "";
+    });
+    dados.escolas = dados.escolas.map(e => {
+      const coordAtualizado = coordMapCertame[(e.nome || "").toUpperCase().trim()];
+      if (coordAtualizado) e.coord_local = coordAtualizado;
+      return e;
+    });
+
     dados.concurso["Título do Concurso"] = certameTitulo;
     dados.concurso["Data da Prova"]      = certameData;
     dados.concurso["Edital"]             = certameDados.edital || dados.concurso["Edital"] || "";
