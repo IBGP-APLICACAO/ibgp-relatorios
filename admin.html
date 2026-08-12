@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>IBGP — Admin Certames</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:#f0f2f5;color:#1a1a1a;min-height:100vh}
@@ -278,12 +280,20 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
         <label class="lbl">URL do Apps Script</label>
         <input type="text" id="fScriptUrl" placeholder="https://script.google.com/macros/s/..." value="https://script.google.com/macros/s/AKfycbz-H2MDVyv92aQC7wXw0XaswlOMu7gz_H-NV3LyEyJ2hQg9R39am3iK5-8WFm9a1F9eEw/exec">
       </div>
-      <button class="btn btn-primary" onclick="gerarRelatorioGeral()" id="btnRelatorio">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
-        </svg>
-        Gerar Relatório Geral
-      </button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <button class="btn btn-primary" onclick="gerarRelatorioGeral()" id="btnRelatorio">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          Gerar Relatório Geral
+        </button>
+        <button class="btn" onclick="baixarRelatorioWord()" id="btnWord" style="display:none;background:#1F3A6E;color:#fff;gap:6px;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Baixar Word
+        </button>
+      </div>
       <div id="statusRelatorio" style="font-size:13px;margin-top:10px;display:none;padding:10px;border-radius:8px;"></div>
     </div>
 
@@ -898,6 +908,8 @@ async function gerarRelatorioGeral() {
     btn.disabled = false; btn.innerHTML = "📄 Gerar Relatório Geral";
 
     _dadosGeral = { escolas: dados.escolas, concurso: dados.concurso };
+    _certameInfoGeral = { titulo: certameTitulo, data: certameData, edital: certameDados.edital || "" };
+    document.getElementById("btnWord").style.display = "inline-flex";
     abrirRelatorioGeral(dados, { titulo: certameTitulo, data: certameData, edital: certameDados.edital || "" }, reportWin);
     mostrarBotoesIndividuais(dados.escolas);
   } catch(e) {
@@ -1087,8 +1099,234 @@ function abrirRelatorioImprimivel(dados) {
   win.document.close();
 }
 
+
+// ── Baixar Relatório Geral em Word ────────────────────────────────────
+function baixarRelatorioWord() {
+  if (!_dadosGeral) { alert("Gere o relatório primeiro."); return; }
+  if (typeof docx === "undefined") { alert("Biblioteca docx não carregada. Verifique sua conexão."); return; }
+
+  var D = docx;
+  var dados = _dadosGeral;
+  var meta  = _certameInfoGeral || {};
+  var conc  = dados.concurso || {};
+  var escolas = dados.escolas || [];
+
+  var titulo   = meta.titulo   || conc["Título do Concurso"] || "Relatório";
+  var edital   = meta.edital   || conc["Edital"] || "—";
+  var dataProva= meta.data     || conc["Data da Prova"] || "—";
+  var coordPed = conc["Coordenador Pedagógico"] || "—";
+  var coordLog = conc["Coordenador Logístico"]  || "—";
+  var hoje     = new Date().toLocaleDateString("pt-BR");
+
+  // ── Cálculos ──
+  var totI=0,totP=0,totA=0,totIn=0,totSalas=0;
+  var cargosMap={};
+  escolas.forEach(function(e){
+    totSalas+=Number(e.salas)||0;
+    var eI=0,eP=0,eA=0,eIn=0;
+    (e.resultados||[]).forEach(function(r){
+      var ins=Number(r.inscr)||0,pre=Number(r.pres)||0,aus=Number(r.aus)||0,inc=Number(r.incl)||0;
+      totI+=ins;totP+=pre;totA+=aus;totIn+=inc;eI+=ins;eP+=pre;eA+=aus;eIn+=inc;
+      var cargo=(r.cargo||"").replace(/^\d+\s*[-—]\s*/,"").trim();
+      if(!cargosMap[cargo])cargosMap[cargo]={inscr:0,pres:0,aus:0,incl:0};
+      cargosMap[cargo].inscr+=ins;cargosMap[cargo].pres+=pre;cargosMap[cargo].aus+=aus;cargosMap[cargo].incl+=inc;
+    });
+    e._tot={ins:eI,pre:eP,aus:eA,inc:eIn};
+  });
+  function pct(a,b){return b>0?(a/b*100).toFixed(1)+"%":"—";}
+
+  var BLUE="1F3A6E", RED="CF3432", DARK="2C2C2C", LGRAY="F5F7FC";
+
+  function run(text,opts){
+    opts=opts||{};
+    return new D.TextRun({text:String(text||""),bold:opts.bold||false,italics:opts.italics||false,
+      color:opts.color||"000000",size:opts.size||22,font:"Arial"});
+  }
+  function para(children,opts){
+    opts=opts||{};
+    if(!Array.isArray(children)) children=[run(children,opts)];
+    return new D.Paragraph({children:children,
+      alignment:opts.align||D.AlignmentType.LEFT,
+      spacing:{before:opts.before||0,after:opts.after||160},
+      heading:opts.heading||undefined,
+      border:opts.border||undefined});
+  }
+  function hCell(text,opts){
+    opts=opts||{};
+    return new D.TableCell({
+      children:[new D.Paragraph({children:[run(text,{bold:true,color:"FFFFFF",size:opts.size||18})],
+        alignment:D.AlignmentType.CENTER})],
+      shading:{type:D.ShadingType.SOLID,color:opts.bg||BLUE,fill:opts.bg||BLUE},
+      verticalAlign:D.VerticalAlign.CENTER,
+      margins:{top:80,bottom:80,left:100,right:100},
+      columnSpan:opts.span||1
+    });
+  }
+  function dCell(text,opts){
+    opts=opts||{};
+    var fill=opts.fill||"FFFFFF";
+    var shading=fill!=="FFFFFF"?{type:D.ShadingType.SOLID,color:fill,fill:fill}:undefined;
+    return new D.TableCell({
+      children:[new D.Paragraph({children:[run(text,{bold:opts.bold||false,size:18,color:opts.color||DARK})],
+        alignment:opts.align||D.AlignmentType.LEFT})],
+      shading:shading,
+      verticalAlign:D.VerticalAlign.CENTER,
+      margins:{top:60,bottom:60,left:100,right:100},
+      columnSpan:opts.span||1
+    });
+  }
+  function totalCells(values){
+    return values.map(function(v,i){
+      return new D.TableCell({
+        children:[new D.Paragraph({children:[run(v,{bold:true,size:18,color:"FFFFFF"})],
+          alignment:i===0?D.AlignmentType.LEFT:D.AlignmentType.CENTER})],
+        shading:{type:D.ShadingType.SOLID,color:DARK,fill:DARK},
+        verticalAlign:D.VerticalAlign.CENTER,
+        margins:{top:60,bottom:60,left:100,right:100}
+      });
+    });
+  }
+  function secTitle(num,text){
+    return new D.Paragraph({
+      children:[run(num+". "+text,{bold:true,size:26,color:BLUE})],
+      border:{bottom:{style:D.BorderStyle.SINGLE,size:6,color:RED,space:4}},
+      spacing:{before:480,after:240}
+    });
+  }
+  function tbl(rows,opts){
+    opts=opts||{};
+    return new D.Table({
+      width:{size:100,type:D.WidthType.PERCENTAGE},
+      rows:rows,
+      borders:{
+        top:{style:D.BorderStyle.SINGLE,size:1,color:"CCCCCC"},
+        bottom:{style:D.BorderStyle.SINGLE,size:1,color:"CCCCCC"},
+        left:{style:D.BorderStyle.SINGLE,size:1,color:"CCCCCC"},
+        right:{style:D.BorderStyle.SINGLE,size:1,color:"CCCCCC"},
+        insideHorizontal:{style:D.BorderStyle.SINGLE,size:1,color:"CCCCCC"},
+        insideVertical:{style:D.BorderStyle.SINGLE,size:1,color:"CCCCCC"}
+      }
+    });
+  }
+
+  var children = [];
+
+  // ── CAPA ──
+  children.push(para([run("INSTITUTO BRASILEIRO DE GESTÃO E PESQUISA",{bold:true,size:20,color:RED})],{align:D.AlignmentType.CENTER,before:0,after:200}));
+  children.push(para([run("RELATÓRIO TÉCNICO CONSOLIDADO",{bold:true,size:40,color:BLUE})],{align:D.AlignmentType.CENTER,after:200}));
+  children.push(para([run(titulo,{size:28,color:"555555"})],{align:D.AlignmentType.CENTER,after:480}));
+  children.push(tbl([
+    new D.TableRow({children:[hCell("Edital"),hCell("Data da Prova"),hCell("Coordenador Pedagógico"),hCell("Coordenador Logístico")]}),
+    new D.TableRow({children:[dCell(edital,{align:D.AlignmentType.CENTER}),dCell(dataProva,{align:D.AlignmentType.CENTER}),dCell(coordPed,{align:D.AlignmentType.CENTER}),dCell(coordLog,{align:D.AlignmentType.CENTER})]}),
+  ]));
+  children.push(para("",{after:0}));
+
+  // ── 1. VISÃO GERAL ──
+  children.push(secTitle("1","Visão Geral"));
+  children.push(tbl([
+    new D.TableRow({children:[hCell("Locais"),hCell("Salas"),hCell("Inscritos"),hCell("Presentes"),hCell("Ausentes"),hCell("% Ausência"),hCell("Inclusos")]}),
+    new D.TableRow({children:[
+      dCell(escolas.length,{align:D.AlignmentType.CENTER}),
+      dCell(totSalas,{align:D.AlignmentType.CENTER}),
+      dCell(totI,{align:D.AlignmentType.CENTER}),
+      dCell(totP,{align:D.AlignmentType.CENTER}),
+      dCell(totA,{align:D.AlignmentType.CENTER}),
+      dCell(pct(totA,totI),{align:D.AlignmentType.CENTER,bold:true}),
+      dCell(totIn,{align:D.AlignmentType.CENTER}),
+    ]}),
+  ]));
+  children.push(para("",{after:0}));
+
+  // ── 2. RESULTADOS POR LOCAL ──
+  children.push(secTitle("2","Resultados por Local de Prova"));
+
+  escolas.forEach(function(e,ei){
+    children.push(para([run((ei+1)+". "+e.nome,{bold:true,size:22,color:BLUE})],{before:300,after:80}));
+    var info=[];
+    if(e.coord_local)info.push("Coordenador: "+e.coord_local);
+    if(e.salas)info.push("Salas: "+e.salas);
+    if(e.turno)info.push("Turno: "+e.turno);
+    if(info.length)children.push(para([run(info.join("   |   "),{size:18,color:"666666",italics:true})],{before:0,after:120}));
+
+    if(e.resultados&&e.resultados.length){
+      var rows=[new D.TableRow({children:[hCell("Cargo"),hCell("Inscritos"),hCell("Presentes"),hCell("Ausentes"),hCell("% Ausência"),hCell("Inclusos")]})];
+      e.resultados.forEach(function(r,ri){
+        var fill=ri%2?LGRAY:"FFFFFF";
+        var ins=Number(r.inscr)||0,aus=Number(r.aus)||0;
+        rows.push(new D.TableRow({children:[
+          dCell(r.cargo,{fill:fill}),
+          dCell(r.inscr||"0",{align:D.AlignmentType.CENTER,fill:fill}),
+          dCell(r.pres||"0",{align:D.AlignmentType.CENTER,fill:fill}),
+          dCell(r.aus||"0",{align:D.AlignmentType.CENTER,fill:fill}),
+          dCell(pct(aus,ins),{align:D.AlignmentType.CENTER,fill:fill}),
+          dCell(r.incl||"0",{align:D.AlignmentType.CENTER,fill:fill}),
+        ]}));
+      });
+      var t=e._tot||{ins:0,pre:0,aus:0,inc:0};
+      rows.push(new D.TableRow({children:totalCells(["TOTAL",t.ins,t.pre,t.aus,pct(t.aus,t.ins),t.inc])}));
+      children.push(tbl(rows));
+    }
+
+    var ocorr=(e.ocorrencias||[]).filter(function(o){return Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0||o.obs;});
+    if(ocorr.length){
+      children.push(para([run("Ocorrências",{bold:true,size:20,color:RED})],{before:200,after:100}));
+      var orows=[new D.TableRow({children:[hCell("Turno"),hCell("Salas c/ Ocorr."),hCell("Eliminados"),hCell("Celular"),hCell("Declarações"),hCell("Observações")]})];
+      ocorr.forEach(function(o,oi){
+        var fill=oi%2?LGRAY:"FFFFFF";
+        orows.push(new D.TableRow({children:[
+          dCell(o.turno||"—",{fill:fill}),
+          dCell(o.sala||"0",{align:D.AlignmentType.CENTER,fill:fill}),
+          dCell(o.cond||"0",{align:D.AlignmentType.CENTER,fill:fill}),
+          dCell(o.toque||"0",{align:D.AlignmentType.CENTER,fill:fill}),
+          dCell(o.decl||"0",{align:D.AlignmentType.CENTER,fill:fill}),
+          dCell(o.obs||"—",{fill:fill}),
+        ]}));
+      });
+      children.push(tbl(orows));
+    }
+    children.push(para("",{before:160,after:0}));
+  });
+
+  // ── 3. CONSOLIDADO POR CARGO ──
+  var cargosArr=Object.keys(cargosMap).map(function(n){return Object.assign({nome:n},cargosMap[n]);});
+  if(cargosArr.length){
+    children.push(secTitle("3","Consolidado por Cargo"));
+    var crows=[new D.TableRow({children:[hCell("Cargo"),hCell("Inscritos"),hCell("Presentes"),hCell("Ausentes"),hCell("% Ausência"),hCell("Inclusos")]})];
+    cargosArr.sort(function(a,b){return b.inscr-a.inscr;}).forEach(function(c,ci){
+      var fill=ci%2?LGRAY:"FFFFFF";
+      crows.push(new D.TableRow({children:[
+        dCell(c.nome,{fill:fill}),
+        dCell(c.inscr,{align:D.AlignmentType.CENTER,fill:fill}),
+        dCell(c.pres,{align:D.AlignmentType.CENTER,fill:fill}),
+        dCell(c.aus,{align:D.AlignmentType.CENTER,fill:fill}),
+        dCell(pct(c.aus,c.inscr),{align:D.AlignmentType.CENTER,fill:fill}),
+        dCell(c.incl,{align:D.AlignmentType.CENTER,fill:fill}),
+      ]}));
+    });
+    children.push(tbl(crows));
+  }
+
+  // ── Build doc ──
+  var doc=new D.Document({
+    creator:"IBGP",
+    title:"Relatório Técnico Consolidado – "+titulo,
+    description:"Gerado em "+hoje,
+    styles:{default:{document:{run:{font:"Arial",size:22}}}},
+    sections:[{
+      properties:{page:{margin:{top:1134,right:1000,bottom:1134,left:1000}}},
+      children:children
+    }]
+  });
+
+  D.Packer.toBlob(doc).then(function(blob){
+    var fname="Relatorio_IBGP_"+titulo.replace(/[^a-zA-Z0-9À-ú]/g,"_").replace(/_+/g,"_")+".docx";
+    saveAs(blob,fname);
+  }).catch(function(err){alert("Erro ao gerar Word: "+err.message);});
+}
+
 // ── Cache para relatórios individuais ────────────────────────────────
 var _dadosGeral = null;
+var _certameInfoGeral = null;
 
 function mostrarBotoesIndividuais(escolas) {
   if (!escolas || escolas.length === 0) return;
