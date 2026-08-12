@@ -937,25 +937,9 @@ async function gerarRelatorioGeral() {
     (certameDados.escolas || []).forEach(ce => {
       coordMapCertame[(ce.nome || "").toUpperCase().trim()] = ce.coord_local || "";
     });
-    // Eleva nomes abreviados para o nome completo da lista global de coordenadores
-    function normStr(s) {
-      return (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase().trim();
-    }
-    function expandirNomeCoord(nome) {
-      if (!nome || !coordenadores || !coordenadores.length) return nome;
-      const nNorm = normStr(nome);
-      const exato   = coordenadores.find(c => normStr(c) === nNorm);
-      if (exato) return exato;
-      const contido = coordenadores.find(c => normStr(c).includes(nNorm));
-      if (contido) return contido;
-      const inverso = coordenadores.find(c => nNorm.includes(normStr(c)));
-      if (inverso) return inverso;
-      return nome;
-    }
     dados.escolas = dados.escolas.map(e => {
       const coordAtualizado = coordMapCertame[(e.nome || "").toUpperCase().trim()];
-      if (coordAtualizado) e.coord_local = expandirNomeCoord(coordAtualizado);
-      else if (e.coord_local) e.coord_local = expandirNomeCoord(e.coord_local);
+      if (coordAtualizado) e.coord_local = coordAtualizado;
       return e;
     });
 

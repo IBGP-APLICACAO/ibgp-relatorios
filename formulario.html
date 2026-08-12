@@ -712,34 +712,9 @@ function onCertameChange(){
   ["rowEscola","rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"]
     .forEach(id => { const el = document.getElementById(id); if(el) el.classList.add("hidden"); });
 
-  function normStr(s) {
-    return (s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase().trim();
-  }
-  function expandirCoord(nome, lista) {
-    if (!nome || !lista || !lista.length) return nome;
-    const nNorm = normStr(nome);
-    const exato   = lista.find(c => normStr(c) === nNorm);
-    if (exato) return exato;
-    const contido = lista.find(c => normStr(c).includes(nNorm));
-    if (contido) return contido;
-    const inverso = lista.find(c => nNorm.includes(normStr(c)));
-    if (inverso) return inverso;
-    return nome;
-  }
-
-  // Carrega coordenadores PRIMEIRO, depois o certame (evita race condition)
-  fetch("dados/coordenadores.json?v="+Date.now())
-    .then(r => r.ok ? r.json() : [])
-    .catch(() => [])
-    .then(coordsGlobais => {
-      return fetch("dados/" + info.id + ".json?v="+Date.now())
-        .then(r => r.json())
-        .then(dados => { dados = fixUtf8Double(dados);
-          (dados.escolas || []).forEach(e => { e.coord_local = expandirCoord(e.coord_local, coordsGlobais); });
-          return dados;
-        });
-    })
-    .then(dados => {
+  fetch("dados/" + info.id + ".json?v="+Date.now())
+    .then(r => r.json())
+    .then(dados => { dados = fixUtf8Double(dados);
       CONCURSO = dados;
       window._cpfIndex = null; // reseta índice CPF ao trocar escola
       window._inscrIndex = null; // reseta índice inscrição
