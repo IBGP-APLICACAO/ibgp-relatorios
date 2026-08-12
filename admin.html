@@ -670,8 +670,13 @@ function processarPlanilha(wb, nomeArquivo) {
     const cargo = String(r[7]  || "").trim();
     if (!sala || !turno || !cargo) continue;
 
-    if (!escMap[escola]) escMap[escola] = {cargosMap:{}, candidatos:0};
-    escMap[escola].candidatos++;
+    if (!escMap[escola]) escMap[escola] = {cargosMap:{}, candidatos:[]};
+    const inscr_cand = String(r[1] || "").trim();
+    const nome_cand  = String(r[2] || "").trim();
+    const cpf_cand   = String(r[3] || "").replace(/\D/g,"");
+    if (inscr_cand || nome_cand) {
+      escMap[escola].candidatos.push({ inscricao: inscr_cand, nome: nome_cand, cpf: cpf_cand, sala });
+    }
     const key = `${sala}|${turno}|${cargo}`;
     escMap[escola].cargosMap[key] = (escMap[escola].cargosMap[key] || 0) + 1;
   }
@@ -699,8 +704,9 @@ function processarPlanilha(wb, nomeArquivo) {
       }
     }
 
+    const candArr = escMap[nome].candidatos;
     return { nome, coord_local: coord, salas, cargos, hasManha, haTarde,
-             candidatos: escMap[nome].candidatos };
+             candidatos: candArr, candidatosCount: candArr.length };
   });
 
   dadosCertame = { id, titulo, edital, data: dataFormatada, dataISO, escolas };
@@ -737,7 +743,7 @@ function renderRevisao(nomeArquivo) {
       </td>
       <td style="text-align:center">${e.salas}</td>
       <td style="text-align:center">${turno}</td>
-      <td style="text-align:center">${e.candidatos}</td>
+      <td style="text-align:center">${e.candidatosCount || e.candidatos?.length || 0}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -777,7 +783,8 @@ async function publicar() {
       nome: e.nome,
       coord_local: e.coord_local,
       salas: e.salas,
-      cargos: e.cargos
+      cargos: e.cargos,
+      candidatos: e.candidatos || []
     }))
   };
 
