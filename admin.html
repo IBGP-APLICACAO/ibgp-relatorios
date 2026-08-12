@@ -173,6 +173,10 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
         </div>
       </div>
       <div id="statusRemover" style="font-size:12px;margin-top:8px;display:none"></div>
+      <hr style="margin:14px 0">
+      <p class="note" style="margin-bottom:10px">Se os dados antigos ainda aparecerem no relatório, limpe manualmente:</p>
+      <button class="btn btn-sm" style="background:#e65100;color:#fff;white-space:nowrap" onclick="limparDadosPlanilha()">🗑 Limpar dados da planilha agora</button>
+      <div id="statusLimpar" style="font-size:12px;margin-top:8px;display:none"></div>
     </div>
 
     <!-- PASSO 1 -->
@@ -344,7 +348,13 @@ async function removerCertame() {
       if (scriptUrl && escolasParaApagar.length > 0) {
         stEl.textContent = "Limpando dados da planilha...";
         const enc = encodeURIComponent(escolasParaApagar.join("|"));
-        await fetch(`${scriptUrl}?action=deletarEscolas&escolas=${enc}`).catch(() => {});
+        try {
+          const rd = await fetch(`${scriptUrl}?action=deletarEscolas&escolas=${enc}`);
+          const jd = await rd.json().catch(() => ({}));
+          if (jd.status !== "ok") stEl.textContent = "Aviso: dados da planilha podem não ter sido apagados.";
+        } catch(eDel) {
+          stEl.textContent = "Aviso: não foi possível limpar a planilha (" + eDel.message + "). Apague manualmente se necessário.";
+        }
       }
 
       // 3. Remove arquivo do certame do GitHub
@@ -368,6 +378,37 @@ async function removerCertame() {
   } catch(err) {
     stEl.style.color = "#c62828";
     stEl.textContent = "Erro: " + err.message;
+  }
+}
+
+async function limparDadosPlanilha() {
+  const id = document.getElementById("selRemover").value;
+  const scriptUrl = document.getElementById("fScriptUrl").value.trim();
+  const stEl = document.getElementById("statusLimpar");
+  stEl.style.display = "block"; stEl.style.color = "#1565c0";
+
+  if (!scriptUrl) { stEl.style.color = "#c62828"; stEl.textContent = "Informe a URL do Apps Script."; return; }
+
+  if (id) {
+    // Usa escolas do certame selecionado
+    stEl.textContent = "Buscando escolas do certame...";
+    try {
+      const rC = await fetch(`dados/${id}.json?_=${Date.now()}`);
+      if (!rC.ok) throw new Error("Certame não encontrado");
+      const certDados = await rC.json();
+      const escolas = (certDados.escolas || []).map(e => e.nome || "").filter(Boolean);
+      if (!escolas.length) { stEl.textContent = "Nenhuma escola encontrada no certame."; return; }
+      stEl.textContent = `Limpando ${escolas.length} escola(s)...`;
+      const enc = encodeURIComponent(escolas.join("|"));
+      const rd = await fetch(`${scriptUrl}?action=deletarEscolas&escolas=${enc}`);
+      const jd = await rd.json().catch(() => ({}));
+      stEl.style.color = jd.status === "ok" ? "#2e7d32" : "#c62828";
+      stEl.textContent = jd.status === "ok"
+        ? `✓ ${jd.deletadas} escola(s) removidas da planilha.`
+        : "Erro ao limpar planilha.";
+    } catch(e) { stEl.style.color = "#c62828"; stEl.textContent = "Erro: " + e.message; }
+  } else {
+    stEl.style.color = "#c62828"; stEl.textContent = "Selecione um certame primeiro.";
   }
 }
 
