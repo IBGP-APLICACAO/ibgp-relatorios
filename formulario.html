@@ -752,6 +752,7 @@ function onEscolaChange(){
   const idx = sel.value;
   if(idx === "" || !CONCURSO){
     ["rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  document.getElementById("btnLimparFlutuante").style.display="none";
     return;
   }
   const escola = CONCURSO.escolas[parseInt(idx)];
@@ -771,6 +772,7 @@ function onEscolaChange(){
   document.getElementById("cardFotos").classList.remove("hidden");
   document.getElementById("cardObs").classList.remove("hidden");
   document.getElementById("divBtn").classList.remove("hidden");
+  document.getElementById("btnLimparFlutuante").style.display="flex";
 
   // Trava os selects após a escolha
   selCertame.disabled = true;
@@ -1551,5 +1553,15 @@ async function enviar(){
   }
 }
 </script>
+
+  <!-- Botão flutuante limpar -->
+  <button id="btnLimparFlutuante" onclick="descartarRascunho()"
+    title="Limpar preenchimento"
+    style="display:none;position:fixed;left:16px;bottom:24px;z-index:999;
+           background:#fff;border:2px solid #CF3432;color:#CF3432;
+           border-radius:50%;width:48px;height:48px;font-size:20px;
+           cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.18);
+           align-items:center;justify-content:center;">🗑</button>
+
 </body>
 </html>
