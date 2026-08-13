@@ -797,8 +797,8 @@ function renderStat(tableId, cargos){
     tbody.innerHTML += `<tr>
       <td>${c.sala} — ${nome}</td>
       <td><input type="number" id="${tableId}_inscr_${i}" value="${c.inscr}" min="0" style="${sr}" readonly tabindex="-1"></td>
-      <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'pres')"></td>
-      <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'aus')"></td>
+      <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" max="${c.inscr}" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'pres')"></td>
+      <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" max="${c.inscr}" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'aus')"></td>
       <td><input type="number" id="${tableId}_incl_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig></td>
       <td><span id="${tableId}_pct_${i}" style="${sp}">—</span></td>
     </tr>`;
@@ -838,10 +838,12 @@ function recalcStat(tbl, i, changed){
   if(!presEl||!ausEl||!pctEl) return;
 
   if(changed==='pres'){
-    const pres = parseInt(presEl.value)||0;
+    const pres = Math.min(parseInt(presEl.value)||0, inscr);
+    presEl.value = pres;
     if(inscr>0) ausEl.value = Math.max(0, inscr-pres);
   } else if(changed==='aus'){
-    const aus = parseInt(ausEl.value)||0;
+    const aus = Math.min(parseInt(ausEl.value)||0, inscr);
+    ausEl.value = aus;
     if(inscr>0) presEl.value = Math.max(0, inscr-aus);
   } else if(changed==='inscr'){
     const pres = presEl.value!=='' ? parseInt(presEl.value)||0 : null;
