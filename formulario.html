@@ -797,8 +797,8 @@ function renderStat(tableId, cargos){
     tbody.innerHTML += `<tr>
       <td>${c.sala} — ${nome}</td>
       <td><input type="number" id="${tableId}_inscr_${i}" value="${c.inscr}" min="0" style="${sr}" readonly tabindex="-1"></td>
-      <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" max="${c.inscr}" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'pres')"></td>
-      <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" max="${c.inscr}" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'aus')"></td>
+      <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" max="${c.inscr}" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'pres')" onblur="capStat('${tableId}',${i})"></td>
+      <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" max="${c.inscr}" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'aus')" onblur="capStat('${tableId}',${i})"></td>
       <td><input type="number" id="${tableId}_incl_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig></td>
       <td><span id="${tableId}_pct_${i}" style="${sp}">—</span></td>
     </tr>`;
@@ -828,6 +828,15 @@ function recalcTotal(tableId, count){
     +'<td style="'+st+'">'+totIncl+'</td>'
     +'<td style="'+stp+'">'+pct+'</td>'
     +'</tr>';
+}
+
+function capStat(tbl, i){
+  const inscr = parseInt(document.getElementById(tbl+'_inscr_'+i)?.value)||0;
+  if(!inscr) return;
+  const presEl = document.getElementById(tbl+'_pres_'+i);
+  const ausEl  = document.getElementById(tbl+'_aus_'+i);
+  if(presEl && parseInt(presEl.value) > inscr) presEl.value = inscr;
+  if(ausEl  && parseInt(ausEl.value)  > inscr) ausEl.value  = inscr;
 }
 
 function recalcStat(tbl, i, changed){
