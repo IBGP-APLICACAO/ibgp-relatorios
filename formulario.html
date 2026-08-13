@@ -660,6 +660,11 @@ function restaurarRascunho(){
     const m=el.id.match(/^(.+)_pct_(\d+)$/);
     if(m) recalcStat(m[1],parseInt(m[2]),null);
   });
+  // Aplica cap de inscritos nos campos restaurados do rascunho
+  document.querySelectorAll('[id*="_pres_"],[id*="_aus_"]').forEach(el=>{
+    const m=el.id.match(/^(.+)_(pres|aus)_(\d+)$/);
+    if(m) capStat(m[1],parseInt(m[3]));
+  });
 }
 function limparRascunho(){
   const k=_rascunhoKey(); if(k) localStorage.removeItem(k);
