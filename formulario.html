@@ -1543,10 +1543,13 @@ async function enviar(){
       headers:{"Content-Type":"text/plain"},
       body: JSON.stringify(payload)
     });
+    clearTimeout(_rascunhoSaveT);
     limparRascunho();
     document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
     ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+    document.getElementById("btnLimparFlutuante").style.display = "none";
     document.getElementById("cardSucesso").classList.remove("hidden");
+    window.scrollTo({top: 0, behavior: "smooth"});
   } catch(e) {
     btn.disabled = false; btn.textContent = "Enviar Formulário";
     alert("Erro ao enviar: " + e.message + "\n\nVerifique sua conexão e tente novamente.");
