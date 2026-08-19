@@ -1424,9 +1424,12 @@ function validar(){
 }
 
 async function enviar(){
+  const btn = document.getElementById("btnEnviar");
+  try {
   if(!validar()) return;
   const idx = sel.value;
   if(idx === ""){ alert("Selecione uma escola."); return; }
+  if(!CONCURSO||!CONCURSO.escolas){ alert("Certame não carregado. Recarregue a página."); return; }
   const escola = CONCURSO.escolas[parseInt(idx)];
   const hasManha = escola.cargos.some(c=>c.turno==="Manhã");
   const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
@@ -1502,7 +1505,6 @@ async function enviar(){
     },
   };
 
-  const btn = document.getElementById("btnEnviar");
   btn.disabled = true; btn.textContent = "Comprimindo fotos...";
 
   try {
@@ -1522,11 +1524,15 @@ async function enviar(){
     });
     limparRascunho();
     document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
-    ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+    ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>{const _e=document.getElementById(id);if(_e)_e.classList.add("hidden");});
     document.getElementById("cardSucesso").classList.remove("hidden");
   } catch(e) {
     btn.disabled = false; btn.textContent = "Enviar Formulário";
     alert("Erro ao enviar: " + e.message + "\n\nVerifique sua conexão e tente novamente.");
+  }
+  } catch(e2) {
+    if(btn){btn.disabled=false;btn.textContent="Enviar Formulário";}
+    alert("Erro inesperado: " + e2.message);
   }
 }
 </script>
