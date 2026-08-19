@@ -1314,7 +1314,13 @@ function renderFotosCategorias(hasManha, haTarde){
 
 function previewCat(inputId, previewId){
   const files = Array.from(document.getElementById(inputId).files);
-  fotosMap[inputId] = [...(fotosMap[inputId]||[]), ...files];
+  const formatsOk = ['image/jpeg','image/jpg','image/png','image/webp','image/gif','image/bmp'];
+  const invalidas = files.filter(f => !formatsOk.includes(f.type.toLowerCase()) || f.name.toLowerCase().endsWith('.heic') || f.name.toLowerCase().endsWith('.heif'));
+  const validas   = files.filter(f =>  formatsOk.includes(f.type.toLowerCase()) && !f.name.toLowerCase().endsWith('.heic') && !f.name.toLowerCase().endsWith('.heif'));
+  if(invalidas.length > 0){
+    alert("⚠️ Formato não suportado:\n\n" + invalidas.map(f=>f.name).join("\n") + "\n\nEnvie fotos em JPG ou PNG.\nNo iPhone: Ajustes → Câmera → Formatos → Mais Compatível.");
+  }
+  fotosMap[inputId] = [...(fotosMap[inputId]||[]), ...validas];
   renderPreview(inputId, previewId);
 }
 
