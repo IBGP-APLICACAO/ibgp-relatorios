@@ -280,6 +280,11 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
         e aparecerá automaticamente no formulário em ~1 minuto.
       </p>
       <div class="field">
+        <label class="lbl">URL do Apps Script (Google Sheets deste certame)</label>
+        <input type="text" id="fCertameScriptUrl" placeholder="https://script.google.com/macros/s/...">
+        <p class="token-hint">Cole aqui o link de implantação do Apps Script vinculado à planilha deste município.</p>
+      </div>
+      <div class="field">
         <label class="lbl">Token GitHub (PAT) — guardado na sessão atual</label>
         <input type="password" id="fToken" placeholder="github_pat_...">
         <p class="token-hint">Cole o token uma vez; ele será lembrado até fechar o navegador.</p>
@@ -777,8 +782,10 @@ async function publicar() {
     dadosCertame.escolas[parseInt(inp.dataset.idx)].coord_local = inp.value.trim();
   });
 
+  const scriptUrl = (document.getElementById("fCertameScriptUrl")?.value || "").trim();
   const certameJSON = {
     id, titulo, edital, data,
+    script_url: scriptUrl,
     escolas: dadosCertame.escolas.map(e => ({
       nome: e.nome,
       coord_local: e.coord_local,
@@ -811,7 +818,7 @@ async function publicar() {
       if (!confirm(`O certame "${id}" já existe.\nDeseja substituir?`)) return;
       certames.splice(idxExist, 1);
     }
-    certames.push({ id, titulo, edital, data });
+    certames.push({ id, titulo, edital, data, script_url: scriptUrl });
 
     // 2. Verifica se arquivo certame já existe
     let sha2;
