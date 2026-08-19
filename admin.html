@@ -627,7 +627,7 @@ function processarPlanilha(wb, nomeArquivo) {
   // ── Info do certame (linha 2, índice 1) ──
   const info = linhas[1];
   const concursoRaw  = String(info[5]  || "");
-  const dataProvaRaw = info[8];            // Date object (cellDates:true)
+  const dataProvaRaw = info[8];            // pode ser Date, número serial ou string "DD/MM/YYYY"
 
   // Separa título e edital
   const mEdital = concursoRaw.match(/\s*[-–]\s*(EDITAL\s*[Nº°Oo]+\.?\s*[\d/]+[\d]*)/i);
@@ -638,10 +638,18 @@ function processarPlanilha(wb, nomeArquivo) {
   const MESES = ["janeiro","fevereiro","março","abril","maio","junho",
                  "julho","agosto","setembro","outubro","novembro","dezembro"];
   let dataFormatada = "", dataISO = "";
+  let dObj = null;
   if (dataProvaRaw instanceof Date) {
-    const d = dataProvaRaw;
-    dataFormatada = `${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()}`;
-    dataISO = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    dObj = dataProvaRaw;
+  } else if (typeof dataProvaRaw === "number") {
+    dObj = new Date(Math.round((dataProvaRaw - 25569) * 86400 * 1000));
+  } else if (typeof dataProvaRaw === "string" && dataProvaRaw.match(/\d{2}\/\d{2}\/\d{4}/)) {
+    const [dd, mm, yyyy] = dataProvaRaw.split("/");
+    dObj = new Date(`${yyyy}-${mm}-${dd}`);
+  }
+  if (dObj && !isNaN(dObj)) {
+    dataFormatada = `${dObj.getDate()} de ${MESES[dObj.getMonth()]} de ${dObj.getFullYear()}`;
+    dataISO = `${dObj.getFullYear()}-${pad(dObj.getMonth()+1)}-${pad(dObj.getDate())}`;
   }
 
   // Gera ID a partir do título
@@ -652,27 +660,35 @@ function processarPlanilha(wb, nomeArquivo) {
     : slugify(titulo.split(" ").slice(-3).join(" "));
   const id = `${cidadeId}-${dataISO}`;
 
-  // ── Mapa de coordenadores (colunas 22 e 23 da DADOS ALOCAÇÃO) ──
+  // ── Detecta índices de coluna dinamicamente pelo cabeçalho ──
+  const header = linhas[0].map(h => String(h||"").trim().toUpperCase());
+  const iEscola = header.indexOf("ESCOLA") !== -1 ? header.indexOf("ESCOLA") : 13;
+  const iSala   = header.indexOf("SALA")   !== -1 ? header.indexOf("SALA")   : 10;
+  const iTurno  = header.indexOf("TURNO")  !== -1 ? header.indexOf("TURNO")  : 9;
+  const iCargo  = header.indexOf("CARGO")  !== -1 ? header.indexOf("CARGO")  : 7;
+  const iCoordEsc  = header.indexOf("ESCOLA_COORD")  !== -1 ? header.indexOf("ESCOLA_COORD")  : -1;
+  const iCoordNome = header.indexOf("COORDENADOR")   !== -1 ? header.indexOf("COORDENADOR")   : -1;
+
+  // ── Mapa de coordenadores (se coluna existir na planilha) ──
   const coordMap = {};
-  for (let i = 1; i < linhas.length; i++) {
-    const r = linhas[i];
-    const escCoord = String(r[22] || "").trim();
-    const nomeCoord = String(r[23] || "").trim();
-    if (escCoord && nomeCoord && escCoord !== "ESCOLA") {
-      coordMap[escCoord] = nomeCoord;
+  if (iCoordEsc >= 0 && iCoordNome >= 0) {
+    for (let i = 1; i < linhas.length; i++) {
+      const r = linhas[i];
+      const escCoord = String(r[iCoordEsc] || "").trim();
+      const nomeCoord = String(r[iCoordNome] || "").trim();
+      if (escCoord && nomeCoord) coordMap[escCoord] = nomeCoord;
     }
   }
 
   // ── Agrega cargos: escola → sala → turno → cargo → count ──
-  // Col 16=ESCOLA, 13=SALA, 12=TURNO, 7=CARGO
   const escMap = {};
   for (let i = 1; i < linhas.length; i++) {
     const r = linhas[i];
-    const escola = String(r[16] || "").trim();
+    const escola = String(r[iEscola] || "").trim();
     if (!escola) continue;
-    const sala  = String(r[13] || "").trim();
-    const turno = String(r[12] || "").trim();
-    const cargo = String(r[7]  || "").trim();
+    const sala  = String(r[iSala]  || "").trim();
+    const turno = String(r[iTurno] || "").trim();
+    const cargo = String(r[iCargo] || "").trim();
     if (!sala || !turno || !cargo) continue;
 
     if (!escMap[escola]) escMap[escola] = {cargosMap:{}, candidatos:[]};
