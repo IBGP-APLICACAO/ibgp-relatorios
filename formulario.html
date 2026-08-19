@@ -1538,6 +1538,7 @@ async function enviar(){
 
   const btn = document.getElementById("btnEnviar");
   btn.disabled = true; btn.textContent = "Comprimindo fotos...";
+  alert("DEBUG 1: validação OK, iniciando compressão de fotos. Fotos no mapa: " + Object.values(fotosMap).flat().length);
 
   try {
     payload.fotos = await coletarFotos();
@@ -1546,6 +1547,7 @@ async function enviar(){
     alert("Erro ao processar fotos: " + e.message); return;
   }
 
+  alert("DEBUG 2: fotos coletadas OK, exibindo sucesso!");
   // Mostra sucesso imediatamente (sem depender de resposta do servidor)
   clearTimeout(_rascunhoSaveT);
   limparRascunho();
