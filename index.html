@@ -6,7 +6,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IBGP — Formulário de Aplicação de Prova</title>
+  <title>IBGP â FormulÃ¡rio de AplicaÃ§Ã£o de Prova</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #F2F2F2; color: #393939; }
@@ -98,7 +98,7 @@
 <div class="header">
   <img src="IBGP.png" alt="IBGP" onerror="this.style.display='none'">
   <div class="header-text">
-    <h1>IBGP — Formulário de Aplicação de Prova</h1>
+    <h1>IBGP â FormulÃ¡rio de AplicaÃ§Ã£o de Prova</h1>
     <p id="headerSub">Carregando...</p>
   </div>
 </div>
@@ -106,14 +106,14 @@
 
 <div class="container">
 
-  <!-- 1. IDENTIFICAÇÃO -->
+  <!-- 1. IDENTIFICAÃÃO -->
   <div class="card" id="cardIdent">
-    <div class="card-title neutra">1. Identificação</div>
+    <div class="card-title neutra">1. IdentificaÃ§Ã£o</div>
     <div class="form-row">
       <div class="form-group" style="flex:2;">
         <label>Certame</label>
         <select id="selCertame" onchange="onCertameChange()">
-          <option value="">— Selecione o certame —</option>
+          <option value="">â Selecione o certame â</option>
         </select>
       </div>
     </div>
@@ -121,20 +121,20 @@
       <div class="form-group" style="flex:2;">
         <label>Local / Escola</label>
         <select id="selEscola" onchange="onEscolaChange()">
-          <option value="">— Selecione seu local de aplicação —</option>
+          <option value="">â Selecione seu local de aplicaÃ§Ã£o â</option>
         </select>
-        <button class="btn-alterar" id="btnAlterar" style="display:none" onclick="alterarEscola()">✎ Alterar escola</button>
+        <button class="btn-alterar" id="btnAlterar" style="display:none" onclick="alterarEscola()">â Alterar escola</button>
       </div>
     </div>
     <div class="form-row hidden" id="rowIdent2">
       <div class="form-group" style="flex:2;">
-        <label>Coordenação Local</label>
+        <label>CoordenaÃ§Ã£o Local</label>
         <input type="text" id="inputCoord" placeholder="Nome completo">
       </div>
       <div class="form-group">
         <label>Houve apoio?</label>
         <div class="radio-row" style="margin-top:8px;">
-          <label><input type="radio" name="apoio" value="Não" checked onchange="toggleApoio()"> Não</label>
+          <label><input type="radio" name="apoio" value="NÃ£o" checked onchange="toggleApoio()"> NÃ£o</label>
           <label><input type="radio" name="apoio" value="Sim" onchange="toggleApoio()"> Sim</label>
         </div>
       </div>
@@ -148,25 +148,25 @@
     </div>
   </div>
 
-  <!-- TURNO MANHÃ -->
+  <!-- TURNO MANHÃ -->
   <div class="hidden" id="secManha">
 
     <div class="card">
-      <div class="card-title manha">2. Turno Manhã — Horários</div>
+      <div class="card-title manha">2. Turno ManhÃ£ â HorÃ¡rios</div>
       <div class="horarios-grid">
         <div class="form-group"><label>Chegada da equipe</label><input type="time" id="m_chegada"></div>
-        <div class="form-group"><label>Abertura do portão</label><input type="time" id="m_ab_portao"></div>
+        <div class="form-group"><label>Abertura do portÃ£o</label><input type="time" id="m_ab_portao"></div>
         <div class="form-group"><label>Abertura do malote</label><input type="time" id="m_ab_malote"></div>
-        <div class="form-group"><label>Distribuição dos pacotes</label><input type="time" id="m_distrib"></div>
-        <div class="form-group"><label>Fechamento do portão</label><input type="time" id="m_fch_portao"></div>
-        <div class="form-group"><label>Início da aplicação</label><input type="time" id="m_inicio"></div>
+        <div class="form-group"><label>DistribuiÃ§Ã£o dos pacotes</label><input type="time" id="m_distrib"></div>
+        <div class="form-group"><label>Fechamento do portÃ£o</label><input type="time" id="m_fch_portao"></div>
+        <div class="form-group"><label>InÃ­cio da aplicaÃ§Ã£o</label><input type="time" id="m_inicio"></div>
         <div class="form-group"><label>Encerramento</label><input type="time" id="m_encerr"></div>
         <div class="form-group"><label>Fechamento do malote</label><input type="time" id="m_fch_malote"></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title manha">3. Turno Manhã — Testemunhas</div>
+      <div class="card-title manha">3. Turno ManhÃ£ â Testemunhas</div>
       <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Malote</p>
       <table class="test-table">
         <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
@@ -179,85 +179,85 @@
     </div>
 
     <div class="card">
-      <div class="card-title manha">4. Turno Manhã — Estatística por Cargo</div>
+      <div class="card-title manha">4. Turno ManhÃ£ â EstatÃ­stica por Cargo</div>
       <div style="overflow-x:auto;"><table class="stat-table" id="tabelaManha">
-        <thead><tr><th>Cargo / Função</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th><th>% Ausência</th></tr></thead><tfoot></tfoot>
+        <thead><tr><th>Cargo / FunÃ§Ã£o</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>InclusÃµes</th><th>% AusÃªncia</th></tr></thead><tfoot></tfoot>
         <tbody></tbody>
       </table></div>
     </div>
 
     <div class="card">
-      <div class="card-title manha">5. Turno Manhã — Ocorrências</div>
+      <div class="card-title manha">5. Turno ManhÃ£ â OcorrÃªncias</div>
       <div class="ocorr-block">
-        <h4>Ocorrências em sala</h4>
-        <div class="radio-row"><label><input type="radio" name="m_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="m_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Sim</label></div>
+        <h4>OcorrÃªncias em sala</h4>
+        <div class="radio-row"><label><input type="radio" name="m_ocorr_sala" value="NÃ£o" checked onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> NÃ£o</label><label><input type="radio" name="m_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Sim</label></div>
         <div id="m_ocorr_sala_wrap" class="hidden">
           <div id="m_ocorr_sala_items">
             <div class="ocorr-item-block" style="border:1px solid #d0d0d0;border-radius:6px;padding:10px;margin-bottom:8px;">
                 <select style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;background:#fafafa;" onchange="selectOcorrTipo(this)">
-                  <option value="">— Selecione o tipo de ocorrência —</option>
-                  <option value="folha_falt">Ausência de folha de resposta</option>
+                  <option value="">â Selecione o tipo de ocorrÃªncia â</option>
+                  <option value="folha_falt">AusÃªncia de folha de resposta</option>
                   <option value="cand_fiscal">Candidato assinou no local do fiscal</option>
-                  <option value="cond_esp">Condição Especial em Caráter Excepcional</option>
+                  <option value="cond_esp">CondiÃ§Ã£o Especial em CarÃ¡ter Excepcional</option>
                   <option value="folha_erro">Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</option>
-                  <option value="errata">Errata de questão</option>
+                  <option value="errata">Errata de questÃ£o</option>
                   <option value="fiscal_cand">Fiscal assinou no local do candidato</option>
-                  <option value="folha_imp">Folha de resposta com erro de impressão</option>
-                  <option value="pacote_danif">Pacote de retorno danificado — uso de novo pacote</option>
-                  <option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>
+                  <option value="folha_imp">Folha de resposta com erro de impressÃ£o</option>
+                  <option value="pacote_danif">Pacote de retorno danificado â uso de novo pacote</option>
+                  <option value="banheiro">SaÃ­da do candidato de sala antes do perÃ­odo de sigilo</option>
                   <option value="test_fiscal">Testemunha assinou no campo do fiscal de sala na ata</option>
                   <option value="outros">Outros</option>
                 </select>
                 <div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:8px;">
-                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                  <div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
                 </div>
                 <div class="ocorr-fields hidden" data-tipo="banheiro" style="margin-top:8px;">
-                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                  <div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
                 </div>
-                <div class="ocorr-fields hidden" data-tipo="folha_erro" style="margin-top:8px;"><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;">Candidato correto</div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.3px;">Candidato incorreto (utilizou a folha)</div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="margin-top:10px;padding-top:8px;border-top:1px solid #eee;"><div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;">Qual marcação ocorreu:</div><div style="display:flex;flex-direction:column;gap:6px;font-size:13px;"><label style="cursor:pointer;"><input type="checkbox"> Assinatura</label><div><label style="cursor:pointer;"><input type="checkbox" onchange="this.closest('div').querySelector('.folha-tipo-sub').style.display=this.checked?'block':'none'"> Tipo de prova</label><div class="folha-tipo-sub" style="display:none;margin-top:4px;margin-left:20px;font-size:12px;color:#555;">Qual foi marcado: <input type="text" placeholder="ex: Tipo B" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;">&nbsp;&nbsp;Qual é o correto: <input type="text" placeholder="ex: Tipo A" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;"></div></div><label style="cursor:pointer;"><input type="checkbox"> Marcou as alternativas na questão?</label></div><div style="margin-top:8px;font-size:12px;color:#333;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_reserva_m_0" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_reserva_m_0" value="Não"> Não</label></div></div></div>
+                <div class="ocorr-fields hidden" data-tipo="folha_erro" style="margin-top:8px;"><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;">Candidato correto</div><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.3px;">Candidato incorreto (utilizou a folha)</div><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="margin-top:10px;padding-top:8px;border-top:1px solid #eee;"><div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;">Qual marcaÃ§Ã£o ocorreu:</div><div style="display:flex;flex-direction:column;gap:6px;font-size:13px;"><label style="cursor:pointer;"><input type="checkbox"> Assinatura</label><div><label style="cursor:pointer;"><input type="checkbox" onchange="this.closest('div').querySelector('.folha-tipo-sub').style.display=this.checked?'block':'none'"> Tipo de prova</label><div class="folha-tipo-sub" style="display:none;margin-top:4px;margin-left:20px;font-size:12px;color:#555;">Qual foi marcado: <input type="text" placeholder="ex: Tipo B" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;">&nbsp;&nbsp;Qual Ã© o correto: <input type="text" placeholder="ex: Tipo A" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;"></div></div><label style="cursor:pointer;"><input type="checkbox"> Marcou as alternativas na questÃ£o?</label></div><div style="margin-top:8px;font-size:12px;color:#333;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_reserva_m_0" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_reserva_m_0" value="NÃ£o"> NÃ£o</label></div></div></div>
                 <div class="ocorr-fields hidden" data-tipo="errata" style="margin-top:8px;">
-                  <div style="display:flex;gap:8px;margin-bottom:6px;"><input type="text" placeholder="Questão(ões)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div>
-                  <textarea rows="2" placeholder="Descrição da errata..." style="width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
+                  <div style="display:flex;gap:8px;margin-bottom:6px;"><input type="text" placeholder="QuestÃ£o(Ãµes)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div>
+                  <textarea rows="2" placeholder="DescriÃ§Ã£o da errata..." style="width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
                 </div>
-                <div class="ocorr-fields hidden" data-tipo="cond_esp" style="margin-top:8px;"><div style="margin-bottom:6px;"><label style="font-size:12px;font-weight:600;">Nome da ata reserva:</label><input type="text" placeholder="Nome da ata reserva" style="display:block;width:100%;margin-top:3px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="fiscal_cand" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="cand_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="folha_imp" style="margin-top:8px;"><div style="font-size:12px;color:#333;margin-bottom:6px;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_m_0" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_m_0" value="Não"> Não</label></div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-                <div class="ocorr-fields hidden" data-tipo="pacote_danif" style="margin-top:8px;"><div style="display:flex;gap:8px;"><input type="text" placeholder="Nº do novo pacote" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Sala" style="width:80px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div></div>
-                <div class="ocorr-fields hidden" data-tipo="test_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <div class="ocorr-fields hidden" data-tipo="cond_esp" style="margin-top:8px;"><div style="margin-bottom:6px;"><label style="font-size:12px;font-weight:600;">Nome da ata reserva:</label><input type="text" placeholder="Nome da ata reserva" style="display:block;width:100%;margin-top:3px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="fiscal_cand" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="cand_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="folha_imp" style="margin-top:8px;"><div style="font-size:12px;color:#333;margin-bottom:6px;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_m_0" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_m_0" value="NÃ£o"> NÃ£o</label></div><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <div class="ocorr-fields hidden" data-tipo="pacote_danif" style="margin-top:8px;"><div style="display:flex;gap:8px;"><input type="text" placeholder="NÂº do novo pacote" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Sala" style="width:80px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div></div>
+                <div class="ocorr-fields hidden" data-tipo="test_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
                 <div class="ocorr-fields hidden" data-tipo="outros" style="margin-top:8px;">
-                  <div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo:<label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_m_0_ou" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_m_0_ou" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label></div>
-                  <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-                  <textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
+                  <div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo:<label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_m_0_ou" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_m_0_ou" value="cand" onchange="toggleOutrosCand(this)"> Candidato especÃ­fico</label></div>
+                  <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                  <textarea rows="2" placeholder="Descreva a ocorrÃªncia..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
                 </div>
               </div>
           </div>
-          <button type="button" class="add-btn" style="margin-top:4px;" onclick="addOcorrItem('m_ocorr_sala_items','m')">+ Adicionar ocorrência</button>
+          <button type="button" class="add-btn" style="margin-top:4px;" onclick="addOcorrItem('m_ocorr_sala_items','m')">+ Adicionar ocorrÃªncia</button>
         </div>
       <div class="ocorr-block">
         <h4>Prova condicional</h4>
-        <div class="radio-row"><label><input type="radio" name="m_cond" value="Não" checked onchange="toggleOcorrEntries('m_cond','m_cond_wrap')"> Não</label><label><input type="radio" name="m_cond" value="Sim" onchange="toggleOcorrEntries('m_cond','m_cond_wrap')"> Sim</label></div>
+        <div class="radio-row"><label><input type="radio" name="m_cond" value="NÃ£o" checked onchange="toggleOcorrEntries('m_cond','m_cond_wrap')"> NÃ£o</label><label><input type="radio" name="m_cond" value="Sim" onchange="toggleOcorrEntries('m_cond','m_cond_wrap')"> Sim</label></div>
         <div id="m_cond_wrap" class="hidden">
-          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div class="entry-header"><span>NÂº InscriÃ§Ã£o</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="m_cond_entries">
-            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
           <button type="button" class="add-btn" onclick="addEntry('m_cond_entries')">+ Adicionar</button>
         </div>
       </div>
       <div class="ocorr-block">
         <h4>Toque de celular</h4>
-        <div class="radio-row"><label><input type="radio" name="m_toque" value="Não" checked onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Não</label><label><input type="radio" name="m_toque" value="Sim" onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Sim</label></div>
+        <div class="radio-row"><label><input type="radio" name="m_toque" value="NÃ£o" checked onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> NÃ£o</label><label><input type="radio" name="m_toque" value="Sim" onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Sim</label></div>
         <div id="m_toque_wrap" class="hidden">
           <div id="m_toque_entries">
             <div class="toque-entry-block" style="border:1px solid #d8d8d8;border-radius:6px;padding:10px;margin-bottom:8px;">
-              <div class="entry-header" style="margin-bottom:4px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <div class="entry-header" style="margin-bottom:4px;"><span>NÂº InscriÃ§Ã£o</span><span>Nome do Candidato</span><span>Sala</span></div>
+              <div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
               <div class="toque-radios" style="margin-top:8px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:#333;">
                 <div><strong>Estado do aparelho:</strong>
                   <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_estado_1" value="Ligado"> Ligado</label>
                   <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_estado_1" value="Desligado"> Desligado</label>
                 </div>
-                <div><strong>Lacração:</strong>
+                <div><strong>LacraÃ§Ã£o:</strong>
                   <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_lacrado_1" value="Lacrado"> Lacrado</label>
-                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_lacrado_1" value="Não lacrado"> Não lacrado</label>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_lacrado_1" value="NÃ£o lacrado"> NÃ£o lacrado</label>
                 </div>
                 <div><strong>Local do aparelho:</strong>
                   <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="m_toque_local_1" value="Com o candidato"> Com o candidato</label>
@@ -270,12 +270,12 @@
         </div>
       </div>
       <div class="ocorr-block">
-        <h4>Declaração de comparecimento</h4>
-        <div class="radio-row"><label><input type="radio" name="m_decl" value="Não" checked onchange="toggleOcorrEntries('m_decl','m_decl_wrap')"> Não</label><label><input type="radio" name="m_decl" value="Sim" onchange="toggleOcorrEntries('m_decl','m_decl_wrap')"> Sim</label></div>
+        <h4>DeclaraÃ§Ã£o de comparecimento</h4>
+        <div class="radio-row"><label><input type="radio" name="m_decl" value="NÃ£o" checked onchange="toggleOcorrEntries('m_decl','m_decl_wrap')"> NÃ£o</label><label><input type="radio" name="m_decl" value="Sim" onchange="toggleOcorrEntries('m_decl','m_decl_wrap')"> Sim</label></div>
         <div id="m_decl_wrap" class="hidden">
-          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div class="entry-header"><span>NÂº InscriÃ§Ã£o</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="m_decl_entries">
-            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
           <button type="button" class="add-btn" onclick="addEntry('m_decl_entries')">+ Adicionar</button>
         </div>
@@ -283,7 +283,7 @@
     </div>
 
     <div class="card">
-      <div class="card-title manha">6. Turno Manhã — Testemunhas — Fechamento do Malote</div>
+      <div class="card-title manha">6. Turno ManhÃ£ â Testemunhas â Fechamento do Malote</div>
       <table class="test-table">
         <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
         <tbody>
@@ -300,21 +300,21 @@
   <div class="hidden" id="secTarde">
 
     <div class="card">
-      <div class="card-title tarde">6. Turno Tarde — Horários</div>
+      <div class="card-title tarde">6. Turno Tarde â HorÃ¡rios</div>
       <div class="horarios-grid">
         <div class="form-group"><label>Chegada da equipe</label><input type="time" id="t_chegada"></div>
-        <div class="form-group"><label>Abertura do portão</label><input type="time" id="t_ab_portao"></div>
+        <div class="form-group"><label>Abertura do portÃ£o</label><input type="time" id="t_ab_portao"></div>
         <div class="form-group"><label>Abertura do malote</label><input type="time" id="t_ab_malote"></div>
-        <div class="form-group"><label>Distribuição dos pacotes</label><input type="time" id="t_distrib"></div>
-        <div class="form-group"><label>Fechamento do portão</label><input type="time" id="t_fch_portao"></div>
-        <div class="form-group"><label>Início da aplicação</label><input type="time" id="t_inicio"></div>
+        <div class="form-group"><label>DistribuiÃ§Ã£o dos pacotes</label><input type="time" id="t_distrib"></div>
+        <div class="form-group"><label>Fechamento do portÃ£o</label><input type="time" id="t_fch_portao"></div>
+        <div class="form-group"><label>InÃ­cio da aplicaÃ§Ã£o</label><input type="time" id="t_inicio"></div>
         <div class="form-group"><label>Encerramento</label><input type="time" id="t_encerr"></div>
         <div class="form-group"><label>Fechamento do malote</label><input type="time" id="t_fch_malote"></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title tarde">7. Turno Tarde — Testemunhas</div>
+      <div class="card-title tarde">7. Turno Tarde â Testemunhas</div>
       <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Malote</p>
       <table class="test-table">
         <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
@@ -327,85 +327,85 @@
     </div>
 
     <div class="card">
-      <div class="card-title tarde">8. Turno Tarde — Estatística por Cargo</div>
+      <div class="card-title tarde">8. Turno Tarde â EstatÃ­stica por Cargo</div>
       <div style="overflow-x:auto;"><table class="stat-table" id="tabelaTarde">
-        <thead><tr><th>Cargo / Função</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th><th>% Ausência</th></tr></thead><tfoot></tfoot>
+        <thead><tr><th>Cargo / FunÃ§Ã£o</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>InclusÃµes</th><th>% AusÃªncia</th></tr></thead><tfoot></tfoot>
         <tbody></tbody>
       </table></div>
     </div>
 
     <div class="card">
-      <div class="card-title tarde">9. Turno Tarde — Ocorrências</div>
+      <div class="card-title tarde">9. Turno Tarde â OcorrÃªncias</div>
       <div class="ocorr-block">
-        <h4>Ocorrências em sala</h4>
-        <div class="radio-row"><label><input type="radio" name="t_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="t_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Sim</label></div>
+        <h4>OcorrÃªncias em sala</h4>
+        <div class="radio-row"><label><input type="radio" name="t_ocorr_sala" value="NÃ£o" checked onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> NÃ£o</label><label><input type="radio" name="t_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Sim</label></div>
         <div id="t_ocorr_sala_wrap" class="hidden">
           <div id="t_ocorr_sala_items">
             <div class="ocorr-item-block" style="border:1px solid #d0d0d0;border-radius:6px;padding:10px;margin-bottom:8px;">
                 <select style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;background:#fafafa;" onchange="selectOcorrTipo(this)">
-                  <option value="">— Selecione o tipo de ocorrência —</option>
-                  <option value="folha_falt">Ausência de folha de resposta</option>
+                  <option value="">â Selecione o tipo de ocorrÃªncia â</option>
+                  <option value="folha_falt">AusÃªncia de folha de resposta</option>
                   <option value="cand_fiscal">Candidato assinou no local do fiscal</option>
-                  <option value="cond_esp">Condição Especial em Caráter Excepcional</option>
+                  <option value="cond_esp">CondiÃ§Ã£o Especial em CarÃ¡ter Excepcional</option>
                   <option value="folha_erro">Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</option>
-                  <option value="errata">Errata de questão</option>
+                  <option value="errata">Errata de questÃ£o</option>
                   <option value="fiscal_cand">Fiscal assinou no local do candidato</option>
-                  <option value="folha_imp">Folha de resposta com erro de impressão</option>
-                  <option value="pacote_danif">Pacote de retorno danificado — uso de novo pacote</option>
-                  <option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>
+                  <option value="folha_imp">Folha de resposta com erro de impressÃ£o</option>
+                  <option value="pacote_danif">Pacote de retorno danificado â uso de novo pacote</option>
+                  <option value="banheiro">SaÃ­da do candidato de sala antes do perÃ­odo de sigilo</option>
                   <option value="test_fiscal">Testemunha assinou no campo do fiscal de sala na ata</option>
                   <option value="outros">Outros</option>
                 </select>
                 <div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:8px;">
-                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                  <div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
                 </div>
                 <div class="ocorr-fields hidden" data-tipo="banheiro" style="margin-top:8px;">
-                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                  <div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
                 </div>
-                <div class="ocorr-fields hidden" data-tipo="folha_erro" style="margin-top:8px;"><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;">Candidato correto</div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.3px;">Candidato incorreto (utilizou a folha)</div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="margin-top:10px;padding-top:8px;border-top:1px solid #eee;"><div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;">Qual marcação ocorreu:</div><div style="display:flex;flex-direction:column;gap:6px;font-size:13px;"><label style="cursor:pointer;"><input type="checkbox"> Assinatura</label><div><label style="cursor:pointer;"><input type="checkbox" onchange="this.closest('div').querySelector('.folha-tipo-sub').style.display=this.checked?'block':'none'"> Tipo de prova</label><div class="folha-tipo-sub" style="display:none;margin-top:4px;margin-left:20px;font-size:12px;color:#555;">Qual foi marcado: <input type="text" placeholder="ex: Tipo B" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;">&nbsp;&nbsp;Qual é o correto: <input type="text" placeholder="ex: Tipo A" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;"></div></div><label style="cursor:pointer;"><input type="checkbox"> Marcou as alternativas na questão?</label></div><div style="margin-top:8px;font-size:12px;color:#333;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_reserva_t_0" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_reserva_t_0" value="Não"> Não</label></div></div></div>
+                <div class="ocorr-fields hidden" data-tipo="folha_erro" style="margin-top:8px;"><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;">Candidato correto</div><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.3px;">Candidato incorreto (utilizou a folha)</div><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="margin-top:10px;padding-top:8px;border-top:1px solid #eee;"><div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;">Qual marcaÃ§Ã£o ocorreu:</div><div style="display:flex;flex-direction:column;gap:6px;font-size:13px;"><label style="cursor:pointer;"><input type="checkbox"> Assinatura</label><div><label style="cursor:pointer;"><input type="checkbox" onchange="this.closest('div').querySelector('.folha-tipo-sub').style.display=this.checked?'block':'none'"> Tipo de prova</label><div class="folha-tipo-sub" style="display:none;margin-top:4px;margin-left:20px;font-size:12px;color:#555;">Qual foi marcado: <input type="text" placeholder="ex: Tipo B" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;">&nbsp;&nbsp;Qual Ã© o correto: <input type="text" placeholder="ex: Tipo A" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;"></div></div><label style="cursor:pointer;"><input type="checkbox"> Marcou as alternativas na questÃ£o?</label></div><div style="margin-top:8px;font-size:12px;color:#333;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_reserva_t_0" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_reserva_t_0" value="NÃ£o"> NÃ£o</label></div></div></div>
                 <div class="ocorr-fields hidden" data-tipo="errata" style="margin-top:8px;">
-                  <div style="display:flex;gap:8px;margin-bottom:6px;"><input type="text" placeholder="Questão(ões)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div>
-                  <textarea rows="2" placeholder="Descrição da errata..." style="width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
+                  <div style="display:flex;gap:8px;margin-bottom:6px;"><input type="text" placeholder="QuestÃ£o(Ãµes)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div>
+                  <textarea rows="2" placeholder="DescriÃ§Ã£o da errata..." style="width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
                 </div>
-                <div class="ocorr-fields hidden" data-tipo="cond_esp" style="margin-top:8px;"><div style="margin-bottom:6px;"><label style="font-size:12px;font-weight:600;">Nome da ata reserva:</label><input type="text" placeholder="Nome da ata reserva" style="display:block;width:100%;margin-top:3px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="fiscal_cand" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="cand_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="folha_imp" style="margin-top:8px;"><div style="font-size:12px;color:#333;margin-bottom:6px;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_t_0" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_t_0" value="Não"> Não</label></div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-                <div class="ocorr-fields hidden" data-tipo="pacote_danif" style="margin-top:8px;"><div style="display:flex;gap:8px;"><input type="text" placeholder="Nº do novo pacote" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Sala" style="width:80px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;"></div></div>
-                <div class="ocorr-fields hidden" data-tipo="test_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <div class="ocorr-fields hidden" data-tipo="cond_esp" style="margin-top:8px;"><div style="margin-bottom:6px;"><label style="font-size:12px;font-weight:600;">Nome da ata reserva:</label><input type="text" placeholder="Nome da ata reserva" style="display:block;width:100%;margin-top:3px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="fiscal_cand" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="cand_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="folha_imp" style="margin-top:8px;"><div style="font-size:12px;color:#333;margin-bottom:6px;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_t_0" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_t_0" value="NÃ£o"> NÃ£o</label></div><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <div class="ocorr-fields hidden" data-tipo="pacote_danif" style="margin-top:8px;"><div style="display:flex;gap:8px;"><input type="text" placeholder="NÂº do novo pacote" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Sala" style="width:80px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;"></div></div>
+                <div class="ocorr-fields hidden" data-tipo="test_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
                 <div class="ocorr-fields hidden" data-tipo="outros" style="margin-top:8px;">
-                  <div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo:<label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_t_0_ou" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_t_0_ou" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label></div>
-                  <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-                  <textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
+                  <div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo:<label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_t_0_ou" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_t_0_ou" value="cand" onchange="toggleOutrosCand(this)"> Candidato especÃ­fico</label></div>
+                  <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                  <textarea rows="2" placeholder="Descreva a ocorrÃªncia..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
                 </div>
               </div>
           </div>
-          <button type="button" class="add-btn" style="margin-top:4px;" onclick="addOcorrItem('t_ocorr_sala_items','t')">+ Adicionar ocorrência</button>
+          <button type="button" class="add-btn" style="margin-top:4px;" onclick="addOcorrItem('t_ocorr_sala_items','t')">+ Adicionar ocorrÃªncia</button>
         </div>
       <div class="ocorr-block">
         <h4>Prova condicional</h4>
-        <div class="radio-row"><label><input type="radio" name="t_cond" value="Não" checked onchange="toggleOcorrEntries('t_cond','t_cond_wrap')"> Não</label><label><input type="radio" name="t_cond" value="Sim" onchange="toggleOcorrEntries('t_cond','t_cond_wrap')"> Sim</label></div>
+        <div class="radio-row"><label><input type="radio" name="t_cond" value="NÃ£o" checked onchange="toggleOcorrEntries('t_cond','t_cond_wrap')"> NÃ£o</label><label><input type="radio" name="t_cond" value="Sim" onchange="toggleOcorrEntries('t_cond','t_cond_wrap')"> Sim</label></div>
         <div id="t_cond_wrap" class="hidden">
-          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div class="entry-header"><span>NÂº InscriÃ§Ã£o</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="t_cond_entries">
-            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
           <button type="button" class="add-btn" onclick="addEntry('t_cond_entries')">+ Adicionar</button>
         </div>
       </div>
       <div class="ocorr-block">
         <h4>Toque de celular</h4>
-        <div class="radio-row"><label><input type="radio" name="t_toque" value="Não" checked onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Não</label><label><input type="radio" name="t_toque" value="Sim" onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Sim</label></div>
+        <div class="radio-row"><label><input type="radio" name="t_toque" value="NÃ£o" checked onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> NÃ£o</label><label><input type="radio" name="t_toque" value="Sim" onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Sim</label></div>
         <div id="t_toque_wrap" class="hidden">
           <div id="t_toque_entries">
             <div class="toque-entry-block" style="border:1px solid #d8d8d8;border-radius:6px;padding:10px;margin-bottom:8px;">
-              <div class="entry-header" style="margin-bottom:4px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <div class="entry-header" style="margin-bottom:4px;"><span>NÂº InscriÃ§Ã£o</span><span>Nome do Candidato</span><span>Sala</span></div>
+              <div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
               <div class="toque-radios" style="margin-top:8px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:#333;">
                 <div><strong>Estado do aparelho:</strong>
                   <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_estado_1" value="Ligado"> Ligado</label>
                   <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_estado_1" value="Desligado"> Desligado</label>
                 </div>
-                <div><strong>Lacração:</strong>
+                <div><strong>LacraÃ§Ã£o:</strong>
                   <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_lacrado_1" value="Lacrado"> Lacrado</label>
-                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_lacrado_1" value="Não lacrado"> Não lacrado</label>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_lacrado_1" value="NÃ£o lacrado"> NÃ£o lacrado</label>
                 </div>
                 <div><strong>Local do aparelho:</strong>
                   <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="t_toque_local_1" value="Com o candidato"> Com o candidato</label>
@@ -418,12 +418,12 @@
         </div>
       </div>
       <div class="ocorr-block">
-        <h4>Declaração de comparecimento</h4>
-        <div class="radio-row"><label><input type="radio" name="t_decl" value="Não" checked onchange="toggleOcorrEntries('t_decl','t_decl_wrap')"> Não</label><label><input type="radio" name="t_decl" value="Sim" onchange="toggleOcorrEntries('t_decl','t_decl_wrap')"> Sim</label></div>
+        <h4>DeclaraÃ§Ã£o de comparecimento</h4>
+        <div class="radio-row"><label><input type="radio" name="t_decl" value="NÃ£o" checked onchange="toggleOcorrEntries('t_decl','t_decl_wrap')"> NÃ£o</label><label><input type="radio" name="t_decl" value="Sim" onchange="toggleOcorrEntries('t_decl','t_decl_wrap')"> Sim</label></div>
         <div id="t_decl_wrap" class="hidden">
-          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div class="entry-header"><span>NÂº InscriÃ§Ã£o</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="t_decl_entries">
-            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+            <div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
           <button type="button" class="add-btn" onclick="addEntry('t_decl_entries')">+ Adicionar</button>
         </div>
@@ -431,7 +431,7 @@
     </div>
 
     <div class="card">
-      <div class="card-title tarde">10. Turno Tarde — Testemunhas — Fechamento do Malote</div>
+      <div class="card-title tarde">10. Turno Tarde â Testemunhas â Fechamento do Malote</div>
       <table class="test-table">
         <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
         <tbody>
@@ -444,39 +444,39 @@
 
   </div></div><!-- /secTarde -->
 
-  <!-- REGISTRO FOTOGRÁFICO -->
+  <!-- REGISTRO FOTOGRÃFICO -->
   <div class="card hidden" id="cardFotos">
-    <div class="card-title neutra">Registro Fotográfico</div>
-    <p style="font-size:13px;color:#666;margin-bottom:16px;">Selecione 2 fotos para cada categoria. Elas serão salvas automaticamente no Google Drive.</p>
+    <div class="card-title neutra">Registro FotogrÃ¡fico</div>
+    <p style="font-size:13px;color:#666;margin-bottom:16px;">Selecione 2 fotos para cada categoria. Elas serÃ£o salvas automaticamente no Google Drive.</p>
     <div id="fotosGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"></div>
   </div>
 
-  <!-- OBSERVAÇÕES GERAIS -->
+  <!-- OBSERVAÃÃES GERAIS -->
   <div class="card hidden" id="cardObs">
-    <div class="card-title neutra">10. Observações Gerais</div>
+    <div class="card-title neutra">10. ObservaÃ§Ãµes Gerais</div>
     <div class="form-group">
-      <label>Informações adicionais relevantes</label>
-      <textarea id="textObs" rows="4" placeholder="Descreva qualquer informação adicional. Se não houver, deixe em branco."></textarea>
+      <label>InformaÃ§Ãµes adicionais relevantes</label>
+      <textarea id="textObs" rows="4" placeholder="Descreva qualquer informaÃ§Ã£o adicional. Se nÃ£o houver, deixe em branco."></textarea>
     </div>
   </div>
 
   <div class="hidden" id="divBtn">
     <div id="msgValidacao"></div>
-    <button class="btn" id="btnEnviar" onclick="enviar()">Enviar Formulário</button>
+    <button class="btn" id="btnEnviar" onclick="enviar()">Enviar FormulÃ¡rio</button>
   </div>
 
   <div class="card success-box hidden" id="cardSucesso">
-    <div class="check-circle">✓</div>
-    <h2>Formulário enviado com sucesso!</h2>
+    <div class="check-circle">â</div>
+    <h2>FormulÃ¡rio enviado com sucesso!</h2>
     <p>Os dados de <strong id="nomeEscolaSucesso"></strong><br>foram registrados. Obrigado!</p>
   </div>
 
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════════════
-//  MAIÚSCULAS — campos de nome
-// ════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+//  MAIÃSCULAS â campos de nome
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 document.addEventListener('input', function(e){
   const el = e.target;
   if(el.tagName !== 'INPUT' || el.type !== 'text') return;
@@ -488,15 +488,15 @@ document.addEventListener('input', function(e){
   }
 });
 
-// ════════════════════════════════════════════════════════════════
-//  CONFIGURAÇÃO
-// ════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+//  CONFIGURAÃÃO
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-H2MDVyv92aQC7wXw0XaswlOMu7gz_H-NV3LyEyJ2hQg9R39am3iK5-8WFm9a1F9eEw/exec";
 
 
-// ══════════════════════════════════════════════════════════════════════
-//  RASCUNHO AUTOMÁTICO (localStorage)
-// ══════════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+//  RASCUNHO AUTOMÃTICO (localStorage)
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function _rascunhoKey(){
   if(!CONCURSO||sel.value==='') return null;
   return 'ibgp_rascunho_'+CONCURSO.id+'_'+sel.value;
@@ -544,7 +544,7 @@ function salvarRascunho(){
   });
   d['_gerado_em'] = CONCURSO?.gerado_em || '';
   try{localStorage.setItem(k,JSON.stringify(d));}catch(e){}
-  _rascunhoToast('💾 Rascunho salvo');
+  _rascunhoToast('ð¾ Rascunho salvo');
 }
 let _rascunhoToastT;
 function _rascunhoToast(msg,cor){
@@ -565,7 +565,7 @@ function restaurarRascunho(){
   // Se o certame foi republicado, invalida o rascunho anterior
   if(d._gerado_em && CONCURSO?.gerado_em && d._gerado_em !== CONCURSO.gerado_em){
     localStorage.removeItem(k);
-    _rascunhoToast('⚠️ Certame atualizado — rascunho anterior descartado','#CF3432');
+    _rascunhoToast('â ï¸ Certame atualizado â rascunho anterior descartado','#CF3432');
     return;
   }
   if(!d) return;
@@ -597,10 +597,10 @@ function restaurarRascunho(){
     entries.forEach(e=>{
       const block=document.createElement('div'); block.className='entry-sala-block';
       const row=document.createElement('div'); row.className='entry-row';
-      [['a','Nº Inscrição'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
+      [['a','NÂº InscriÃ§Ã£o'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
         const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; row.appendChild(inp);
       });
-      const ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='Descrição da ocorrência...'; ta.value=e.d||'';
+      const ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='DescriÃ§Ã£o da ocorrÃªncia...'; ta.value=e.d||'';
       block.appendChild(row); block.appendChild(ta); list.appendChild(block);
     });
   });
@@ -609,7 +609,7 @@ function restaurarRascunho(){
     const list=document.getElementById(id); if(!list) return; list.innerHTML='';
     entries.forEach(e=>{
       const row=document.createElement('div'); row.className='entry-row';
-      [['a','Nº Inscrição'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
+      [['a','NÂº InscriÃ§Ã£o'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
         const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; row.appendChild(inp);
       });
       list.appendChild(row);
@@ -620,7 +620,7 @@ function restaurarRascunho(){
     const list=document.getElementById(id); if(!list) return; list.innerHTML='';
     entries.forEach(e=>{
       const row=document.createElement('div'); row.className='entry-row';
-      [['a','Nº Inscrição'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
+      [['a','NÂº InscriÃ§Ã£o'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
         const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; row.appendChild(inp);
       });
       list.appendChild(row);
@@ -637,9 +637,9 @@ function restaurarRascunho(){
       block.className='toque-entry-block';
       block.style.cssText='border:1px solid #d8d8d8;border-radius:6px;padding:10px;margin-bottom:8px;';
       block.innerHTML=
-        '<div class="entry-header" style="margin-bottom:4px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>'+
+        '<div class="entry-header" style="margin-bottom:4px;"><span>NÂº InscriÃ§Ã£o</span><span>Nome do Candidato</span><span>Sala</span></div>'+
         '<div class="entry-row">'+
-          '<input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text" value="'+(e.a||'')+'">'+
+          '<input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text" value="'+(e.a||'')+'">'+
           '<input type="text" placeholder="Nome do Candidato" value="'+(e.b||'')+'">'+
           '<input type="text" placeholder="Sala" value="'+(e.c||'')+'">'+
         '</div>'+
@@ -651,8 +651,8 @@ function restaurarRascunho(){
       list.appendChild(block);
     });
   });
-  _rascunhoToast('📋 Rascunho restaurado!','#1F3A6E');
-  // Recalcula % ausência após restaurar
+  _rascunhoToast('ð Rascunho restaurado!','#1F3A6E');
+  // Recalcula % ausÃªncia apÃ³s restaurar
   document.querySelectorAll('[id*="_pct_"]').forEach(el=>{
     const m=el.id.match(/^(.+)_pct_(\d+)$/);
     if(m) recalcStat(m[1],parseInt(m[2]),null);
@@ -681,16 +681,16 @@ let CONCURSO = null;
 const selCertame = document.getElementById("selCertame");
 const sel = document.getElementById("selEscola");
 
-// ════════════════════════════════════════════════════════════════
-//  INIT — carrega lista de certames
-// ════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+//  INIT â carrega lista de certames
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 fetch("dados/certames.json?v="+Date.now())
   .then(r => r.json())
   .then(certames => {
     certames.forEach((c, i) => {
       const o = document.createElement("option");
       o.value = i;
-      o.textContent = c.titulo + " — " + c.data;
+      o.textContent = c.titulo + " â " + c.data;
       o.dataset.id = c.id;
       selCertame.appendChild(o);
     });
@@ -705,10 +705,10 @@ function onCertameChange(){
   const idx = selCertame.value;
   if(idx === "") return;
   const info = window._certamesIndex[parseInt(idx)];
-  document.getElementById("headerSub").textContent = info.titulo + "  •  " + info.data;
+  document.getElementById("headerSub").textContent = info.titulo + "  â¢  " + info.data;
 
   // Reseta escola
-  sel.innerHTML = '<option value="">— Selecione seu local de aplicação —</option>';
+  sel.innerHTML = '<option value="">â Selecione seu local de aplicaÃ§Ã£o â</option>';
   ["rowEscola","rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"]
     .forEach(id => { const el = document.getElementById(id); if(el) el.classList.add("hidden"); });
 
@@ -716,8 +716,8 @@ function onCertameChange(){
     .then(r => r.json())
     .then(dados => { dados = fixUtf8Double(dados);
       CONCURSO = dados;
-      window._cpfIndex = null; // reseta índice CPF ao trocar escola
-      window._inscrIndex = null; // reseta índice inscrição
+      window._cpfIndex = null; // reseta Ã­ndice CPF ao trocar escola
+      window._inscrIndex = null; // reseta Ã­ndice inscriÃ§Ã£o
       dados.escolas.forEach((e, i) => {
         const o = document.createElement("option");
         o.value = i; o.textContent = e.nome;
@@ -742,13 +742,13 @@ function onEscolaChange(){
   document.getElementById("inputCoord").value = escola.coord_local;
   document.getElementById("rowIdent2").classList.remove("hidden");
 
-  const hasManha = escola.cargos.some(c=>c.turno==="Manhã");
+  const hasManha = escola.cargos.some(c=>c.turno==="ManhÃ£");
   const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
 
   document.getElementById("secManha").classList.toggle("hidden", !hasManha);
   document.getElementById("secTarde").classList.toggle("hidden", !haTarde);
 
-  if(hasManha) renderStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã"));
+  if(hasManha) renderStat("tabelaManha", escola.cargos.filter(c=>c.turno==="ManhÃ£"));
   if(haTarde)  renderStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde"));
 
   renderFotosCategorias(hasManha, haTarde);
@@ -756,7 +756,7 @@ function onEscolaChange(){
   document.getElementById("cardObs").classList.remove("hidden");
   document.getElementById("divBtn").classList.remove("hidden");
 
-  // Trava os selects após a escolha
+  // Trava os selects apÃ³s a escolha
   selCertame.disabled = true;
   sel.disabled = true;
   document.getElementById("btnAlterar").style.display = "inline";
@@ -764,7 +764,7 @@ function onEscolaChange(){
 }
 
 function alterarEscola(){
-  if(!confirm("Tem certeza que deseja alterar a escola?\nTodos os dados preenchidos serão perdidos.")) return;
+  if(!confirm("Tem certeza que deseja alterar a escola?\nTodos os dados preenchidos serÃ£o perdidos.")) return;
   // Destrava
   selCertame.disabled = false;
   sel.disabled = false;
@@ -784,12 +784,12 @@ function renderStat(tableId, cargos){
   cargos.forEach((c,i)=>{
     const nome = c.cargo.replace(/^01\s+/,"");
     tbody.innerHTML += `<tr>
-      <td>${c.sala} — ${nome}</td>
+      <td>${c.sala} â ${nome}</td>
       <td><input type="number" id="${tableId}_inscr_${i}" value="${c.inscr}" min="0" style="${sr}" readonly tabindex="-1"></td>
       <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'pres')"></td>
       <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'aus')"></td>
       <td><input type="number" id="${tableId}_incl_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig></td>
-      <td><span id="${tableId}_pct_${i}" style="${sp}">—</span></td>
+      <td><span id="${tableId}_pct_${i}" style="${sp}">â</span></td>
     </tr>`;
   });
   recalcTotal(tableId, cargos.length);
@@ -805,7 +805,7 @@ function recalcTotal(tableId, count){
     totAus  += parseInt(document.getElementById(tableId+'_aus_'+i)?.value)||0;
     totIncl += parseInt(document.getElementById(tableId+'_incl_'+i)?.value)||0;
   }
-  const pct = totPrev>0 ? (totAus/totPrev*100).toFixed(1)+'%' : '—';
+  const pct = totPrev>0 ? (totAus/totPrev*100).toFixed(1)+'%' : 'â';
   const st = "font-weight:700;background:#1F3A6E;color:#fff;padding:7px 6px;text-align:center;font-size:13px;";
   const stl = "font-weight:700;background:#1F3A6E;color:#fff;padding:7px 10px;font-size:13px;";
   const stp = "font-weight:700;background:#0F2A5E;color:#AAC4E8;padding:7px 6px;text-align:center;font-size:13px;";
@@ -841,7 +841,7 @@ function recalcStat(tbl, i, changed){
 
   const aus = parseInt(ausEl.value);
   pctEl.textContent = (!isNaN(aus) && ausEl.value!=='' && inscr>0)
-    ? (aus/inscr*100).toFixed(1)+'%' : '—';
+    ? (aus/inscr*100).toFixed(1)+'%' : 'â';
   // Atualiza linha de totais
   const rows = document.querySelectorAll('#'+tbl+' tbody tr').length;
   recalcTotal(tbl, rows);
@@ -884,7 +884,7 @@ function lookupCPF(cpfId, nomeId){
   if(!cpfEl||!nomeEl) return;
   const cpf=cpfEl.value.replace(/\D/g,'');
   if(cpf.length<11){ nomeEl.readOnly=false; nomeEl.style.background=''; return; }
-  // Constrói índice CPF→nome a partir dos candidatos da escola selecionada
+  // ConstrÃ³i Ã­ndice CPFânome a partir dos candidatos da escola selecionada
   if(!window._cpfIndex){
     window._cpfIndex={};
     const idx=document.getElementById('selEscola')?.value;
@@ -900,14 +900,14 @@ function lookupCPF(cpfId, nomeId){
     nomeEl.readOnly=true;
     nomeEl.style.background='#EEF3FB';
     nomeEl.style.color='#1F3A6E';
-    nomeEl.title='Candidato identificado pela alocação';
+    nomeEl.title='Candidato identificado pela alocaÃ§Ã£o';
   } else {
     nomeEl.value='';
     nomeEl.readOnly=false;
     nomeEl.style.background='#FFF9EC';
     nomeEl.style.color='';
-    nomeEl.title='CPF não encontrado — digite o nome manualmente';
-    nomeEl.placeholder='CPF não encontrado — digite o nome';
+    nomeEl.title='CPF nÃ£o encontrado â digite o nome manualmente';
+    nomeEl.placeholder='CPF nÃ£o encontrado â digite o nome';
     nomeEl.focus();
   }
   // Verifica duplicados no grupo de testemunhas em tempo real
@@ -916,7 +916,7 @@ function lookupCPF(cpfId, nomeId){
 
 function getTxt(id){ const el=document.getElementById(id); return el ? el.value.trim() : ""; }
 function getNum(id){ const el=document.getElementById(id); return el ? (parseInt(el.value)||0) : 0; }
-function getRad(name){ const el=document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : "Não"; }
+function getRad(name){ const el=document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : "NÃ£o"; }
 
 function coletarStat(tableId, cargos){
   return cargos.map((c,i)=>({
@@ -937,9 +937,9 @@ function _buildToqueRadios(prefix, idx){
       '<label style="margin-left:10px;cursor:pointer;"><input type="radio" name="' + prefix + '_toque_estado_' + idx + '" value="Ligado"> Ligado</label>' +
       '<label style="margin-left:10px;cursor:pointer;"><input type="radio" name="' + prefix + '_toque_estado_' + idx + '" value="Desligado"> Desligado</label>' +
     '</div>' +
-    '<div><strong>Lacração:</strong>' +
+    '<div><strong>LacraÃ§Ã£o:</strong>' +
       '<label style="margin-left:10px;cursor:pointer;"><input type="radio" name="' + prefix + '_toque_lacrado_' + idx + '" value="Lacrado"> Lacrado</label>' +
-      '<label style="margin-left:10px;cursor:pointer;"><input type="radio" name="' + prefix + '_toque_lacrado_' + idx + '" value="Não lacrado"> Não lacrado</label>' +
+      '<label style="margin-left:10px;cursor:pointer;"><input type="radio" name="' + prefix + '_toque_lacrado_' + idx + '" value="NÃ£o lacrado"> NÃ£o lacrado</label>' +
     '</div>' +
     '<div><strong>Local do aparelho:</strong>' +
       '<label style="margin-left:10px;cursor:pointer;"><input type="radio" name="' + prefix + '_toque_local_' + idx + '" value="Com o candidato"> Com o candidato</label>' +
@@ -954,9 +954,9 @@ function addToqueEntry(listId, prefix){
   block.className = 'toque-entry-block';
   block.style.cssText = 'border:1px solid #d8d8d8;border-radius:6px;padding:10px;margin-bottom:8px;';
   block.innerHTML =
-    '<div class="entry-header" style="margin-bottom:4px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>' +
+    '<div class="entry-header" style="margin-bottom:4px;"><span>NÂº InscriÃ§Ã£o</span><span>Nome do Candidato</span><span>Sala</span></div>' +
     '<div class="entry-row">' +
-      '<input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text">' +
+      '<input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text">' +
       '<input type="text" placeholder="Nome do Candidato">' +
       '<input type="text" placeholder="Sala">' +
     '</div>' +
@@ -980,27 +980,27 @@ function addOcorrItem(listId, prefix){
   wrap.style.cssText = 'border:1px solid #d0d0d0;border-radius:6px;padding:10px;margin-bottom:8px;';
   wrap.innerHTML =
     '<select style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;background:#fafafa;" onchange="selectOcorrTipo(this)">' +
-    '<option value="">— Selecione o tipo de ocorrência —</option>' +
-    '<option value="folha_falt">Ausência de folha de resposta</option>' +
+    '<option value="">â Selecione o tipo de ocorrÃªncia â</option>' +
+    '<option value="folha_falt">AusÃªncia de folha de resposta</option>' +
     '<option value="cand_fiscal">Candidato assinou no local do fiscal</option>' +
-    '<option value="cond_esp">Condição Especial em Caráter Excepcional</option>' +
+    '<option value="cond_esp">CondiÃ§Ã£o Especial em CarÃ¡ter Excepcional</option>' +
     '<option value="folha_erro">Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</option>' +
-    '<option value="errata">Errata de questão</option>' +
+    '<option value="errata">Errata de questÃ£o</option>' +
     '<option value="fiscal_cand">Fiscal assinou no local do candidato</option>' +
-    '<option value="folha_imp">Folha de resposta com erro de impressão</option>' +
-    '<option value="pacote_danif">Pacote de retorno danificado — uso de novo pacote</option>' +
-    '<option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>' +
+    '<option value="folha_imp">Folha de resposta com erro de impressÃ£o</option>' +
+    '<option value="pacote_danif">Pacote de retorno danificado â uso de novo pacote</option>' +
+    '<option value="banheiro">SaÃ­da do candidato de sala antes do perÃ­odo de sigilo</option>' +
     '<option value="test_fiscal">Testemunha assinou no campo do fiscal de sala na ata</option>' +
     '<option value="outros">Outros</option>' +
     '</select>' +
-    '<div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
-    '<div class="ocorr-fields hidden" data-tipo="banheiro" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
-    '<div class="ocorr-fields hidden" data-tipo="folha_erro" style="margin-top:8px;"><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;">Candidato correto</div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.3px;">Candidato incorreto (utilizou a folha)</div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="margin-top:10px;padding-top:8px;border-top:1px solid #eee;"><div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;">Qual marcação ocorreu:</div><div style="display:flex;flex-direction:column;gap:6px;font-size:13px;"><label style="cursor:pointer;"><input type="checkbox"> Assinatura</label><div><label style="cursor:pointer;"><input type="checkbox" onchange="this.closest(\'div\').querySelector(\'#FTS_'+uid+'\').style.display=this.checked?\'block\':\'none\'"> Tipo de prova</label><div id="FTS_'+uid+'" style="display:none;margin-top:4px;margin-left:20px;font-size:12px;color:#555;">Qual foi marcado: <input type="text" placeholder="ex: Tipo B" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;">&nbsp;&nbsp;Qual é o correto: <input type="text" placeholder="ex: Tipo A" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;"></div></div><label style="cursor:pointer;"><input type="checkbox"> Marcou as alternativas na questão?</label></div><div style="margin-top:8px;font-size:12px;color:#333;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_reserva_'+uid+'"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_reserva_'+uid+'"> Não</label></div></div></div>' +
-    '<div class="ocorr-fields hidden" data-tipo="cond_esp" style="margin-top:8px;"><div style="margin-bottom:6px;"><label style="font-size:12px;font-weight:600;">Nome da ata reserva:</label><input type="text" placeholder="Nome da ata reserva" style="display:block;width:100%;margin-top:3px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +'<div class="ocorr-fields hidden" data-tipo="fiscal_cand" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +'<div class="ocorr-fields hidden" data-tipo="cand_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +'<div class="ocorr-fields hidden" data-tipo="folha_imp" style="margin-top:8px;"><div style="font-size:12px;color:#333;margin-bottom:6px;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_'+uid+'"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_'+uid+'"> Não</label></div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
-    '<div class="ocorr-fields hidden" data-tipo="errata" style="margin-top:8px;"><div style="display:flex;gap:8px;margin-bottom:6px;"><input type="text" placeholder="Questão(ões)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div><textarea rows="2" placeholder="Descrição da errata..." style="width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea></div>' +
-    '<div class="ocorr-fields hidden" data-tipo="pacote_danif" style="margin-top:8px;"><div style="display:flex;gap:8px;"><input type="text" placeholder="Nº do novo pacote" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Sala" style="width:80px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div></div>' +
-    '<div class="ocorr-fields hidden" data-tipo="test_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
-    '<div class="ocorr-fields hidden" data-tipo="outros" style="margin-top:8px;"><div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo:<label style="margin-left:8px;cursor:pointer;"><input type=\"radio\" name=\"tipo_'+uid+'_ou\" value=\"sala\" checked onchange=\"toggleOutrosCand(this)\"> Sala toda</label><label style=\"margin-left:8px;cursor:pointer;\"><input type=\"radio\" name=\"tipo_'+uid+'_ou\" value=\"cand\" onchange=\"toggleOutrosCand(this)\"> Candidato específico</label></div><div class=\"outros-cand-fields\" style=\"display:none\"><div class=\"entry-row\"><input type=\"text\" placeholder=\"Nº Inscrição\" oninput=\"lookupInscricao(this)\" style=\"cursor:text\"><input type=\"text\" placeholder=\"Nome do Candidato\"><input type=\"text\" placeholder=\"Sala\"></div></div><textarea rows=\"2\" placeholder=\"Descreva a ocorrência...\" style=\"width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;\"></textarea></div>';
+    '<div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="banheiro" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="folha_erro" style="margin-top:8px;"><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;">Candidato correto</div><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.3px;">Candidato incorreto (utilizou a folha)</div><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="margin-top:10px;padding-top:8px;border-top:1px solid #eee;"><div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;">Qual marcaÃ§Ã£o ocorreu:</div><div style="display:flex;flex-direction:column;gap:6px;font-size:13px;"><label style="cursor:pointer;"><input type="checkbox"> Assinatura</label><div><label style="cursor:pointer;"><input type="checkbox" onchange="this.closest(\'div\').querySelector(\'#FTS_'+uid+'\').style.display=this.checked?\'block\':\'none\'"> Tipo de prova</label><div id="FTS_'+uid+'" style="display:none;margin-top:4px;margin-left:20px;font-size:12px;color:#555;">Qual foi marcado: <input type="text" placeholder="ex: Tipo B" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;">&nbsp;&nbsp;Qual Ã© o correto: <input type="text" placeholder="ex: Tipo A" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;"></div></div><label style="cursor:pointer;"><input type="checkbox"> Marcou as alternativas na questÃ£o?</label></div><div style="margin-top:8px;font-size:12px;color:#333;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_reserva_'+uid+'"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_reserva_'+uid+'"> NÃ£o</label></div></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="cond_esp" style="margin-top:8px;"><div style="margin-bottom:6px;"><label style="font-size:12px;font-weight:600;">Nome da ata reserva:</label><input type="text" placeholder="Nome da ata reserva" style="display:block;width:100%;margin-top:3px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +'<div class="ocorr-fields hidden" data-tipo="fiscal_cand" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +'<div class="ocorr-fields hidden" data-tipo="cand_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +'<div class="ocorr-fields hidden" data-tipo="folha_imp" style="margin-top:8px;"><div style="font-size:12px;color:#333;margin-bottom:6px;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_'+uid+'"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_'+uid+'"> NÃ£o</label></div><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="errata" style="margin-top:8px;"><div style="display:flex;gap:8px;margin-bottom:6px;"><input type="text" placeholder="QuestÃ£o(Ãµes)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div><textarea rows="2" placeholder="DescriÃ§Ã£o da errata..." style="width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="pacote_danif" style="margin-top:8px;"><div style="display:flex;gap:8px;"><input type="text" placeholder="NÂº do novo pacote" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Sala" style="width:80px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="test_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="outros" style="margin-top:8px;"><div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo:<label style="margin-left:8px;cursor:pointer;"><input type=\"radio\" name=\"tipo_'+uid+'_ou\" value=\"sala\" checked onchange=\"toggleOutrosCand(this)\"> Sala toda</label><label style=\"margin-left:8px;cursor:pointer;\"><input type=\"radio\" name=\"tipo_'+uid+'_ou\" value=\"cand\" onchange=\"toggleOutrosCand(this)\"> Candidato especÃ­fico</label></div><div class=\"outros-cand-fields\" style=\"display:none\"><div class=\"entry-row\"><input type=\"text\" placeholder=\"NÂº InscriÃ§Ã£o\" oninput=\"lookupInscricao(this)\" style=\"cursor:text\"><input type=\"text\" placeholder=\"Nome do Candidato\"><input type=\"text\" placeholder=\"Sala\"></div></div><textarea rows=\"2\" placeholder=\"Descreva a ocorrÃªncia...\" style=\"width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;\"></textarea></div>';
   list.appendChild(wrap);
 }
 
@@ -1017,12 +1017,12 @@ function addOutrosEntry(listId, prefix){
   const div = document.createElement('div');
   div.className = 'outros-block';
   div.style.cssText = 'border:1px solid #e0e0e0;border-radius:6px;padding:8px;margin-bottom:6px;';
-  div.innerHTML = `<div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo de ocorrência:
+  div.innerHTML = `<div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo de ocorrÃªncia:
     <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_${uid}" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label>
-    <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_${uid}" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label>
+    <label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_${uid}" value="cand" onchange="toggleOutrosCand(this)"> Candidato especÃ­fico</label>
   </div>
-  <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
-  <textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>`;
+  <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+  <textarea rows="2" placeholder="Descreva a ocorrÃªncia..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>`;
   list.appendChild(div);
 }
 
@@ -1032,9 +1032,9 @@ function addFolhaErroEntry(listId){
   block.className = 'folha-erro-block';
   block.style.cssText = 'border:1px solid #e0e0e0;border-radius:6px;padding:8px;margin-bottom:6px;';
   block.innerHTML = `<div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;">Candidato correto</div>
-    <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+    <div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
     <div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.3px;">Candidato incorreto (utilizou a folha)</div>
-    <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>`;
+    <div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>`;
   list.appendChild(block);
 }
 
@@ -1043,7 +1043,7 @@ function addErrataEntry(listId){
   const row = document.createElement('div');
   row.className = 'errata-row';
   row.style.cssText = 'display:flex;gap:8px;margin-bottom:4px;';
-  row.innerHTML = '<input type="text" placeholder="Questão(ões)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;">';
+  row.innerHTML = '<input type="text" placeholder="QuestÃ£o(Ãµes)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;">';
   list.appendChild(row);
 }
 
@@ -1051,7 +1051,7 @@ function addEntry(listId){
   const list = document.getElementById(listId);
   const row = document.createElement('div');
   row.className = 'entry-row';
-  row.innerHTML = '<input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala">';
+  row.innerHTML = '<input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala">';
   list.appendChild(row);
 }
 
@@ -1059,7 +1059,7 @@ function addSalaEntry(listId){
   const list = document.getElementById(listId);
   const block = document.createElement('div');
   block.className = 'entry-sala-block';
-  block.innerHTML = '<div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>';
+  block.innerHTML = '<div class="entry-row"><input type="text" placeholder="NÂº InscriÃ§Ã£o" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><textarea rows="2" placeholder="DescriÃ§Ã£o da ocorrÃªncia..."></textarea>';
   list.appendChild(block);
 }
 
@@ -1239,9 +1239,9 @@ function coletarToqueEntries(listId){
   }).filter(e=>e.inscricao||e.candidato||e.sala);
 }
 
-// ════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 //  FOTOS
-// ════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 let fotosMap = {};
 let fotasCats = [];
 
@@ -1250,20 +1250,20 @@ function renderFotosCategorias(hasManha, haTarde){
   fotasCats = [];
 
   const cats = [];
-  cats.push({id:'fc_sinal_m',   label:'📌 Sinalização — Manhã',          cor:'#393939'});
+  cats.push({id:'fc_sinal_m',   label:'ð SinalizaÃ§Ã£o â ManhÃ£',          cor:'#393939'});
   if(hasManha){
-    cats.push({id:'fc_portao_ab_m',  label:'🚪 Abertura do Portão — Manhã',    cor:'#1F3A6E'});
-    cats.push({id:'fc_aplic_m',      label:'📝 Aplicação — Manhã',             cor:'#1F3A6E'});
-    cats.push({id:'fc_abm_m',        label:'📦 Abertura do Malote — Manhã',    cor:'#1F3A6E'});
-    cats.push({id:'fc_fchm_m',       label:'📦 Fechamento do Malote — Manhã',  cor:'#1F3A6E'});
-    cats.push({id:'fc_portao_fch_m', label:'🚪 Fechamento do Portão — Manhã',  cor:'#1F3A6E'});
+    cats.push({id:'fc_portao_ab_m',  label:'ðª Abertura do PortÃ£o â ManhÃ£',    cor:'#1F3A6E'});
+    cats.push({id:'fc_aplic_m',      label:'ð AplicaÃ§Ã£o â ManhÃ£',             cor:'#1F3A6E'});
+    cats.push({id:'fc_abm_m',        label:'ð¦ Abertura do Malote â ManhÃ£',    cor:'#1F3A6E'});
+    cats.push({id:'fc_fchm_m',       label:'ð¦ Fechamento do Malote â ManhÃ£',  cor:'#1F3A6E'});
+    cats.push({id:'fc_portao_fch_m', label:'ðª Fechamento do PortÃ£o â ManhÃ£',  cor:'#1F3A6E'});
   }
   if(haTarde){
-    cats.push({id:'fc_portao_ab_t',  label:'🚪 Abertura do Portão — Tarde',    cor:'#CF3432'});
-    cats.push({id:'fc_aplic_t',      label:'📝 Aplicação — Tarde',             cor:'#CF3432'});
-    cats.push({id:'fc_abm_t',        label:'📦 Abertura do Malote — Tarde',    cor:'#CF3432'});
-    cats.push({id:'fc_fchm_t',       label:'📦 Fechamento do Malote — Tarde',  cor:'#CF3432'});
-    cats.push({id:'fc_portao_fch_t', label:'🚪 Fechamento do Portão — Tarde',  cor:'#CF3432'});
+    cats.push({id:'fc_portao_ab_t',  label:'ðª Abertura do PortÃ£o â Tarde',    cor:'#CF3432'});
+    cats.push({id:'fc_aplic_t',      label:'ð AplicaÃ§Ã£o â Tarde',             cor:'#CF3432'});
+    cats.push({id:'fc_abm_t',        label:'ð¦ Abertura do Malote â Tarde',    cor:'#CF3432'});
+    cats.push({id:'fc_fchm_t',       label:'ð¦ Fechamento do Malote â Tarde',  cor:'#CF3432'});
+    cats.push({id:'fc_portao_fch_t', label:'ðª Fechamento do PortÃ£o â Tarde',  cor:'#CF3432'});
   }
 
   fotasCats = cats;
@@ -1302,7 +1302,7 @@ function renderPreview(inputId, previewId){
     reader.readAsDataURL(file);
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.textContent = '✕';
+    btn.textContent = 'â';
     btn.style.cssText = 'position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.6);color:#FFF;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;line-height:1;padding:0;';
     btn.onclick = () => { fotosMap[inputId].splice(idx, 1); renderPreview(inputId, previewId); };
     wrap.appendChild(img);
@@ -1312,19 +1312,25 @@ function renderPreview(inputId, previewId){
 }
 
 function comprimirImagem(file, categoria){
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Falha ao ler arquivo: " + file.name));
     reader.onload = e => {
       const img = new Image();
+      img.onerror = () => reject(new Error("Falha ao carregar imagem: " + file.name));
       img.onload = () => {
-        const MAX = 1200;
-        let w = img.width, h = img.height;
-        if(w > MAX){ h = Math.round(h * MAX / w); w = MAX; }
-        if(h > MAX){ w = Math.round(w * MAX / h); h = MAX; }
-        const canvas = document.createElement('canvas');
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        resolve({ categoria, nome: file.name, b64: canvas.toDataURL('image/jpeg', 0.75).split(',')[1] });
+        try {
+          const MAX = 1200;
+          let w = img.width, h = img.height;
+          if(w > MAX){ h = Math.round(h * MAX / w); w = MAX; }
+          if(h > MAX){ w = Math.round(w * MAX / h); h = MAX; }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve({ categoria, nome: file.name, b64: canvas.toDataURL('image/jpeg', 0.75).split(',')[1] });
+        } catch(err) {
+          reject(err);
+        }
       };
       img.src = e.target.result;
     };
@@ -1340,11 +1346,11 @@ async function coletarFotos(){
   return fotos;
 }
 
-// ════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 //  ENVIO
-// ════════════════════════════════════════════════════════════════
+// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function validar(){
-  // Limpa marcações anteriores
+  // Limpa marcaÃ§Ãµes anteriores
   document.querySelectorAll('.campo-invalido').forEach(el => el.classList.remove('campo-invalido'));
   const msg = document.getElementById('msgValidacao');
   msg.style.display = 'none';
@@ -1366,50 +1372,50 @@ function validar(){
   const hasManha = !document.getElementById('secManha').classList.contains('hidden');
   const haTarde  = !document.getElementById('secTarde').classList.contains('hidden');
 
-  // ── Horários ──
+  // ââ HorÃ¡rios ââ
   if(hasManha){
     ['m_chegada','m_ab_portao','m_ab_malote','m_distrib','m_fch_portao','m_inicio','m_encerr','m_fch_malote']
-      .forEach(id => checar(document.getElementById(id), 'Horários — Manhã'));
+      .forEach(id => checar(document.getElementById(id), 'HorÃ¡rios â ManhÃ£'));
   }
   if(haTarde){
     ['t_chegada','t_ab_portao','t_ab_malote','t_distrib','t_fch_portao','t_inicio','t_encerr','t_fch_malote']
-      .forEach(id => checar(document.getElementById(id), 'Horários — Tarde'));
+      .forEach(id => checar(document.getElementById(id), 'HorÃ¡rios â Tarde'));
   }
 
-  // ── Testemunhas ──
+  // ââ Testemunhas ââ
   if(hasManha){
     for(let i=1;i<=3;i++){
-      checar(document.getElementById(`m_t${i}_ab_malote_nome`),  'Testemunhas Abertura Malote — Manhã');
-      checar(document.getElementById(`m_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote — Manhã');
+      checar(document.getElementById(`m_t${i}_ab_malote_nome`),  'Testemunhas Abertura Malote â ManhÃ£');
+      checar(document.getElementById(`m_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote â ManhÃ£');
     }
   }
   if(haTarde){
     for(let i=1;i<=3;i++){
-      checar(document.getElementById(`t_t${i}_ab_malote_nome`),  'Testemunhas Abertura Malote — Tarde');
-      checar(document.getElementById(`t_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote — Tarde');
+      checar(document.getElementById(`t_t${i}_ab_malote_nome`),  'Testemunhas Abertura Malote â Tarde');
+      checar(document.getElementById(`t_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote â Tarde');
     }
   }
 
-  // ── CPFs duplicados nas testemunhas ──
+  // ââ CPFs duplicados nas testemunhas ââ
   if(hasManha){
-    if(validarCPFsDuplicados('m','ab_malote',secoes))  { if(!secoes.includes('Testemunhas Abertura Malote — Manhã (CPFs duplicados)'))  secoes.push('Testemunhas Abertura Malote — Manhã (CPFs duplicados)');  }
-    if(validarCPFsDuplicados('m','fch_malote',secoes)) { if(!secoes.includes('Testemunhas Fechamento Malote — Manhã (CPFs duplicados)')) secoes.push('Testemunhas Fechamento Malote — Manhã (CPFs duplicados)'); }
+    if(validarCPFsDuplicados('m','ab_malote',secoes))  { if(!secoes.includes('Testemunhas Abertura Malote â ManhÃ£ (CPFs duplicados)'))  secoes.push('Testemunhas Abertura Malote â ManhÃ£ (CPFs duplicados)');  }
+    if(validarCPFsDuplicados('m','fch_malote',secoes)) { if(!secoes.includes('Testemunhas Fechamento Malote â ManhÃ£ (CPFs duplicados)')) secoes.push('Testemunhas Fechamento Malote â ManhÃ£ (CPFs duplicados)'); }
   }
   if(haTarde){
-    if(validarCPFsDuplicados('t','ab_malote',secoes))  { if(!secoes.includes('Testemunhas Abertura Malote — Tarde (CPFs duplicados)'))  secoes.push('Testemunhas Abertura Malote — Tarde (CPFs duplicados)');  }
-    if(validarCPFsDuplicados('t','fch_malote',secoes)) { if(!secoes.includes('Testemunhas Fechamento Malote — Tarde (CPFs duplicados)')) secoes.push('Testemunhas Fechamento Malote — Tarde (CPFs duplicados)'); }
+    if(validarCPFsDuplicados('t','ab_malote',secoes))  { if(!secoes.includes('Testemunhas Abertura Malote â Tarde (CPFs duplicados)'))  secoes.push('Testemunhas Abertura Malote â Tarde (CPFs duplicados)');  }
+    if(validarCPFsDuplicados('t','fch_malote',secoes)) { if(!secoes.includes('Testemunhas Fechamento Malote â Tarde (CPFs duplicados)')) secoes.push('Testemunhas Fechamento Malote â Tarde (CPFs duplicados)'); }
   }
 
-  // ── Estatística (pres / aus / incl) ──
+  // ââ EstatÃ­stica (pres / aus / incl) ââ
   document.querySelectorAll('[data-obrig]').forEach(el => {
     const inManha = !!el.closest('#secManha');
     const inTarde = !!el.closest('#secTarde');
-    if(inManha && hasManha) checar(el, 'Estatística — Manhã');
-    if(inTarde && haTarde)  checar(el, 'Estatística — Tarde');
+    if(inManha && hasManha) checar(el, 'EstatÃ­stica â ManhÃ£');
+    if(inTarde && haTarde)  checar(el, 'EstatÃ­stica â Tarde');
   });
 
   if(secoes.length > 0){
-    msg.textContent = '⚠ Preencha os campos obrigatórios: ' + secoes.join(' · ');
+    msg.textContent = 'â  Preencha os campos obrigatÃ³rios: ' + secoes.join(' Â· ');
     msg.style.display = 'block';
     if(primeiro) primeiro.scrollIntoView({behavior:'smooth', block:'center'});
     return false;
@@ -1422,7 +1428,7 @@ async function enviar(){
   const idx = sel.value;
   if(idx === ""){ alert("Selecione uma escola."); return; }
   const escola = CONCURSO.escolas[parseInt(idx)];
-  const hasManha = escola.cargos.some(c=>c.turno==="Manhã");
+  const hasManha = escola.cargos.some(c=>c.turno==="ManhÃ£");
   const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
 
   const payload = {
@@ -1456,7 +1462,7 @@ async function enviar(){
           {nome:getTxt("m_t3_fch_malote_nome"), cpf:getTxt("m_t3_fch_malote_cpf")},
         ],
       },
-      estatistica: coletarStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã")),
+      estatistica: coletarStat("tabelaManha", escola.cargos.filter(c=>c.turno==="ManhÃ£")),
       ocorrencias: {
         sala:  {resp:getRad("m_ocorr_sala"), candidatos:coletarSalaEntries("m_ocorr_sala_entries"),
           tipos: coletarTiposOcorr("m_ocorr"),},
@@ -1502,7 +1508,7 @@ async function enviar(){
   try {
     payload.fotos = await coletarFotos();
   } catch(e) {
-    btn.disabled = false; btn.textContent = "Enviar Formulário";
+    btn.disabled = false; btn.textContent = "Enviar FormulÃ¡rio";
     alert("Erro ao processar fotos: " + e.message); return;
   }
 
@@ -1519,8 +1525,8 @@ async function enviar(){
     ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
     document.getElementById("cardSucesso").classList.remove("hidden");
   } catch(e) {
-    btn.disabled = false; btn.textContent = "Enviar Formulário";
-    alert("Erro ao enviar: " + e.message + "\n\nVerifique sua conexão e tente novamente.");
+    btn.disabled = false; btn.textContent = "Enviar FormulÃ¡rio";
+    alert("Erro ao enviar: " + e.message + "\n\nVerifique sua conexÃ£o e tente novamente.");
   }
 }
 </script>
