@@ -1535,32 +1535,18 @@ async function enviar(){
     alert("Erro ao processar fotos: " + e.message); return;
   }
 
-  btn.textContent = "Enviando... Aguarde, isso pode levar até 30 segundos.";
+  btn.textContent = "Enviando...";
 
-  // Com no-cors não conseguimos ler a resposta; usamos race com timeout
-  // para não deixar o coordenador preso caso o servidor demore (fotos + e-mail).
-  let fetchTimedOut = false;
-  try {
-    await Promise.race([
-      fetch(SCRIPT_URL, {
-        method:"POST", mode:"no-cors",
-        headers:{"Content-Type":"text/plain"},
-        body: JSON.stringify(payload)
-      }),
-      new Promise((_, reject) =>
-        setTimeout(() => { fetchTimedOut = true; reject(new Error("__TIMEOUT__")); }, 30000)
-      )
-    ]);
-  } catch(e) {
-    if (!fetchTimedOut) {
-      // Erro de rede real (sem internet, DNS etc.)
-      btn.disabled = false; btn.textContent = "Enviar Formulário";
-      alert("Erro ao enviar: " + e.message + "\n\nVerifique sua conexão e tente novamente.");
-      return;
-    }
-    // Timeout: o servidor provavelmente recebeu mas ainda está processando.
-    // Prosseguimos para mostrar o sucesso.
-  }
+  // Com no-cors não conseguimos ler a resposta de qualquer forma.
+  // Enviamos em background e mostramos sucesso imediatamente.
+  fetch(SCRIPT_URL, {
+    method:"POST", mode:"no-cors",
+    headers:{"Content-Type":"text/plain"},
+    body: JSON.stringify(payload)
+  }).catch(err => console.warn("Envio em background falhou:", err));
+
+  // Pequena pausa para garantir que o request foi iniciado
+  await new Promise(r => setTimeout(r, 800));
 
   clearTimeout(_rascunhoSaveT);
   limparRascunho();
