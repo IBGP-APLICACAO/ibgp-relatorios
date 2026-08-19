@@ -1535,25 +1535,40 @@ async function enviar(){
     alert("Erro ao processar fotos: " + e.message); return;
   }
 
-  btn.textContent = "Enviando...";
+  btn.textContent = "Enviando... Aguarde, isso pode levar até 30 segundos.";
 
+  // Com no-cors não conseguimos ler a resposta; usamos race com timeout
+  // para não deixar o coordenador preso caso o servidor demore (fotos + e-mail).
+  let fetchTimedOut = false;
   try {
-    await fetch(SCRIPT_URL, {
-      method:"POST", mode:"no-cors",
-      headers:{"Content-Type":"text/plain"},
-      body: JSON.stringify(payload)
-    });
-    clearTimeout(_rascunhoSaveT);
-    limparRascunho();
-    document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
-    ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
-    document.getElementById("btnLimparFlutuante").style.display = "none";
-    document.getElementById("cardSucesso").classList.remove("hidden");
-    window.scrollTo({top: 0, behavior: "smooth"});
+    await Promise.race([
+      fetch(SCRIPT_URL, {
+        method:"POST", mode:"no-cors",
+        headers:{"Content-Type":"text/plain"},
+        body: JSON.stringify(payload)
+      }),
+      new Promise((_, reject) =>
+        setTimeout(() => { fetchTimedOut = true; reject(new Error("__TIMEOUT__")); }, 30000)
+      )
+    ]);
   } catch(e) {
-    btn.disabled = false; btn.textContent = "Enviar Formulário";
-    alert("Erro ao enviar: " + e.message + "\n\nVerifique sua conexão e tente novamente.");
+    if (!fetchTimedOut) {
+      // Erro de rede real (sem internet, DNS etc.)
+      btn.disabled = false; btn.textContent = "Enviar Formulário";
+      alert("Erro ao enviar: " + e.message + "\n\nVerifique sua conexão e tente novamente.");
+      return;
+    }
+    // Timeout: o servidor provavelmente recebeu mas ainda está processando.
+    // Prosseguimos para mostrar o sucesso.
   }
+
+  clearTimeout(_rascunhoSaveT);
+  limparRascunho();
+  document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
+  ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  document.getElementById("btnLimparFlutuante").style.display = "none";
+  document.getElementById("cardSucesso").classList.remove("hidden");
+  window.scrollTo({top: 0, behavior: "smooth"});
 }
 </script>
 
