@@ -1547,15 +1547,18 @@ async function enviar(){
     alert("Erro ao processar fotos: " + e.message); return;
   }
 
-  alert("DEBUG 2: fotos coletadas OK, exibindo sucesso!");
-  // Mostra sucesso imediatamente (sem depender de resposta do servidor)
-  clearTimeout(_rascunhoSaveT);
-  limparRascunho();
-  document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
-  ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
-  document.getElementById("btnLimparFlutuante").style.display = "none";
-  document.getElementById("cardSucesso").classList.remove("hidden");
-  window.scrollTo({top: 0, behavior: "smooth"});
+  try {
+    clearTimeout(_rascunhoSaveT);
+    limparRascunho();
+    document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
+    ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+    document.getElementById("btnLimparFlutuante").style.display = "none";
+    document.getElementById("cardSucesso").classList.remove("hidden");
+    window.scrollTo({top: 0, behavior: "smooth"});
+  } catch(e) {
+    alert("ERRO no bloco de sucesso: " + e.message + "\nLinha: " + e.stack);
+    return;
+  }
 
   // Envia dados em background (no-cors: não conseguimos ler a resposta)
   fetch(SCRIPT_URL, {
