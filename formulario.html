@@ -1535,19 +1535,7 @@ async function enviar(){
     alert("Erro ao processar fotos: " + e.message); return;
   }
 
-  btn.textContent = "Enviando...";
-
-  // Com no-cors não conseguimos ler a resposta de qualquer forma.
-  // Enviamos em background e mostramos sucesso imediatamente.
-  fetch(SCRIPT_URL, {
-    method:"POST", mode:"no-cors",
-    headers:{"Content-Type":"text/plain"},
-    body: JSON.stringify(payload)
-  }).catch(err => console.warn("Envio em background falhou:", err));
-
-  // Pequena pausa para garantir que o request foi iniciado
-  await new Promise(r => setTimeout(r, 800));
-
+  // Mostra sucesso imediatamente (sem depender de resposta do servidor)
   clearTimeout(_rascunhoSaveT);
   limparRascunho();
   document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
@@ -1555,6 +1543,13 @@ async function enviar(){
   document.getElementById("btnLimparFlutuante").style.display = "none";
   document.getElementById("cardSucesso").classList.remove("hidden");
   window.scrollTo({top: 0, behavior: "smooth"});
+
+  // Envia dados em background (no-cors: não conseguimos ler a resposta)
+  fetch(SCRIPT_URL, {
+    method:"POST", mode:"no-cors",
+    headers:{"Content-Type":"text/plain"},
+    body: JSON.stringify(payload)
+  }).catch(err => console.warn("Envio falhou:", err));
 }
 </script>
 
