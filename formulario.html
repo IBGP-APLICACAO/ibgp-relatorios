@@ -1538,7 +1538,7 @@ async function enviar(){
 
   const btn = document.getElementById("btnEnviar");
   btn.disabled = true; btn.textContent = "Comprimindo fotos...";
-  alert("DEBUG 1: validação OK, iniciando compressão de fotos. Fotos no mapa: " + Object.values(fotosMap).flat().length);
+
 
   try {
     payload.fotos = await coletarFotos();
@@ -1547,18 +1547,16 @@ async function enviar(){
     alert("Erro ao processar fotos: " + e.message); return;
   }
 
-  try {
-    clearTimeout(_rascunhoSaveT);
-    limparRascunho();
-    document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
-    ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
-    document.getElementById("btnLimparFlutuante").style.display = "none";
-    document.getElementById("cardSucesso").classList.remove("hidden");
-    window.scrollTo({top: 0, behavior: "smooth"});
-  } catch(e) {
-    alert("ERRO no bloco de sucesso: " + e.message + "\nLinha: " + e.stack);
-    return;
-  }
+  clearTimeout(_rascunhoSaveT);
+  limparRascunho();
+  document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
+  ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  document.getElementById("btnLimparFlutuante").style.display = "none";
+  const sc = document.getElementById("cardSucesso");
+  sc.classList.remove("hidden");
+  sc.style.display = "block";
+  alert("✅ Formulário enviado! Feche este alerta para ver a confirmação.");
+  window.scrollTo({top: 0, behavior: "smooth"});
 
   // Envia dados em background (no-cors: não conseguimos ler a resposta)
   fetch(SCRIPT_URL, {
