@@ -1509,7 +1509,7 @@ async function enviar(){
   btn.textContent = "Enviando...";
 
   try {
-    await fetch(SCRIPT_URL, {
+    await fetch(CONCURSO?.script_url || SCRIPT_URL, {
       method:"POST", mode:"no-cors",
       headers:{"Content-Type":"text/plain"},
       body: JSON.stringify(payload)
