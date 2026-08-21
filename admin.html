@@ -1173,8 +1173,8 @@ function abrirRelatorioImprimivel(dados) {
         const src = b ? (b.startsWith("data:") ? b : "data:image/jpeg;base64," + b) : "";
         if (src) {
           fotoHtml += '<div class="foto-item">'
-            + '<img src="' + src + '" alt="' + (f.nome||f.categoria||'foto') + '">'
-            + '<div class="foto-label">' + ([f.categoria, f.nome].filter(Boolean).join(" — ") || "Foto") + '</div>'
+            + '<img src="' + src + '" alt="' + (f.categoria||f.turno||'foto') + '">'
+            + '<div class="foto-label">' + ([f.categoria, f.turno].filter(Boolean).join(" — ") || "Foto") + '</div>'
             + '</div>';
         }
       });
