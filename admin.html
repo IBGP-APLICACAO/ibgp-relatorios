@@ -951,6 +951,9 @@ async function gerarRelatorioGeral() {
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     const dados = await resp.json();
     dados.escolas = (dados.escolas || []).filter(e => escolasDoCertame.has((e.nome || "").toUpperCase().trim()));
+    const salasMapCert = {};
+    (certameDados.escolas || []).forEach(ce => { salasMapCert[(ce.nome||'').toUpperCase().trim()] = ce.salas||0; });
+    dados.escolas = dados.escolas.map(e => { if(!e.salas) e.salas = salasMapCert[(e.nome||'').toUpperCase().trim()]||0; return e; });
     dados.concurso["TÃ­tulo do Concurso"] = certameTitulo;
     dados.concurso["Data da Prova"]      = certameData;
     dados.concurso["Edital"]             = certameDados.edital || dados.concurso["Edital"] || "";
