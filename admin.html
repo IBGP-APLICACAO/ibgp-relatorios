@@ -1237,7 +1237,6 @@ function abrirRelatorioImprimivel(dados) {
     }
     html += secao("Registro Fotográfico", corM, fotoHtml);
 
-    html += '<div style="text-align:center;font-size:10px;color:#aaa;margin-top:8px;padding-bottom:8px;">Gerado em ' + new Date().toLocaleString("pt-BR") + ' — IBGP Sistema de Aplicação</div></div>';
   });
 
   html += "</body></html>";
@@ -1355,7 +1354,6 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'<div style="border-top:1px solid #3D3D3D;padding-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px 28px;">'
     +infoCell("Edital",edital)+infoCell("Data da Prova",dataProva)+infoCell("Turno(s)",turnosStr)
     +infoCell("Total de Locais",n)+infoCell("Coord. Pedag\u00f3gico",coordPed)+infoCell("Coord. Log\u00edstico",coordLog)
-    +infoCell("Gerado em",hoje)
     +'</div></div>'
     +'<div style="'+PC+'height:4px;background:'+corR+';margin-bottom:28px;border-radius:0 0 6px 6px;"></div>';
 
@@ -1368,7 +1366,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+=secH("2","Resumo Executivo");
   var pctPres=pct2(totP,totI),pctAus=pct2(totA,totI);
   html+='<p>A aplica\u00e7\u00e3o foi conduzida em <strong>'+n+'</strong> '+(n===1?"local":"locais")+', com <strong>'+totSalas+'</strong> salas utilizadas. Foram registrados <strong>'+totI+'</strong> candidatos inscritos, sendo <strong>'+totP+'</strong> presentes ('+pctPres+') e <strong>'+totA+'</strong> ausentes ('+pctAus+').'+(cargoMaiorInscr?' O cargo com maior n\u00famero de inscritos foi <strong>'+cargoMaiorInscr.nome+'</strong>, com '+cargoMaiorInscr.inscr+' candidatos.':'')+'</p>';
-  html+='<div class="card" style="margin-bottom:20px;overflow:hidden;border-radius:8px;"><table style="table-layout:fixed;width:100%;border-collapse:collapse;"><tbody><tr>'+indCard(n,"Locais","#1D4ED8","#fff")+indCard(nCargos,"Cargos","#15803D","#fff")+indCard(totSalas,"Salas","#B91C1C","#fff")+indCard(totI,"Inscritos","#1D4ED8","#fff")+'</tr><tr>'+indCard(totP,"Presentes","#15803D","#fff")+indCard(totA,"Ausentes","#B91C1C","#fff")+indCard(pctPres,"Taxa Presen\u00e7a","#1D4ED8","#fff")+indCard(pctAus,"Taxa Aus\u00eancia","#15803D","#fff")+'</tr></tbody></table></div>';
+  html+='<div class="card" style="margin-bottom:20px;overflow:hidden;border-radius:8px;"><table style="table-layout:fixed;width:100%;border-collapse:collapse;"><tbody><tr>'+indCard(n,"Locais","#3B82F6","#fff")+indCard(nCargos,"Cargos","#22C55E","#fff")+indCard(totSalas,"Salas","#EF4444","#fff")+indCard(totI,"Inscritos","#3B82F6","#fff")+'</tr><tr>'+indCard(totP,"Presentes","#22C55E","#fff")+indCard(totA,"Ausentes","#EF4444","#fff")+indCard(pctPres,"Taxa Presen\u00e7a","#3B82F6","#fff")+indCard(pctAus,"Taxa Aus\u00eancia","#22C55E","#fff")+'</tr></tbody></table></div>';
   html+='<p style="font-size:11px;font-weight:600;color:#1F3A6E;margin:16px 0 6px;padding-bottom:4px;border-bottom:2px solid #1F3A6E;">Top 5 Cargos \u2014 Maior N\u00famero de Inscritos</p>';
   if(top5Inscr.length){html+='<table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:12px;"><thead><tr style="background:#1F3A6E;color:#fff;"><th style="padding:5px 8px;text-align:left;">Cargo</th><th style="padding:5px 8px;text-align:right;">Inscritos</th></tr></thead><tbody>';top5Inscr.forEach(function(c,i){html+='<tr style="background:'+(i%2===0?'#F5F7FC':'#fff')+'"><td style="padding:4px 8px;">'+c.nome+'</td><td style="padding:4px 8px;text-align:right;font-weight:600;">'+c.inscr+'</td></tr>';});html+='</tbody></table>';}
   html+='<p style="font-size:11px;font-weight:700;color:#333;text-transform:uppercase;margin-bottom:8px;">Top 5 Cargos \u2014 Maior Taxa de Aus\u00eancia</p>';
@@ -1467,7 +1465,6 @@ function abrirRelatorioGeral(dados, meta, win) {
   // Rodapé
   html+='<div style="border-top:1px solid #CCC;margin-top:28px;padding-top:12px;display:flex;justify-content:space-between;font-size:9px;color:#888;">'
     +'<span>IBGP \u2014 Instituto Brasileiro de Gest\u00e3o e Pesquisa</span>'
-    +'<span>Gerado em '+hoje+'</span>'
     +'</div>';
   html+='</body></html>';
   win.document.write(html);
