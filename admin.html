@@ -951,9 +951,10 @@ async function gerarRelatorioGeral() {
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     const dados = await resp.json();
     dados.escolas = (dados.escolas || []).filter(e => escolasDoCertame.has((e.nome || "").toUpperCase().trim()));
+    function normNomeEsc(n){return(n||'').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();}
     const salasMapCert = {};
-    (certameDados.escolas || []).forEach(ce => { salasMapCert[(ce.nome||'').toUpperCase().trim()] = ce.salas||0; });
-    dados.escolas = dados.escolas.map(e => { if(!e.salas) e.salas = salasMapCert[(e.nome||'').toUpperCase().trim()]||0; return e; });
+    (certameDados.escolas || []).forEach(ce => { salasMapCert[normNomeEsc(ce.nome)] = ce.salas||0; });
+    dados.escolas = dados.escolas.map(e => { if(!e.salas) e.salas = salasMapCert[normNomeEsc(e.nome)]||0; return e; });
     dados.concurso["TÃ­tulo do Concurso"] = certameTitulo;
     dados.concurso["Data da Prova"]      = certameData;
     dados.concurso["Edital"]             = certameDados.edital || dados.concurso["Edital"] || "";
@@ -1278,7 +1279,7 @@ function abrirRelatorioGeral(dados, meta, win) {
       var ins=Number(r.inscr)||0,pre=Number(r.pres)||0,aus=Number(r.aus)||0,inc=Number(r.incl)||0;
       totI+=ins;totP+=pre;totA+=aus;totIn+=inc;eI+=ins;eP+=pre;eA+=aus;eIn+=inc;
       if(ins>0&&aus/ins>maxPct){maxPct=aus/ins;melhorCargo=r;}
-      var cargo=r.cargo.replace(/^\d+\s*[-\u2014]\s*/,'').trim();
+      var cargo=r.cargo.replace(/^SALA\s+\S+\s*[-\u2014]+\s*/i,'').trim();
       if(!cargosMap[cargo])cargosMap[cargo]={inscr:0,pres:0,aus:0,incl:0};
       cargosMap[cargo].inscr+=ins;cargosMap[cargo].pres+=pre;cargosMap[cargo].aus+=aus;cargosMap[cargo].incl+=inc;
     });
@@ -1287,7 +1288,8 @@ function abrirRelatorioGeral(dados, meta, win) {
   });
   function pct(a,b){return b>0?(a/b*100).toFixed(1)+"%":"\u2014";}
   function pct2(a,b){return b>0?(a/b*100).toFixed(2)+"%":"\u2014";}
-  if(Object.keys(cargosMap).length===0){(certameDados.escolas||[]).forEach(function(ce){(ce.cargos||[]).forEach(function(r){var cargo=(r.cargo||'').replace(/^\d+\s*[-\u2014]\s*/,'').trim();if(!cargo)return;if(!cargosMap[cargo])cargosMap[cargo]={inscr:0,pres:0,aus:0,incl:0};cargosMap[cargo].inscr+=Number(r.inscr)||0;});});}
+  if(!totSalas)(certameDados.escolas||[]).forEach(function(ce){totSalas+=(ce.salas||0);});
+  if(Object.keys(cargosMap).length===0){(certameDados.escolas||[]).forEach(function(ce){(ce.cargos||[]).forEach(function(r){var cargo=(r.cargo||'').replace(/^SALA\s+\S+\s*[-\u2014]+\s*/i,'').trim();if(!cargo)return;if(!cargosMap[cargo])cargosMap[cargo]={inscr:0,pres:0,aus:0,incl:0};cargosMap[cargo].inscr+=Number(r.inscr)||0;});});}
   var n=escolas.length,nCargos=Object.keys(cargosMap).length;
   var cargosArr=Object.keys(cargosMap).map(function(nome){return Object.assign({nome:nome},cargosMap[nome]);});
   var top5Inscr=cargosArr.slice().sort(function(a,b){return b.inscr-a.inscr;}).slice(0,5);
