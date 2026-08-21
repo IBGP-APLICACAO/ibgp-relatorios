@@ -1196,6 +1196,27 @@ function abrirRelatorioImprimivel(dados) {
   win.document.close();
 }
 
+
+// ── Botões de relatórios individuais ────────────────────────────────
+function mostrarBotoesIndividuais(escolas) {
+  if (!escolas || escolas.length === 0) return;
+  var el = document.getElementById("statusRelatorio");
+  el.style.display = "block";
+  el.style.background = "#EFF3FB";
+  el.style.color = "#1F3A6E";
+  el.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">📄 Relatórios Individuais por Local</div>'
+    + '<div style="display:flex;flex-wrap:wrap;gap:8px;">'
+    + escolas.map(function(e, i) {
+        return '<button onclick="abrirIndividualPorIdx(' + i + ')" style="background:#1F3A6E;color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">' + e.nome + '</button>';
+      }).join("")
+    + '</div>';
+}
+
+function abrirIndividualPorIdx(i) {
+  if (!_dadosGeral) return;
+  abrirRelatorioImprimivel({ concurso: _dadosGeral.concurso, escolas: [_dadosGeral.escolas[i]] });
+}
+
 function abrirRelatorioGeral(dados, meta, win) {
   if (!win) win = window.open("", "_blank");
   win.document.open(); // reseta documento (remove tela de carregamento)
