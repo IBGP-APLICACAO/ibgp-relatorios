@@ -1028,6 +1028,7 @@ function abrirRelatorioImprimivel(dados) {
   html += `<div class="no-print" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#1F3A6E;color:#fff;padding:12px 20px;margin-bottom:16px;border-radius:8px;align-items:center;justify-content:space-between;">
     <span style="font-weight:700;">Relatório Individual — IBGP</span>
     <button onclick="window.print()" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#CF3432;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">🖨 Imprimir / Salvar PDF</button>
+    <button onclick="(function(){var b=new Blob([document.documentElement.outerHTML],{type:'application/msword'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download='Relatorio_Individual_IBGP.doc';a.click();URL.revokeObjectURL(u);})()" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#2E7D32;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;margin-left:8px;">📥 Baixar Word (.doc)</button>
   </div>`;
 
   // Por escola
