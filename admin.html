@@ -1378,7 +1378,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+='<div class="pb">';
   html+=secH("3","Procedimentos Padronizados");
   html+='<p>Em todos os locais de aplica\u00e7\u00e3o foram adotados os procedimentos operacionais padronizados do IBGP, conforme descrito a seguir:</p>';
-  html+='<table style="margin-top:10px;">';
+  html+='<table style="margin-top:10px;width:100%;border-collapse:collapse;"><thead><tr><th style="'+PC+'background:#1F3A6E;color:#fff;padding:7px 10px;font-size:11px;width:30px;text-align:center;">#</th><th style="'+PC+'background:#1F3A6E;color:#fff;padding:7px 10px;font-size:11px;text-align:left;">Procedimento</th><th style="'+PC+'background:#1F3A6E;color:#fff;padding:7px 10px;font-size:11px;width:110px;text-align:center;">Hor\u00e1rio</th></tr></thead>';
   ["Reuni\u00e3o de alinhamento com a equipe de coordena\u00e7\u00e3o e fiscaliza\u00e7\u00e3o antes do in\u00edcio das atividades.",
    "Abertura do port\u00e3o e recep\u00e7\u00e3o dos candidatos conforme cronograma estabelecido no edital.",
    "Abertura do malote de provas na presen\u00e7a das testemunhas, com registro fotogr\u00e1fico.",
@@ -1389,8 +1389,10 @@ function abrirRelatorioGeral(dados, meta, win) {
    "Fechamento do malote com lacre de seguran\u00e7a e registro fotogr\u00e1fico do procedimento.",
    "Encaminhamento de formul\u00e1rios, atas e malotes \u00e0 coordena\u00e7\u00e3o log\u00edstica ao t\u00e9rmino da aplica\u00e7\u00e3o."
   ].forEach(function(proc,i){var bg=i%2?'#F5F7FC':'#fff';
+    var ht=['05h50 \u00e0s 06h45','07h00','\u2014','08h00','08h30','\u2014','\u2014','\u2014','\u2014'][i]||'\u2014';
     html+='<tr><td style="'+PC+'background:'+bg+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;width:30px;text-align:center;font-weight:700;color:'+corP+';">'+(i+1)+'</td>'
-      +'<td style="'+PC+'background:'+bg+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;text-align:justify;">'+proc+'</td></tr>';});
+      +'<td style="'+PC+'background:'+bg+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;text-align:justify;">'+proc+'</td>'
+      +'<td style="'+PC+'background:'+bg+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;width:110px;text-align:center;font-weight:600;color:'+corP+';">'+ht+'</td></tr>';});
   html+='</table></div>';
 
   // 4. Locais de Aplicação
