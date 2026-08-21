@@ -1039,6 +1039,15 @@ function abrirRelatorioImprimivel(dados) {
       grid2("Apoio à Coordenação", houveApoio, houveApoio === "Sim" ? "Nome do apoiador" : "", houveApoio === "Sim" ? nomeApoio : "")
     );
 
+    // 1b. Comissão
+    const houveComissao = d.houve_comissao || "Não";
+    const membrosComissaoStr = Array.isArray(d.membros_comissao) ? d.membros_comissao.join("; ") : (d.membros_comissao || "—");
+    if (houveComissao === "Sim") {
+      html += secao("Comissão", "#5A3A8A",
+        grid2("Houve comissão?", "Sim", "Membros", membrosComissaoStr || "—")
+      );
+    }
+
     // 2. Horários por turno
     (e.horarios || []).forEach(function(h) {
       const cor = h.turno === "Manhã" ? corM : corT;
@@ -1153,6 +1162,41 @@ function abrirRelatorioImprimivel(dados) {
       }
 
       html += secao("Ocorrências — " + o.turno, cor, oHtml);
+    });
+
+    // 5b. Ampliação de Sala por turno
+    var _turnoCores = {"Manhã": corM, "Tarde": corT};
+    [["manha","Manhã"],["tarde","Tarde"]].forEach(function(pair) {
+      var td = d[pair[0]] || {};
+      var ampList = td.ampliacao || [];
+      if (ampList.length === 0) return;
+      var ampHtml = ampList.map(function(ap) {
+        return grid2("Ata", ap.ata||"—", "Qtd. Candidatos", ap.qtd||"—") +
+          (ap.justificativa ? '<p style="font-size:12px;margin:4px 0;"><strong>Justificativa:</strong> '+ap.justificativa+'</p>' : "");
+      }).join('<hr style="border:none;border-top:1px solid #eee;margin:4px 0;">');
+      html += secao("Ampliação de Sala — "+pair[1], _turnoCores[pair[1]]||corH, ampHtml);
+    });
+
+    // 5c. Correção de Dados Cadastrais por turno
+    [["manha","Manhã"],["tarde","Tarde"]].forEach(function(pair) {
+      var td = d[pair[0]] || {};
+      var corrList = td.correcao || [];
+      if (corrList.length === 0) return;
+      var corrHtml = '<table style="width:100%;border-collapse:collapse;font-size:12px;">'
+        + '<thead><tr style="background:#555;color:#fff;">'
+        + '<th style="padding:5px 8px;text-align:left;">Inscrição</th>'
+        + '<th style="padding:5px 8px;text-align:left;">Candidato</th>'
+        + '<th style="padding:5px 8px;text-align:left;">Tipo</th>'
+        + '<th style="padding:5px 8px;text-align:left;">Dado Correto</th>'
+        + '</tr></thead><tbody>'
+        + corrList.map(function(c) {
+          return '<tr><td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.inscricao||"—")+'</td>'
+            + '<td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.candidato||"—")+'</td>'
+            + '<td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.tipo||"—")+'</td>'
+            + '<td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.correcao||"—")+'</td></tr>';
+        }).join("")
+        + '</tbody></table>';
+      html += secao("Correção de Dados Cadastrais — "+pair[1], _turnoCores[pair[1]]||corH, corrHtml);
     });
 
     // 6. Observações Gerais
