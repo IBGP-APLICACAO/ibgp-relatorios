@@ -954,7 +954,7 @@ async function gerarRelatorioGeral() {
     function normNomeEsc(n){return(n||'').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();}
     const salasMapCert = {};
     (certameDados.escolas || []).forEach(ce => { salasMapCert[normNomeEsc(ce.nome)] = ce.salas||0; });
-    dados.escolas = dados.escolas.map(e => { if(!e.salas) e.salas = salasMapCert[normNomeEsc(e.nome)]||0; return e; });
+    dados.escolas.forEach(e => { if(!e.salas) e.salas = salasMapCert[normNomeEsc(e.nome)]||0; });
     dados.concurso["TÃ­tulo do Concurso"] = certameTitulo;
     dados.concurso["Data da Prova"]      = certameData;
     dados.concurso["Edital"]             = certameDados.edital || dados.concurso["Edital"] || "";
