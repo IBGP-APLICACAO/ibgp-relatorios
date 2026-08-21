@@ -1264,346 +1264,155 @@ function abrirIndividualPorIdx(i) {
 
 function abrirRelatorioGeral(dados, meta, win) {
   if (!win) win = window.open("", "_blank");
-  win.document.open(); // reseta documento (remove tela de carregamento)
+  win.document.open();
   var conc = dados.concurso || {};
   var escolas = dados.escolas || [];
-
-  // ââ CÃ¡lculos globais ââ
   var totI=0, totP=0, totA=0, totIn=0, totSalas=0;
   var cargosMap = {};
   escolas.forEach(function(e) {
     totSalas += Number(e.salas)||0;
-    var eI=0, eP=0, eA=0, eIn=0;
-    var melhorCargo=null, maxPct=-1;
+    var eI=0, eP=0, eA=0, eIn=0, melhorCargo=null, maxPct=-1;
     (e.resultados||[]).forEach(function(r) {
       var ins=Number(r.inscr)||0, pre=Number(r.pres)||0, aus=Number(r.aus)||0, inc=Number(r.incl)||0;
       totI+=ins; totP+=pre; totA+=aus; totIn+=inc;
       eI+=ins; eP+=pre; eA+=aus; eIn+=inc;
       if(ins>0 && aus/ins>maxPct){ maxPct=aus/ins; melhorCargo=r; }
-      var cargo = r.cargo.replace(/^\d+\s*[-â]\s*/,'').trim();
+      var cargo = r.cargo.replace(/^\d+\s*[-\u2014]\s*/,'').trim();
       if(!cargosMap[cargo]) cargosMap[cargo]={inscr:0,pres:0,aus:0,incl:0};
       cargosMap[cargo].inscr+=ins; cargosMap[cargo].pres+=pre; cargosMap[cargo].aus+=aus; cargosMap[cargo].incl+=inc;
     });
-    e._tot = {ins:eI, pre:eP, aus:eA, inc:eIn};
-    e._cargoMaiorAus = melhorCargo;
-    e._hasOcorr = (e.ocorrencias||[]).some(function(o){ return Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0; });
+    e._tot={ins:eI,pre:eP,aus:eA,inc:eIn};
+    e._cargoMaiorAus=melhorCargo;
+    e._hasOcorr=(e.ocorrencias||[]).some(function(o){return Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0;});
   });
-
-  function pct(a,b){ return b>0?(a/b*100).toFixed(1)+"%":"â"; }
-  function pct2(a,b){ return b>0?(a/b*100).toFixed(2)+"%":"â"; }
-  var n=escolas.length;
-  var nCargos=Object.keys(cargosMap).length;
-  var top5Locais=escolas.slice().sort(function(a,b){return (b._tot.ins||0)-(a._tot.ins||0);}).slice(0,Math.min(5,n));
+  function pct(a,b){ return b>0?(a/b*100).toFixed(1)+"%":"—"; }
+  function pct2(a,b){ return b>0?(a/b*100).toFixed(2)+"%":"—"; }
+  var n=escolas.length, nCargos=Object.keys(cargosMap).length;
   var cargosArr=Object.keys(cargosMap).map(function(nome){return Object.assign({nome:nome},cargosMap[nome]);});
   var top5Aus=cargosArr.filter(function(c){return c.inscr>0;}).sort(function(a,b){return b.aus/b.inscr-a.aus/a.inscr;}).slice(0,5);
-
-  var titulo   = meta.titulo   || conc["TÃ­tulo do Concurso"] || "";
-  var edital   = meta.edital   || conc["Edital"] || "";
-  var dataProva= meta.data     || conc["Data da Prova"] || "";
-  var coordPed = conc["Coordenador PedagÃ³gico"] || "â";
-  var coordLog = conc["Coordenador LogÃ­stico"]  || "â";
+  var cargoMaiorInscr=cargosArr.slice().sort(function(a,b){return b.inscr-a.inscr;})[0]||null;
+  var titulo=meta.titulo||conc["T\u00edtulo do Concurso"]||"";
+  var edital=meta.edital||conc["Edital"]||"";
+  var dataProva=meta.data||conc["Data da Prova"]||"";
+  var coordPed="TIAGO JOS\u00c9 THEISEN";
+  var coordLog="Marcela Avelar Pedrosa Rocha";
   var turnosSet={};
   escolas.forEach(function(e){if(e.turno)String(e.turno).split(/\s+e\s+|\//).forEach(function(t){if(t.trim())turnosSet[t.trim()]=1;});});
-  var turnosStr=Object.keys(turnosSet).filter(Boolean).join(" e ")||"â";
+  var turnosStr=Object.keys(turnosSet).filter(Boolean).join(" e ")||"—";
   var hoje=new Date().toLocaleDateString("pt-BR");
   var corP="#1F3A6E", corR="#CF3432", corE="#2C2C2C";
-
-  // ââ Helpers de HTML ââ
   var PC='-webkit-print-color-adjust:exact;print-color-adjust:exact;';
-  function thS(extra){ return 'style="'+PC+'background:'+corP+';color:#fff;padding:10px 12px;text-align:left;font-size:11px;font-weight:700;'+(extra||'')+'"'; }
-  function td(bg,extra){ return 'style="'+PC+'background:'+(bg||'#fff')+'!important;padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;'+(extra||'')+'"'; }
-  function tdZ(i,extra){ return td(i%2?'#F5F7FC':'#fff',extra); }
+  function thS(x){ return 'style="'+PC+'background:'+corP+';color:#fff;padding:10px 12px;text-align:left;font-size:11px;font-weight:700;'+(x||'')+'"'; }
+  function tdBg(bg,x){ return 'style="'+PC+'background:'+(bg||'#fff')+'!important;padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;'+(x||'')+'"'; }
+  function tdZ(i,x){ return tdBg(i%2?'#F5F7FC':'#fff',x); }
   function secH(num,t){ return '<h2 style="font-size:15px;font-weight:700;color:'+corP+';border-bottom:3px solid '+corR+';padding-bottom:10px;margin:36px 0 18px;letter-spacing:.3px;">'+num+'. '+t+'</h2>'; }
-  function infoCell(l,v){ return '<div style="padding:4px 0;"><span style="display:block;color:#aaa;font-size:9px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;">'+l+'</span><span style="color:#fff;font-size:12px;font-weight:600;">'+(v||"â")+'</span></div>'; }
+  function infoCell(l,v){ return '<div style="padding:4px 0;"><span style="display:block;color:#aaa;font-size:9px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;">'+l+'</span><span style="color:#fff;font-size:12px;font-weight:600;">'+(v||"—")+'</span></div>'; }
   function indCard(v,l){ return '<td style="'+PC+'background:#fff;padding:20px 14px;text-align:center;border:1px solid #D8DEEC;width:25%;"><div style="'+PC+'font-size:30px;font-weight:700;color:'+corP+';line-height:1;">'+v+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#777;margin-top:8px;line-height:1.3;">'+l+'</div></td>'; }
-  function totalRow(cols){ return '<tr>'+cols.map(function(c){ var attr=c[2]?' '+c[2]:''; return '<td'+attr+' style="'+PC+'background:'+corE+'!important;color:#fff!important;padding:10px 12px;font-weight:700;font-size:12px;'+(c[1]||'')+'">'+(c[0])+'</td>'; }).join('')+'</tr>'; }
-
-  // ââ HTML ââ
   var html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>IBGP</title>'
-    +'<style>*{box-sizing:border-box;margin:0;padding:0;}'
-    +'body{font-family:Arial,sans-serif;background:#F2F4F8;padding:28px;font-size:13px;color:#2C2C2C;'+PC+'}'
-    +'table{width:100%;border-collapse:collapse;}'
-    +'.card{background:#fff;border-radius:6px;border:1px solid #DDE3EE;margin-bottom:24px;overflow:hidden;}'
-    +'.no-print{display:flex;}'
-    +'p{line-height:1.8;color:#444;font-size:13px;margin-bottom:12px;}'
-    +'@media print{body{background:#fff;padding:14px;}.no-print{display:none!important;}.pb{page-break-before:always;}}'
-    +'</style></head><body>';
-
-  // Barra (sÃ³ tela)
-  html+='<div class="no-print" style="'+PC+'background:'+corP+';padding:12px 20px;margin-bottom:20px;border-radius:8px;align-items:center;justify-content:flex-end;">'
-    +'<button onclick="window.print()" style="'+PC+'background:'+corR+';color:#fff;border:none;padding:9px 24px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">ð¨ Imprimir / Salvar PDF</button>'
-    +'</div>';
-
-  // ââ CAPA ââ
-  html+='<div style="'+PC+'background:'+corE+';padding:36px 36px 28px;border-radius:8px 8px 0 0;margin-bottom:0;">'
-    +'<p style="'+PC+'color:'+corR+';font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">Instituto Brasileiro de GestÃ£o e Pesquisa</p>'
-    +'<h1 style="color:#fff;font-size:26px;font-weight:700;margin-bottom:8px;letter-spacing:.5px;">RELATÃRIO TÃCNICO CONSOLIDADO</h1>'
+    +'<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;background:#F2F4F8;padding:28px;font-size:13px;color:#2C2C2C;'+PC+'}table{width:100%;border-collapse:collapse;}.card{background:#fff;border-radius:6px;border:1px solid #DDE3EE;margin-bottom:24px;overflow:hidden;}.no-print{display:flex;}p{line-height:1.8;color:#444;font-size:13px;margin-bottom:12px;}@media print{body{background:#fff;padding:14px;}.no-print{display:none!important;}.pb{page-break-before:always;}}</style></head><body>';
+  html+='<div class="no-print" style="'+PC+'background:'+corP+';padding:12px 20px;margin-bottom:20px;border-radius:8px;align-items:center;justify-content:flex-end;"><button onclick="window.print()" style="'+PC+'background:'+corR+';color:#fff;border:none;padding:9px 24px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">\u{1F5A8} Imprimir / Salvar PDF</button></div>';
+  html+='<div style="'+PC+'background:'+corE+';padding:36px 36px 28px;border-radius:8px 8px 0 0;">'
+    +'<p style="'+PC+'color:'+corR+';font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">Instituto Brasileiro de Gest\u00e3o e Pesquisa</p>'
+    +'<h1 style="color:#fff;font-size:26px;font-weight:700;margin-bottom:8px;">RELAT\u00d3RIO T\u00c9CNICO CONSOLIDADO</h1>'
     +'<h2 style="color:#BBBBBB;font-size:15px;font-weight:400;margin-bottom:28px;">'+titulo+'</h2>'
     +'<div style="border-top:1px solid #3D3D3D;padding-top:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px 32px;">'
-    +infoCell("Edital",edital)
-    +infoCell("Data da Prova",dataProva)
-    +infoCell("Turno(s)",turnosStr)
-    +infoCell("Total de Locais",n)
-    +infoCell("Coordenador PedagÃ³gico",coordPed)
-    +infoCell("Coordenador LogÃ­stico",coordLog)
-    +infoCell("Gerado em",hoje)
-    +'</div></div>'
+    +infoCell("Edital",edital)+infoCell("Data da Prova",dataProva)+infoCell("Turno(s)",turnosStr)
+    +infoCell("Total de Locais",n)+infoCell("Coordenador Pedag\u00f3gico",coordPed)+infoCell("Coordenador Log\u00edstico",coordLog)
+    +infoCell("Gerado em",hoje)+'</div></div>'
     +'<div style="'+PC+'height:5px;background:'+corR+';margin-bottom:32px;border-radius:0 0 8px 8px;"></div>';
-
-  // ââ 1. APRESENTAÃÃO ââ
-  html+=secH("1","ApresentaÃ§Ã£o");
+  html+=secH("1","Apresenta\u00e7\u00e3o");
   html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corP+';">'
-    +'<p>Este relatÃ³rio consolida as informaÃ§Ãµes de <strong>'+n+(n===1?" local":" locais")+'</strong> de aplicaÃ§Ã£o das provas objetivas do <strong>'+titulo+'</strong> â '+edital+', realizadas em '+dataProva+', turno'+(Object.keys(turnosSet).length>1?"s":"")+" "+turnosStr+'.</p>'
-    +'<p>'+(n===1?"O local dispÃµe":"Os "+n+" locais dispÃµem")+' de relatÃ³rio tÃ©cnico individual, arquivado separadamente. Os quantitativos de candidatos inscritos, presentes e ausentes apresentados neste documento tÃªm como fonte autoritativa a base de leitura do IBGP, totalizando <strong>'+nCargos+(nCargos===1?" cargo":" cargos")+'</strong> distribuÃ­dos em <strong>'+totSalas+' salas</strong> de prova.</p>'
-    +'<p>Em todos os locais a aplicaÃ§Ã£o transcorreu conforme o cronograma definido no edital. Os procedimentos padronizados do IBGP foram aplicados integralmente, incluindo controle de acesso, distribuiÃ§Ã£o de provas, identificaÃ§Ã£o de candidatos e encerramento com lacre de malotes.</p>'
-    +'</div>';
-
-  // ââ 2. RESUMO EXECUTIVO (2Âª pÃ¡gina) ââ
+    +'<p>Este relat\u00f3rio consolida as informa\u00e7\u00f5es de <strong>'+n+(n===1?" local":" locais")+'</strong> de aplica\u00e7\u00e3o — <strong>'+titulo+'</strong>, '+edital+', realizadas em '+dataProva+', turno'+(Object.keys(turnosSet).length>1?"s":"")+" "+turnosStr+'.</p>'
+    +'<p>Cada local possui relat\u00f3rio t\u00e9cnico individual arquivado separadamente. Os quantitativos totalizam <strong>'+nCargos+' cargo'+(nCargos!==1?"s":"")+'</strong> em <strong>'+totSalas+' salas</strong> de prova.</p></div>';
   html+='<div class="pb">';
   html+=secH("2","Resumo Executivo");
-
-  // Texto resumo
   var pctPres=pct2(totP,totI), pctAus=pct2(totA,totI);
-  html+='<div class="card" style="padding:24px 28px;">'
-    +'<p>A aplicaÃ§Ã£o foi conduzida simultaneamente em <strong>'+n+'</strong> '+(n===1?"local":"locais")+', totalizando <strong>'+totSalas+'</strong> salas. Foram registrados <strong>'+totI+'</strong> candidatos inscritos, <strong>'+totP+'</strong> presentes ('+pctPres+') e <strong>'+totA+'</strong> ausentes ('+pctAus+').</p>'
-    +'</div>';
-
-  // Indicadores Globais (tabela 2Ã4 como no Word)
-  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Indicadores Globais</p>';
-  html+='<div class="card" style="margin-bottom:28px;"><table><tbody>'
-    +'<tr>'+indCard(n,"Locais de AplicaÃ§Ã£o")+indCard(nCargos,"Cargos")+indCard(totSalas,"Salas Utilizadas")+indCard(totI,"Candidatos Inscritos")+'</tr>'
-    +'<tr>'+indCard(totP,"Candidatos Presentes")+indCard(totA,"Candidatos Ausentes")+indCard(pctPres,"Taxa de PresenÃ§a")+indCard(pctAus,"Taxa de AusÃªncia")+'</tr>'
-    +'</tbody></table></div>';
-
-  // Top 5 locais (inscritos)
-  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Top '+Math.min(5,n)+' Cargos com Maior NÃºmero de Inscritos</p>';
-  html+='<div class="card" style="margin-bottom:24px;"><table><thead><tr>'
-    +'<th '+thS()+'>Cargo / FunÃ§Ã£o</th>'
-    +'<th '+thS("text-align:center;")+'>Inscritos</th>'
-    +'<th '+thS("text-align:center;")+'>Presentes</th>'
-    +'<th '+thS("text-align:center;")+'>Ausentes</th>'
-    +'<th '+thS("text-align:center;")+'>% Aus.</th>'
-    +'</tr></thead><tbody>';
-  top5Locais.forEach(function(e,i){
-    var t=e._tot||{ins:0,pre:0,aus:0};
-    html+='<tr><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.ins+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.pre+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(t.aus,t.ins)+'</td></tr>';
-  });
-  html+='</tbody></table></div>';
-
-  // Top 5 cargos (ausÃªncia)
-  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Top 5 Cargos com Maior Taxa de AusÃªncia</p>';
-  html+='<div class="card" style="margin-bottom:24px;"><table><thead><tr>'
-    +'<th '+thS()+'>Cargo / FunÃ§Ã£o</th>'
-    +'<th '+thS("text-align:center;")+'>Inscritos</th>'
-    +'<th '+thS("text-align:center;")+'>Ausentes</th>'
-    +'<th '+thS("text-align:center;")+'>% AusÃªncia</th>'
-    +'</tr></thead><tbody>';
-  if(top5Aus.length>0){
-    top5Aus.forEach(function(c,i){
-      html+='<tr><td '+tdZ(i)+'>'+c.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.inscr+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(c.aus,c.inscr)+'</td></tr>';
-    });
-  } else {
-    html+='<tr><td colspan="4" '+td()+' style="text-align:center;color:#999;">Dados insuficientes</td></tr>';
-  }
-  html+='</tbody></table></div>';
-
-  // Procedimentos Padronizados
-  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Procedimentos Padronizados â Aplicados em Todos os Locais</p>';
-  html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corR+';">'
-    +'<ol style="padding-left:20px;font-size:13px;line-height:2.2;color:#333;">'
-    +'<li>ReuniÃ£o de alinhamento com a equipe: 05h50 Ã s 06h45.</li>'
-    +'<li>Abertura do portÃ£o Ã s 07h00, com conferÃªncia de documentos e lista de presenÃ§a da equipe.</li>'
-    +'<li>Abertura dos malotes de provas com testemunhas e registro fotogrÃ¡fico.</li>'
-    +'<li>DistribuiÃ§Ã£o dos pacotes de provas Ã s 07h30, com capa virada para a carteira.</li>'
-    +'<li>Fechamento do portÃ£o pontualmente Ã s 08h00, com lavratura do Termo de Fechamento.</li>'
-    +'<li>InÃ­cio das provas Ã s 08h30, conforme cronograma do edital.</li>'
-    +'<li>IdentificaÃ§Ã£o dos candidatos mediante documento oficial com foto.</li>'
-    +'<li>ProibiÃ§Ã£o e recolhimento de dispositivos eletrÃ´nicos antes do inÃ­cio.</li>'
-    +'<li>AplicaÃ§Ã£o de prova condicional com protocolo e registro em formulÃ¡rio.</li>'
-    +'<li>Fechamento e lacre dos malotes com folhas de respostas, sob testemunho dos coordenadores locais.</li>'
-    +'<li>Encaminhamento de formulÃ¡rios, atas e malotes Ã  coordenaÃ§Ã£o logÃ­stica.</li>'
-    +'</ol></div>';
-
-  html+='</div>'; // fecha div pb da seÃ§Ã£o 2
-
-  // ââ 3. LOCAIS DE APLICAÃÃO (3Âª pÃ¡gina) ââ
+  html+='<div class="card" style="padding:24px 28px;"><p>A aplica\u00e7\u00e3o foi conduzida em <strong>'+n+'</strong> '+(n===1?"local":"locais")+', totalizando <strong>'+totSalas+'</strong> salas. Registrados <strong>'+totI+'</strong> inscritos, <strong>'+totP+'</strong> presentes ('+pctPres+') e <strong>'+totA+'</strong> ausentes ('+pctAus+').</p>'+(cargoMaiorInscr?'<p>Cargo com maior n\u00famero de inscritos: <strong>'+cargoMaiorInscr.nome+'</strong> ('+cargoMaiorInscr.inscr+' candidatos).</p>':'')+'</div>';
+  html+='<div class="card" style="margin-bottom:28px;"><table><tbody><tr>'+indCard(n,"Locais")+indCard(nCargos,"Cargos")+indCard(totSalas,"Salas")+indCard(totI,"Inscritos")+'</tr><tr>'+indCard(totP,"Presentes")+indCard(totA,"Ausentes")+indCard(pctPres,"Taxa Presen\u00e7a")+indCard(pctAus,"Taxa Aus\u00eancia")+'</tr></tbody></table></div>';
+  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Top 5 Cargos com Maior Taxa de Aus\u00eancia</p>';
+  html+='<div class="card"><table><thead><tr><th '+thS()+'>Cargo</th><th '+thS("text-align:center;")+'>Inscritos</th><th '+thS("text-align:center;")+'>Ausentes</th><th '+thS("text-align:center;")+'>% Aus.</th></tr></thead><tbody>';
+  top5Aus.forEach(function(c,i){html+='<tr><td '+tdZ(i)+'>'+c.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.inscr+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(c.aus,c.inscr)+'</td></tr>';});
+  if(!top5Aus.length)html+='<tr><td colspan="4" style="padding:16px;text-align:center;color:#999;">Nenhum dado.</td></tr>';
+  html+='</tbody></table></div></div>';
   html+='<div class="pb">';
-  html+=secH("3","Locais de AplicaÃ§Ã£o");
-  html+='<p>A tabela abaixo lista os '+n+' '+(n===1?"local":"locais")+' de aplicaÃ§Ã£o das provas, com o nÃºmero de salas utilizadas e a coordenaÃ§Ã£o local responsÃ¡vel.</p>';
-  html+='<div class="card"><table><thead><tr>'
-    +'<th '+thS("width:40px;text-align:center;")+'>#</th>'
-    +'<th '+thS()+'>Local de AplicaÃ§Ã£o</th>'
-    +'<th '+thS()+'>Data</th>'
-    +'<th '+thS("text-align:center;")+'>Salas</th>'
-    +'<th '+thS()+'>Coord. Local</th>'
-    +'</tr></thead><tbody>';
-  escolas.forEach(function(e,i){
-    html+='<tr><td '+tdZ(i,"text-align:center;font-weight:700;")+'>'+(i+1)+'</td><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i)+'>'+dataProva+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"â")+'</td><td '+tdZ(i)+'>'+(e.coord_local||"â")+'</td></tr>';
+  html+=secH("3","Procedimentos Padronizados");
+  html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corP+';">'
+    +'<p style="margin-bottom:16px;">Em todos os locais foram adotados os procedimentos operacionais padronizados do IBGP:</p>'
+    +'<table>';
+  ["Reuni\u00e3o de alinhamento com a equipe de coordena\u00e7\u00e3o e fiscaliza\u00e7\u00e3o antes do in\u00edcio das atividades.",
+   "Abertura do port\u00e3o e recep\u00e7\u00e3o dos candidatos conforme cronograma estabelecido no edital.",
+   "Abertura do malote de provas na presen\u00e7a das testemunhas, com registro fotogr\u00e1fico.",
+   "Fechamento do port\u00e3o no hor\u00e1rio definido, impedindo acesso de candidatos ap\u00f3s o limite.",
+   "In\u00edcio das provas no hor\u00e1rio previsto, ap\u00f3s confer\u00eancia da sala e distribui\u00e7\u00e3o dos cadernos.",
+   "Identifica\u00e7\u00e3o individual dos candidatos mediante documento oficial com foto.",
+   "Lacramento dos celulares e equipamentos eletr\u00f4nicos ao adentrar na sala de prova.",
+   "Fechamento do malote com lacre de seguran\u00e7a e registro fotogr\u00e1fico do procedimento.",
+   "Encaminhamento de formul\u00e1rios, atas e malotes \u00e0 coordena\u00e7\u00e3o log\u00edstica ao t\u00e9rmino da aplica\u00e7\u00e3o."
+  ].forEach(function(proc,i){
+    var bg=i%2?'#F5F7FC':'#fff';
+    html+='<tr><td style="'+PC+'background:'+bg+'!important;padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;width:36px;text-align:center;font-weight:700;color:'+corP+';">'+(i+1)+'</td>'
+      +'<td style="'+PC+'background:'+bg+'!important;padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;">'+proc+'</td></tr>';
   });
-  html+=totalRow([["TOTAL â "+n+(n===1?" LOCAL":" LOCAIS"),"font-weight:700;","colspan='2'"],
-    [dataProva,""],
-    [totSalas,"text-align:center;"],
-    [n+(n===1?" coordenador":" coordenadores"),""]
-  ]);
-  html+='</tbody></table></div></div>';
+  html+='</table></div></div>';
 
-  // ââ 4. QUADRO CONSOLIDADO POR CARGO (sem quebra â continua na mesma Ã¡rea) ââ
-  html+=secH("4","Quadro Consolidado por Cargo");
-  html+='<p>ConsolidaÃ§Ã£o dos '+nCargos+' '+(nCargos===1?"cargo":"cargos")+' do certame. Linhas com taxa de ausÃªncia igual ou superior a 50% sÃ£o destacadas em vermelho.</p>';
-  html+='<div class="card"><table><thead><tr>'
-    +'<th '+thS("width:36px;text-align:center;")+'>#</th>'
-    +'<th '+thS()+'>Cargo / FunÃ§Ã£o</th>'
-    +'<th '+thS("text-align:center;")+'>Inscritos</th>'
-    +'<th '+thS("text-align:center;")+'>Presentes</th>'
-    +'<th '+thS("text-align:center;")+'>Ausentes</th>'
-    +'<th '+thS("text-align:center;")+'>InclusÃ£o</th>'
-    +'<th '+thS("text-align:center;")+'>% Aus.</th>'
-    +'</tr></thead><tbody>';
-  var tCI=0,tCP=0,tCA=0,tCIn=0;
-  cargosArr.slice().sort(function(a,b){return a.nome.localeCompare(b.nome,"pt");}).forEach(function(c,i){
-    tCI+=c.inscr; tCP+=c.pres; tCA+=c.aus; tCIn+=c.incl;
-    var pA=c.inscr>0?c.aus/c.inscr:0, hi=pA>=0.5;
-    var bg=hi?"#FFEBEE":(i%2?"#F5F7FC":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
-    var s=PC+'background:'+bg+'!important;color:'+tc+';padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;';
-    html+='<tr>'
-      +'<td style="'+s+'text-align:center;font-weight:600;">'+(i+1)+'</td>'
-      +'<td style="'+s+'">'+c.nome+'</td>'
-      +'<td style="'+s+'text-align:center;">'+c.inscr+'</td>'
-      +'<td style="'+s+'text-align:center;">'+c.pres+'</td>'
-      +'<td style="'+s+'text-align:center;">'+c.aus+'</td>'
-      +'<td style="'+s+'text-align:center;">'+c.incl+'</td>'
-      +'<td style="'+s+'text-align:center;font-weight:'+(hi?"700":"400")+';">'+(pA*100).toFixed(1)+'%</td>'
-      +'</tr>';
-  });
-  html+=totalRow([["TOTAL â "+nCargos+(nCargos===1?" CARGO":" CARGOS"),"","colspan='2'"],
-    [tCI,"text-align:center;"],
-    [tCP,"text-align:center;"],
-    [tCA,"text-align:center;"],
-    [tCIn,"text-align:center;"],
-    [pct(tCA,tCI),"text-align:center;"]
-  ]);
-  html+='</tbody></table></div></div>';
-
-  // ââ 5. RESULTADO POR LOCAL (sem quebra â continua na mesma Ã¡rea) ââ
-  html+=secH("5","Resultado por Local");
-  html+='<p>Resultado consolidado por local de aplicaÃ§Ã£o: salas utilizadas, quantitativos, taxa de ausÃªncia, ocorrÃªncias e cargo com maior taxa de ausÃªncia.</p>';
-  html+='<div class="card"><table><thead><tr>'
-    +'<th '+thS("width:36px;text-align:center;")+'>#</th>'
-    +'<th '+thS()+'>Local</th>'
-    +'<th '+thS("text-align:center;")+'>Salas</th>'
-    +'<th '+thS("text-align:center;")+'>Prev.</th>'
-    +'<th '+thS("text-align:center;")+'>Pres.</th>'
-    +'<th '+thS("text-align:center;")+'>Aus.</th>'
-    +'<th '+thS("text-align:center;")+'>% Aus.</th>'
-    +'<th '+thS("text-align:center;")+'>Ocorr.</th>'
-    +'<th '+thS()+'>Cargo c/ Maior Aus.</th>'
-    +'</tr></thead><tbody>';
-  escolas.forEach(function(e,i){
-    var t=e._tot||{ins:0,pre:0,aus:0};
-    var mc=e._cargoMaiorAus;
-    var mcStr=mc?mc.cargo.replace(/^\d+\s*[-â]\s*/,"").trim()+" ("+pct(Number(mc.aus)||0,Number(mc.inscr)||1)+")":"â";
-    var ocorrStr=e._hasOcorr?'<span style="'+PC+'background:#FFEBEE!important;color:#B71C1C;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;">Sim</span>':'<span style="color:#888;font-size:11px;">NÃ£o</span>';
-    html+='<tr><td '+tdZ(i,"text-align:center;font-weight:600;")+'>'+(i+1)+'</td><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"â")+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.ins+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.pre+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(t.aus,t.ins)+'</td><td '+tdZ(i,"text-align:center;")+'>'+ocorrStr+'</td><td '+tdZ(i)+'>'+mcStr+'</td></tr>';
-  });
-  html+=totalRow([
-    ["TOTAL â "+n+(n===1?" LOCAL":" LOCAIS"),"","colspan='2'"],
-    [totSalas,"text-align:center;"],
-    [totI,"text-align:center;"],
-    [totP,"text-align:center;"],
-    [totA,"text-align:center;"],
-    [pct(totA,totI),"text-align:center;"],
-    ["",""],
-    ["",""]
-  ]);
-  html+='</tbody></table></div></div>';
-
-  html+='</div>'; // fecha div pb da seÃ§Ã£o 3
-
-  // ââ 4. DETALHAMENTO OPERACIONAL POR LOCAL (nova pÃ¡gina) ââ
   html+='<div class="pb">';
-  html+=secH("4","Detalhamento Operacional por Local");
-  html+='<p>Para cada local sÃ£o apresentadas as informaÃ§Ãµes operacionais e os quantitativos por cargo.</p>';
+  html+=secH("4","Locais de Aplica\u00e7\u00e3o");
+  html+='<div class="card"><table><thead><tr><th '+thS()+'>Local</th><th '+thS()+'>Coordenador(a) Local</th><th '+thS("text-align:center;")+'>Turno</th><th '+thS("text-align:center;")+'>Salas</th></tr></thead><tbody>';
+  escolas.forEach(function(e,i){html+='<tr><td '+tdZ(i)+'><strong>'+e.nome+'</strong></td><td '+tdZ(i)+'>'+(e.coord_local||"—")+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.turno||"—")+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"—")+'</td></tr>';});
+  html+='</tbody></table></div></div>';
 
+  html+='<div class="pb">';
+  html+=secH("5","Quadro Consolidado por Cargo");
+  html+='<p style="font-size:11px;color:#888;margin-bottom:10px;">Linhas com fundo vermelho: taxa de aus\u00eancia acima de 50%.</p>';
+  html+='<div class="card"><table><thead><tr><th '+thS()+'>Cargo</th><th '+thS("text-align:center;")+'>Inscritos</th><th '+thS("text-align:center;")+'>Presentes</th><th '+thS("text-align:center;")+'>Ausentes</th><th '+thS("text-align:center;")+'>Inclus\u00e3o</th><th '+thS("text-align:center;")+'>% Aus.</th></tr></thead><tbody>';
+  cargosArr.slice().sort(function(a,b){return b.inscr-a.inscr;}).forEach(function(c,i){
+    var pa=c.inscr>0?(c.aus/c.inscr*100):0;
+    if(pa>50){
+      var rd='style="'+PC+'background:#FFF0F0!important;padding:10px 12px;border-bottom:1px solid #F5C6C6;font-size:12px;';
+      html+='<tr><td '+rd+'font-weight:600;color:'+corR+';">'+c.nome+'</td><td '+rd+'text-align:center;">'+c.inscr+'</td><td '+rd+'text-align:center;">'+c.pres+'</td><td '+rd+'text-align:center;font-weight:700;color:'+corR+';">'+c.aus+'</td><td '+rd+'text-align:center;">'+c.incl+'</td><td style="'+PC+'background:'+corR+'!important;padding:10px 12px;border-bottom:1px solid #F5C6C6;font-size:12px;text-align:center;font-weight:700;color:#fff;">'+pct(c.aus,c.inscr)+'</td></tr>';
+    } else {
+      html+='<tr><td '+tdZ(i)+'>'+c.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.inscr+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.pres+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.incl+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(c.aus,c.inscr)+'</td></tr>';
+    }
+  });
+  var totRow='style="'+PC+'background:'+corE+'!important;color:#fff!important;padding:10px 12px;font-weight:700;font-size:12px;';
+  html+='<tr><td '+totRow+'">TOTAL</td><td '+totRow+'text-align:center;">'+totI+'</td><td '+totRow+'text-align:center;">'+totP+'</td><td '+totRow+'text-align:center;">'+totA+'</td><td '+totRow+'text-align:center;">'+totIn+'</td><td '+totRow+'text-align:center;">'+pct(totA,totI)+'</td></tr>';
+  html+='</tbody></table></div></div>';
+
+  html+='<div class="pb">';
+  html+=secH("6","Resultado por Local de Aplica\u00e7\u00e3o");
   escolas.forEach(function(e,ei){
-    html+='<div style="margin-bottom:28px;">';
-    // CabeÃ§alho do local
-    html+='<div style="'+PC+'background:'+corP+';color:#fff;padding:12px 18px;border-radius:6px 6px 0 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">'
-      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Local '+(ei+1)+'</span><strong style="font-size:13px;">'+e.nome+'</strong></div>'
-      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Data da aplicaÃ§Ã£o</span><span style="font-size:12px;">'+dataProva+'</span></div>'
-      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Salas utilizadas</span><span style="font-size:12px;">'+(e.salas||"â")+' salas</span></div>'
-      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Coordenador PedagÃ³gico</span><span style="font-size:12px;">'+coordPed+'</span></div>'
-      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Coordenador LogÃ­stico</span><span style="font-size:12px;">'+coordLog+'</span></div>'
-      +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Coord. Local</span><span style="font-size:12px;">'+(e.coord_local||"â")+'</span></div>'
+    if(ei>0)html+='<div class="pb"></div>';
+    var t=e._tot||{ins:0,pre:0,aus:0,inc:0};
+    html+='<div class="card" style="margin-bottom:20px;">'
+      +'<div style="'+PC+'background:'+corP+';padding:14px 20px;"><strong style="color:#fff;font-size:14px;">'+e.nome+'</strong><span style="color:#AABBD4;font-size:11px;margin-left:16px;">'+(e.coord_local||"")+'</span></div>'
+      +'<div style="padding:16px 20px;">'
+      +'<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px;">'
+      +'<div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:'+corP+';">'+(e.salas||0)+'</div><div style="font-size:9px;text-transform:uppercase;color:#777;">Salas</div></div>'
+      +'<div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:'+corP+';">'+t.ins+'</div><div style="font-size:9px;text-transform:uppercase;color:#777;">Inscritos</div></div>'
+      +'<div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:#2E7D32;">'+t.pre+'</div><div style="font-size:9px;text-transform:uppercase;color:#777;">Presentes</div></div>'
+      +'<div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:'+corR+';">'+t.aus+'</div><div style="font-size:9px;text-transform:uppercase;color:#777;">Ausentes</div></div>'
+      +'<div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:'+corE+';">'+pct(t.aus,t.ins)+'</div><div style="font-size:9px;text-transform:uppercase;color:#777;">Taxa Aus.</div></div>'
       +'</div>';
-    // Tabela de resultados
-    var rows=e.resultados||[];
-    var eCI=0,eCP=0,eCA=0,eCIn=0;
-    html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;overflow:hidden;"><table><thead><tr>'
-      +'<th '+thS()+'>Cargo / FunÃ§Ã£o</th>'
-      +'<th '+thS("text-align:center;")+'>Previstos</th>'
-      +'<th '+thS("text-align:center;")+'>Presentes</th>'
-      +'<th '+thS("text-align:center;")+'>Ausentes</th>'
-      +'<th '+thS("text-align:center;")+'>InclusÃ£o</th>'
-      +'<th '+thS("text-align:center;")+'>% AusÃªncia</th>'
-      +'</tr></thead><tbody>';
-    rows.forEach(function(r,i){
-      var ins=Number(r.inscr)||0,pre=Number(r.pres)||0,aus=Number(r.aus)||0,inc=Number(r.incl)||0;
-      eCI+=ins; eCP+=pre; eCA+=aus; eCIn+=inc;
-      var pA=ins>0?aus/ins:0, hi=pA>=0.5;
-      var bg=hi?"#FFEBEE":(i%2?"#F5F7FC":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
-      var s=PC+'background:'+bg+'!important;color:'+tc+';padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;';
-      html+='<tr>'
-        +'<td style="'+s+'">'+r.cargo.replace(/^\d+\s*[-â]\s*/,"").trim()+'</td>'
-        +'<td style="'+s+'text-align:center;">'+ins+'</td>'
-        +'<td style="'+s+'text-align:center;">'+pre+'</td>'
-        +'<td style="'+s+'text-align:center;">'+aus+'</td>'
-        +'<td style="'+s+'text-align:center;">'+inc+'</td>'
-        +'<td style="'+s+'text-align:center;font-weight:'+(hi?"700":"400")+';">'+(pA*100).toFixed(1)+'%</td>'
-        +'</tr>';
-    });
-    if(rows.length===0){
-      html+='<tr><td colspan="6" '+td()+' style="text-align:center;color:#999;padding:16px;">Nenhum resultado registrado</td></tr>';
-    } else {
-      html+=totalRow([["TOTAL",""],
-        [eCI,"text-align:center;"],
-        [eCP,"text-align:center;"],
-        [eCA,"text-align:center;"],
-        [eCIn,"text-align:center;"],
-        [pct(eCA,eCI),"text-align:center;"]
-      ]);
-    }
-    html+='</tbody></table></div>';
-    html+='</div>'; // fim local
+    if(e._cargoMaiorAus){var cm=e._cargoMaiorAus;html+='<p style="font-size:12px;margin-bottom:12px;"><strong>Cargo com maior taxa de aus\u00eancia:</strong> '+(cm.cargo||cm.nome||"—")+' — '+pct(Number(cm.aus)||0,Number(cm.inscr)||0)+'</p>';}
+    var ocorrs=(e.ocorrencias||[]).filter(function(o){return Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0||o.obs;});
+    if(ocorrs.length>0){
+      html+='<p style="font-size:11px;font-weight:700;text-transform:uppercase;color:#555;margin-bottom:8px;">Ocorr\u00eancias</p><table style="font-size:11px;"><thead><tr><th style="'+PC+'background:#555;color:#fff;padding:6px 10px;text-align:left;">Turno</th><th style="'+PC+'background:#555;color:#fff;padding:6px 10px;text-align:center;">Sa\u00edda Ant.</th><th style="'+PC+'background:#555;color:#fff;padding:6px 10px;text-align:center;">Condu\u00e7\u00e3o</th><th style="'+PC+'background:#555;color:#fff;padding:6px 10px;text-align:center;">Celular</th><th style="'+PC+'background:#555;color:#fff;padding:6px 10px;text-align:center;">Decl.</th><th style="'+PC+'background:#555;color:#fff;padding:6px 10px;text-align:left;">Obs.</th></tr></thead><tbody>';
+      ocorrs.forEach(function(o,oi){var ob=oi%2?'#F5F7FC':'#fff';html+='<tr><td style="'+PC+'background:'+ob+'!important;padding:6px 10px;border-bottom:1px solid #eee;">'+(o.turno||"—")+'</td><td style="'+PC+'background:'+ob+'!important;padding:6px 10px;border-bottom:1px solid #eee;text-align:center;">'+(Number(o.sala)||0)+'</td><td style="'+PC+'background:'+ob+'!important;padding:6px 10px;border-bottom:1px solid #eee;text-align:center;">'+(Number(o.cond)||0)+'</td><td style="'+PC+'background:'+ob+'!important;padding:6px 10px;border-bottom:1px solid #eee;text-align:center;">'+(Number(o.toque)||0)+'</td><td style="'+PC+'background:'+ob+'!important;padding:6px 10px;border-bottom:1px solid #eee;text-align:center;">'+(Number(o.decl)||0)+'</td><td style="'+PC+'background:'+ob+'!important;padding:6px 10px;border-bottom:1px solid #eee;">'+(o.obs||"—")+'</td></tr>';});
+      html+='</tbody></table>';
+    } else { html+='<p style="font-size:12px;color:#999;font-style:italic;">Nenhuma ocorr\u00eancia registrada.</p>'; }
+    html+='</div></div>';
   });
+  html+='</div>';
 
-  html+='</div>'; // fim div pb detalhamento
-
-  // ââ 5. REGISTRO FOTOGRÃFICO POR LOCAL ââ
-  html+='<div class="pb">';
-  html+=secH("5","Registro FotogrÃ¡fico por Local");
-  html+='<p>Imagens coletadas pelos coordenadores locais durante a aplicaÃ§Ã£o, documentando: SinalizaÃ§Ã£o da Escola, Abertura do Malote, Andamento da AplicaÃ§Ã£o e Fechamento do Malote.</p>';
-
-  escolas.forEach(function(e, ei) {
-    html+='<div style="margin-bottom:24px;">';
-    html+='<div style="'+PC+'background:'+corP+';color:#fff;padding:10px 18px;border-radius:6px 6px 0 0;">'
-      +'<strong style="font-size:13px;">'+(ei+1)+'. '+e.nome+'</strong>'
-      +'</div>';
-    if (e.foto_url) {
-      html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;padding:16px 20px;background:#fff;">'
-        +'<p style="margin-bottom:10px;color:#444;">Fotos disponÃ­veis no Google Drive:</p>'
-        +'<a href="'+e.foto_url+'" target="_blank" style="'+PC+'display:inline-block;background:'+corR+';color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">ð Ver Fotos no Google Drive</a>'
-        +'<p style="margin-top:10px;font-size:11px;color:#888;">Categorias: SinalizaÃ§Ã£o da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da AplicaÃ§Ã£o &nbsp;|&nbsp; Fechamento do Malote</p>'
-        +'</div>';
-    } else {
-      html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;padding:16px 20px;background:#fff;">'
-        +'<p style="color:#999;font-style:italic;">[ Fotos a serem inseridas a partir do formulÃ¡rio individual do local ]</p>'
-        +'<p style="font-size:11px;color:#aaa;margin-top:6px;">Categorias: SinalizaÃ§Ã£o da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da AplicaÃ§Ã£o &nbsp;|&nbsp; Fechamento do Malote</p>'
-        +'</div>';
-    }
-    html+='</div>';
-  });
-
-  html+='</div>'; // fim pb sec5 fotos
+  var escolasComFoto=escolas.filter(function(e){return e.foto_url;});
+  if(escolasComFoto.length>0){
+    html+='<div class="pb">';
+    html+=secH("7","Registro Fotogr\u00e1fico por Local");
+    html+='<div class="card" style="padding:20px 24px;"><p style="margin-bottom:16px;">Fotos de cada local dispon\u00edveis no Google Drive (Sinaliza\u00e7\u00e3o, Abertura de Malote, Andamento e Fechamento).</p>';
+    escolasComFoto.forEach(function(e){html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid #DDE3EE;border-radius:6px;margin-bottom:10px;"><span style="font-size:13px;font-weight:600;color:'+corP+';">'+e.nome+'</span><a href="'+e.foto_url+'" target="_blank" style="'+PC+'background:'+corR+';color:#fff;padding:7px 18px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;">&#128193; Ver Fotos</a></div>';});
+    html+='</div></div>';
+  }
+  html+='<div style="border-top:1px solid #DDE3EE;margin-top:32px;padding-top:16px;display:flex;justify-content:space-between;"><span style="font-size:10px;color:#aaa;">IBGP \u2014 Instituto Brasileiro de Gest\u00e3o e Pesquisa</span><span style="font-size:10px;color:#aaa;">Gerado em '+hoje+'</span></div>';
   html+='</body></html>';
   win.document.write(html);
   win.document.close();
