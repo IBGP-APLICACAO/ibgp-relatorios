@@ -1033,11 +1033,10 @@ function abrirRelatorioImprimivel(dados) {
     // 1. Identificação
     const houveApoio = d.houve_apoio || "—";
     const nomeApoio  = d.nome_apoio  || "—";
-    const enviadoEm  = d.enviado_em  ? new Date(d.enviado_em).toLocaleString("pt-BR") : "—";
     html += secao("Identificação", corH,
       grid2("Coordenador Local", e.coord_local, "Turno(s)", e.turno) +
-      grid2("Número de Salas", d.salas || "—", "Formulário enviado em", enviadoEm) +
-      grid2("Houve apoio/acessibilidade?", houveApoio, houveApoio === "Sim" ? "Nome do apoiador" : "", houveApoio === "Sim" ? nomeApoio : "")
+      grid2("Número de Salas", d.salas || "—", "", "") +
+      grid2("Apoio à Coordenação", houveApoio, houveApoio === "Sim" ? "Nome do apoiador" : "", houveApoio === "Sim" ? nomeApoio : "")
     );
 
     // 2. Horários por turno
@@ -1062,7 +1061,8 @@ function abrirRelatorioImprimivel(dados) {
         + '<th ' + thS(cor) + ' style="text-align:center;">Inscritos</th>'
         + '<th ' + thS(cor) + ' style="text-align:center;">Presentes</th>'
         + '<th ' + thS(cor) + ' style="text-align:center;">Ausentes</th>'
-        + '<th ' + thS(cor) + ' style="text-align:center;">Isentos/Def.</th>'
+        + '<th ' + thS(cor) + ' style="text-align:center;">% Aus.</th>'
+        + '<th ' + thS(cor) + ' style="text-align:center;">Inclusão</th>'
         + '</tr></thead><tbody>';
       rows.forEach(function(r, i) {
         tI+=Number(r.inscr)||0; tP+=Number(r.pres)||0; tA+=Number(r.aus)||0; tIn+=Number(r.incl)||0;
@@ -1071,12 +1071,13 @@ function abrirRelatorioImprimivel(dados) {
           + '<td style="text-align:center;">' + r.inscr + '</td>'
           + '<td style="text-align:center;">' + r.pres + '</td>'
           + '<td style="text-align:center;">' + r.aus + '</td>'
+          + '<td style="text-align:center;">' + (r.inscr>0?(r.aus/r.inscr*100).toFixed(1)+'%':'—') + '</td>'
           + '<td style="text-align:center;">' + (r.incl||0) + '</td>'
           + '</tr>';
       });
       tab += '<tr class="total-row"><td><strong>TOTAL</strong></td>'
         + '<td style="text-align:center;">' + tI + '</td><td style="text-align:center;">' + tP + '</td>'
-        + '<td style="text-align:center;">' + tA + '</td><td style="text-align:center;">' + tIn + '</td>'
+        + '<td style="text-align:center;">' + tA + '</td><td style="text-align:center;">' + (tI>0?(tA/tI*100).toFixed(1)+'%':'—') + '</td><td style="text-align:center;">' + tIn + '</td>'
         + '</tr></tbody></table>';
       html += secao("Estatística por Cargo — " + turno, cor, tab);
     });
