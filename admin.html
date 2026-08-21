@@ -1389,7 +1389,14 @@ function abrirRelatorioGeral(dados, meta, win) {
    "Fechamento do malote com lacre de seguran\u00e7a e registro fotogr\u00e1fico do procedimento.",
    "Encaminhamento de formul\u00e1rios, atas e malotes \u00e0 coordena\u00e7\u00e3o log\u00edstica ao t\u00e9rmino da aplica\u00e7\u00e3o."
   ].forEach(function(proc,i){var bg=i%2?'#F5F7FC':'#fff';
-    var ht=['05h50 \u00e0s 06h45','07h00','\u2014','08h00','08h30','\u2014','\u2014','\u2014','\u2014'][i]||'\u2014';
+    var concH=dados.concurso||{};
+    var ht=[(concH["Hr Reuni\u00e3o \u2014 In\u00edcio"]||'')+(concH["Hr Reuni\u00e3o \u2014 Fim"]?' \u00e0s '+concH["Hr Reuni\u00e3o \u2014 Fim"]:''),
+             concH["Hr Abertura do Port\u00e3o"]||'\u2014',
+             '\u2014',
+             concH["Hr Fechamento do Port\u00e3o"]||'\u2014',
+             concH["Hr In\u00edcio da Prova"]||'\u2014',
+             '\u2014','\u2014','\u2014','\u2014'][i]||'\u2014';
+    if(!ht)ht='\u2014';
     html+='<tr><td style="'+PC+'background:'+bg+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;width:30px;text-align:center;font-weight:700;color:'+corP+';">'+(i+1)+'</td>'
       +'<td style="'+PC+'background:'+bg+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;text-align:justify;">'+proc+'</td>'
       +'<td style="'+PC+'background:'+bg+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;width:110px;text-align:center;font-weight:600;color:'+corP+';">'+ht+'</td></tr>';});
