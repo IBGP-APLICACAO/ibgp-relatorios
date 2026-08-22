@@ -1391,10 +1391,10 @@ function abrirRelatorioGeral(dados, meta, win) {
   ].forEach(function(proc,i){var bg=i%2?'#F5F7FC':'#fff';
     var _hr=(dados.escolas&&dados.escolas[0]&&dados.escolas[0].horarios&&dados.escolas[0].horarios[0])||{};
     var sfx='';
-    if(i===0&&_hr.chegada)sfx=' <em>(Hor\u00e1rio: '+_hr.chegada+'.)</em>';
-    if(i===1&&_hr.ab_portao)sfx=' <em>(Hor\u00e1rio: '+_hr.ab_portao+'.)</em>';
-    if(i===3&&_hr.fch_portao)sfx=' <em>(Hor\u00e1rio: '+_hr.fch_portao+'.)</em>';
-    if(i===4&&_hr.inicio)sfx=' <em>(Hor\u00e1rio: '+_hr.inicio+'.)</em>';
+    if(i===0&&_hr.chegada)sfx=' \u2014 Reuni\u00e3o de alinhamento \u00e0s '+_hr.chegada+'.';
+    if(i===1&&_hr.ab_portao)sfx=' \u2014 Abertura do port\u00e3o \u00e0s '+_hr.ab_portao+'.';
+    if(i===3&&_hr.fch_portao)sfx=' \u2014 Fechamento do port\u00e3o \u00e0s '+_hr.fch_portao+'.';
+    if(i===4&&_hr.inicio)sfx=' \u2014 In\u00edcio das provas \u00e0s '+_hr.inicio+'.';
     html+='<tr><td style="'+PC+'background:'+bg+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;width:30px;text-align:center;font-weight:700;color:'+corP+';">'+(i+1)+'</td>'
       +'<td style="'+PC+'background:'+bg+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;text-align:justify;">'+proc+sfx+'</td></tr>';});
   html+='</table></div>';
