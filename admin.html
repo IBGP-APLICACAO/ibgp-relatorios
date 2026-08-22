@@ -1459,12 +1459,23 @@ function abrirRelatorioGeral(dados, meta, win) {
   });
   html+='</div>';
 
-  var escolasComFoto=escolas.filter(function(e){return e.foto_url;});
+  var escolasComFoto=escolas.filter(function(e){return e.dados&&e.dados.fotos&&e.dados.fotos.length>0;});
   if(escolasComFoto.length>0){
     html+='<div class="pb">';
     html+=secH("7","Registro Fotogr\u00e1fico");
-    html+='<p style="margin-bottom:12px;">As imagens registradas durante a aplica\u00e7\u00e3o est\u00e3o dispon\u00edveis no Google Drive, organizadas por local e categoria.</p>';
-    escolasComFoto.forEach(function(e){html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border:1px solid #CCC;border-radius:4px;margin-bottom:8px;"><span style="font-size:11px;font-weight:600;color:'+corP+';">'+e.nome+'</span><a href="'+e.foto_url+'" target="_blank" style="'+PC+'background:'+corR+';color:#fff;padding:5px 14px;border-radius:4px;font-size:11px;font-weight:700;text-decoration:none;">&#128193; Acessar Fotos</a></div>';});
+    escolasComFoto.forEach(function(e){
+      var fotos=e.dados.fotos||[];
+      html+='<div style="margin-bottom:20px;">';
+      html+='<p style="'+PC+'font-size:12px;font-weight:700;color:'+corP+';margin-bottom:8px;border-bottom:1px solid #EEE;padding-bottom:4px;">'+e.nome+'</p>';
+      html+='<div style="display:flex;flex-wrap:wrap;gap:10px;">';
+      fotos.forEach(function(f){
+        html+='<div style="text-align:center;max-width:210px;">';
+        html+='<img src="data:image/jpeg;base64,'+f.b64+'" style="width:100%;max-width:210px;border-radius:4px;border:1px solid #DDD;" />';
+        html+='<p style="font-size:9px;color:#555;margin-top:4px;">'+f.categoria+'</p>';
+        html+='</div>';
+      });
+      html+='</div></div>';
+    });
     html+='</div>';
   }
 
