@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IBGP ÃÂ¢ÃÂÃÂ Admin Certames</title>
+<title>IBGP ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Admin Certames</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -11,7 +11,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:#f0f2f5;color:#1a1a1a;min-height:100vh}
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Gate ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Gate ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ */
 #gate{display:flex;align-items:center;justify-content:center;min-height:100vh}
 .gate-card{background:#fff;border-radius:14px;padding:44px 40px;width:360px;box-shadow:0 4px 24px rgba(0,0,0,.12);text-align:center}
 .gate-card .logo{height:48px;margin-bottom:20px}
@@ -19,7 +19,7 @@ body{font-family:system-ui,sans-serif;background:#f0f2f5;color:#1a1a1a;min-heigh
 .gate-card p{font-size:13px;color:#666;margin-bottom:24px}
 .err-msg{color:#c62828;font-size:12px;margin-top:10px;display:none}
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Admin ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Admin ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ */
 #admin{display:none}
 header{background:#1F3A6E;color:#fff;padding:14px 32px;display:flex;align-items:center;gap:14px}
 header .logo{height:30px}
@@ -81,7 +81,7 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
 .note{font-size:12px;color:#888;margin-top:6px}
 .token-hint{font-size:11px;color:#aaa;margin-top:4px}
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Autocomplete coordenador ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Autocomplete coordenador ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ */
 .coord-wrap{position:relative}
 .coord-wrap input{width:100%;padding-right:32px}
 .coord-dropdown{position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);max-height:200px;overflow-y:auto;z-index:999;display:none}
@@ -91,7 +91,7 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
 .coord-opt.add-new{color:#2e7d32;font-weight:500;border-top:1px solid #eee}
 .coord-opt.add-new:hover{background:#f1f8e9}
 
-/* ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Gerenciar coordenadores ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ */
+/* ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Gerenciar coordenadores ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ */
 .coord-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .chip{display:inline-flex;align-items:center;gap:6px;background:#f0f4ff;color:#1F3A6E;border-radius:20px;padding:4px 10px 4px 12px;font-size:12px;font-weight:500}
 .chip button{border:none;background:none;color:#999;cursor:pointer;font-size:14px;line-height:1;padding:0}
@@ -100,14 +100,14 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
 </head>
 <body>
 
-<!-- ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+<!-- ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
      GATE
-ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ -->
+ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ -->
 <div id="gate">
   <div class="gate-card">
     <img class="logo" src="https://ibgp-aplicacao.github.io/ibgp-relatorios/ibgp-logo.png"
          onerror="this.style.display='none'" alt="IBGP">
-    <h1>IBGP ÃÂ¢ÃÂÃÂ ÃÂÃÂrea Admin</h1>
+    <h1>IBGP ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ÃÂÃÂÃÂÃÂrea Admin</h1>
     <p>Cadastro de novos certames</p>
     <div class="field">
       <input type="password" id="senhaInput" placeholder="Senha de acesso"
@@ -118,27 +118,27 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
   </div>
 </div>
 
-<!-- ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+<!-- ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
      ADMIN
-ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ -->
+ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ -->
 <div id="admin">
   <header>
     <img class="logo" src="https://ibgp-aplicacao.github.io/ibgp-relatorios/ibgp-logo.png"
          onerror="this.style.display='none'" alt="">
-    <h1>AdministraÃÂÃÂ§ÃÂÃÂ£o ÃÂ¢ÃÂÃÂ Cadastro de Certame</h1>
+    <h1>AdministraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Cadastro de Certame</h1>
   </header>
 
   <div class="container">
 
     <!-- COORDENADORES -->
     <div class="card" id="cardCoords">
-      <div class="card-title"><span>ÃÂ¢ÃÂÃÂ</span> Coordenadores cadastrados</div>
-      <p class="note" style="margin-bottom:14px">Clique no <strong>ÃÂ¢ÃÂÃÂ</strong> para remover. Use o campo abaixo para adicionar novos.</p>
+      <div class="card-title"><span>ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</span> Coordenadores cadastrados</div>
+      <p class="note" style="margin-bottom:14px">Clique no <strong>ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</strong> para remover. Use o campo abaixo para adicionar novos.</p>
       <div class="coord-chips" id="chipsCoord"></div>
       <div class="row" style="margin-top:16px;align-items:flex-end">
         <div class="field" style="flex:1;margin-bottom:0">
           <label class="lbl">Adicionar coordenador</label>
-          <input type="text" id="novoCoord" placeholder="Digite o nome em maiÃÂÃÂºsculas"
+          <input type="text" id="novoCoord" placeholder="Digite o nome em maiÃÂÃÂÃÂÃÂºsculas"
                  onkeydown="if(event.key==='Enter'){adicionarCoord();event.preventDefault()}">
         </div>
         <div style="flex:0 0 auto;padding-bottom:0">
@@ -158,17 +158,17 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
 
     <!-- GERENCIAR CERTAMES -->
     <div class="card" id="cardGerenciar">
-      <div class="card-title"><span>ÃÂ¢ÃÂÃÂ</span> Remover certame publicado</div>
+      <div class="card-title"><span>ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</span> Remover certame publicado</div>
       <p class="note" style="margin-bottom:14px">Selecione o certame que deseja excluir do site.</p>
       <div class="field">
         <label class="lbl">Token GitHub (PAT)</label>
         <input type="password" id="fTokenRemover" placeholder="github_pat_...">
-        <p class="token-hint">Cole o token ÃÂ¢ÃÂÃÂ o mesmo usado no passo 3.</p>
+        <p class="token-hint">Cole o token ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ o mesmo usado no passo 3.</p>
       </div>
       <div class="row" style="align-items:flex-end;margin-top:4px">
         <div class="field" style="flex:1;margin-bottom:0">
           <label class="lbl">Certame</label>
-          <select id="selRemover"><option value="">ÃÂ¢ÃÂÃÂ Carregando... ÃÂ¢ÃÂÃÂ</option></select>
+          <select id="selRemover"><option value="">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Carregando... ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</option></select>
         </div>
         <div style="flex:0 0 auto">
           <button class="btn btn-sm" style="background:#c62828;color:#fff;white-space:nowrap" onclick="removerCertame()">Excluir</button>
@@ -176,20 +176,20 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
       </div>
       <div id="statusRemover" style="font-size:12px;margin-top:8px;display:none"></div>
       <hr style="margin:14px 0">
-      <p class="note" style="margin-bottom:10px">Se os dados antigos ainda aparecerem no relatÃÂÃÂ³rio, limpe manualmente:</p>
-      <button class="btn btn-sm" style="background:#e65100;color:#fff;white-space:nowrap" onclick="limparDadosPlanilha()">ÃÂ°ÃÂÃÂÃÂ Limpar dados da planilha agora</button>
+      <p class="note" style="margin-bottom:10px">Se os dados antigos ainda aparecerem no relatÃÂÃÂÃÂÃÂ³rio, limpe manualmente:</p>
+      <button class="btn btn-sm" style="background:#e65100;color:#fff;white-space:nowrap" onclick="limparDadosPlanilha()">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Limpar dados da planilha agora</button>
       <div id="statusLimpar" style="font-size:12px;margin-top:8px;display:none"></div>
     </div>
 
     <!-- EDITAR COORDS DE CERTAME -->
     <div class="card" id="cardEditarCoords">
-      <div class="card-title"><span>ÃÂ¢ÃÂÃÂ</span> Editar coordenadores de certame publicado</div>
-      <p class="note" style="margin-bottom:14px">Os coordenadores jÃÂÃÂ¡ estÃÂÃÂ£o cadastrados na lista global, mas o certame foi publicado com os nomes antigos. Use este card para corrigir os nomes sem republicar.</p>
+      <div class="card-title"><span>ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</span> Editar coordenadores de certame publicado</div>
+      <p class="note" style="margin-bottom:14px">Os coordenadores jÃÂÃÂÃÂÃÂ¡ estÃÂÃÂÃÂÃÂ£o cadastrados na lista global, mas o certame foi publicado com os nomes antigos. Use este card para corrigir os nomes sem republicar.</p>
       <div class="row" style="align-items:flex-end;gap:10px">
         <div class="field" style="flex:2;margin-bottom:0">
           <label class="lbl">Certame</label>
           <select id="selEditarCoords" style="border:1px solid #ddd;border-radius:8px;padding:9px 13px;font-size:14px;width:100%;outline:none;background:#fff;">
-            <option value="">ÃÂ¢ÃÂÃÂ Carregando... ÃÂ¢ÃÂÃÂ</option>
+            <option value="">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Carregando... ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</option>
           </select>
         </div>
         <div style="flex:0 0 auto;padding-bottom:0">
@@ -214,7 +214,7 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
 
     <!-- PASSO 1 -->
     <div class="card">
-      <div class="card-title"><span>1</span> Planilha de alocaÃÂÃÂ§ÃÂÃÂ£o</div>
+      <div class="card-title"><span>1</span> Planilha de alocaÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o</div>
       <div class="drop-zone" id="dropZone"
            onclick="document.getElementById('fileInput').click()"
            ondragover="event.preventDefault();this.classList.add('over')"
@@ -224,40 +224,40 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
           <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 12l-4-4-4 4M12 8v8"/>
         </svg>
         <p>Clique ou arraste a planilha .xlsx aqui</p>
-        <small>Formato: MODELO DE ALOCAÃÂÃÂÃÂÃÂO IBGP</small>
+        <small>Formato: MODELO DE ALOCAÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂO IBGP</small>
       </div>
       <input type="file" id="fileInput" accept=".xlsx" style="display:none"
              onchange="lerArquivo(this.files[0])">
     </div>
 
-    <!-- PASSO 2 (oculto atÃÂÃÂ© carregar arquivo) -->
+    <!-- PASSO 2 (oculto atÃÂÃÂÃÂÃÂ© carregar arquivo) -->
     <div class="card" id="cardRevisao" style="display:none">
       <div class="card-title"><span>2</span> Dados do certame</div>
 
       <div class="row">
         <div class="field" style="flex:3">
-          <label class="lbl">TÃÂÃÂ­tulo do certame</label>
+          <label class="lbl">TÃÂÃÂÃÂÃÂ­tulo do certame</label>
           <input type="text" id="fTitulo">
         </div>
       </div>
       <div class="row">
         <div class="field" style="flex:2">
           <label class="lbl">Edital</label>
-          <input type="text" id="fEdital" placeholder="Ex: Edital nÃÂÃÂº 01/2026">
+          <input type="text" id="fEdital" placeholder="Ex: Edital nÃÂÃÂÃÂÃÂº 01/2026">
         </div>
         <div class="field" style="flex:2">
           <label class="lbl">Data da prova (por extenso)</label>
           <input type="text" id="fData" placeholder="Ex: 26 de julho de 2026">
         </div>
         <div class="field" style="flex:2">
-          <label class="lbl">ID (identificador ÃÂÃÂºnico)</label>
+          <label class="lbl">ID (identificador ÃÂÃÂÃÂÃÂºnico)</label>
           <input type="text" id="fId" placeholder="Ex: alto-rio-doce-2026-07-26">
         </div>
       </div>
 
       <hr>
-      <div class="card-title" style="margin-bottom:12px"><span>ÃÂÃÂ·</span> Locais de aplicaÃÂÃÂ§ÃÂÃÂ£o</div>
-      <p class="note" style="margin-bottom:12px">Coordenadores detectados automaticamente ÃÂ¢ÃÂÃÂ corrija se necessÃÂÃÂ¡rio.</p>
+      <div class="card-title" style="margin-bottom:12px"><span>ÃÂÃÂÃÂÃÂ·</span> Locais de aplicaÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o</div>
+      <p class="note" style="margin-bottom:12px">Coordenadores detectados automaticamente ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ corrija se necessÃÂÃÂÃÂÃÂ¡rio.</p>
       <table>
         <thead>
           <tr>
@@ -276,18 +276,18 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
     <div class="card" id="cardPublicar" style="display:none">
       <div class="card-title"><span>3</span> Publicar no site</div>
       <p style="font-size:13px;color:#555;margin-bottom:16px">
-        O certame serÃÂÃÂ¡ salvo em <code style="background:#f5f5f5;padding:2px 5px;border-radius:4px">dados/</code>
-        e aparecerÃÂÃÂ¡ automaticamente no formulÃÂÃÂ¡rio em ~1 minuto.
+        O certame serÃÂÃÂÃÂÃÂ¡ salvo em <code style="background:#f5f5f5;padding:2px 5px;border-radius:4px">dados/</code>
+        e aparecerÃÂÃÂÃÂÃÂ¡ automaticamente no formulÃÂÃÂÃÂÃÂ¡rio em ~1 minuto.
       </p>
       <div class="field">
         <label class="lbl">URL do Apps Script (Google Sheets deste certame)</label>
         <input type="text" id="fCertameScriptUrl" placeholder="https://script.google.com/macros/s/...">
-        <p class="token-hint">Cole aqui o link de implantaÃÂÃÂ§ÃÂÃÂ£o do Apps Script vinculado ÃÂÃÂ  planilha deste municÃÂÃÂ­pio.</p>
+        <p class="token-hint">Cole aqui o link de implantaÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o do Apps Script vinculado ÃÂÃÂÃÂÃÂ  planilha deste municÃÂÃÂÃÂÃÂ­pio.</p>
       </div>
       <div class="field">
-        <label class="lbl">Token GitHub (PAT) ÃÂ¢ÃÂÃÂ guardado na sessÃÂÃÂ£o atual</label>
+        <label class="lbl">Token GitHub (PAT) ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ guardado na sessÃÂÃÂÃÂÃÂ£o atual</label>
         <input type="password" id="fToken" placeholder="github_pat_...">
-        <p class="token-hint">Cole o token uma vez; ele serÃÂÃÂ¡ lembrado atÃÂÃÂ© fechar o navegador.</p>
+        <p class="token-hint">Cole o token uma vez; ele serÃÂÃÂÃÂÃÂ¡ lembrado atÃÂÃÂÃÂÃÂ© fechar o navegador.</p>
       </div>
       <button class="btn btn-publish" onclick="publicar()">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -298,17 +298,17 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
       <div id="status"></div>
     </div>
 
-    <!-- RELATÃÂÃÂRIO GERAL -->
+    <!-- RELATÃÂÃÂÃÂÃÂRIO GERAL -->
     <div class="card">
-      <div class="card-title"><span>ÃÂ°ÃÂÃÂÃÂ</span> RelatÃÂÃÂ³rio Geral</div>
+      <div class="card-title"><span>ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ</span> RelatÃÂÃÂÃÂÃÂ³rio Geral</div>
       <p style="font-size:13px;color:#555;margin-bottom:16px;">
-        Gera o RelatÃÂÃÂ³rio Geral de AplicaÃÂÃÂ§ÃÂÃÂ£o consolidando os dados enviados pelos coordenadores para o certame selecionado.
+        Gera o RelatÃÂÃÂÃÂÃÂ³rio Geral de AplicaÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o consolidando os dados enviados pelos coordenadores para o certame selecionado.
       </p>
       <div class="row">
         <div class="field" style="flex:2">
           <label class="lbl">Certame</label>
           <select id="selRelatorio" style="border:1px solid #ddd;border-radius:8px;padding:9px 13px;font-size:14px;width:100%;outline:none;background:#fff;">
-            <option value="">ÃÂ¢ÃÂÃÂ Carregando certames... ÃÂ¢ÃÂÃÂ</option>
+            <option value="">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Carregando certames... ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</option>
           </select>
         </div>
       </div>
@@ -321,7 +321,7 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
           </svg>
-          Gerar RelatÃÂÃÂ³rio Geral
+          Gerar RelatÃÂÃÂÃÂÃÂ³rio Geral
         </button>
         <button class="btn" onclick="baixarRelatorioWord()" id="btnWord" style="display:none;background:#1F3A6E;color:#fff;gap:6px;">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -337,17 +337,17 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
 </div><!-- /admin -->
 
 <script>
-// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
 //  CONFIG
-// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
-const SENHA    = "ibgpadmin2026"; // ÃÂ¢ÃÂÃÂ altere aqui se quiser
+// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
+const SENHA    = "ibgpadmin2026"; // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ altere aqui se quiser
 const GH_OWNER = "IBGP-APLICACAO";
 const GH_REPO  = "ibgp-relatorios";
 
-// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Lista de coordenadores ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Lista de coordenadores ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
 let coordenadores = [];
 
-// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Gerenciar certames ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Gerenciar certames ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
 async function carregarListaCertames() {
   const sel = document.getElementById("selRemover");
   try {
@@ -355,7 +355,7 @@ async function carregarListaCertames() {
     if (!r.ok) throw new Error();
     const lista = await r.json();
     const opts = lista.length
-      ? '<option value="">ÃÂ¢ÃÂÃÂ Selecione ÃÂ¢ÃÂÃÂ</option>' + lista.map(c => `<option value="${c.id}">${c.titulo} ÃÂ¢ÃÂÃÂ ${c.data}</option>`).join("")
+      ? '<option value="">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Selecione ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</option>' + lista.map(c => `<option value="${c.id}">${c.titulo} ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ${c.data}</option>`).join("")
       : '<option value="">Nenhum certame cadastrado</option>';
     sel.innerHTML = opts;
     document.getElementById("selEditarCoords").innerHTML = opts;
@@ -375,7 +375,7 @@ async function removerCertame() {
     stEl.style.display = "block"; stEl.style.color = "#c62828";
     stEl.textContent = "Cole o Token GitHub antes de excluir."; return;
   }
-  if (!confirm(`Excluir o certame "${id}" e todos os relatÃÂÃÂ³rios das escolas permanentemente?`)) return;
+  if (!confirm(`Excluir o certame "${id}" e todos os relatÃÂÃÂÃÂÃÂ³rios das escolas permanentemente?`)) return;
 
   stEl.style.display = "block"; stEl.style.color = "#1565c0";
   stEl.textContent = "Excluindo...";
@@ -400,9 +400,9 @@ async function removerCertame() {
         try {
           const rd = await fetch(`${scriptUrl}?action=deletarEscolas&escolas=${enc}`);
           const jd = await rd.json().catch(() => ({}));
-          if (jd.status !== "ok") stEl.textContent = "Aviso: dados da planilha podem nÃÂÃÂ£o ter sido apagados.";
+          if (jd.status !== "ok") stEl.textContent = "Aviso: dados da planilha podem nÃÂÃÂÃÂÃÂ£o ter sido apagados.";
         } catch(eDel) {
-          stEl.textContent = "Aviso: nÃÂÃÂ£o foi possÃÂÃÂ­vel limpar a planilha (" + eDel.message + "). Apague manualmente se necessÃÂÃÂ¡rio.";
+          stEl.textContent = "Aviso: nÃÂÃÂÃÂÃÂ£o foi possÃÂÃÂÃÂÃÂ­vel limpar a planilha (" + eDel.message + "). Apague manualmente se necessÃÂÃÂÃÂÃÂ¡rio.";
         }
       }
 
@@ -413,7 +413,7 @@ async function removerCertame() {
     }
 
     // 4. Atualiza certames.json
-    stEl.textContent = "Atualizando ÃÂÃÂ­ndice...";
+    stEl.textContent = "Atualizando ÃÂÃÂÃÂÃÂ­ndice...";
     const r1 = await fetch(`${base}/certames.json`, {headers});
     const j1 = await r1.json();
     const lista = JSON.parse(b64decode(j1.content)).filter(c => c.id !== id);
@@ -422,7 +422,7 @@ async function removerCertame() {
     })});
 
     stEl.style.color = "#2e7d32";
-    stEl.textContent = `ÃÂ¢ÃÂÃÂ Certame "${id}" e ${escolasParaApagar.length} escola(s) removidos com sucesso!`;
+    stEl.textContent = `ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Certame "${id}" e ${escolasParaApagar.length} escola(s) removidos com sucesso!`;
     carregarListaCertames();
   } catch(err) {
     stEl.style.color = "#c62828";
@@ -443,7 +443,7 @@ async function limparDadosPlanilha() {
     stEl.textContent = "Buscando escolas do certame...";
     try {
       const rC = await fetch(`dados/${id}.json?_=${Date.now()}`);
-      if (!rC.ok) throw new Error("Certame nÃÂÃÂ£o encontrado");
+      if (!rC.ok) throw new Error("Certame nÃÂÃÂÃÂÃÂ£o encontrado");
       const certDados = await rC.json();
       const escolas = (certDados.escolas || []).map(e => e.nome || "").filter(Boolean);
       if (!escolas.length) { stEl.textContent = "Nenhuma escola encontrada no certame."; return; }
@@ -453,7 +453,7 @@ async function limparDadosPlanilha() {
       const jd = await rd.json().catch(() => ({}));
       stEl.style.color = jd.status === "ok" ? "#2e7d32" : "#c62828";
       stEl.textContent = jd.status === "ok"
-        ? `ÃÂ¢ÃÂÃÂ ${jd.deletadas} escola(s) removidas da planilha.`
+        ? `ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ${jd.deletadas} escola(s) removidas da planilha.`
         : "Erro ao limpar planilha.";
     } catch(e) { stEl.style.color = "#c62828"; stEl.textContent = "Erro: " + e.message; }
   } else {
@@ -475,7 +475,7 @@ function renderChips() {
   coordenadores.slice().sort().forEach(nome => {
     const chip = document.createElement("div");
     chip.className = "chip";
-    chip.innerHTML = `${nome} <button onclick="removerCoord('${nome.replace(/'/g,"\\'")}')">ÃÂ¢ÃÂÃÂ</button>`;
+    chip.innerHTML = `${nome} <button onclick="removerCoord('${nome.replace(/'/g,"\\'")}')">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</button>`;
     el.appendChild(chip);
   });
 }
@@ -527,14 +527,14 @@ async function salvarCoordenadores() {
     const r1 = await fetch(url, {method:"PUT", headers, body: JSON.stringify(body)});
     if (!r1.ok) throw new Error(await r1.text());
     stEl.style.color = "#2e7d32";
-    stEl.textContent = "ÃÂ¢ÃÂÃÂ Base salva com sucesso!";
+    stEl.textContent = "ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Base salva com sucesso!";
   } catch(err) {
     stEl.style.color = "#c62828";
     stEl.textContent = "Erro: " + err.message;
   }
 }
 
-// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Autocomplete coordenador ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Autocomplete coordenador ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
 function filtrarCoords(inputId, dropId) {
   const inp  = document.getElementById(inputId);
   const drop = document.getElementById(dropId);
@@ -551,11 +551,11 @@ function filtrarCoords(inputId, dropId) {
     opt.onmousedown = () => { inp.value = nome; fecharDrop(dropId); };
     drop.appendChild(opt);
   });
-  // OpÃÂÃÂ§ÃÂÃÂ£o "adicionar novo"
+  // OpÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂ£o "adicionar novo"
   if (val && !coordenadores.includes(val)) {
     const opt = document.createElement("div");
     opt.className = "coord-opt add-new";
-    opt.textContent = `+ Adicionar "${val}" ÃÂÃÂ  base`;
+    opt.textContent = `+ Adicionar "${val}" ÃÂÃÂÃÂÃÂ  base`;
     opt.onmousedown = () => {
       coordenadores.push(val);
       coordenadores.sort();
@@ -573,7 +573,7 @@ function fecharDrop(dropId) {
   if (el) el.classList.remove("open");
 }
 
-// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Gate ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Gate ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
 function entrar() {
   if (document.getElementById("senhaInput").value === SENHA) {
     document.getElementById("gate").style.display  = "none";
@@ -591,7 +591,7 @@ function entrar() {
   }
 }
 
-// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Drag & Drop ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Drag & Drop ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
 function onDrop(e) {
   e.preventDefault();
   document.getElementById("dropZone").classList.remove("over");
@@ -599,7 +599,7 @@ function onDrop(e) {
   if (f) lerArquivo(f);
 }
 
-// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ LÃÂÃÂª o Excel ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ LÃÂÃÂÃÂÃÂª o Excel ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
 let dadosCertame = null;
 
 function lerArquivo(file) {
@@ -618,24 +618,24 @@ function lerArquivo(file) {
 }
 
 function processarPlanilha(wb, nomeArquivo) {
-  const wsAlocacao = wb.Sheets["DADOS ALOCAÃÂÃÂÃÂÃÂO"];
-  if (!wsAlocacao) { alert("Aba 'DADOS ALOCAÃÂÃÂÃÂÃÂO' nÃÂÃÂ£o encontrada."); return; }
+  const wsAlocacao = wb.Sheets["DADOS ALOCAÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂO"];
+  if (!wsAlocacao) { alert("Aba 'DADOS ALOCAÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂO' nÃÂÃÂÃÂÃÂ£o encontrada."); return; }
 
   const linhas = XLSX.utils.sheet_to_json(wsAlocacao, {header:1, defval:""});
   if (linhas.length < 2) { alert("Planilha sem dados."); return; }
 
-  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Info do certame (linha 2, ÃÂÃÂ­ndice 1) ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Info do certame (linha 2, ÃÂÃÂÃÂÃÂ­ndice 1) ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
   const info = linhas[1];
   const concursoRaw  = String(info[5]  || "");
-  const dataProvaRaw = info[8];            // pode ser Date, nÃÂÃÂºmero serial ou string "DD/MM/YYYY"
+  const dataProvaRaw = info[8];            // pode ser Date, nÃÂÃÂÃÂÃÂºmero serial ou string "DD/MM/YYYY"
 
-  // Separa tÃÂÃÂ­tulo e edital
-  const mEdital = concursoRaw.match(/\s*[-ÃÂ¢ÃÂÃÂ]\s*(EDITAL\s*[NÃÂÃÂºÃÂÃÂ°Oo]+\.?\s*[\d/]+[\d]*)/i);
+  // Separa tÃÂÃÂÃÂÃÂ­tulo e edital
+  const mEdital = concursoRaw.match(/\s*[-ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ]\s*(EDITAL\s*[NÃÂÃÂÃÂÃÂºÃÂÃÂÃÂÃÂ°Oo]+\.?\s*[\d/]+[\d]*)/i);
   const titulo  = mEdital ? concursoRaw.slice(0, mEdital.index).trim() : concursoRaw.trim();
   const edital  = mEdital ? cap(mEdital[1].trim()) : "";
 
   // Formata data
-  const MESES = ["janeiro","fevereiro","marÃÂÃÂ§o","abril","maio","junho",
+  const MESES = ["janeiro","fevereiro","marÃÂÃÂÃÂÃÂ§o","abril","maio","junho",
                  "julho","agosto","setembro","outubro","novembro","dezembro"];
   let dataFormatada = "", dataISO = "";
   let dObj = null;
@@ -652,15 +652,15 @@ function processarPlanilha(wb, nomeArquivo) {
     dataISO = `${dObj.getFullYear()}-${pad(dObj.getMonth()+1)}-${pad(dObj.getDate())}`;
   }
 
-  // Gera ID a partir do tÃÂÃÂ­tulo
-  // "CONCURSO PÃÂÃÂBLICO DO MUNICÃÂÃÂPIO DE ALTO RIO DOCE/MG" ÃÂ¢ÃÂÃÂ "alto-rio-doce"
-  const mCidade = titulo.match(/(?:MUNIC[IÃÂÃÂ]PIO DE|CIDADE DE|ESTADO DE|GOVERNO DE|CÃÂÃÂMARA DE|PREFEITURA DE)\s+([^/,\n]+)/i);
+  // Gera ID a partir do tÃÂÃÂÃÂÃÂ­tulo
+  // "CONCURSO PÃÂÃÂÃÂÃÂBLICO DO MUNICÃÂÃÂÃÂÃÂPIO DE ALTO RIO DOCE/MG" ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ "alto-rio-doce"
+  const mCidade = titulo.match(/(?:MUNIC[IÃÂÃÂÃÂÃÂ]PIO DE|CIDADE DE|ESTADO DE|GOVERNO DE|CÃÂÃÂÃÂÃÂMARA DE|PREFEITURA DE)\s+([^/,\n]+)/i);
   const cidadeId = mCidade
-    ? mCidade[1].trim().toLowerCase().normalize("NFD").replace(/[ÃÂÃÂ-ÃÂÃÂ¯]/g,"").replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"")
+    ? mCidade[1].trim().toLowerCase().normalize("NFD").replace(/[ÃÂÃÂÃÂÃÂ-ÃÂÃÂÃÂÃÂ¯]/g,"").replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"")
     : slugify(titulo.split(" ").slice(-3).join(" "));
   const id = `${cidadeId}-${dataISO}`;
 
-  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Detecta ÃÂÃÂ­ndices de coluna dinamicamente pelo cabeÃÂÃÂ§alho ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Detecta ÃÂÃÂÃÂÃÂ­ndices de coluna dinamicamente pelo cabeÃÂÃÂÃÂÃÂ§alho ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
   const header = linhas[0].map(h => String(h||"").trim().toUpperCase());
   const iEscola = header.indexOf("ESCOLA") !== -1 ? header.indexOf("ESCOLA") : 13;
   const iSala   = header.indexOf("SALA")   !== -1 ? header.indexOf("SALA")   : 10;
@@ -669,7 +669,7 @@ function processarPlanilha(wb, nomeArquivo) {
   const iCoordEsc  = header.indexOf("ESCOLA_COORD")  !== -1 ? header.indexOf("ESCOLA_COORD")  : -1;
   const iCoordNome = header.indexOf("COORDENADOR")   !== -1 ? header.indexOf("COORDENADOR")   : -1;
 
-  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Mapa de coordenadores (se coluna existir na planilha) ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Mapa de coordenadores (se coluna existir na planilha) ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
   const coordMap = {};
   if (iCoordEsc >= 0 && iCoordNome >= 0) {
     for (let i = 1; i < linhas.length; i++) {
@@ -680,7 +680,7 @@ function processarPlanilha(wb, nomeArquivo) {
     }
   }
 
-  // ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Agrega cargos: escola ÃÂ¢ÃÂÃÂ sala ÃÂ¢ÃÂÃÂ turno ÃÂ¢ÃÂÃÂ cargo ÃÂ¢ÃÂÃÂ count ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+  // ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Agrega cargos: escola ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ sala ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ turno ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ cargo ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ count ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
   const escMap = {};
   for (let i = 1; i < linhas.length; i++) {
     const r = linhas[i];
@@ -706,7 +706,7 @@ function processarPlanilha(wb, nomeArquivo) {
   const escolas = Object.keys(escMap).map(nome => {
     const cargos = Object.entries(escMap[nome].cargosMap).map(([key, inscr]) => {
       const [sala, turno, cargo] = key.split("|");
-      return { sala, turno: turno === "MANHÃÂÃÂ" ? "ManhÃÂÃÂ£" : "Tarde", cargo, inscr };
+      return { sala, turno: turno === "MANHÃÂÃÂÃÂÃÂ" ? "ManhÃÂÃÂÃÂÃÂ£" : "Tarde", cargo, inscr };
     });
     cargos.sort((a, b) => {
       const na = parseInt(a.sala.replace(/\D/g,"")) || 0;
@@ -714,7 +714,7 @@ function processarPlanilha(wb, nomeArquivo) {
       return na - nb || a.turno.localeCompare(b.turno) || a.cargo.localeCompare(b.cargo);
     });
     const salas = new Set(cargos.map(c => c.sala)).size;
-    const hasManha = cargos.some(c => c.turno === "ManhÃÂÃÂ£");
+    const hasManha = cargos.some(c => c.turno === "ManhÃÂÃÂÃÂÃÂ£");
     const haTarde  = cargos.some(c => c.turno === "Tarde");
 
     // Tenta achar coordenador: match exato ou parcial
@@ -743,8 +743,8 @@ function renderRevisao(nomeArquivo) {
   const tbody = document.getElementById("tabelaEscolas");
   tbody.innerHTML = "";
   dadosCertame.escolas.forEach((e, i) => {
-    const turno = e.hasManha && e.haTarde ? '<span class="badge badge-mt">ManhÃÂÃÂ£ e Tarde</span>'
-                : e.hasManha ? '<span class="badge badge-m">ManhÃÂÃÂ£</span>'
+    const turno = e.hasManha && e.haTarde ? '<span class="badge badge-mt">ManhÃÂÃÂÃÂÃÂ£ e Tarde</span>'
+                : e.hasManha ? '<span class="badge badge-m">ManhÃÂÃÂÃÂÃÂ£</span>'
                 : '<span class="badge badge-t">Tarde</span>';
     const dropId  = `drop_${i}`;
     const inputId = `cinput_${i}`;
@@ -770,30 +770,30 @@ function renderRevisao(nomeArquivo) {
   });
 
   const dz = document.getElementById("dropZone");
-  dz.querySelector("p").textContent = `ÃÂ¢ÃÂÃÂ ${nomeArquivo} ÃÂ¢ÃÂÃÂ ${dadosCertame.escolas.length} locais detectados`;
+  dz.querySelector("p").textContent = `ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ${nomeArquivo} ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ${dadosCertame.escolas.length} locais detectados`;
   dz.classList.add("loaded");
 
   document.getElementById("cardRevisao").style.display  = "block";
   document.getElementById("cardPublicar").style.display = "block";
 }
 
-// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Publicar ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Publicar ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
 async function publicar() {
   const token = document.getElementById("fToken").value.trim();
   if (!token) { setStatus("Informe o Token GitHub (PAT).", "err"); return; }
   sessionStorage.setItem("ghToken", token);
 
-  // Coleta dados do formulÃÂÃÂ¡rio
+  // Coleta dados do formulÃÂÃÂÃÂÃÂ¡rio
   const titulo = document.getElementById("fTitulo").value.trim();
   const edital = document.getElementById("fEdital").value.trim();
   const data   = document.getElementById("fData").value.trim();
   const id     = document.getElementById("fId").value.trim();
 
   if (!titulo || !data || !id) {
-    setStatus("Preencha tÃÂÃÂ­tulo, data e ID antes de publicar.", "err"); return;
+    setStatus("Preencha tÃÂÃÂÃÂÃÂ­tulo, data e ID antes de publicar.", "err"); return;
   }
 
-  // Atualiza coordenadores pelo formulÃÂÃÂ¡rio
+  // Atualiza coordenadores pelo formulÃÂÃÂÃÂÃÂ¡rio
   document.querySelectorAll(".coordInput").forEach(inp => {
     dadosCertame.escolas[parseInt(inp.dataset.idx)].coord_local = inp.value.trim();
   });
@@ -821,7 +821,7 @@ async function publicar() {
   try {
     setStatus("Verificando certames existentes...", "info");
 
-    // 1. LÃÂÃÂª certames.json
+    // 1. LÃÂÃÂÃÂÃÂª certames.json
     const r1 = await fetch(`${base}/certames.json`, {headers});
     if (!r1.ok) throw new Error("Erro ao ler certames.json: " + r1.status);
     const j1 = await r1.json();
@@ -831,12 +831,12 @@ async function publicar() {
     // Verifica duplicata
     const idxExist = certames.findIndex(c => c.id === id);
     if (idxExist >= 0) {
-      if (!confirm(`O certame "${id}" jÃÂÃÂ¡ existe.\nDeseja substituir?`)) return;
+      if (!confirm(`O certame "${id}" jÃÂÃÂÃÂÃÂ¡ existe.\nDeseja substituir?`)) return;
       certames.splice(idxExist, 1);
     }
     certames.push({ id, titulo, edital, data, script_url: scriptUrl });
 
-    // 2. Verifica se arquivo certame jÃÂÃÂ¡ existe
+    // 2. Verifica se arquivo certame jÃÂÃÂÃÂÃÂ¡ existe
     let sha2;
     const r2 = await fetch(`${base}/${id}.json`, {headers});
     if (r2.ok) { sha2 = (await r2.json()).sha; }
@@ -857,22 +857,22 @@ async function publicar() {
               sha2,
               `feat: dados ${id}`);
 
-    setStatus("Atualizando ÃÂÃÂ­ndice de certames...", "info");
+    setStatus("Atualizando ÃÂÃÂÃÂÃÂ­ndice de certames...", "info");
 
     // 4. Atualiza certames.json
     await put(`${base}/certames.json`,
               JSON.stringify(certames, null, 2),
               sha1,
-              `feat: adiciona ${id} ao ÃÂÃÂ­ndice`);
+              `feat: adiciona ${id} ao ÃÂÃÂÃÂÃÂ­ndice`);
 
-    setStatus(`ÃÂ¢ÃÂÃÂ Certame "${titulo}" publicado com sucesso! O formulÃÂÃÂ¡rio atualizarÃÂÃÂ¡ em cerca de 1 minuto.`, "ok");
+    setStatus(`ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Certame "${titulo}" publicado com sucesso! O formulÃÂÃÂÃÂÃÂ¡rio atualizarÃÂÃÂÃÂÃÂ¡ em cerca de 1 minuto.`, "ok");
 
   } catch(err) {
     setStatus("Erro: " + err.message, "err");
   }
 }
 
-// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Helpers ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Helpers ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
 function setStatus(msg, tipo) {
   const el = document.getElementById("status");
   el.textContent = msg;
@@ -895,26 +895,26 @@ function b64encode(str) {
 function pad(n) { return String(n).padStart(2, "0"); }
 function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase(); }
 function slugify(s) {
-  return s.toLowerCase().normalize("NFD").replace(/[ÃÂÃÂ-ÃÂÃÂ¯]/g,"")
+  return s.toLowerCase().normalize("NFD").replace(/[ÃÂÃÂÃÂÃÂ-ÃÂÃÂÃÂÃÂ¯]/g,"")
           .replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"");
 }
 
-// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ Carrega certames no select do RelatÃÂÃÂ³rio Geral ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Carrega certames no select do RelatÃÂÃÂÃÂÃÂ³rio Geral ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
 async function carregarCertamesRelatorio() {
   const sel = document.getElementById("selRelatorio");
   try {
     const r = await fetch("dados/certames.json?_=" + Date.now());
     const lista = await r.json();
     const optsRel = lista.length
-      ? '<option value="">ÃÂ¢ÃÂÃÂ Selecione o certame ÃÂ¢ÃÂÃÂ</option>' +
-        lista.map(c => `<option value="${c.id}" data-titulo="${c.titulo}" data-data="${c.data}">${c.titulo} ÃÂ¢ÃÂÃÂ ${c.data}</option>`).join("")
+      ? '<option value="">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Selecione o certame ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</option>' +
+        lista.map(c => `<option value="${c.id}" data-titulo="${c.titulo}" data-data="${c.data}">${c.titulo} ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ${c.data}</option>`).join("")
       : '<option value="">Nenhum certame publicado</option>';
     sel.innerHTML = optsRel;
     // Populate edit-coords select too (simpler options without data attrs)
     const selE = document.getElementById("selEditarCoords");
     if (selE) {
       selE.innerHTML = lista.length
-        ? '<option value="">ÃÂ¢ÃÂÃÂ Selecione ÃÂ¢ÃÂÃÂ</option>' + lista.map(c => `<option value="${c.id}">${c.titulo} ÃÂ¢ÃÂÃÂ ${c.data}</option>`).join("")
+        ? '<option value="">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Selecione ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ</option>' + lista.map(c => `<option value="${c.id}">${c.titulo} ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ ${c.data}</option>`).join("")
         : '<option value="">Nenhum certame publicado</option>';
     }
   } catch(_) {
@@ -922,7 +922,7 @@ async function carregarCertamesRelatorio() {
   }
 }
 
-// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ RelatÃÂÃÂ³rio Geral ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
+// ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ RelatÃÂÃÂÃÂÃÂ³rio Geral ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂ
 async function gerarRelatorioGeral() {
   const selRel = document.getElementById("selRelatorio");
   const certameId = selRel.value;
@@ -931,9 +931,9 @@ async function gerarRelatorioGeral() {
   }
   const reportWin = window.open("", "_blank");
   if (!reportWin) {
-    mostrarStatusRelatorio("Pop-up bloqueado. Permita pop-ups para este site nas configuraÃÂÃÂ§ÃÂÃÂµes do browser.", false); return;
+    mostrarStatusRelatorio("Pop-up bloqueado. Permita pop-ups para este site nas configuraÃÂÃÂÃÂÃÂ§ÃÂÃÂÃÂÃÂµes do browser.", false); return;
   }
-  reportWin.document.write('<html><body style="font-family:Arial;padding:40px;color:#555;text-align:center;"><p style="font-size:16px;margin-top:80px;">ÃÂ¢ÃÂÃÂ³ Carregando dados do relatÃÂÃÂ³rio...</p></body></html>');
+  reportWin.document.write('<html><body style="font-family:Arial;padding:40px;color:#555;text-align:center;"><p style="font-size:16px;margin-top:80px;">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ³ Carregando dados do relatÃÂÃÂÃÂÃÂ³rio...</p></body></html>');
   const certameOpt = selRel.selectedOptions[0];
   const certameTitulo = certameOpt.dataset.titulo;
   const certameData   = certameOpt.dataset.data;
@@ -942,11 +942,11 @@ async function gerarRelatorioGeral() {
   mostrarStatusRelatorio("Conectando ao Apps Script...", null);
   try {
     const rCertame = await fetch(`dados/${certameId}.json?_=${Date.now()}`);
-    if (!rCertame.ok) throw new Error("Certame nÃÂÃÂ£o encontrado");
+    if (!rCertame.ok) throw new Error("Certame nÃÂÃÂÃÂÃÂ£o encontrado");
     const certameDados = await rCertame.json();
     const escolasDoCertame = new Set((certameDados.escolas || []).map(e => (e.nome || "").toUpperCase().trim()));
     const url = certameDados.script_url || document.getElementById("fScriptUrl").value.trim();
-    if (!url || !url.startsWith("https://script.google.com")) throw new Error("URL do script nÃÂÃÂ£o configurada para este certame.");
+    if (!url || !url.startsWith("https://script.google.com")) throw new Error("URL do script nÃÂÃÂÃÂÃÂ£o configurada para este certame.");
     const resp = await fetch(url + "?action=relatorio");
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     const dados = await resp.json();
@@ -955,15 +955,15 @@ async function gerarRelatorioGeral() {
     const salasMapCert = {};
     (certameDados.escolas || []).forEach(ce => { salasMapCert[normNomeEsc(ce.nome)] = ce.salas||0; });
     dados.escolas.forEach(e => { if(!e.salas) e.salas = salasMapCert[normNomeEsc(e.nome)]||0; });
-    dados.concurso["TÃÂÃÂ­tulo do Concurso"] = certameTitulo;
+    dados.concurso["TÃÂÃÂÃÂÃÂ­tulo do Concurso"] = certameTitulo;
     dados.concurso["Data da Prova"]      = certameData;
     dados.concurso["Edital"]             = certameDados.edital || dados.concurso["Edital"] || "";
-    btn.disabled = false; btn.innerHTML = "ÃÂ°ÃÂÃÂÃÂ Gerar RelatÃÂÃÂ³rio Geral";
+    btn.disabled = false; btn.innerHTML = "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Gerar RelatÃÂÃÂÃÂÃÂ³rio Geral";
     _dadosGeral = { escolas: dados.escolas, concurso: dados.concurso };
     abrirRelatorioGeral(dados, { titulo: certameTitulo, data: certameData, edital: certameDados.edital || "" }, reportWin);
     mostrarBotoesIndividuais(dados.escolas);
   } catch(e) {
-    btn.disabled = false; btn.innerHTML = "ÃÂ°ÃÂÃÂÃÂ Gerar RelatÃÂÃÂ³rio Geral";
+    btn.disabled = false; btn.innerHTML = "ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Gerar RelatÃÂÃÂÃÂÃÂ³rio Geral";
     mostrarStatusRelatorio("Erro: " + e.message, false);
     if (reportWin && !reportWin.closed) reportWin.close();
   }
@@ -984,7 +984,7 @@ function abrirRelatorioImprimivel(dados) {
   const corM = "#1F3A6E", corT = "#CF3432", corH = "#2C2C2C";
 
   function fh(val) {
-    if (!val || val === "Ã¢ÂÂ") return val || "Ã¢ÂÂ";
+    if (!val || val === "ÃÂ¢ÃÂÃÂ") return val || "ÃÂ¢ÃÂÃÂ";
     const s = String(val);
     const m = s.match(/T(\d{2}:\d{2})/);
     if (m) return m[1];
@@ -1001,7 +1001,7 @@ function abrirRelatorioImprimivel(dados) {
 
   function grid2(l1,v1,l2,v2) {
     const cel = (l,v) => l
-      ? '<div style="padding:6px 0;"><span style="display:block;font-size:9px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;">' + l + '</span><span style="font-size:12px;color:#1a1a1a;">' + (v||"Ã¢ÂÂ") + '</span></div>'
+      ? '<div style="padding:6px 0;"><span style="display:block;font-size:9px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;">' + l + '</span><span style="font-size:12px;color:#1a1a1a;">' + (v||"ÃÂ¢ÃÂÃÂ") + '</span></div>'
       : "<div></div>";
     return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;border-bottom:1px solid #F0F0F0;padding:2px 0;">' + cel(l1,v1) + cel(l2,v2) + '</div>';
   }
@@ -1010,63 +1010,63 @@ function abrirRelatorioImprimivel(dados) {
     return 'style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:' + cor + ';color:#fff;padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px;"';
   }
 
-  let html = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>RelatÃÂ³rio Individual Ã¢ÂÂ IBGP</title>'
+  let html = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>RelatÃÂÃÂ³rio Individual ÃÂ¢ÃÂÃÂ IBGP</title>'
     + '<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;background:#EFEFEF;padding:24px;font-size:13px;color:#2C2C2C;-webkit-print-color-adjust:exact;print-color-adjust:exact;}table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}th{padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px;}td{padding:6px 10px;border-bottom:1px solid #eee;font-size:12px;vertical-align:top;}tr:last-child td{border-bottom:none;}.alt td{background:#F7F7F7;}.total-row td{-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#E8E8E8!important;font-weight:700;}.no-print{display:flex;}.foto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:12px;}.foto-item{border:1px solid #eee;border-radius:6px;overflow:hidden;}.foto-item img{width:100%;height:160px;object-fit:cover;display:block;}.foto-label{font-size:10px;color:#666;padding:5px 8px;text-align:center;background:#f9f9f9;}@media print{body{background:#fff;padding:12px;}.no-print{display:none!important;}.page-break{page-break-before:always;}.foto-grid{grid-template-columns:repeat(3,1fr);}}</style></head><body>';
 
   html += '<div class="no-print" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#1F3A6E;color:#fff;padding:12px 20px;margin-bottom:16px;border-radius:8px;align-items:center;justify-content:space-between;">'
-    + '<span style="font-weight:700;">RelatÃÂ³rio Individual Ã¢ÂÂ IBGP</span>'
-    + '<button onclick="window.print()" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#CF3432;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">Ã°ÂÂÂ¨ Imprimir / Salvar PDF</button>'
+    + '<span style="font-weight:700;">RelatÃÂÃÂ³rio Individual ÃÂ¢ÃÂÃÂ IBGP</span>'
+    + '<button onclick="window.print()" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#CF3432;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">ÃÂ°ÃÂÃÂÃÂ¨ Imprimir / Salvar PDF</button>'
     + '</div>';
 
   escolas.forEach(function(e, ei) {
     const d = e.dados || {};
-    const certame = d.concurso || d.certame || conc["TÃÂ­tulo do Concurso"] || "Ã¢ÂÂ";
-    const edital  = d.edital   || conc["Edital"]       || "Ã¢ÂÂ";
-    const data    = d.data     || conc["Data da Prova"] || "Ã¢ÂÂ";
+    const certame = d.concurso || d.certame || conc["TÃÂÃÂ­tulo do Concurso"] || "ÃÂ¢ÃÂÃÂ";
+    const edital  = d.edital   || conc["Edital"]       || "ÃÂ¢ÃÂÃÂ";
+    const data    = d.data     || conc["Data da Prova"] || "ÃÂ¢ÃÂÃÂ";
 
     html += '<div class="' + (ei > 0 ? 'page-break' : '') + '">';
 
-    // CabeÃÂ§alho
+    // CabeÃÂÃÂ§alho
     html += '<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#2C2C2C;padding:16px 20px;border-radius:8px 8px 0 0;">'
-      + '<p style="color:#CF3432;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">IBGP Ã¢ÂÂ RelatÃÂ³rio de AplicaÃÂ§ÃÂ£o de Prova</p>'
-      + '<h1 style="color:#fff;font-size:17px;margin:0 0 4px;">' + (e.nome || "Ã¢ÂÂ") + '</h1>'
+      + '<p style="color:#CF3432;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">IBGP ÃÂ¢ÃÂÃÂ RelatÃÂÃÂ³rio de AplicaÃÂÃÂ§ÃÂÃÂ£o de Prova</p>'
+      + '<h1 style="color:#fff;font-size:17px;margin:0 0 4px;">' + (e.nome || "ÃÂ¢ÃÂÃÂ") + '</h1>'
       + '<p style="color:#bbb;font-size:11px;">' + certame + ' &bull; ' + data + ' &bull; Edital ' + edital + '</p>'
       + '</div>'
       + '<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;height:4px;background:#CF3432;margin-bottom:16px;border-radius:0 0 4px 4px;"></div>';
 
-    // 1. IdentificaÃÂ§ÃÂ£o
-    const houveApoio = d.houve_apoio || "Ã¢ÂÂ";
-    const nomeApoio  = d.nome_apoio  || "Ã¢ÂÂ";
-    html += secao("IdentificaÃÂ§ÃÂ£o", corH,
+    // 1. IdentificaÃÂÃÂ§ÃÂÃÂ£o
+    const houveApoio = d.houve_apoio || "ÃÂ¢ÃÂÃÂ";
+    const nomeApoio  = d.nome_apoio  || "ÃÂ¢ÃÂÃÂ";
+    html += secao("IdentificaÃÂÃÂ§ÃÂÃÂ£o", corH,
       grid2("Coordenador Local", e.coord_local, "Turno(s)", e.turno) +
-      grid2("NÃÂºmero de Salas", d.salas || "Ã¢ÂÂ", "", "") +
-      grid2("Apoio ÃÂ  CoordenaÃÂ§ÃÂ£o", houveApoio, houveApoio === "Sim" ? "Nome do apoiador" : "", houveApoio === "Sim" ? nomeApoio : "")
+      grid2("NÃÂÃÂºmero de Salas", d.salas || "ÃÂ¢ÃÂÃÂ", "", "") +
+      grid2("Apoio ÃÂÃÂ  CoordenaÃÂÃÂ§ÃÂÃÂ£o", houveApoio, houveApoio === "Sim" ? "Nome do apoiador" : "", houveApoio === "Sim" ? nomeApoio : "")
     );
 
-    // 1b. ComissÃÂ£o
-    const houveComissao = d.houve_comissao || "NÃÂ£o";
-    const membrosComissaoStr = Array.isArray(d.membros_comissao) ? d.membros_comissao.join("; ") : (d.membros_comissao || "Ã¢ÂÂ");
+    // 1b. ComissÃÂÃÂ£o
+    const houveComissao = d.houve_comissao || "NÃÂÃÂ£o";
+    const membrosComissaoStr = Array.isArray(d.membros_comissao) ? d.membros_comissao.join("; ") : (d.membros_comissao || "ÃÂ¢ÃÂÃÂ");
     if (houveComissao === "Sim") {
-      html += secao("ComissÃÂ£o", "#5A3A8A",
-        grid2("Houve comissÃÂ£o?", "Sim", "Membros", membrosComissaoStr || "Ã¢ÂÂ")
+      html += secao("ComissÃÂÃÂ£o", "#5A3A8A",
+        grid2("Houve comissÃÂÃÂ£o?", "Sim", "Membros", membrosComissaoStr || "ÃÂ¢ÃÂÃÂ")
       );
     }
 
-    // 2. HorÃÂ¡rios por turno
+    // 2. HorÃÂÃÂ¡rios por turno
     (e.horarios || []).forEach(function(h) {
-      const cor = h.turno === "ManhÃÂ£" ? corM : corT;
-      html += secao("HorÃÂ¡rios Ã¢ÂÂ " + h.turno, cor,
-        grid2("Chegada da equipe",        fh(h.chegada),    "Abertura do portÃÂ£o",         fh(h.ab_portao)) +
-        grid2("Abertura do malote",       fh(h.ab_malote),  "DistribuiÃÂ§ÃÂ£o dos materiais", fh(h.distrib)) +
-        grid2("Fechamento do portÃÂ£o",     fh(h.fch_portao), "InÃÂ­cio da aplicaÃÂ§ÃÂ£o",        fh(h.inicio)) +
+      const cor = h.turno === "ManhÃÂÃÂ£" ? corM : corT;
+      html += secao("HorÃÂÃÂ¡rios ÃÂ¢ÃÂÃÂ " + h.turno, cor,
+        grid2("Chegada da equipe",        fh(h.chegada),    "Abertura do portÃÂÃÂ£o",         fh(h.ab_portao)) +
+        grid2("Abertura do malote",       fh(h.ab_malote),  "DistribuiÃÂÃÂ§ÃÂÃÂ£o dos materiais", fh(h.distrib)) +
+        grid2("Fechamento do portÃÂÃÂ£o",     fh(h.fch_portao), "InÃÂÃÂ­cio da aplicaÃÂÃÂ§ÃÂÃÂ£o",        fh(h.inicio)) +
         grid2("Encerramento da prova",    fh(h.encerr),     "Fechamento do malote",       fh(h.fch_malote))
       );
     });
 
-    // 3. EstatÃÂ­stica por cargo/turno
+    // 3. EstatÃÂÃÂ­stica por cargo/turno
     const turnosRes = [...new Set((e.resultados || []).map(r => r.turno))];
     turnosRes.forEach(function(turno) {
-      const cor  = turno === "ManhÃÂ£" ? corM : corT;
+      const cor  = turno === "ManhÃÂÃÂ£" ? corM : corT;
       const rows = (e.resultados || []).filter(r => r.turno === turno);
       let tI=0, tP=0, tA=0, tIn=0;
       let tab = '<table><thead><tr>'
@@ -1075,51 +1075,51 @@ function abrirRelatorioImprimivel(dados) {
         + '<th ' + thS(cor) + ' style="text-align:center;">Presentes</th>'
         + '<th ' + thS(cor) + ' style="text-align:center;">Ausentes</th>'
         + '<th ' + thS(cor) + ' style="text-align:center;">% Aus.</th>'
-        + '<th ' + thS(cor) + ' style="text-align:center;">InclusÃÂ£o</th>'
+        + '<th ' + thS(cor) + ' style="text-align:center;">InclusÃÂÃÂ£o</th>'
         + '</tr></thead><tbody>';
       rows.forEach(function(r, i) {
         tI+=Number(r.inscr)||0; tP+=Number(r.pres)||0; tA+=Number(r.aus)||0; tIn+=Number(r.incl)||0;
         tab += '<tr class="' + (i%2===1?'alt':'') + '">'
-          + '<td>' + (r.cargo||"Ã¢ÂÂ") + '</td>'
+          + '<td>' + (r.cargo||"ÃÂ¢ÃÂÃÂ") + '</td>'
           + '<td style="text-align:center;">' + r.inscr + '</td>'
           + '<td style="text-align:center;">' + r.pres + '</td>'
           + '<td style="text-align:center;">' + r.aus + '</td>'
-          + '<td style="text-align:center;">' + (r.inscr>0?(r.aus/r.inscr*100).toFixed(1)+'%':'Ã¢ÂÂ') + '</td>'
+          + '<td style="text-align:center;">' + (r.inscr>0?(r.aus/r.inscr*100).toFixed(1)+'%':'ÃÂ¢ÃÂÃÂ') + '</td>'
           + '<td style="text-align:center;">' + (r.incl||0) + '</td>'
           + '</tr>';
       });
       tab += '<tr class="total-row"><td><strong>TOTAL</strong></td>'
         + '<td style="text-align:center;">' + tI + '</td><td style="text-align:center;">' + tP + '</td>'
-        + '<td style="text-align:center;">' + tA + '</td><td style="text-align:center;">' + (tI>0?(tA/tI*100).toFixed(1)+'%':'Ã¢ÂÂ') + '</td><td style="text-align:center;">' + tIn + '</td>'
+        + '<td style="text-align:center;">' + tA + '</td><td style="text-align:center;">' + (tI>0?(tA/tI*100).toFixed(1)+'%':'ÃÂ¢ÃÂÃÂ') + '</td><td style="text-align:center;">' + tIn + '</td>'
         + '</tr></tbody></table>';
-      html += secao("EstatÃÂ­stica por Cargo Ã¢ÂÂ " + turno, cor, tab);
+      html += secao("EstatÃÂÃÂ­stica por Cargo ÃÂ¢ÃÂÃÂ " + turno, cor, tab);
     });
 
     // 4. Testemunhas por turno
     const turnosTest = [...new Set((e.testemunhas || []).map(t => t.turno))];
     turnosTest.forEach(function(turno) {
-      const cor = turno === "ManhÃÂ£" ? corM : corT;
+      const cor = turno === "ManhÃÂÃÂ£" ? corM : corT;
       const tt  = (e.testemunhas || []).filter(t => t.turno === turno);
       let tHtml = "";
       tt.forEach(function(t) {
         const pessoas = [];
         for (let i = 1; i <= 3; i++) {
-          if (t["t"+i+"_nome"]) pessoas.push(i + ". " + t["t"+i+"_nome"] + " &nbsp;Ã¢ÂÂ&nbsp; CPF: " + (t["t"+i+"_cpf"]||"Ã¢ÂÂ"));
+          if (t["t"+i+"_nome"]) pessoas.push(i + ". " + t["t"+i+"_nome"] + " &nbsp;ÃÂ¢ÃÂÃÂ&nbsp; CPF: " + (t["t"+i+"_cpf"]||"ÃÂ¢ÃÂÃÂ"));
         }
         tHtml += '<div style="margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #f0f0f0;">'
           + '<div style="font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">' + t.tipo + '</div>'
-          + '<div style="font-size:12px;line-height:2;">' + (pessoas.join("<br>") || "Ã¢ÂÂ") + '</div>'
+          + '<div style="font-size:12px;line-height:2;">' + (pessoas.join("<br>") || "ÃÂ¢ÃÂÃÂ") + '</div>'
           + '</div>';
       });
-      if (tHtml) html += secao("Testemunhas Ã¢ÂÂ " + turno, cor, tHtml);
+      if (tHtml) html += secao("Testemunhas ÃÂ¢ÃÂÃÂ " + turno, cor, tHtml);
     });
 
-    // 5. OcorrÃÂªncias por turno
-    const ocorrLabels = {sala:"Salas c/ ocorrÃÂªncia", cond:"Prova condicional", toque:"Toque de celular", decl:"Decl. de comparecimento"};
+    // 5. OcorrÃÂÃÂªncias por turno
+    const ocorrLabels = {sala:"Salas c/ ocorrÃÂÃÂªncia", cond:"Prova condicional", toque:"Toque de celular", decl:"Decl. de comparecimento"};
     const candLabels  = {estado:"Estado do aparelho", lacrado:"Lacramento", local:"Local do aparelho"};
 
     (e.ocorrencias || []).forEach(function(o) {
-      const cor   = o.turno === "ManhÃÂ£" ? corM : corT;
+      const cor   = o.turno === "ManhÃÂÃÂ£" ? corM : corT;
       const cands = (e.candidatos || []).filter(c => c.turno === o.turno);
       const total = (Number(o.sala)||0)+(Number(o.cond)||0)+(Number(o.toque)||0)+(Number(o.decl)||0);
 
@@ -1141,77 +1141,77 @@ function abrirRelatorioImprimivel(dados) {
           const extraCols = Object.keys(c0).filter(k => !["turno","tipo","inscricao","candidato","sala"].includes(k));
           oHtml += '<div style="margin-bottom:14px;">'
             + '<div style="font-size:10px;font-weight:700;color:#7B3F00;text-transform:uppercase;letter-spacing:.5px;padding:5px 10px;background:#FFF3CD;border-left:3px solid #FFA000;border-radius:2px;margin-bottom:6px;">'
-            + tipo + ' Ã¢ÂÂ ' + grupo.length + ' candidato(s)</div>'
+            + tipo + ' ÃÂ¢ÃÂÃÂ ' + grupo.length + ' candidato(s)</div>'
             + '<table><thead><tr>'
-            + '<th ' + thS(cor) + '>InscriÃÂ§ÃÂ£o</th>'
+            + '<th ' + thS(cor) + '>InscriÃÂÃÂ§ÃÂÃÂ£o</th>'
             + '<th ' + thS(cor) + '>Candidato</th>'
             + '<th ' + thS(cor) + '>Sala</th>';
           extraCols.forEach(k => { oHtml += '<th ' + thS(cor) + '>' + (candLabels[k]||k) + '</th>'; });
           oHtml += '</tr></thead><tbody>';
           grupo.forEach(function(c, i) {
             oHtml += '<tr class="' + (i%2===1?'alt':'') + '">'
-              + '<td>' + (c.inscricao||"Ã¢ÂÂ") + '</td><td>' + (c.candidato||"Ã¢ÂÂ") + '</td><td>' + (c.sala||"Ã¢ÂÂ") + '</td>';
-            extraCols.forEach(k => { oHtml += '<td>' + (c[k]||"Ã¢ÂÂ") + '</td>'; });
+              + '<td>' + (c.inscricao||"ÃÂ¢ÃÂÃÂ") + '</td><td>' + (c.candidato||"ÃÂ¢ÃÂÃÂ") + '</td><td>' + (c.sala||"ÃÂ¢ÃÂÃÂ") + '</td>';
+            extraCols.forEach(k => { oHtml += '<td>' + (c[k]||"ÃÂ¢ÃÂÃÂ") + '</td>'; });
             oHtml += '</tr>';
           });
           oHtml += '</tbody></table></div>';
         });
       } else if (total === 0) {
-        oHtml += '<p style="color:#4CAF50;font-size:12px;font-style:italic;">Nenhuma ocorrÃÂªncia registrada neste turno.</p>';
+        oHtml += '<p style="color:#4CAF50;font-size:12px;font-style:italic;">Nenhuma ocorrÃÂÃÂªncia registrada neste turno.</p>';
       }
 
       if (o.obs) {
         oHtml += '<div style="margin-top:8px;padding:8px 12px;background:#f5f5f5;border-radius:4px;font-size:12px;color:#555;border-left:3px solid #999;">'
-          + '<strong>ObservaÃÂ§ÃÂµes do turno:</strong> ' + o.obs + '</div>';
+          + '<strong>ObservaÃÂÃÂ§ÃÂÃÂµes do turno:</strong> ' + o.obs + '</div>';
       }
 
-      html += secao("OcorrÃÂªncias Ã¢ÂÂ " + o.turno, cor, oHtml);
+      html += secao("OcorrÃÂÃÂªncias ÃÂ¢ÃÂÃÂ " + o.turno, cor, oHtml);
     });
 
-    // 5b. AmpliaÃÂ§ÃÂ£o de Sala por turno
-    var _turnoCores = {"ManhÃÂ£": corM, "Tarde": corT};
-    [["manha","ManhÃÂ£"],["tarde","Tarde"]].forEach(function(pair) {
+    // 5b. AmpliaÃÂÃÂ§ÃÂÃÂ£o de Sala por turno
+    var _turnoCores = {"ManhÃÂÃÂ£": corM, "Tarde": corT};
+    [["manha","ManhÃÂÃÂ£"],["tarde","Tarde"]].forEach(function(pair) {
       var td = d[pair[0]] || {};
       var ampList = td.ampliacao || [];
       if (ampList.length === 0) return;
       var ampHtml = ampList.map(function(ap) {
-        return grid2("Ata", ap.ata||"Ã¢ÂÂ", "Qtd. Candidatos", ap.qtd||"Ã¢ÂÂ") +
+        return grid2("Ata", ap.ata||"ÃÂ¢ÃÂÃÂ", "Qtd. Candidatos", ap.qtd||"ÃÂ¢ÃÂÃÂ") +
           (ap.justificativa ? '<p style="font-size:12px;margin:4px 0;"><strong>Justificativa:</strong> '+ap.justificativa+'</p>' : "");
       }).join('<hr style="border:none;border-top:1px solid #eee;margin:4px 0;">');
-      html += secao("AmpliaÃÂ§ÃÂ£o de Sala Ã¢ÂÂ "+pair[1], _turnoCores[pair[1]]||corH, ampHtml);
+      html += secao("AmpliaÃÂÃÂ§ÃÂÃÂ£o de Sala ÃÂ¢ÃÂÃÂ "+pair[1], _turnoCores[pair[1]]||corH, ampHtml);
     });
 
-    // 5c. CorreÃÂ§ÃÂ£o de Dados Cadastrais por turno
-    [["manha","ManhÃÂ£"],["tarde","Tarde"]].forEach(function(pair) {
+    // 5c. CorreÃÂÃÂ§ÃÂÃÂ£o de Dados Cadastrais por turno
+    [["manha","ManhÃÂÃÂ£"],["tarde","Tarde"]].forEach(function(pair) {
       var td = d[pair[0]] || {};
       var corrList = td.correcao || [];
       if (corrList.length === 0) return;
       var corrHtml = '<table style="width:100%;border-collapse:collapse;font-size:12px;">'
         + '<thead><tr style="background:#555;color:#fff;">'
-        + '<th style="padding:5px 8px;text-align:left;">InscriÃÂ§ÃÂ£o</th>'
+        + '<th style="padding:5px 8px;text-align:left;">InscriÃÂÃÂ§ÃÂÃÂ£o</th>'
         + '<th style="padding:5px 8px;text-align:left;">Candidato</th>'
         + '<th style="padding:5px 8px;text-align:left;">Tipo</th>'
         + '<th style="padding:5px 8px;text-align:left;">Dado Correto</th>'
         + '</tr></thead><tbody>'
         + corrList.map(function(c) {
-          return '<tr><td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.inscricao||"Ã¢ÂÂ")+'</td>'
-            + '<td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.candidato||"Ã¢ÂÂ")+'</td>'
-            + '<td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.tipo||"Ã¢ÂÂ")+'</td>'
-            + '<td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.correcao||"Ã¢ÂÂ")+'</td></tr>';
+          return '<tr><td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.inscricao||"ÃÂ¢ÃÂÃÂ")+'</td>'
+            + '<td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.candidato||"ÃÂ¢ÃÂÃÂ")+'</td>'
+            + '<td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.tipo||"ÃÂ¢ÃÂÃÂ")+'</td>'
+            + '<td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.correcao||"ÃÂ¢ÃÂÃÂ")+'</td></tr>';
         }).join("")
         + '</tbody></table>';
-      html += secao("CorreÃÂ§ÃÂ£o de Dados Cadastrais Ã¢ÂÂ "+pair[1], _turnoCores[pair[1]]||corH, corrHtml);
+      html += secao("CorreÃÂÃÂ§ÃÂÃÂ£o de Dados Cadastrais ÃÂ¢ÃÂÃÂ "+pair[1], _turnoCores[pair[1]]||corH, corrHtml);
     });
 
-    // 6. ObservaÃÂ§ÃÂµes Gerais
+    // 6. ObservaÃÂÃÂ§ÃÂÃÂµes Gerais
     const obsTexto = e.obs || d.obs || "";
     if (obsTexto) {
-      html += secao("ObservaÃÂ§ÃÂµes Gerais", corH,
+      html += secao("ObservaÃÂÃÂ§ÃÂÃÂµes Gerais", corH,
         '<p style="font-size:13px;line-height:1.7;color:#2C2C2C;white-space:pre-wrap;">' + obsTexto + '</p>'
       );
     }
 
-    // 7. Registro FotogrÃÂ¡fico
+    // 7. Registro FotogrÃÂÃÂ¡fico
     const fotos = d.fotos || [];
     let fotoHtml = "";
     if (fotos.length > 0) {
@@ -1222,20 +1222,20 @@ function abrirRelatorioImprimivel(dados) {
         if (src) {
           fotoHtml += '<div class="foto-item">'
             + '<img src="' + src + '" alt="' + (f.categoria||f.turno||'foto') + '">'
-            + '<div class="foto-label">' + ([f.categoria, f.turno].filter(Boolean).join(" Ã¢ÂÂ ") || "Foto") + '</div>'
+            + '<div class="foto-label">' + ([f.categoria, f.turno].filter(Boolean).join(" ÃÂ¢ÃÂÃÂ ") || "Foto") + '</div>'
             + '</div>';
         }
       });
       fotoHtml += '</div>';
       if (e.foto_url) {
-        fotoHtml += '<p style="margin-top:14px;font-size:12px;"><a href="' + e.foto_url + '" target="_blank" style="color:#1F3A6E;font-weight:700;text-decoration:none;">Ã°ÂÂÂ Ver tambÃÂ©m no Google Drive Ã¢ÂÂ</a></p>';
+        fotoHtml += '<p style="margin-top:14px;font-size:12px;"><a href="' + e.foto_url + '" target="_blank" style="color:#1F3A6E;font-weight:700;text-decoration:none;">ÃÂ°ÃÂÃÂÃÂ Ver tambÃÂÃÂ©m no Google Drive ÃÂ¢ÃÂÃÂ</a></p>';
       }
     } else if (e.foto_url) {
-      fotoHtml = '<a href="' + e.foto_url + '" target="_blank" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;display:inline-block;background:#CF3432;color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">Ã°ÂÂÂ Ver Fotos no Google Drive</a>';
+      fotoHtml = '<a href="' + e.foto_url + '" target="_blank" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;display:inline-block;background:#CF3432;color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">ÃÂ°ÃÂÃÂÃÂ Ver Fotos no Google Drive</a>';
     } else {
       fotoHtml = '<p style="color:#999;font-style:italic;font-size:13px;">Nenhuma foto enviada.</p>';
     }
-    html += secao("Registro FotogrÃÂ¡fico", corM, fotoHtml);
+    html += secao("Registro FotogrÃÂÃÂ¡fico", corM, fotoHtml);
 
   });
 
@@ -1245,14 +1245,14 @@ function abrirRelatorioImprimivel(dados) {
 }
 
 
-// Ã¢ÂÂÃ¢ÂÂ BotÃÂµes de relatÃÂ³rios individuais Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂÃ¢ÂÂ
+// ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ BotÃÂÃÂµes de relatÃÂÃÂ³rios individuais ÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂÃÂ¢ÃÂÃÂ
 function mostrarBotoesIndividuais(escolas) {
   if (!escolas || escolas.length === 0) return;
   var el = document.getElementById("statusRelatorio");
   el.style.display = "block";
   el.style.background = "#EFF3FB";
   el.style.color = "#1F3A6E";
-  el.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Ã°ÂÂÂ RelatÃÂ³rios Individuais por Local</div>'
+  el.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">ÃÂ°ÃÂÃÂÃÂ RelatÃÂÃÂ³rios Individuais por Local</div>'
     + '<div style="display:flex;flex-wrap:wrap;gap:8px;">'
     + escolas.map(function(e, i) {
         return '<button onclick="abrirIndividualPorIdx(' + i + ')" style="background:#1F3A6E;color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">' + e.nome + '</button>';
@@ -1297,7 +1297,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   var titulo=meta.titulo||conc["T\u00edtulo do Concurso"]||"";
   var edital=meta.edital||conc["Edital"]||"";
   var dataProva=meta.data||conc["Data da Prova"]||"";
-  var coordPed="TIAGO JOS\u00c9 THEISEN";
+  var coordPed="Tiago Jos\u00e9 Theisen";
   var coordLog="Marcela Avelar Pedrosa Rocha";
   var turnosSet={};
   escolas.forEach(function(e){if(e.turno)String(e.turno).split(/\s+e\s+|\//).forEach(function(t){if(t.trim())turnosSet[t.trim()]=1;});});
@@ -1329,7 +1329,7 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'}'
     +'</style></head><body>';
 
-  // CabeÃÂ§alho fixo (cinza claro, repete em todas as pÃÂ¡ginas)
+  // CabeÃÂÃÂ§alho fixo (cinza claro, repete em todas as pÃÂÃÂ¡ginas)
   html+='<div id="pgHeader">'
     +'<div style="display:flex;justify-content:space-between;align-items:center;">'
     +'<img src="https://ibgp-aplicacao.github.io/ibgp-relatorios/ibgp-logo.png" style="height:44px;" />'
@@ -1354,9 +1354,9 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'</div></div>'
     +'<div style="'+PC+'height:4px;background:'+corR+';margin-bottom:28px;border-radius:0 0 6px 6px;"></div>';
 
-  // 1. ApresentaÃÂ§ÃÂ£o
+  // 1. ApresentaÃÂÃÂ§ÃÂÃÂ£o
   html+=secH("1","Apresenta\u00e7\u00e3o");
-  html+='<p>Este relat\u00f3rio consolida as informa\u00e7\u00f5es de <strong>'+n+(n===1?" local":" locais")+'</strong> de aplica\u00e7\u00e3o das provas objetivas do concurso p\u00fablico <strong>'+titulo+'</strong>, '+edital+', realizadas em '+dataProva+', turno'+(Object.keys(turnosSet).length>1?"s":"")+" "+turnosStr+'. Cada local possui relat\u00f3rio t\u00e9cnico individual arquivado separadamente. Os quantitativos totalizam <strong>'+nCargos+' cargo'+(nCargos!==1?"s":"")+'</strong> distribuÃÂ­dos em <strong>'+totSalas+' salas</strong> de prova.</p>';
+  html+='<p>Este relat\u00f3rio consolida as informa\u00e7\u00f5es de <strong>'+n+(n===1?" local":" locais")+'</strong> de aplica\u00e7\u00e3o das provas objetivas do concurso p\u00fablico <strong>'+titulo+'</strong>, '+edital+', realizadas em '+dataProva+', turno'+(Object.keys(turnosSet).length>1?"s":"")+" "+turnosStr+'. Cada local possui relat\u00f3rio t\u00e9cnico individual arquivado separadamente. Os quantitativos totalizam <strong>'+nCargos+' cargo'+(nCargos!==1?"s":"")+'</strong> distribuÃ­dos em <strong>'+totSalas+' salas</strong> de prova.</p>';
 
   // 2. Resumo Executivo
   html+='<div>';
@@ -1396,7 +1396,7 @@ function abrirRelatorioGeral(dados, meta, win) {
       +'<td style="'+PC+'background:'+bg+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;text-align:justify;">'+p+'</td></tr>';});
   html+='</table></div>';
 
-  // 4. Locais de AplicaÃÂ§ÃÂ£o
+  // 4. Locais de AplicaÃÂÃÂ§ÃÂÃÂ£o
   html+='<div>';
   html+=secH("4","Locais de Aplica\u00e7\u00e3o");
   html+='<div class="card"><table><thead><tr><th '+thS()+'>Local de Aplica\u00e7\u00e3o</th><th '+thS()+'>Coordenador(a) Local</th><th '+thS("text-align:center;")+'>Turno</th><th '+thS("text-align:center;")+'>Salas</th></tr></thead><tbody>';
@@ -1475,7 +1475,7 @@ function abrirRelatorioGeral(dados, meta, win) {
     html+='</div>';
   }
 
-  // RodapÃÂ©
+  // RodapÃÂÃÂ©
   html+='<div style="border-top:1px solid #CCC;margin-top:28px;padding-top:12px;display:flex;justify-content:space-between;font-size:9px;color:#888;">'
     +'<span>IBGP \u2014 Instituto Brasileiro de Gest\u00e3o e Pesquisa</span>'
     +'</div>';
