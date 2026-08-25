@@ -964,6 +964,19 @@ dados.escolas = dados.escolas.map(function(ge) {
   if (!ge.coord_local && local.coord_local) ge.coord_local = local.coord_local;
   return ge;
 });
+
+// Merge salas and cargos from local JSON
+var localMap = {};
+(certameDados.escolas || []).forEach(function(le) {
+  localMap[(le.nome||"").toUpperCase().trim()] = le;
+});
+dados.escolas = dados.escolas.map(function(ge) {
+  var local = localMap[(ge.nome||"").toUpperCase().trim()] || {};
+  if (!ge.salas && local.salas) ge.salas = local.salas;
+  if (!ge.cargos && local.cargos) ge.cargos = local.cargos;
+  if (!ge.coord_local && local.coord_local) ge.coord_local = local.coord_local;
+  return ge;
+});
     function normNomeEsc(n){return(n||'').toUpperCase().normalize('NFD').replace(/[\u0300-\u036F]/g,'').trim();}
     const salasMapCert = {};
     (certameDados.escolas || []).forEach(ce => { salasMapCert[normNomeEsc(ce.nome)] = ce.salas||0; });
