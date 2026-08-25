@@ -933,7 +933,7 @@ async function gerarRelatorioGeral() {
   if (!reportWin) {
     mostrarStatusRelatorio("Pop-up bloqueado. Permita pop-ups para este site nas configuraÃ§Ãµes do browser.", false); return;
   }
-  reportWin.document.write('<html><body style="font-family:Arial;padding:40px;color:#555;text-align:center;"><p style="font-size:16px;margin-top:80px;">â³ Carregando dados do relatÃ³rio...</p></body></html>');
+  reportWin.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="font-family:Arial;padding:40px;color:#555;text-align:center;"><p style="font-size:16px;margin-top:80px;">â³ Carregando dados do relatÃ³rio...</p></body></html>');
   const certameOpt = selRel.selectedOptions[0];
   const certameTitulo = certameOpt.dataset.titulo;
   const certameData   = certameOpt.dataset.data;
@@ -1239,8 +1239,9 @@ function abrirRelatorioImprimivel(dados) {
   });
 
   html += "</body></html>";
-  const _blob = new Blob([html], {type: 'text/html;charset=utf-8'});
-  window.open(URL.createObjectURL(_blob), '_blank');
+  var _b=new Blob([html],{type:'text/html;charset=utf-8'}),_u=URL.createObjectURL(_b);
+  window.open(_u,'_blank');
+  setTimeout(function(){URL.revokeObjectURL(_u);},30000);
 }
 
 
@@ -1479,8 +1480,9 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'<span>IBGP \u2014 Instituto Brasileiro de Gest\u00e3o e Pesquisa</span>'
     +'</div>';
   html+='</body></html>';
-  win.document.write(html);
-  win.document.close();
+  var _b=new Blob([html],{type:'text/html;charset=utf-8'}),_u=URL.createObjectURL(_b);
+  window.open(_u,'_blank');
+  setTimeout(function(){URL.revokeObjectURL(_u);},30000);
 }
 </script>
 </body>
