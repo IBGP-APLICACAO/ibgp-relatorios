@@ -1,9 +1,9 @@
 {
   "id": "de-pouso-alegremg-2026-08-02",
-  "titulo": "CONCURSO PÚBLICO DA GUARDA CIVIL MUNICIPAL DE POUSO ALEGRE/MG",
-  "edital": "Edital nº 01/2026",
+  "titulo": "CONCURSO PÃBLICO DA GUARDA CIVIL MUNICIPAL DE POUSO ALEGRE/MG",
+  "edital": "Edital nÂº 01/2026",
   "data": "2 de agosto de 2026",
-  "script_url": "https://script.google.com/macros/s/AKfycbwaleKTiGiTEQTzdUcYn7JpX387-gpZ4SJ_1sPNSgj-jJbGUEfJicmoSoGbuFGwpghX/exec",
+  "script_url": "https://script.google.com/macros/s/AKfycbwaleKTiGiTEQTzdUcYn7JpX387-gpZ4SJ_1sPNSgj-jJbGUEfJicmoSoGbuFgwpghX/exec",
   "escolas": [
     {
       "nome": "EE. PRESIDENTE BERNARDES",
@@ -12,19 +12,19 @@
       "cargos": [
         {
           "sala": "SALA 01",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 36
         },
         {
           "sala": "SALA 02",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 36
         },
         {
           "sala": "SALA 03",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 36
         }
@@ -32,13 +32,13 @@
       "candidatos": [
         {
           "inscricao": "16327913",
-          "nome": "VÍTOR NASCIMENTO RODRIGUES",
+          "nome": "VÃTOR NASCIMENTO RODRIGUES",
           "cpf": "14621136720",
           "sala": "SALA 01"
         },
         {
           "inscricao": "16328655",
-          "nome": "VITÓRIA FERNANDA PEREIRA DE OLIVEIRA",
+          "nome": "VITÃRIA FERNANDA PEREIRA DE OLIVEIRA",
           "cpf": "17489028655",
           "sala": "SALA 01"
         },
@@ -56,7 +56,7 @@
         },
         {
           "inscricao": "16327703",
-          "nome": "VITÓRIA REGINA SILVEIRA JUNHO",
+          "nome": "VITÃRIA REGINA SILVEIRA JUNHO",
           "cpf": "09543479607",
           "sala": "SALA 01"
         },
@@ -104,7 +104,7 @@
         },
         {
           "inscricao": "16334141",
-          "nome": "WALISON ANDRÉ NUNES DA ROSA",
+          "nome": "WALISON ANDRÃ NUNES DA ROSA",
           "cpf": "42216909840",
           "sala": "SALA 01"
         },
@@ -200,7 +200,7 @@
         },
         {
           "inscricao": "16333540",
-          "nome": "WELERSON NORONHA ARAÚJO DOS SANTOS",
+          "nome": "WELERSON NORONHA ARAÃJO DOS SANTOS",
           "cpf": "13812657660",
           "sala": "SALA 01"
         },
@@ -254,7 +254,7 @@
         },
         {
           "inscricao": "16331498",
-          "nome": "WELLINGTON JUNIOR SILVA MEZÊNCIO",
+          "nome": "WELLINGTON JUNIOR SILVA MEZÃNCIO",
           "cpf": "02183317620",
           "sala": "SALA 02"
         },
@@ -278,7 +278,7 @@
         },
         {
           "inscricao": "16330564",
-          "nome": "WEMERSON DA CONCEIÇÃO SILVA",
+          "nome": "WEMERSON DA CONCEIÃÃO SILVA",
           "cpf": "03582187217",
           "sala": "SALA 02"
         },
@@ -368,7 +368,7 @@
         },
         {
           "inscricao": "16337531",
-          "nome": "WESLEY HENRIQUE GONÇALVES",
+          "nome": "WESLEY HENRIQUE GONÃALVES",
           "cpf": "16134058637",
           "sala": "SALA 02"
         },
@@ -380,7 +380,7 @@
         },
         {
           "inscricao": "16327661",
-          "nome": "WESLEY LÚCIO",
+          "nome": "WESLEY LÃCIO",
           "cpf": "08292066632",
           "sala": "SALA 02"
         },
@@ -464,7 +464,7 @@
         },
         {
           "inscricao": "16329149",
-          "nome": "ÀLEX DA SILVA LIMA",
+          "nome": "ÃLEX DA SILVA LIMA",
           "cpf": "10348214669",
           "sala": "SALA 03"
         },
@@ -530,7 +530,7 @@
         },
         {
           "inscricao": "16336363",
-          "nome": "WILSON JOSÉ DE SOUZA FILHO",
+          "nome": "WILSON JOSÃ DE SOUZA FILHO",
           "cpf": "11462666698",
           "sala": "SALA 03"
         },
@@ -542,7 +542,7 @@
         },
         {
           "inscricao": "16328535",
-          "nome": "WINÍCIUS ROCHA SILVEIRA",
+          "nome": "WINÃCIUS ROCHA SILVEIRA",
           "cpf": "02307038604",
           "sala": "SALA 03"
         },
@@ -681,109 +681,109 @@
       ]
     },
     {
-      "nome": "EM. DOUTOR ÂNGELO CÔNSOLI",
-      "coord_local": "ÉGON ARIEL DE FARIA SILVA",
+      "nome": "EM. DOUTOR ÃNGELO CÃNSOLI",
+      "coord_local": "ÃGON ARIEL DE FARIA SILVA",
       "salas": 17,
       "cargos": [
         {
           "sala": "SALA 01",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 33
         },
         {
           "sala": "SALA 02",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 27
         },
         {
           "sala": "SALA 03",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 27
         },
         {
           "sala": "SALA 05",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 24
         },
         {
           "sala": "SALA 06",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 23
         },
         {
           "sala": "SALA 08",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 27
         },
         {
           "sala": "SALA 09",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 25
         },
         {
           "sala": "SALA 10",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 25
         },
         {
           "sala": "SALA 11",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 25
         },
         {
           "sala": "SALA 12",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 27
         },
         {
           "sala": "SALA 13",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 25
         },
         {
           "sala": "SALA 14",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 26
         },
         {
           "sala": "SALA 15",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 26
         },
         {
           "sala": "SALA 16",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 24
         },
         {
           "sala": "SALA 17",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 24
         },
         {
           "sala": "SALA 18",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 24
         },
         {
           "sala": "SALA 19",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 25
         }
@@ -875,19 +875,19 @@
         },
         {
           "inscricao": "16330301",
-          "nome": "PATRÍCIA DONIZETE LOPES BERTALINI",
+          "nome": "PATRÃCIA DONIZETE LOPES BERTALINI",
           "cpf": "13452950654",
           "sala": "SALA 01"
         },
         {
           "inscricao": "16328768",
-          "nome": "PATRÍCIA SOUZA SILVA BALDIN",
+          "nome": "PATRÃCIA SOUZA SILVA BALDIN",
           "cpf": "13398987648",
           "sala": "SALA 01"
         },
         {
           "inscricao": "16330545",
-          "nome": "PATRÍCIO SANTOS GIRÃO",
+          "nome": "PATRÃCIO SANTOS GIRÃO",
           "cpf": "09444895670",
           "sala": "SALA 01"
         },
@@ -905,7 +905,7 @@
         },
         {
           "inscricao": "16334656",
-          "nome": "PATRICK GUIMARÃES ALBUQUERQUE",
+          "nome": "PATRICK GUIMARÃES ALBUQUERQUE",
           "cpf": "85625523215",
           "sala": "SALA 01"
         },
@@ -923,7 +923,7 @@
         },
         {
           "inscricao": "16328390",
-          "nome": "PAULO ANTÔNIO BARCELLOS CORDEIRO JUNIOR",
+          "nome": "PAULO ANTÃNIO BARCELLOS CORDEIRO JUNIOR",
           "cpf": "10074795660",
           "sala": "SALA 01"
         },
@@ -995,13 +995,13 @@
         },
         {
           "inscricao": "16327388",
-          "nome": "PAULO SÉRGIO GUIMARÃES",
+          "nome": "PAULO SÃRGIO GUIMARÃES",
           "cpf": "08788507670",
           "sala": "SALA 02"
         },
         {
           "inscricao": "16327418",
-          "nome": "PAULO SÉRGIO MOREIRA JÚNIOR",
+          "nome": "PAULO SÃRGIO MOREIRA JÃNIOR",
           "cpf": "11781894655",
           "sala": "SALA 02"
         },
@@ -1037,7 +1037,7 @@
         },
         {
           "inscricao": "16338165",
-          "nome": "PEDRO ERNESTO GONÇALVES ZUCHETTO",
+          "nome": "PEDRO ERNESTO GONÃALVES ZUCHETTO",
           "cpf": "14423463610",
           "sala": "SALA 02"
         },
@@ -1079,7 +1079,7 @@
         },
         {
           "inscricao": "16341278",
-          "nome": "PEDRO HENRIQUE DA SILVA CORRÊA",
+          "nome": "PEDRO HENRIQUE DA SILVA CORRÃA",
           "cpf": "11836508689",
           "sala": "SALA 02"
         },
@@ -1121,7 +1121,7 @@
         },
         {
           "inscricao": "16331767",
-          "nome": "PEDRO HENRIQUE JORDÃO NEPOMUCENO",
+          "nome": "PEDRO HENRIQUE JORDÃO NEPOMUCENO",
           "cpf": "16048150784",
           "sala": "SALA 02"
         },
@@ -1283,7 +1283,7 @@
         },
         {
           "inscricao": "16329210",
-          "nome": "PETERSON GIFFONI COELHO ARAÚJO",
+          "nome": "PETERSON GIFFONI COELHO ARAÃJO",
           "cpf": "13983540660",
           "sala": "SALA 03"
         },
@@ -1361,7 +1361,7 @@
         },
         {
           "inscricao": "16339173",
-          "nome": "RAFAEL ANTÔNIO",
+          "nome": "RAFAEL ANTÃNIO",
           "cpf": "10316674664",
           "sala": "SALA 12"
         },
@@ -1607,7 +1607,7 @@
         },
         {
           "inscricao": "16330257",
-          "nome": "RAMON LUÍS DE OLIVEIRA",
+          "nome": "RAMON LUÃS DE OLIVEIRA",
           "cpf": "10798753609",
           "sala": "SALA 13"
         },
@@ -1625,13 +1625,13 @@
         },
         {
           "inscricao": "16328808",
-          "nome": "RAÍ PEREIRA CORTES",
+          "nome": "RAÃ PEREIRA CORTES",
           "cpf": "18156293711",
           "sala": "SALA 14"
         },
         {
           "inscricao": "16328810",
-          "nome": "RAÍTO MOISÉS DE FARIA MEIRA",
+          "nome": "RAÃTO MOISÃS DE FARIA MEIRA",
           "cpf": "10468505636",
           "sala": "SALA 14"
         },
@@ -1655,7 +1655,7 @@
         },
         {
           "inscricao": "16328823",
-          "nome": "RAPHAEL PEIXOTO MARTINS ASSUMPÇÃO",
+          "nome": "RAPHAEL PEIXOTO MARTINS ASSUMPÃÃO",
           "cpf": "12674791675",
           "sala": "SALA 14"
         },
@@ -1697,7 +1697,7 @@
         },
         {
           "inscricao": "16334040",
-          "nome": "RAUL TENÓRIO DOS SANTOS",
+          "nome": "RAUL TENÃRIO DOS SANTOS",
           "cpf": "13473925489",
           "sala": "SALA 14"
         },
@@ -1811,7 +1811,7 @@
         },
         {
           "inscricao": "16331686",
-          "nome": "RENAN GONÇALVES DA SILVA",
+          "nome": "RENAN GONÃALVES DA SILVA",
           "cpf": "14481275642",
           "sala": "SALA 15"
         },
@@ -1847,7 +1847,7 @@
         },
         {
           "inscricao": "16328021",
-          "nome": "RENATA LÍZIA DA SILVA",
+          "nome": "RENATA LÃZIA DA SILVA",
           "cpf": "10913570648",
           "sala": "SALA 15"
         },
@@ -2045,7 +2045,7 @@
         },
         {
           "inscricao": "16337507",
-          "nome": "ROBSON JUNIO GONÇALVES FERNANDES TEIXEIRA",
+          "nome": "ROBSON JUNIO GONÃALVES FERNANDES TEIXEIRA",
           "cpf": "10584858655",
           "sala": "SALA 16"
         },
@@ -2075,7 +2075,7 @@
         },
         {
           "inscricao": "16334594",
-          "nome": "RODOLFO JOSÉ DA SILVA SANTOS",
+          "nome": "RODOLFO JOSÃ DA SILVA SANTOS",
           "cpf": "16341920440",
           "sala": "SALA 16"
         },
@@ -2165,7 +2165,7 @@
         },
         {
           "inscricao": "16327632",
-          "nome": "ROGÉRIA DA SILVA GUALBERTO",
+          "nome": "ROGÃRIA DA SILVA GUALBERTO",
           "cpf": "11084186608",
           "sala": "SALA 17"
         },
@@ -2177,7 +2177,7 @@
         },
         {
           "inscricao": "16332564",
-          "nome": "ROGÉRIO REIS FERREIRA",
+          "nome": "ROGÃRIO REIS FERREIRA",
           "cpf": "12210397685",
           "sala": "SALA 17"
         },
@@ -2189,13 +2189,13 @@
         },
         {
           "inscricao": "16330539",
-          "nome": "ROMÁRIO DA SILVA OLIVEIRA",
+          "nome": "ROMÃRIO DA SILVA OLIVEIRA",
           "cpf": "05120297170",
           "sala": "SALA 17"
         },
         {
           "inscricao": "16341267",
-          "nome": "ROMÁRIO JOSÉ DE LIMA",
+          "nome": "ROMÃRIO JOSÃ DE LIMA",
           "cpf": "12544287632",
           "sala": "SALA 17"
         },
@@ -2219,7 +2219,7 @@
         },
         {
           "inscricao": "16327560",
-          "nome": "RONALD DE AZEVEDO BRANDÃO",
+          "nome": "RONALD DE AZEVEDO BRANDÃO",
           "cpf": "13833059788",
           "sala": "SALA 17"
         },
@@ -2267,7 +2267,7 @@
         },
         {
           "inscricao": "16330236",
-          "nome": "RUAN GUILHERME GONÇALVES",
+          "nome": "RUAN GUILHERME GONÃALVES",
           "cpf": "13985836698",
           "sala": "SALA 18"
         },
@@ -2345,7 +2345,7 @@
         },
         {
           "inscricao": "16333339",
-          "nome": "SABRINA DE CÁSSIA LEOPOLDINO SILVA",
+          "nome": "SABRINA DE CÃSSIA LEOPOLDINO SILVA",
           "cpf": "10523109660",
           "sala": "SALA 18"
         },
@@ -2357,13 +2357,13 @@
         },
         {
           "inscricao": "16336844",
-          "nome": "SABRINA RAMOS GONÇALVES",
+          "nome": "SABRINA RAMOS GONÃALVES",
           "cpf": "13338264607",
           "sala": "SALA 18"
         },
         {
           "inscricao": "16329228",
-          "nome": "SALOMÃO RICHARD DA SILVA OLIVEIRA",
+          "nome": "SALOMÃO RICHARD DA SILVA OLIVEIRA",
           "cpf": "70008428654",
           "sala": "SALA 18"
         },
@@ -2411,7 +2411,7 @@
         },
         {
           "inscricao": "16339663",
-          "nome": "SAMUEL CÁSSIO DE SOUZA",
+          "nome": "SAMUEL CÃSSIO DE SOUZA",
           "cpf": "02203354607",
           "sala": "SALA 19"
         },
@@ -2507,13 +2507,13 @@
         },
         {
           "inscricao": "16339592",
-          "nome": "SAMUEL VINÍCIUS GOUVÊA SILVA",
+          "nome": "SAMUEL VINÃCIUS GOUVÃA SILVA",
           "cpf": "11548873675",
           "sala": "SALA 19"
         },
         {
           "inscricao": "16338767",
-          "nome": "SANDRO JOSÉ DOS REIS",
+          "nome": "SANDRO JOSÃ DOS REIS",
           "cpf": "36138953827",
           "sala": "SALA 19"
         },
@@ -2561,7 +2561,7 @@
         },
         {
           "inscricao": "16327808",
-          "nome": "SEBASTIÃO CRUZ JÚNIOR",
+          "nome": "SEBASTIÃO CRUZ JÃNIOR",
           "cpf": "10213663660",
           "sala": "SALA 08"
         },
@@ -2633,7 +2633,7 @@
         },
         {
           "inscricao": "16339451",
-          "nome": "TAINAN MENDONÇA DOS SANTOS",
+          "nome": "TAINAN MENDONÃA DOS SANTOS",
           "cpf": "14247641735",
           "sala": "SALA 08"
         },
@@ -2747,7 +2747,7 @@
         },
         {
           "inscricao": "16341273",
-          "nome": "THAIS APAREC FARIA GUSMÃO",
+          "nome": "THAIS APAREC FARIA GUSMÃO",
           "cpf": "11585174670",
           "sala": "SALA 09"
         },
@@ -2771,7 +2771,7 @@
         },
         {
           "inscricao": "16328398",
-          "nome": "THAIS LOURENÇO DA SILVA",
+          "nome": "THAIS LOURENÃO DA SILVA",
           "cpf": "11145388680",
           "sala": "SALA 09"
         },
@@ -2783,7 +2783,7 @@
         },
         {
           "inscricao": "16328079",
-          "nome": "THAIS NASCIMENTO DIONÍSIO",
+          "nome": "THAIS NASCIMENTO DIONÃSIO",
           "cpf": "13473963658",
           "sala": "SALA 09"
         },
@@ -2795,7 +2795,7 @@
         },
         {
           "inscricao": "16341028",
-          "nome": "THALLES ANDRÉ DA SILVA",
+          "nome": "THALLES ANDRÃ DA SILVA",
           "cpf": "11491275626",
           "sala": "SALA 09"
         },
@@ -2963,7 +2963,7 @@
         },
         {
           "inscricao": "16330909",
-          "nome": "THIAGO SEVERINO DA PAIXÃO",
+          "nome": "THIAGO SEVERINO DA PAIXÃO",
           "cpf": "13920149483",
           "sala": "SALA 10"
         },
@@ -3053,7 +3053,7 @@
         },
         {
           "inscricao": "16327829",
-          "nome": "TIAGO RODRIGUES MENDONÇA",
+          "nome": "TIAGO RODRIGUES MENDONÃA",
           "cpf": "12689256673",
           "sala": "SALA 11"
         },
@@ -3077,7 +3077,7 @@
         },
         {
           "inscricao": "16331876",
-          "nome": "TÚLIO DOS SANTOS SILVA",
+          "nome": "TÃLIO DOS SANTOS SILVA",
           "cpf": "12602561622",
           "sala": "SALA 11"
         },
@@ -3095,7 +3095,7 @@
         },
         {
           "inscricao": "16329855",
-          "nome": "TULIO VINÍCIUS DUARTE BORGES",
+          "nome": "TULIO VINÃCIUS DUARTE BORGES",
           "cpf": "14051441652",
           "sala": "SALA 11"
         },
@@ -3113,7 +3113,7 @@
         },
         {
           "inscricao": "16331738",
-          "nome": "UARNEM FERREIRA DE ANDRADE JÚNIOR",
+          "nome": "UARNEM FERREIRA DE ANDRADE JÃNIOR",
           "cpf": "06928563150",
           "sala": "SALA 11"
         },
@@ -3161,7 +3161,7 @@
         },
         {
           "inscricao": "16338651",
-          "nome": "VALÉRIA CORRÊA RIBEIRO",
+          "nome": "VALÃRIA CORRÃA RIBEIRO",
           "cpf": "12576028616",
           "sala": "SALA 05"
         },
@@ -3239,7 +3239,7 @@
         },
         {
           "inscricao": "16328606",
-          "nome": "VICTOR EMANUEL SIMÕES ALVES",
+          "nome": "VICTOR EMANUEL SIMÃES ALVES",
           "cpf": "70115027696",
           "sala": "SALA 05"
         },
@@ -3293,7 +3293,7 @@
         },
         {
           "inscricao": "16329498",
-          "nome": "VICTÓRIA HORANAH DE LIMA E SILVA NORONHA",
+          "nome": "VICTÃRIA HORANAH DE LIMA E SILVA NORONHA",
           "cpf": "12754360646",
           "sala": "SALA 06"
         },
@@ -3329,7 +3329,7 @@
         },
         {
           "inscricao": "16327874",
-          "nome": "VINÍCIUS DE OLIVEIRA SILVA",
+          "nome": "VINÃCIUS DE OLIVEIRA SILVA",
           "cpf": "13889773621",
           "sala": "SALA 06"
         },
@@ -3341,13 +3341,13 @@
         },
         {
           "inscricao": "16340386",
-          "nome": "VINÍCIUS HENRIQUE PEREIRA DA SILVA",
+          "nome": "VINÃCIUS HENRIQUE PEREIRA DA SILVA",
           "cpf": "13334391647",
           "sala": "SALA 06"
         },
         {
           "inscricao": "16334529",
-          "nome": "VINICIUS JOSÉ CORREIA DE OLIVEIRA",
+          "nome": "VINICIUS JOSÃ CORREIA DE OLIVEIRA",
           "cpf": "03922302246",
           "sala": "SALA 06"
         },
@@ -3359,7 +3359,7 @@
         },
         {
           "inscricao": "16339097",
-          "nome": "VINÍCIUS RODRIGUES MORAES",
+          "nome": "VINÃCIUS RODRIGUES MORAES",
           "cpf": "12682631681",
           "sala": "SALA 06"
         },
@@ -3420,151 +3420,151 @@
       "cargos": [
         {
           "sala": "SALA AMAM.",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 1
         },
         {
           "sala": "SALA IND. 15MIN",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 1
         },
         {
           "sala": "SALA 206",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 53
         },
         {
           "sala": "SALA 302",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 54
         },
         {
           "sala": "SALA 306",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 95
         },
         {
           "sala": "SALA 503",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 39
         },
         {
           "sala": "SALA 601",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 72
         },
         {
           "sala": "SALA 602",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 117
         },
         {
           "sala": "SALA 603",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 43
         },
         {
           "sala": "SALA 604",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 48
         },
         {
           "sala": "SALA 605",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 92
         },
         {
           "sala": "SALA 701",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 61
         },
         {
           "sala": "SALA 704",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 42
         },
         {
           "sala": "SALA 801",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 66
         },
         {
           "sala": "SALA 804",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 45
         },
         {
           "sala": "SALA 805",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 51
         },
         {
           "sala": "SALA 806",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 51
         },
         {
           "sala": "SALA 807",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 52
         },
         {
           "sala": "SALA 901",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 42
         },
         {
           "sala": "SALA 904",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 97
         },
         {
           "sala": "SALA 906",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 57
         },
         {
           "sala": "SALA 1001",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 64
         },
         {
           "sala": "SALA 1002",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 57
         },
         {
           "sala": "SALA 501/502",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 130
         },
         {
           "sala": "SALA 702/703",
-          "turno": "Manhã",
+          "turno": "ManhÃ£",
           "cargo": "301 - GUARDA CIVIL MUNICIPAL",
           "inscr": 125
         }
@@ -3794,7 +3794,7 @@
         },
         {
           "inscricao": "16333575",
-          "nome": "MAURÍCIO DE SOUZA CONCEIÇÃO",
+          "nome": "MAURÃCIO DE SOUZA CONCEIÃÃO",
           "cpf": "15949625617",
           "sala": "SALA 1001"
         },
@@ -3812,7 +3812,7 @@
         },
         {
           "inscricao": "16327474",
-          "nome": "MAXILÂNIO MAXIMIANO MATIAS DE SENA",
+          "nome": "MAXILÃNIO MAXIMIANO MATIAS DE SENA",
           "cpf": "15258553604",
           "sala": "SALA 1001"
         },
@@ -3878,7 +3878,7 @@
         },
         {
           "inscricao": "16330136",
-          "nome": "MESSIAS DE PAULA VÍTOR",
+          "nome": "MESSIAS DE PAULA VÃTOR",
           "cpf": "70151923655",
           "sala": "SALA 1001"
         },
@@ -3950,25 +3950,25 @@
         },
         {
           "inscricao": "16340881",
-          "nome": "MIGUEL RIBEIRO DO ROSÁRIO",
+          "nome": "MIGUEL RIBEIRO DO ROSÃRIO",
           "cpf": "16594450603",
           "sala": "SALA 1001"
         },
         {
           "inscricao": "16329456",
-          "nome": "MÁRCIO MARQUES PEREIRA",
+          "nome": "MÃRCIO MARQUES PEREIRA",
           "cpf": "09918909650",
           "sala": "SALA 1002"
         },
         {
           "inscricao": "16327871",
-          "nome": "MÁRCIO OLIVEIRA DA COSTA",
+          "nome": "MÃRCIO OLIVEIRA DA COSTA",
           "cpf": "07076862700",
           "sala": "SALA 1002"
         },
         {
           "inscricao": "16332145",
-          "nome": "MÁRCIO ROGÉRIO PEREIRA",
+          "nome": "MÃRCIO ROGÃRIO PEREIRA",
           "cpf": "04875713630",
           "sala": "SALA 1002"
         },
@@ -4052,7 +4052,7 @@
         },
         {
           "inscricao": "16327336",
-          "nome": "MOISÉS HENRIQUE DIAS BARBOSA",
+          "nome": "MOISÃS HENRIQUE DIAS BARBOSA",
           "cpf": "16943730614",
           "sala": "SALA 1002"
         },
@@ -4100,7 +4100,7 @@
         },
         {
           "inscricao": "16331199",
-          "nome": "NATÃ RESENDE DE CASTRO",
+          "nome": "NATÃ RESENDE DE CASTRO",
           "cpf": "12238912673",
           "sala": "SALA 1002"
         },
@@ -4130,7 +4130,7 @@
         },
         {
           "inscricao": "16328919",
-          "nome": "NATANAEL DOS SANTOS CORRÊA",
+          "nome": "NATANAEL DOS SANTOS CORRÃA",
           "cpf": "12414290650",
           "sala": "SALA 1002"
         },
@@ -4148,7 +4148,7 @@
         },
         {
           "inscricao": "16328412",
-          "nome": "NATÂNIA GONÇALVES DE SOUZA",
+          "nome": "NATÃNIA GONÃALVES DE SOUZA",
           "cpf": "12825866610",
           "sala": "SALA 1002"
         },
@@ -4232,7 +4232,7 @@
         },
         {
           "inscricao": "16330683",
-          "nome": "NÍCOLAS GABRIEL DE SOUSA BRAZ",
+          "nome": "NÃCOLAS GABRIEL DE SOUSA BRAZ",
           "cpf": "16492061608",
           "sala": "SALA 1002"
         },
@@ -4286,7 +4286,7 @@
         },
         {
           "inscricao": "16331015",
-          "nome": "ORLANDO NATAN SILVEIRA GONÇALVES",
+          "nome": "ORLANDO NATAN SILVEIRA GONÃALVES",
           "cpf": "14835080645",
           "sala": "SALA 1002"
         },
@@ -4316,7 +4316,7 @@
         },
         {
           "inscricao": "16339628",
-          "nome": "ADAIR ANTÔNIO DOS SANTOS JUNIOR",
+          "nome": "ADAIR ANTÃNIO DOS SANTOS JUNIOR",
           "cpf": "13369405652",
           "sala": "SALA 206"
         },
@@ -4334,13 +4334,13 @@
         },
         {
           "inscricao": "16329489",
-          "nome": "ADEMILSON DA SILVA PEREIRA GUIMARÃES",
+          "nome": "ADEMILSON DA SILVA PEREIRA GUIMARÃES",
           "cpf": "13484509678",
           "sala": "SALA 206"
         },
         {
           "inscricao": "16333920",
-          "nome": "ADILSON MACHADO GONÇALVES JÚNIOR",
+          "nome": "ADILSON MACHADO GONÃALVES JÃNIOR",
           "cpf": "13085139680",
           "sala": "SALA 206"
         },
@@ -4358,25 +4358,25 @@
         },
         {
           "inscricao": "16340773",
-          "nome": "ADRIAN EUGÊNIO ROBERTO",
+          "nome": "ADRIAN EUGÃNIO ROBERTO",
           "cpf": "15371757694",
           "sala": "SALA 206"
         },
         {
           "inscricao": "16330377",
-          "nome": "ADRIANO JÚNIO VILAS BOAS BARBOSA",
+          "nome": "ADRIANO JÃNIO VILAS BOAS BARBOSA",
           "cpf": "09912079639",
           "sala": "SALA 206"
         },
         {
           "inscricao": "16337560",
-          "nome": "ADRIANO JÚNIOR SIMÕES PEREIRA",
+          "nome": "ADRIANO JÃNIOR SIMÃES PEREIRA",
           "cpf": "16644432662",
           "sala": "SALA 206"
         },
         {
           "inscricao": "16328890",
-          "nome": "ADRIANO PINTOS OCAÑA",
+          "nome": "ADRIANO PINTOS OCAÃA",
           "cpf": "03104118078",
           "sala": "SALA 206"
         },
@@ -4388,13 +4388,13 @@
         },
         {
           "inscricao": "16327723",
-          "nome": "AFRÂNIO MOREIRA DE ANDRADE CHAGAS",
+          "nome": "AFRÃNIO MOREIRA DE ANDRADE CHAGAS",
           "cpf": "12209365619",
           "sala": "SALA 206"
         },
         {
           "inscricao": "16332745",
-          "nome": "AGLAILSON JOSÉ DO NASCIMENTO JUNIOR",
+          "nome": "AGLAILSON JOSÃ DO NASCIMENTO JUNIOR",
           "cpf": "16871042474",
           "sala": "SALA 206"
         },
@@ -4442,7 +4442,7 @@
         },
         {
           "inscricao": "16329748",
-          "nome": "ALAN FRANK BARROS DE SÁ",
+          "nome": "ALAN FRANK BARROS DE SÃ",
           "cpf": "60967343321",
           "sala": "SALA 206"
         },
@@ -4508,7 +4508,7 @@
         },
         {
           "inscricao": "16331901",
-          "nome": "ALEF SILVÉRIO PEDRO",
+          "nome": "ALEF SILVÃRIO PEDRO",
           "cpf": "12798670608",
           "sala": "SALA 206"
         },
@@ -4592,7 +4592,7 @@
         },
         {
           "inscricao": "16328188",
-          "nome": "ALEX SANDER SONJA VARÇALO",
+          "nome": "ALEX SANDER SONJA VARÃALO",
           "cpf": "13566944629",
           "sala": "SALA 206"
         },
@@ -4646,7 +4646,7 @@
         },
         {
           "inscricao": "16327417",
-          "nome": "ALEXANDRE SEBASTIÃO DA ROCHA",
+          "nome": "ALEXANDRE SEBASTIÃO DA ROCHA",
           "cpf": "45435532841",
           "sala": "SALA 302"
         },
@@ -4724,13 +4724,13 @@
         },
         {
           "inscricao": "16334131",
-          "nome": "ALISSON ARAÚJO XAVIER BRANDAO",
+          "nome": "ALISSON ARAÃJO XAVIER BRANDAO",
           "cpf": "11927227607",
           "sala": "SALA 302"
         },
         {
           "inscricao": "16327319",
-          "nome": "ALISSON LÚCIO DÁVILA BITENCOURT",
+          "nome": "ALISSON LÃCIO DÃVILA BITENCOURT",
           "cpf": "17290207637",
           "sala": "SALA 302"
         },
@@ -4886,7 +4886,7 @@
         },
         {
           "inscricao": "16330436",
-          "nome": "AMAURI ROMÃO SANTANA DIAS ALVES DOS SANTOS",
+          "nome": "AMAURI ROMÃO SANTANA DIAS ALVES DOS SANTOS",
           "cpf": "74961080144",
           "sala": "SALA 302"
         },
@@ -4976,13 +4976,13 @@
         },
         {
           "inscricao": "16327641",
-          "nome": "ANA LÍVIA DE ARAÚJO",
+          "nome": "ANA LÃVIA DE ARAÃJO",
           "cpf": "12290617628",
           "sala": "SALA 306"
         },
         {
           "inscricao": "16333498",
-          "nome": "ANA LÍVIA PINTO CABRAL",
+          "nome": "ANA LÃVIA PINTO CABRAL",
           "cpf": "09056546333",
           "sala": "SALA 306"
         },
@@ -5048,13 +5048,13 @@
         },
         {
           "inscricao": "16330752",
-          "nome": "ANDRÉ APARECIDO DE ALMEIDA SILVA",
+          "nome": "ANDRÃ APARECIDO DE ALMEIDA SILVA",
           "cpf": "10036053627",
           "sala": "SALA 306"
         },
         {
           "inscricao": "16339619",
-          "nome": "ANDRÉ AZIZ FONSECA PORTELLA CHAIN",
+          "nome": "ANDRÃ AZIZ FONSECA PORTELLA CHAIN",
           "cpf": "13992809617",
           "sala": "SALA 306"
         },
@@ -5066,19 +5066,19 @@
         },
         {
           "inscricao": "16337615",
-          "nome": "ANDRÉ FILIPE SALES",
+          "nome": "ANDRÃ FILIPE SALES",
           "cpf": "12214029605",
           "sala": "SALA 306"
         },
         {
           "inscricao": "16328519",
-          "nome": "ANDRÉ LUCAS DE LIMA GALLO",
+          "nome": "ANDRÃ LUCAS DE LIMA GALLO",
           "cpf": "06062646716",
           "sala": "SALA 306"
         },
         {
           "inscricao": "16327932",
-          "nome": "ANDRÉ LUIS DOS SANTOS",
+          "nome": "ANDRÃ LUIS DOS SANTOS",
           "cpf": "10079253610",
           "sala": "SALA 306"
         },
@@ -5102,7 +5102,7 @@
         },
         {
           "inscricao": "16327823",
-          "nome": "ANDRÉ LUIZ CARRARA BRAZ",
+          "nome": "ANDRÃ LUIZ CARRARA BRAZ",
           "cpf": "48862921861",
           "sala": "SALA 306"
         },
@@ -5114,7 +5114,7 @@
         },
         {
           "inscricao": "16341307",
-          "nome": "ANDRÉ LUIZ LOPES DA SILVA",
+          "nome": "ANDRÃ LUIZ LOPES DA SILVA",
           "cpf": "02187010635",
           "sala": "SALA 306"
         },
@@ -5126,13 +5126,13 @@
         },
         {
           "inscricao": "16337477",
-          "nome": "ANDRÉ MARTINS DE SOUZA",
+          "nome": "ANDRÃ MARTINS DE SOUZA",
           "cpf": "13431957641",
           "sala": "SALA 306"
         },
         {
           "inscricao": "16341014",
-          "nome": "ANDRÉ SOUZA MENDONÇA SIQUEIRA",
+          "nome": "ANDRÃ SOUZA MENDONÃA SIQUEIRA",
           "cpf": "15200260647",
           "sala": "SALA 306"
         },
@@ -5240,7 +5240,7 @@
         },
         {
           "inscricao": "16327733",
-          "nome": "ANTÔNIO CARLOS AGUILAR DE OLIVEIRA",
+          "nome": "ANTÃNIO CARLOS AGUILAR DE OLIVEIRA",
           "cpf": "10805146601",
           "sala": "SALA 306"
         },
@@ -5258,7 +5258,7 @@
         },
         {
           "inscricao": "16328238",
-          "nome": "ANTÔNIO MARCOS GONÇALVES SOARES",
+          "nome": "ANTÃNIO MARCOS GONÃALVES SOARES",
           "cpf": "14581971667",
           "sala": "SALA 306"
         },
@@ -5294,7 +5294,7 @@
         },
         {
           "inscricao": "16337709",
-          "nome": "ARMANDO RODRI DA SILVA JÚNIOR",
+          "nome": "ARMANDO RODRI DA SILVA JÃNIOR",
           "cpf": "12529993645",
           "sala": "SALA 306"
         },
@@ -5378,7 +5378,7 @@
         },
         {
           "inscricao": "16327216",
-          "nome": "BEATRIZ GABRIELLY GONÇALVES",
+          "nome": "BEATRIZ GABRIELLY GONÃALVES",
           "cpf": "14048530658",
           "sala": "SALA 306"
         },
@@ -5516,13 +5516,13 @@
         },
         {
           "inscricao": "16331027",
-          "nome": "BÁRBARA GABRIELA FERREIRA",
+          "nome": "BÃRBARA GABRIELA FERREIRA",
           "cpf": "11372343695",
           "sala": "SALA 501/502"
         },
         {
           "inscricao": "16329060",
-          "nome": "BÁRBARA STÉFANE DE ALMEIDA MOREIRA",
+          "nome": "BÃRBARA STÃFANE DE ALMEIDA MOREIRA",
           "cpf": "07334469658",
           "sala": "SALA 501/502"
         },
@@ -5570,7 +5570,7 @@
         },
         {
           "inscricao": "16335223",
-          "nome": "BRUNA CAROLINE DE PÁDUA PEREIRA",
+          "nome": "BRUNA CAROLINE DE PÃDUA PEREIRA",
           "cpf": "08862074603",
           "sala": "SALA 501/502"
         },
@@ -5594,19 +5594,19 @@
         },
         {
           "inscricao": "16337114",
-          "nome": "BRUNA SHAYANE IWATA PEREIRA BONAFÉ",
+          "nome": "BRUNA SHAYANE IWATA PEREIRA BONAFÃ",
           "cpf": "09590174612",
           "sala": "SALA 501/502"
         },
         {
           "inscricao": "16327291",
-          "nome": "BRUNO ADÃO",
+          "nome": "BRUNO ADÃO",
           "cpf": "12707905607",
           "sala": "SALA 501/502"
         },
         {
           "inscricao": "16339381",
-          "nome": "BRUNO ARAÚJO CARDOSO DA SILVA",
+          "nome": "BRUNO ARAÃJO CARDOSO DA SILVA",
           "cpf": "10474350630",
           "sala": "SALA 501/502"
         },
@@ -5894,7 +5894,7 @@
         },
         {
           "inscricao": "16339963",
-          "nome": "CARLOS ALEXANDRE DE JESUS BOTELHO JÚNIOR",
+          "nome": "CARLOS ALEXANDRE DE JESUS BOTELHO JÃNIOR",
           "cpf": "06771260690",
           "sala": "SALA 501/502"
         },
@@ -5930,7 +5930,7 @@
         },
         {
           "inscricao": "16331820",
-          "nome": "CARLOS EDUARDO LEÃO ROMÃO",
+          "nome": "CARLOS EDUARDO LEÃO ROMÃO",
           "cpf": "09911171663",
           "sala": "SALA 501/502"
         },
@@ -6002,7 +6002,7 @@
         },
         {
           "inscricao": "16331518",
-          "nome": "CARLOS OTÁVIO SOUZA COSTA",
+          "nome": "CARLOS OTÃVIO SOUZA COSTA",
           "cpf": "12102089622",
           "sala": "SALA 501/502"
         },
@@ -6050,19 +6050,19 @@
         },
         {
           "inscricao": "16334379",
-          "nome": "CAROLINE DE PAIVA GONÇALVES",
+          "nome": "CAROLINE DE PAIVA GONÃALVES",
           "cpf": "10905043650",
           "sala": "SALA 501/502"
         },
         {
           "inscricao": "16327906",
-          "nome": "CAROLINE DOS SANTOS CONCEIÇÃO",
+          "nome": "CAROLINE DOS SANTOS CONCEIÃÃO",
           "cpf": "06794313570",
           "sala": "SALA 501/502"
         },
         {
           "inscricao": "16327944",
-          "nome": "CAUÃ BATISTA GOMES",
+          "nome": "CAUÃ BATISTA GOMES",
           "cpf": "40537901825",
           "sala": "SALA 501/502"
         },
@@ -6110,19 +6110,19 @@
         },
         {
           "inscricao": "16332570",
-          "nome": "CÍCERO DE SOUZA SILVA",
+          "nome": "CÃCERO DE SOUZA SILVA",
           "cpf": "06015213230",
           "sala": "SALA 501/502"
         },
         {
           "inscricao": "16328455",
-          "nome": "CICERO JOSÉ DOS SANTOS SILVA",
+          "nome": "CICERO JOSÃ DOS SANTOS SILVA",
           "cpf": "13232310486",
           "sala": "SALA 501/502"
         },
         {
           "inscricao": "16330629",
-          "nome": "CÍCERO RAFAEL PEREIRA DO NASCIMENTO",
+          "nome": "CÃCERO RAFAEL PEREIRA DO NASCIMENTO",
           "cpf": "00835968367",
           "sala": "SALA 501/502"
         },
@@ -6134,7 +6134,7 @@
         },
         {
           "inscricao": "16330404",
-          "nome": "CLARA ELIS GONÇALVES RODRIGUES",
+          "nome": "CLARA ELIS GONÃALVES RODRIGUES",
           "cpf": "51771115807",
           "sala": "SALA 501/502"
         },
@@ -6170,13 +6170,13 @@
         },
         {
           "inscricao": "16328241",
-          "nome": "CLEBERSON GONÇALO  CAROLINO",
+          "nome": "CLEBERSON GONÃALO  CAROLINO",
           "cpf": "12828816630",
           "sala": "SALA 501/502"
         },
         {
           "inscricao": "16333274",
-          "nome": "CLEIDIELE GONÇALVES MAIA",
+          "nome": "CLEIDIELE GONÃALVES MAIA",
           "cpf": "12135073679",
           "sala": "SALA 501/502"
         },
@@ -6212,7 +6212,7 @@
         },
         {
           "inscricao": "16330732",
-          "nome": "CRISTIAN DA SILVA ROMÃO",
+          "nome": "CRISTIAN DA SILVA ROMÃO",
           "cpf": "15372601620",
           "sala": "SALA 501/502"
         },
@@ -6254,7 +6254,7 @@
         },
         {
           "inscricao": "16327709",
-          "nome": "DAILA CARENE OLIVEIRA BRANDÃO",
+          "nome": "DAILA CARENE OLIVEIRA BRANDÃO",
           "cpf": "11111018685",
           "sala": "SALA 501/502"
         },
@@ -6458,7 +6458,7 @@
         },
         {
           "inscricao": "16328502",
-          "nome": "DANILO FRANÇA LIMA",
+          "nome": "DANILO FRANÃA LIMA",
           "cpf": "09378543600",
           "sala": "SALA 503"
         },
@@ -6518,7 +6518,7 @@
         },
         {
           "inscricao": "16328284",
-          "nome": "DAVI MOISÉS DOS SANTOS MEIRA",
+          "nome": "DAVI MOISÃS DOS SANTOS MEIRA",
           "cpf": "86700975590",
           "sala": "SALA 503"
         },
@@ -6548,7 +6548,7 @@
         },
         {
           "inscricao": "16330315",
-          "nome": "DAVID CESAR DE OLIVEIRA PRUDÊNCIO",
+          "nome": "DAVID CESAR DE OLIVEIRA PRUDÃNCIO",
           "cpf": "56250437878",
           "sala": "SALA 601"
         },
@@ -6626,7 +6626,7 @@
         },
         {
           "inscricao": "16331287",
-          "nome": "DEBORA LOURENÇO",
+          "nome": "DEBORA LOURENÃO",
           "cpf": "11795090642",
           "sala": "SALA 601"
         },
@@ -6656,7 +6656,7 @@
         },
         {
           "inscricao": "16330675",
-          "nome": "DEMIR DA CRUZ PORTELES JÚNIOR",
+          "nome": "DEMIR DA CRUZ PORTELES JÃNIOR",
           "cpf": "14488556671",
           "sala": "SALA 601"
         },
@@ -6716,7 +6716,7 @@
         },
         {
           "inscricao": "16331179",
-          "nome": "DIEGO ANGÉLICO MACHADO",
+          "nome": "DIEGO ANGÃLICO MACHADO",
           "cpf": "09034141632",
           "sala": "SALA 601"
         },
@@ -6728,7 +6728,7 @@
         },
         {
           "inscricao": "16328168",
-          "nome": "DIÊGO DA SILVA LOBO",
+          "nome": "DIÃGO DA SILVA LOBO",
           "cpf": "05557728104",
           "sala": "SALA 601"
         },
@@ -6920,7 +6920,7 @@
         },
         {
           "inscricao": "16328911",
-          "nome": "EDMILSON SANTOS DE ARAÚJO",
+          "nome": "EDMILSON SANTOS DE ARAÃJO",
           "cpf": "14810508420",
           "sala": "SALA 601"
         },
@@ -7154,7 +7154,7 @@
         },
         {
           "inscricao": "16327423",
-          "nome": "ELIEL LOURENÇO SILVA",
+          "nome": "ELIEL LOURENÃO SILVA",
           "cpf": "13017203646",
           "sala": "SALA 602"
         },
@@ -7256,7 +7256,7 @@
         },
         {
           "inscricao": "16341206",
-          "nome": "EMANUEL ESTEVÃO NOGUEIRA",
+          "nome": "EMANUEL ESTEVÃO NOGUEIRA",
           "cpf": "11463661673",
           "sala": "SALA 602"
         },
@@ -7352,7 +7352,7 @@
         },
         {
           "inscricao": "16332146",
-          "nome": "ERYK ALEXANDRE ADÃO",
+          "nome": "ERYK ALEXANDRE ADÃO",
           "cpf": "08001859606",
           "sala": "SALA 602"
         },
@@ -7388,7 +7388,7 @@
         },
         {
           "inscricao": "16327986",
-          "nome": "EVANDRO DE CÁSSIA DOS SANTOS",
+          "nome": "EVANDRO DE CÃSSIA DOS SANTOS",
           "cpf": "11563582643",
           "sala": "SALA 602"
         },
@@ -7412,7 +7412,7 @@
         },
         {
           "inscricao": "16328429",
-          "nome": "EVERTON BRANDÃO",
+          "nome": "EVERTON BRANDÃO",
           "cpf": "12061462650",
           "sala": "SALA 602"
         },
@@ -7664,13 +7664,13 @@
         },
         {
           "inscricao": "16333760",
-          "nome": "FÁBIO ALEXANDRE CAMILO",
+          "nome": "FÃBIO ALEXANDRE CAMILO",
           "cpf": "35361693847",
           "sala": "SALA 603"
         },
         {
           "inscricao": "16341203",
-          "nome": "FÁBIO FERREIRA SILVA",
+          "nome": "FÃBIO FERREIRA SILVA",
           "cpf": "45546408847",
           "sala": "SALA 603"
         },
@@ -7700,7 +7700,7 @@
         },
         {
           "inscricao": "16339578",
-          "nome": "FERNANDA BRANDÃO DE ALBUQUERQUE",
+          "nome": "FERNANDA BRANDÃO DE ALBUQUERQUE",
           "cpf": "12562945603",
           "sala": "SALA 603"
         },
@@ -7718,7 +7718,7 @@
         },
         {
           "inscricao": "16331873",
-          "nome": "FERNANDA PATRÍCIA DA SILVA PINTO",
+          "nome": "FERNANDA PATRÃCIA DA SILVA PINTO",
           "cpf": "11160652660",
           "sala": "SALA 603"
         },
@@ -7802,7 +7802,7 @@
         },
         {
           "inscricao": "16327303",
-          "nome": "FLÁVIO DE LIMA BARBOSA",
+          "nome": "FLÃVIO DE LIMA BARBOSA",
           "cpf": "12280662647",
           "sala": "SALA 603"
         },
@@ -8000,7 +8000,7 @@
         },
         {
           "inscricao": "16333767",
-          "nome": "GABRIEL GONÇALVES DE SOUSA",
+          "nome": "GABRIEL GONÃALVES DE SOUSA",
           "cpf": "71310561117",
           "sala": "SALA 604"
         },
@@ -8036,7 +8036,7 @@
         },
         {
           "inscricao": "16328933",
-          "nome": "GABRIEL JUVÊNCIO MOREIRA DA SILVA",
+          "nome": "GABRIEL JUVÃNCIO MOREIRA DA SILVA",
           "cpf": "15013697689",
           "sala": "SALA 604"
         },
@@ -8138,7 +8138,7 @@
         },
         {
           "inscricao": "16330284",
-          "nome": "GABRIEL SODRÉ DE OLIVEIRA",
+          "nome": "GABRIEL SODRÃ DE OLIVEIRA",
           "cpf": "19050139736",
           "sala": "SALA 604"
         },
@@ -8210,7 +8210,7 @@
         },
         {
           "inscricao": "16341330",
-          "nome": "GABRIELLY FERNANDES GONÇALVES",
+          "nome": "GABRIELLY FERNANDES GONÃALVES",
           "cpf": "16636572620",
           "sala": "SALA 605"
         },
@@ -8306,7 +8306,7 @@
         },
         {
           "inscricao": "16331384",
-          "nome": "GETÚLIO NOGUEIRA FREITAS RIBEIRO",
+          "nome": "GETÃLIO NOGUEIRA FREITAS RIBEIRO",
           "cpf": "13828591639",
           "sala": "SALA 605"
         },
@@ -8348,7 +8348,7 @@
         },
         {
           "inscricao": "16330889",
-          "nome": "GILSON MIRANDA NUNES JÚNIOR",
+          "nome": "GILSON MIRANDA NUNES JÃNIOR",
           "cpf": "15121215681",
           "sala": "SALA 605"
         },
@@ -8378,7 +8378,7 @@
         },
         {
           "inscricao": "16330365",
-          "nome": "GIORGI ESTÉFANO DE MOURA SILVA",
+          "nome": "GIORGI ESTÃFANO DE MOURA SILVA",
           "cpf": "16513346681",
           "sala": "SALA 605"
         },
@@ -8492,7 +8492,7 @@
         },
         {
           "inscricao": "16332814",
-          "nome": "GUILHERME ANTÔNIO DALLÓ",
+          "nome": "GUILHERME ANTÃNIO DALLÃ",
           "cpf": "15805439603",
           "sala": "SALA 605"
         },
@@ -8558,7 +8558,7 @@
         },
         {
           "inscricao": "16327413",
-          "nome": "GUILHERME GONÇALVES",
+          "nome": "GUILHERME GONÃALVES",
           "cpf": "02272659632",
           "sala": "SALA 605"
         },
@@ -8714,7 +8714,7 @@
         },
         {
           "inscricao": "16328540",
-          "nome": "GUSTAVO MARIANO BÁRBARA",
+          "nome": "GUSTAVO MARIANO BÃRBARA",
           "cpf": "02276893648",
           "sala": "SALA 605"
         },
@@ -8780,7 +8780,7 @@
         },
         {
           "inscricao": "16327268",
-          "nome": "HAILTON JOSE INÁCIO DANTAS",
+          "nome": "HAILTON JOSE INÃCIO DANTAS",
           "cpf": "10952018675",
           "sala": "SALA 701"
         },
@@ -8798,7 +8798,7 @@
         },
         {
           "inscricao": "16327680",
-          "nome": "HASTLEY KAUÃ MOREIRA OLIVEIRA",
+          "nome": "HASTLEY KAUÃ MOREIRA OLIVEIRA",
           "cpf": "10800910508",
           "sala": "SALA 701"
         },
@@ -8828,13 +8828,13 @@
         },
         {
           "inscricao": "16331268",
-          "nome": "HÉLIO HENRIQUE ÂNGELO DE MELO",
+          "nome": "HÃLIO HENRIQUE ÃNGELO DE MELO",
           "cpf": "10508574617",
           "sala": "SALA 701"
         },
         {
           "inscricao": "16334328",
-          "nome": "HELOISA DA COSTA CÉZAR",
+          "nome": "HELOISA DA COSTA CÃZAR",
           "cpf": "11872302602",
           "sala": "SALA 701"
         },
@@ -8948,7 +8948,7 @@
         },
         {
           "inscricao": "16337479",
-          "nome": "HUGO TARCÍSIO",
+          "nome": "HUGO TARCÃSIO",
           "cpf": "70080790607",
           "sala": "SALA 701"
         },
@@ -8990,7 +8990,7 @@
         },
         {
           "inscricao": "16328289",
-          "nome": "IAN WALLAVI RODRIGUES ARAGÃO",
+          "nome": "IAN WALLAVI RODRIGUES ARAGÃO",
           "cpf": "07016422380",
           "sala": "SALA 701"
         },
@@ -9194,7 +9194,7 @@
         },
         {
           "inscricao": "16334349",
-          "nome": "ISAIAS GONÇALVES DE ABREU",
+          "nome": "ISAIAS GONÃALVES DE ABREU",
           "cpf": "14618417633",
           "sala": "SALA 702/703"
         },
@@ -9314,13 +9314,13 @@
         },
         {
           "inscricao": "16328115",
-          "nome": "JACKSON ANTÔNIO MACHADO DEODATO",
+          "nome": "JACKSON ANTÃNIO MACHADO DEODATO",
           "cpf": "08112411654",
           "sala": "SALA 702/703"
         },
         {
           "inscricao": "16327692",
-          "nome": "JACQUELINE GLÓRIA PRATA DA SILVA TEODORO",
+          "nome": "JACQUELINE GLÃRIA PRATA DA SILVA TEODORO",
           "cpf": "15011770796",
           "sala": "SALA 702/703"
         },
@@ -9410,7 +9410,7 @@
         },
         {
           "inscricao": "16334557",
-          "nome": "JEAN AUGUSTO CÂNDIDO FERREIRA",
+          "nome": "JEAN AUGUSTO CÃNDIDO FERREIRA",
           "cpf": "01598927671",
           "sala": "SALA 702/703"
         },
@@ -9440,7 +9440,7 @@
         },
         {
           "inscricao": "16339411",
-          "nome": "JEAN DEMÉTRIOS DE SOUZA PAULA ABREU",
+          "nome": "JEAN DEMÃTRIOS DE SOUZA PAULA ABREU",
           "cpf": "07847587602",
           "sala": "SALA 702/703"
         },
@@ -9656,7 +9656,7 @@
         },
         {
           "inscricao": "16329562",
-          "nome": "JHONATTA FÉLIX DA SILVA ARAÚJO",
+          "nome": "JHONATTA FÃLIX DA SILVA ARAÃJO",
           "cpf": "08043005699",
           "sala": "SALA 702/703"
         },
@@ -9806,7 +9806,7 @@
         },
         {
           "inscricao": "16328091",
-          "nome": "JOAO VITOR MOURÃO DA SILVA",
+          "nome": "JOAO VITOR MOURÃO DA SILVA",
           "cpf": "05988417175",
           "sala": "SALA 702/703"
         },
@@ -10034,7 +10034,7 @@
         },
         {
           "inscricao": "16334628",
-          "nome": "JOSÉ APARECIDO DA SILVA JUNIOR",
+          "nome": "JOSÃ APARECIDO DA SILVA JUNIOR",
           "cpf": "39737922832",
           "sala": "SALA 704"
         },
@@ -10130,325 +10130,325 @@
         },
         {
           "inscricao": "16331194",
-          "nome": "JOÃO APARECIDO DA SILVA JÚNIOR",
+          "nome": "JOÃO APARECIDO DA SILVA JÃNIOR",
           "cpf": "12289896640",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16327379",
-          "nome": "JOÃO BATISTA DA SILVA NETO",
+          "nome": "JOÃO BATISTA DA SILVA NETO",
           "cpf": "12875475673",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16331799",
-          "nome": "JOÃO CAMILLO LÚCIO DOS SANTOS",
+          "nome": "JOÃO CAMILLO LÃCIO DOS SANTOS",
           "cpf": "09437503699",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16340159",
-          "nome": "JOÃO CARLOS BARBOSA",
+          "nome": "JOÃO CARLOS BARBOSA",
           "cpf": "11544451601",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16327433",
-          "nome": "JOÃO CLEBER DOS SANTOS DONIZETTI",
+          "nome": "JOÃO CLEBER DOS SANTOS DONIZETTI",
           "cpf": "11362155659",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16330507",
-          "nome": "JOÃO ELIZIO MUSSIO DA SILVA",
+          "nome": "JOÃO ELIZIO MUSSIO DA SILVA",
           "cpf": "70519665457",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328120",
-          "nome": "JOÃO EMANUEL AL CARVALHO",
+          "nome": "JOÃO EMANUEL AL CARVALHO",
           "cpf": "07809954652",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328462",
-          "nome": "JOÃO EVERTON MORAES DE SOUZA",
+          "nome": "JOÃO EVERTON MORAES DE SOUZA",
           "cpf": "11475152477",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16336303",
-          "nome": "JOÃO EXPEDITO PEREIRA",
+          "nome": "JOÃO EXPEDITO PEREIRA",
           "cpf": "12020523639",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16340855",
-          "nome": "JOÃO FELIPE CAMPOS SILVA",
+          "nome": "JOÃO FELIPE CAMPOS SILVA",
           "cpf": "12883524688",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16341241",
-          "nome": "JOÃO GABRIEL AGUIAR VILA NOVA",
+          "nome": "JOÃO GABRIEL AGUIAR VILA NOVA",
           "cpf": "11101367652",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328515",
-          "nome": "JOÃO GABRIEL DA ROCHA RIMAS",
+          "nome": "JOÃO GABRIEL DA ROCHA RIMAS",
           "cpf": "17800168751",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16330103",
-          "nome": "JOÃO GABRIEL JERONIMO DA SILVA",
+          "nome": "JOÃO GABRIEL JERONIMO DA SILVA",
           "cpf": "11270348639",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16329618",
-          "nome": "JOÃO GABRIEL SOUZA PEREIRA",
+          "nome": "JOÃO GABRIEL SOUZA PEREIRA",
           "cpf": "70349305625",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328164",
-          "nome": "JOÃO HENRIQUE DE OLIVEIRA ALKMIN",
+          "nome": "JOÃO HENRIQUE DE OLIVEIRA ALKMIN",
           "cpf": "10217784607",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16330668",
-          "nome": "JOÃO LIMA DA ROCHA DE ALMEIDA",
+          "nome": "JOÃO LIMA DA ROCHA DE ALMEIDA",
           "cpf": "15552353790",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328016",
-          "nome": "JOÃO LUCAS BENTO RODRIGUES",
+          "nome": "JOÃO LUCAS BENTO RODRIGUES",
           "cpf": "17489472652",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16327280",
-          "nome": "JOÃO LUCAS CASSIO DA SILVA",
+          "nome": "JOÃO LUCAS CASSIO DA SILVA",
           "cpf": "16224872651",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16330602",
-          "nome": "JOÃO LUCAS MACHADO ARRUDA",
+          "nome": "JOÃO LUCAS MACHADO ARRUDA",
           "cpf": "16085491603",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16340010",
-          "nome": "JOÃO LUCAS SANTOS FLORIANO",
+          "nome": "JOÃO LUCAS SANTOS FLORIANO",
           "cpf": "13516903619",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16341296",
-          "nome": "JOÃO LUIZ DOS SANTOS ROCHA",
+          "nome": "JOÃO LUIZ DOS SANTOS ROCHA",
           "cpf": "02071264614",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16327691",
-          "nome": "JOÃO MARCOS DA SILVA PEREIRA",
+          "nome": "JOÃO MARCOS DA SILVA PEREIRA",
           "cpf": "12258837685",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16339586",
-          "nome": "JOÃO PAULO DE CARVALHO MENDES",
+          "nome": "JOÃO PAULO DE CARVALHO MENDES",
           "cpf": "09982821628",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16341093",
-          "nome": "JOÃO PAULO DE OLIVEIRA CORREIA",
+          "nome": "JOÃO PAULO DE OLIVEIRA CORREIA",
           "cpf": "11114891657",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328988",
-          "nome": "JOÃO PAULO DOS SANTOS",
+          "nome": "JOÃO PAULO DOS SANTOS",
           "cpf": "16970827690",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328441",
-          "nome": "JOÃO PAULO FERNANDES",
+          "nome": "JOÃO PAULO FERNANDES",
           "cpf": "09030359609",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16327629",
-          "nome": "JOÃO PAULO SOARES JÚLIO",
+          "nome": "JOÃO PAULO SOARES JÃLIO",
           "cpf": "11117589641",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16341187",
-          "nome": "JOÃO PEDRO DOS SANTOS OLIVEIRA",
+          "nome": "JOÃO PEDRO DOS SANTOS OLIVEIRA",
           "cpf": "11981907602",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16334613",
-          "nome": "JOÃO PEDRO MARQUES SILVEIRA",
+          "nome": "JOÃO PEDRO MARQUES SILVEIRA",
           "cpf": "16229451662",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16331460",
-          "nome": "JOÃO PEDRO VILELA VIEIRA",
+          "nome": "JOÃO PEDRO VILELA VIEIRA",
           "cpf": "13614408647",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16338993",
-          "nome": "JOÃO VICTOR DA SILVA SOUZA",
+          "nome": "JOÃO VICTOR DA SILVA SOUZA",
           "cpf": "02260489699",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328228",
-          "nome": "JOÃO VICTOR IBA CARVALHO",
+          "nome": "JOÃO VICTOR IBA CARVALHO",
           "cpf": "15203127689",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16338982",
-          "nome": "JOÃO VÍCTOR MACÊDO SILVA",
+          "nome": "JOÃO VÃCTOR MACÃDO SILVA",
           "cpf": "14483749609",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16327334",
-          "nome": "JOÃO VÍCTOR MENEZES DA SILVA",
+          "nome": "JOÃO VÃCTOR MENEZES DA SILVA",
           "cpf": "12658249675",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16327836",
-          "nome": "JOÃO VICTOR SILVA",
+          "nome": "JOÃO VICTOR SILVA",
           "cpf": "14952411656",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16340279",
-          "nome": "JOÃO VITOR LEAL DOS SANTOS",
+          "nome": "JOÃO VITOR LEAL DOS SANTOS",
           "cpf": "05287629583",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328596",
-          "nome": "JOÃO VITOR NERES DOS SANTOS",
+          "nome": "JOÃO VITOR NERES DOS SANTOS",
           "cpf": "09438576517",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16327580",
-          "nome": "JOÃO VITOR SANTOS",
+          "nome": "JOÃO VITOR SANTOS",
           "cpf": "14495365657",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16334643",
-          "nome": "JOÃO VITOR VIDAL",
+          "nome": "JOÃO VITOR VIDAL",
           "cpf": "02346534692",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16332730",
-          "nome": "JOÃO WESLEY DAMAS KIND",
+          "nome": "JOÃO WESLEY DAMAS KIND",
           "cpf": "17954391655",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16337686",
-          "nome": "JOSÉ BENEDITO CÂNDIDO",
+          "nome": "JOSÃ BENEDITO CÃNDIDO",
           "cpf": "08688875600",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16337970",
-          "nome": "JOSÉ CARLOS ADÃO JUNIOR",
+          "nome": "JOSÃ CARLOS ADÃO JUNIOR",
           "cpf": "52728127867",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16329212",
-          "nome": "JOSÉ CARLOS BRESSANE SOUZA",
+          "nome": "JOSÃ CARLOS BRESSANE SOUZA",
           "cpf": "10336972652",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16329658",
-          "nome": "JOSÉ EDUARDO DA SILVA LAURINDO",
+          "nome": "JOSÃ EDUARDO DA SILVA LAURINDO",
           "cpf": "19058114708",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16332239",
-          "nome": "JOSÉ ÉZAQUEU URBANO DOS SANTOS",
+          "nome": "JOSÃ ÃZAQUEU URBANO DOS SANTOS",
           "cpf": "18994554777",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16340458",
-          "nome": "JOSÉ FÁBIO MORAES PLACIDIO",
+          "nome": "JOSÃ FÃBIO MORAES PLACIDIO",
           "cpf": "15009453665",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328481",
-          "nome": "JOSÉ FRANCISCO GOMES DA FONSECA",
+          "nome": "JOSÃ FRANCISCO GOMES DA FONSECA",
           "cpf": "10736666621",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16329274",
-          "nome": "JOSÉ GUILHERME GONÇALVES",
+          "nome": "JOSÃ GUILHERME GONÃALVES",
           "cpf": "10869021656",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16331174",
-          "nome": "JOSÉ LUCIANO",
+          "nome": "JOSÃ LUCIANO",
           "cpf": "71636520464",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16329330",
-          "nome": "JOSÉ LUCIANO DA SILVA BARBOSA",
+          "nome": "JOSÃ LUCIANO DA SILVA BARBOSA",
           "cpf": "12437494669",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328151",
-          "nome": "JOSÉ MARIA MARTINS FERREIRA",
+          "nome": "JOSÃ MARIA MARTINS FERREIRA",
           "cpf": "06231753638",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16337307",
-          "nome": "JOSÉ PAULO MARQUES DOS SANTOS",
+          "nome": "JOSÃ PAULO MARQUES DOS SANTOS",
           "cpf": "15771934666",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328948",
-          "nome": "JOSÉ SIDNEI LOPES",
+          "nome": "JOSÃ SIDNEI LOPES",
           "cpf": "28416052808",
           "sala": "SALA 801"
         },
         {
           "inscricao": "16328180",
-          "nome": "JOSÉ VINICIOS DE ALMEIDA PEREIRA",
+          "nome": "JOSÃ VINICIOS DE ALMEIDA PEREIRA",
           "cpf": "11973332663",
           "sala": "SALA 801"
         },
@@ -10496,7 +10496,7 @@
         },
         {
           "inscricao": "16337416",
-          "nome": "JULIA GONÇALVES FARIA",
+          "nome": "JULIA GONÃALVES FARIA",
           "cpf": "10818164654",
           "sala": "SALA 801"
         },
@@ -10526,31 +10526,31 @@
         },
         {
           "inscricao": "16334369",
-          "nome": "JÉFERSON PIRES DOS SANTOS",
+          "nome": "JÃFERSON PIRES DOS SANTOS",
           "cpf": "13164726635",
           "sala": "SALA 804"
         },
         {
           "inscricao": "16340488",
-          "nome": "JÉSSICA APARECIDA DA SILVA FERREIRA",
+          "nome": "JÃSSICA APARECIDA DA SILVA FERREIRA",
           "cpf": "10105996661",
           "sala": "SALA 804"
         },
         {
           "inscricao": "16334004",
-          "nome": "JÉSSICA GOUVÊA",
+          "nome": "JÃSSICA GOUVÃA",
           "cpf": "10530660660",
           "sala": "SALA 804"
         },
         {
           "inscricao": "16339898",
-          "nome": "JÚLIA SILVEIRA PEREIRA",
+          "nome": "JÃLIA SILVEIRA PEREIRA",
           "cpf": "12511162563",
           "sala": "SALA 804"
         },
         {
           "inscricao": "16336174",
-          "nome": "JÚLIO CÉSAR DA SILVA SILVESTRE",
+          "nome": "JÃLIO CÃSAR DA SILVA SILVESTRE",
           "cpf": "13685814630",
           "sala": "SALA 804"
         },
@@ -10634,7 +10634,7 @@
         },
         {
           "inscricao": "16331705",
-          "nome": "KAIO VINÍCIUS DE OLIVEIRA ROCHA",
+          "nome": "KAIO VINÃCIUS DE OLIVEIRA ROCHA",
           "cpf": "50572242808",
           "sala": "SALA 804"
         },
@@ -10652,7 +10652,7 @@
         },
         {
           "inscricao": "16329368",
-          "nome": "KAÍQUE RIBEIRO TEODORO",
+          "nome": "KAÃQUE RIBEIRO TEODORO",
           "cpf": "42684520879",
           "sala": "SALA 804"
         },
@@ -10706,7 +10706,7 @@
         },
         {
           "inscricao": "16327664",
-          "nome": "KAUÃ GUSTAVO DO NASCIMENTO",
+          "nome": "KAUÃ GUSTAVO DO NASCIMENTO",
           "cpf": "16435175624",
           "sala": "SALA 804"
         },
@@ -10718,7 +10718,7 @@
         },
         {
           "inscricao": "16327226",
-          "nome": "KAUAN DONIZETTE DE FRANÇA SILVA",
+          "nome": "KAUAN DONIZETTE DE FRANÃA SILVA",
           "cpf": "11149910666",
           "sala": "SALA 804"
         },
@@ -10802,7 +10802,7 @@
         },
         {
           "inscricao": "16331215",
-          "nome": "KÊNIA FONSECA MATIAS",
+          "nome": "KÃNIA FONSECA MATIAS",
           "cpf": "13239572605",
           "sala": "SALA 805"
         },
@@ -10838,7 +10838,7 @@
         },
         {
           "inscricao": "16328430",
-          "nome": "KEVIN MELO GUIMARÃES DA SILVA",
+          "nome": "KEVIN MELO GUIMARÃES DA SILVA",
           "cpf": "43478176816",
           "sala": "SALA 805"
         },
@@ -10850,7 +10850,7 @@
         },
         {
           "inscricao": "16328317",
-          "nome": "KÉZIA APARECIDA DA COSTA TAVARES",
+          "nome": "KÃZIA APARECIDA DA COSTA TAVARES",
           "cpf": "05449276133",
           "sala": "SALA 805"
         },
@@ -10892,7 +10892,7 @@
         },
         {
           "inscricao": "16339727",
-          "nome": "LAÍS TEIXEIRA CARVALHO DE OLIVEIRA",
+          "nome": "LAÃS TEIXEIRA CARVALHO DE OLIVEIRA",
           "cpf": "13422712623",
           "sala": "SALA 805"
         },
@@ -10916,13 +10916,13 @@
         },
         {
           "inscricao": "16340487",
-          "nome": "LARISSA GONÇALVES DIAS FONSECA",
+          "nome": "LARISSA GONÃALVES DIAS FONSECA",
           "cpf": "13388192677",
           "sala": "SALA 805"
         },
         {
           "inscricao": "16327353",
-          "nome": "LARISSA GONÇALVES MILANI",
+          "nome": "LARISSA GONÃALVES MILANI",
           "cpf": "16158986623",
           "sala": "SALA 805"
         },
@@ -10970,7 +10970,7 @@
         },
         {
           "inscricao": "16335602",
-          "nome": "LEANDRO ADÃO SIGNORETTE",
+          "nome": "LEANDRO ADÃO SIGNORETTE",
           "cpf": "13126700616",
           "sala": "SALA 805"
         },
@@ -10994,7 +10994,7 @@
         },
         {
           "inscricao": "16327519",
-          "nome": "LEANDRO CÁSSIO SILVA",
+          "nome": "LEANDRO CÃSSIO SILVA",
           "cpf": "08859718686",
           "sala": "SALA 805"
         },
@@ -11024,7 +11024,7 @@
         },
         {
           "inscricao": "16328080",
-          "nome": "LEANDRO GARCIA DE ARAÚJO GOMIDE",
+          "nome": "LEANDRO GARCIA DE ARAÃJO GOMIDE",
           "cpf": "70002899612",
           "sala": "SALA 805"
         },
@@ -11180,13 +11180,13 @@
         },
         {
           "inscricao": "16333367",
-          "nome": "LETÍCIA CRISTINA FERREIRA",
+          "nome": "LETÃCIA CRISTINA FERREIRA",
           "cpf": "12654375641",
           "sala": "SALA 806"
         },
         {
           "inscricao": "16329439",
-          "nome": "LETÍCIA DAIANE OLIVEIRA",
+          "nome": "LETÃCIA DAIANE OLIVEIRA",
           "cpf": "11543344658",
           "sala": "SALA 806"
         },
@@ -11294,7 +11294,7 @@
         },
         {
           "inscricao": "16327300",
-          "nome": "LUAN DAMIÃO DE ALMEIDA",
+          "nome": "LUAN DAMIÃO DE ALMEIDA",
           "cpf": "09980667613",
           "sala": "SALA 806"
         },
@@ -11414,7 +11414,7 @@
         },
         {
           "inscricao": "16341148",
-          "nome": "LUCAS CRISTOVÃO TOLEDO PINTO",
+          "nome": "LUCAS CRISTOVÃO TOLEDO PINTO",
           "cpf": "46362265858",
           "sala": "SALA 807"
         },
@@ -11474,7 +11474,7 @@
         },
         {
           "inscricao": "16330792",
-          "nome": "LUCAS FELIPE DE ARAÚJO",
+          "nome": "LUCAS FELIPE DE ARAÃJO",
           "cpf": "15648421699",
           "sala": "SALA 807"
         },
@@ -11546,7 +11546,7 @@
         },
         {
           "inscricao": "16330494",
-          "nome": "LUCAS IWATA PEREIRA BONAFÉ",
+          "nome": "LUCAS IWATA PEREIRA BONAFÃ",
           "cpf": "11633171957",
           "sala": "SALA 807"
         },
@@ -11666,7 +11666,7 @@
         },
         {
           "inscricao": "16328586",
-          "nome": "LUCAS SILVA DA ANUNCIAÇÃO",
+          "nome": "LUCAS SILVA DA ANUNCIAÃÃO",
           "cpf": "17056482740",
           "sala": "SALA 807"
         },
@@ -11708,7 +11708,7 @@
         },
         {
           "inscricao": "16336057",
-          "nome": "LUCAS VINICIUS ASSUMPÇÃO",
+          "nome": "LUCAS VINICIUS ASSUMPÃÃO",
           "cpf": "43095694806",
           "sala": "SALA 807"
         },
@@ -11906,13 +11906,13 @@
         },
         {
           "inscricao": "16333813",
-          "nome": "LUIS OTÁVIO DA ROCHA",
+          "nome": "LUIS OTÃVIO DA ROCHA",
           "cpf": "16310776606",
           "sala": "SALA 901"
         },
         {
           "inscricao": "16331947",
-          "nome": "LUIS OTÁVIO RODRIGUES CARNEIRO",
+          "nome": "LUIS OTÃVIO RODRIGUES CARNEIRO",
           "cpf": "43951967803",
           "sala": "SALA 901"
         },
@@ -11978,7 +11978,7 @@
         },
         {
           "inscricao": "16328117",
-          "nome": "LUÍS EDUARDO PEREIRA NUNES",
+          "nome": "LUÃS EDUARDO PEREIRA NUNES",
           "cpf": "15804087614",
           "sala": "SALA 904"
         },
@@ -12032,7 +12032,7 @@
         },
         {
           "inscricao": "16331146",
-          "nome": "LUIZ FERNANDO SOARES ARAÚJO",
+          "nome": "LUIZ FERNANDO SOARES ARAÃJO",
           "cpf": "12100036602",
           "sala": "SALA 904"
         },
@@ -12086,7 +12086,7 @@
         },
         {
           "inscricao": "16327725",
-          "nome": "LUIZ HENRIQUE DE ARAÚJO",
+          "nome": "LUIZ HENRIQUE DE ARAÃJO",
           "cpf": "13501613652",
           "sala": "SALA 904"
         },
@@ -12134,7 +12134,7 @@
         },
         {
           "inscricao": "16332579",
-          "nome": "LUIZ OTÁVIO BATISTA ANDRADE",
+          "nome": "LUIZ OTÃVIO BATISTA ANDRADE",
           "cpf": "10838329640",
           "sala": "SALA 904"
         },
@@ -12158,7 +12158,7 @@
         },
         {
           "inscricao": "16336480",
-          "nome": "LUIZ PEDRO GONÇALVES",
+          "nome": "LUIZ PEDRO GONÃALVES",
           "cpf": "15017201637",
           "sala": "SALA 904"
         },
@@ -12212,7 +12212,7 @@
         },
         {
           "inscricao": "16328664",
-          "nome": "MAGNO LUIZ MONTEIRO JÚNIOR",
+          "nome": "MAGNO LUIZ MONTEIRO JÃNIOR",
           "cpf": "02202723609",
           "sala": "SALA 904"
         },
@@ -12230,7 +12230,7 @@
         },
         {
           "inscricao": "16328226",
-          "nome": "MAICON CONCEIÇÃO DA SILVA",
+          "nome": "MAICON CONCEIÃÃO DA SILVA",
           "cpf": "05372632500",
           "sala": "SALA 904"
         },
@@ -12326,7 +12326,7 @@
         },
         {
           "inscricao": "16327738",
-          "nome": "MARCELO AUGUSTO HILÁRIO",
+          "nome": "MARCELO AUGUSTO HILÃRIO",
           "cpf": "12833076690",
           "sala": "SALA 904"
         },
@@ -12374,7 +12374,7 @@
         },
         {
           "inscricao": "16327936",
-          "nome": "MARCO ANTÔNIO TAVARES MARTINS",
+          "nome": "MARCO ANTÃNIO TAVARES MARTINS",
           "cpf": "12056738651",
           "sala": "SALA 904"
         },
@@ -12404,7 +12404,7 @@
         },
         {
           "inscricao": "16337375",
-          "nome": "MARCOS ANTÔNIO",
+          "nome": "MARCOS ANTÃNIO",
           "cpf": "15178622642",
           "sala": "SALA 904"
         },
@@ -12446,7 +12446,7 @@
         },
         {
           "inscricao": "16340538",
-          "nome": "MARCOS JOSUÉ MAR COSTA FERREIRA",
+          "nome": "MARCOS JOSUÃ MAR COSTA FERREIRA",
           "cpf": "14008075658",
           "sala": "SALA 904"
         },
@@ -12482,7 +12482,7 @@
         },
         {
           "inscricao": "16339752",
-          "nome": "MARCOS TÚLIO GONÇALVES SANTOS",
+          "nome": "MARCOS TÃLIO GONÃALVES SANTOS",
           "cpf": "12826773658",
           "sala": "SALA 904"
         },
@@ -12506,13 +12506,13 @@
         },
         {
           "inscricao": "16334528",
-          "nome": "MARCOS VINICIUS LOURENÇO DELFINO",
+          "nome": "MARCOS VINICIUS LOURENÃO DELFINO",
           "cpf": "16864734609",
           "sala": "SALA 904"
         },
         {
           "inscricao": "16340207",
-          "nome": "MARCOS VINÍCIUS RIBEIRO DA SILVA",
+          "nome": "MARCOS VINÃCIUS RIBEIRO DA SILVA",
           "cpf": "14580157699",
           "sala": "SALA 904"
         },
@@ -12620,7 +12620,7 @@
         },
         {
           "inscricao": "16327929",
-          "nome": "MARIA JOSÉ OLIVEIRA DE MEDEIROS",
+          "nome": "MARIA JOSÃ OLIVEIRA DE MEDEIROS",
           "cpf": "12483086624",
           "sala": "SALA 906"
         },
@@ -12650,7 +12650,7 @@
         },
         {
           "inscricao": "16335850",
-          "nome": "MARIANA CONCEIÇÃO SILVA",
+          "nome": "MARIANA CONCEIÃÃO SILVA",
           "cpf": "09836555455",
           "sala": "SALA 906"
         },
@@ -12716,7 +12716,7 @@
         },
         {
           "inscricao": "16327586",
-          "nome": "MARYSON DE GÓES FONSECA",
+          "nome": "MARYSON DE GÃES FONSECA",
           "cpf": "09681770692",
           "sala": "SALA 906"
         },
@@ -12746,7 +12746,7 @@
         },
         {
           "inscricao": "16332261",
-          "nome": "MATEUS CASTRO CUSTÓDIO",
+          "nome": "MATEUS CASTRO CUSTÃDIO",
           "cpf": "71146408110",
           "sala": "SALA 906"
         },
