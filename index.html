@@ -852,7 +852,7 @@ function renderStat(tableId, cargos){
       <td><input type="number" id="${tableId}_inscr_${i}" value="${c.inscr}" min="0" style="${sr}" readonly tabindex="-1"></td>
       <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'pres')"></td>
       <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'aus')"></td>
-      <td><input type="number" id="${tableId}_incl_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig></td>
+      <td><input type="number" id="${tableId}_incl_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'incl')"></td>
       <td><span id="${tableId}_pct_${i}" style="${sp}">—</span></td>
     </tr>`;
   });
@@ -1248,7 +1248,7 @@ function lookupInscricao(inscrEl){
   if(inputs.length < 3) return;
   const nomeEl = inputs[1];
   const salaEl = inputs[2];
-  const key = inscrEl.value.trim().replace(/\D/g,'');
+  const key = inscrEl.value.trim();
   if(!key){ nomeEl.readOnly=false; nomeEl.style.background=''; salaEl.readOnly=false; salaEl.style.background=''; return; }
   const found = window._inscrIndex && window._inscrIndex[key];
   if(found){
