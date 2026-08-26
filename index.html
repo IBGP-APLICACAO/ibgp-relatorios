@@ -1245,18 +1245,18 @@ function lookupInscricao(inscrEl){
   const row  = inscrEl.closest('.entry-row');
   if(!row) return;
   const inputs = row.querySelectorAll('input');
-  if(inputs.length < 3) return;
+  if(inputs.length < 2) return;
   const nomeEl = inputs[1];
-  const salaEl = inputs[2];
+  const salaEl = inputs.length >= 3 ? inputs[2] : null;
   const key = inscrEl.value.trim();
-  if(!key){ nomeEl.readOnly=false; nomeEl.style.background=''; salaEl.readOnly=false; salaEl.style.background=''; return; }
+  if(!key){ nomeEl.readOnly=false; nomeEl.style.background=''; if(salaEl){salaEl.readOnly=false; salaEl.style.background='';} return; }
   const found = window._inscrIndex && window._inscrIndex[key];
   if(found){
     nomeEl.value = found.nome; nomeEl.readOnly = true; nomeEl.style.background='#EEF3FB';
-    salaEl.value = found.sala; salaEl.readOnly = true; salaEl.style.background='#EEF3FB';
+    if(salaEl){salaEl.value = found.sala; salaEl.readOnly = true; salaEl.style.background='#EEF3FB';}
   } else {
     nomeEl.value = ''; nomeEl.readOnly = false; nomeEl.style.background='#FFF9EC';
-    salaEl.value = ''; salaEl.readOnly = false; salaEl.style.background='#FFF9EC';
+    if(salaEl){salaEl.value = ''; salaEl.readOnly = false; salaEl.style.background='#FFF9EC';}
   }
 }
 
