@@ -608,7 +608,7 @@ function lerArquivo(file) {
   const reader = new FileReader();
   reader.onload = e => {
     try {
-      const wb = XLSX.read(new Uint8Array(e.target.result), {type:"array", cellDates:true});
+      const wb = XLSX.read(new Uint8Array(e.target.result), {type:"array", cellDates:true, codepage:65001});
       processarPlanilha(wb, file.name);
     } catch(err) {
       dz.querySelector("p").textContent = "Erro ao ler arquivo: " + err.message;
