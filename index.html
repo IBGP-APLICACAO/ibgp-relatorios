@@ -739,8 +739,11 @@ function restaurarRascunho(){
   });
 }
 function limparRascunho(){
+  if(!confirm('Limpar o rascunho e reiniciar o formulário?')) return;
+  clearTimeout(_rascunhoSaveT);
   const k=_rascunhoKey(); if(k) localStorage.removeItem(k);
-  document.getElementById('rascunho-controls').style.display='none';
+  _rascunhoToast('🗑️ Rascunho limpo!','#CF3432');
+  setTimeout(()=>location.reload(), 800);
 }
 let _rascunhoSaveT;
 document.addEventListener('input',()=>{clearTimeout(_rascunhoSaveT);_rascunhoSaveT=setTimeout(salvarRascunho,1500);});
