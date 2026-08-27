@@ -162,6 +162,12 @@
     </div>
   </div>
 
+  <!-- Controles de rascunho -->
+  <div id="rascunho-controls" style="display:none; gap:8px; margin:8px 0; justify-content:flex-end;">
+    <button type="button" onclick="restaurarRascunho()" style="background:#2e7d32;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;">📋 Carregar Rascunho</button>
+    <button type="button" onclick="limparRascunho()" style="background:#c62828;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;">🗑️ Limpar Rascunho</button>
+  </div>
+
   <!-- TURNO MANHÃ -->
   <div class="hidden" id="secManha">
 
@@ -578,11 +584,13 @@ function salvarRascunho(){
     if(el) d['r_'+n]=el.value;
   });
   d['_apoio']=Array.from(document.querySelectorAll('#apoio_entries input')).map(i=>i.value);
-  ['m_ocorr_sala_entries','t_ocorr_sala_entries'].forEach(id=>{
+  ['m_ocorr_sala_items','t_ocorr_sala_items'].forEach(id=>{
     const el=document.getElementById(id); if(!el) return;
-    d['_'+id]=Array.from(el.querySelectorAll('.entry-sala-block')).map(b=>{
-      const ins=b.querySelectorAll('input'),ta=b.querySelector('textarea');
-      return{a:ins[0]?.value||'',b:ins[1]?.value||'',c:ins[2]?.value||'',d:ta?.value||''};
+    d['_'+id]=Array.from(el.querySelectorAll('.ocorr-item-block')).map(b=>{
+      const tipo=b.querySelector('select')?.value||'';
+      const inputs=Array.from(b.querySelectorAll('input')).map(i=>(i.type==='radio'||i.type==='checkbox')?{type:i.type,name:i.name,value:i.value,checked:i.checked}:{type:i.type,value:i.value});
+      const textareas=Array.from(b.querySelectorAll('textarea')).map(t=>t.value);
+      return{tipo,inputs,textareas};
     });
   });
   ['m_cond_entries','m_decl_entries','t_cond_entries','t_decl_entries'].forEach(id=>{
@@ -608,6 +616,7 @@ function salvarRascunho(){
   });
   d['_gerado_em'] = CONCURSO?.gerado_em || '';
   try{localStorage.setItem(k,JSON.stringify(d));}catch(e){}
+  document.getElementById('rascunho-controls').style.display='flex';
   _rascunhoToast('💾 Rascunho salvo');
 }
 let _rascunhoToastT;
@@ -655,17 +664,24 @@ function restaurarRascunho(){
       });
     }
   }
-  ['m_ocorr_sala_entries','t_ocorr_sala_entries'].forEach(id=>{
+  ['m_ocorr_sala_items','t_ocorr_sala_items'].forEach(id=>{
     const entries=d['_'+id]; if(!entries||!entries.length) return;
-    const list=document.getElementById(id); if(!list) return; list.innerHTML='';
+    const list=document.getElementById(id); if(!list) return;
+    const px=id.startsWith('m')?'m':'t';
+    list.innerHTML='';
     entries.forEach(e=>{
-      const block=document.createElement('div'); block.className='entry-sala-block';
-      const row=document.createElement('div'); row.className='entry-row';
-      [['a','Nº Inscrição'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
-        const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; if(k2==='a'){inp.style.cursor='text';inp.oninput=function(){lookupInscricao(this);};} row.appendChild(inp);
+      addOcorrItem(id,px);
+      const block=list.lastElementChild;
+      const selEl=block.querySelector('select');
+      if(selEl&&e.tipo){selEl.value=e.tipo;selectOcorrTipo(selEl);}
+      const inputs=block.querySelectorAll('input');
+      (e.inputs||[]).forEach((saved,i)=>{
+        if(!inputs[i]) return;
+        if(saved.type==='radio'||saved.type==='checkbox'){if(saved.checked){const r=block.querySelector('input[name="'+saved.name+'"][value="'+saved.value+'"]');if(r)r.checked=true;}}
+        else inputs[i].value=saved.value||'';
       });
-      const ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='Descrição da ocorrência...'; ta.value=e.d||'';
-      block.appendChild(row); block.appendChild(ta); list.appendChild(block);
+      const textareas=block.querySelectorAll('textarea');
+      (e.textareas||[]).forEach((v,i)=>{if(textareas[i])textareas[i].value=v;});
     });
   });
   ['m_cond_entries','t_cond_entries'].forEach(id=>{
@@ -724,6 +740,7 @@ function restaurarRascunho(){
 }
 function limparRascunho(){
   const k=_rascunhoKey(); if(k) localStorage.removeItem(k);
+  document.getElementById('rascunho-controls').style.display='none';
 }
 let _rascunhoSaveT;
 document.addEventListener('input',()=>{clearTimeout(_rascunhoSaveT);_rascunhoSaveT=setTimeout(salvarRascunho,1500);});
@@ -825,6 +842,9 @@ function onEscolaChange(){
   sel.disabled = true;
   document.getElementById("btnAlterar").style.display = "inline";
   setTimeout(restaurarRascunho, 200);
+  // Mostra controles de rascunho se já existe um rascunho para esta escola
+  const _k=_rascunhoKey();
+  if(_k&&localStorage.getItem(_k)) document.getElementById('rascunho-controls').style.display='flex';
 }
 
 function alterarEscola(){
