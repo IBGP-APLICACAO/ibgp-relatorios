@@ -579,7 +579,7 @@ function salvarRascunho(){
     if(el.type==='radio'||el.type==='file'||['selCertame','sel'].includes(el.id)) return;
     d[el.id]=el.value;
   });
-  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl'].forEach(n=>{
+  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl','m_correcao','t_correcao'].forEach(n=>{
     const el=document.querySelector('input[name="'+n+'"]:checked');
     if(el) d['r_'+n]=el.value;
   });
@@ -615,7 +615,7 @@ function salvarRascunho(){
     });
   });
   d['_gerado_em'] = CONCURSO?.gerado_em || '';
-  d['_correcao_entries']=Array.from(document.querySelectorAll('#correcao_entries .correcao-row')).map(row=>{const inputs=row.querySelectorAll('input');const sel=row.querySelector('select');return{inscricao:inputs[0]?.value||'',nome:inputs[1]?.value||'',tipo:sel?.value||''};});
+  ['m','t'].forEach(function(turno){var container=document.getElementById(turno+'_correcao_entries');if(!container)return;d['_correcao_'+turno]=Array.from(container.querySelectorAll('.correcao-block')).map(function(b){var ins=b.querySelectorAll('input'),sel=b.querySelector('select');return{inscricao:(ins[0]&&ins[0].value)||'',nome:(ins[1]&&ins[1].value)||'',tipo:(sel&&sel.value)||'',correcao:(ins[2]&&ins[2].value)||''};});});
   d['_comissao_entries']=Array.from(document.querySelectorAll('#comissao_entries input')).map(i=>i.value);
   if(window._fotosB64Cache) d['_fotosB64']=window._fotosB64Cache;
   try{localStorage.setItem(k,JSON.stringify(d));}catch(e){}
@@ -650,7 +650,7 @@ function restaurarRascunho(){
     const el=document.getElementById(id);
     if(el&&el.type!=='file') el.value=val;
   });
-  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl'].forEach(n=>{
+  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl','m_correcao','t_correcao'].forEach(n=>{
     const val=d['r_'+n]; if(!val) return;
     const el=document.querySelector('input[name="'+n+'"][value="'+val+'"]');
     if(el){el.checked=true; el.dispatchEvent(new Event('change'));}
@@ -734,7 +734,7 @@ function restaurarRascunho(){
       list.appendChild(block);
     });
   });
-  if(d['_correcao_entries']&&d['_correcao_entries'].length){const cList=document.getElementById('correcao_entries');if(cList){cList.innerHTML='';d['_correcao_entries'].forEach(e=>{if(typeof addCorrecaoEntry==='function')addCorrecaoEntry();const rows=cList.querySelectorAll('.correcao-row');const row=rows[rows.length-1];if(row){const inps=row.querySelectorAll('input');if(inps[0])inps[0].value=e.inscricao||'';if(inps[1])inps[1].value=e.nome||'';const sel=row.querySelector('select');if(sel)sel.value=e.tipo||'';}});}}
+  ['m','t'].forEach(function(turno){var entries=d['_correcao_'+turno];if(!entries||!entries.length)return;var container=document.getElementById(turno+'_correcao_entries');if(!container)return;container.innerHTML='';entries.forEach(function(e){addCorrecaoEntry(turno+'_correcao_entries',turno);var blocks=container.querySelectorAll('.correcao-block');var b=blocks[blocks.length-1];if(b){var ins=b.querySelectorAll('input'),sel=b.querySelector('select');if(ins[0])ins[0].value=e.inscricao||'';if(ins[1])ins[1].value=e.nome||'';if(sel)sel.value=e.tipo||'';if(ins[2])ins[2].value=e.correcao||'';}});});
   if(d['_comissao_entries']&&d['_comissao_entries'].length){const mList=document.getElementById('comissao_entries');if(mList){mList.innerHTML='';d['_comissao_entries'].forEach(v=>{if(typeof addComissaoEntry==='function')addComissaoEntry();const inps=mList.querySelectorAll('input');const inp=inps[inps.length-1];if(inp)inp.value=v||'';});}}
   if(d['_fotosB64']){window._fotosB64Cache=d['_fotosB64'];Object.entries(d['_fotosB64']).forEach(([catId,items])=>{const previewEl=document.getElementById('prev_'+catId);if(!previewEl||!items||!items.length)return;items.forEach((item)=>{const wrap=document.createElement('div');wrap.style.cssText='position:relative;display:inline-block;';const img=document.createElement('img');img.src='data:image/jpeg;base64,'+item.b64;img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #DDD;display:block;';wrap.appendChild(img);previewEl.appendChild(wrap);});});}
 
