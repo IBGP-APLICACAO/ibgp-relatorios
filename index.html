@@ -745,12 +745,14 @@ function restaurarRascunho(){
     if(m) recalcStat(m[1],parseInt(m[2]),null);
   });
 }
-function limparRascunho(){
-  if(!confirm('Limpar o rascunho e reiniciar o formulário?')) return;
+function limparRascunho(silencioso){
+  if(!silencioso && !confirm('Limpar o rascunho e reiniciar o formulário?')) return;
   clearTimeout(_rascunhoSaveT);
   const k=_rascunhoKey(); if(k) localStorage.removeItem(k);
-  _rascunhoToast('🗑️ Rascunho limpo!','#CF3432');
-  setTimeout(()=>location.reload(), 800);
+  if(!silencioso){
+    _rascunhoToast('🗑️ Rascunho limpo!','#CF3432');
+    setTimeout(()=>location.reload(), 800);
+  }
 }
 let _rascunhoSaveT;
 document.addEventListener('input',()=>{clearTimeout(_rascunhoSaveT);_rascunhoSaveT=setTimeout(salvarRascunho,1500);});
@@ -1673,7 +1675,7 @@ async function enviar(){
       headers:{"Content-Type":"text/plain"},
       body: JSON.stringify(payload)
     });
-    limparRascunho();
+    limparRascunho(true);
     document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
     ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>{const _e=document.getElementById(id);if(_e)_e.classList.add("hidden");});
     const cs2=document.getElementById("cardSucesso");cs2.classList.remove("hidden");cs2.scrollIntoView({behavior:"smooth",block:"center"});
