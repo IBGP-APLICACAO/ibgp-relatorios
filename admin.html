@@ -323,7 +323,6 @@ hr{border:none;border-top:1px solid #eee;margin:18px 0}
           </svg>
           Gerar Relatório Geral
         </button>
-        <button class="btn" onclick="baixarRelatorioWord()" id="btnWord" style="display:none;background:#1F3A6E;color:#fff;gap:6px;">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
@@ -905,42 +904,32 @@ function slugify(s) {
           .replace(/\s+/g,"-").replace(/[^a-z0-9-]/g,"");
 }
 
-// \u2500\u2500 Carrega certames no select do Relat\u00F3rio Geral \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+
+// ── Carrega certames no select do Relatório ──────────────────────────────
 async function carregarCertamesRelatorio() {
   const sel = document.getElementById("selRelatorio");
   try {
     const r = await fetch("dados/certames.json?_=" + Date.now());
     const lista = await r.json();
-    const optsRel = lista.length
-      ? '<option value="">\u2014 Selecione o certame \u2014</option>' +
-        lista.map(c => `<option value="${c.id}" data-titulo="${c.titulo}" data-data="${c.data}">${c.titulo} \u2014 ${c.data}</option>`).join("")
-      : '<option value="">Nenhum certame publicado</option>';
-    sel.innerHTML = optsRel;
-    // Populate edit-coords select too (simpler options without data attrs)
-    const selE = document.getElementById("selEditarCoords");
-    if (selE) {
-      selE.innerHTML = lista.length
-        ? '<option value="">\u2014 Selecione \u2014</option>' + lista.map(c => `<option value="${c.id}">${c.titulo} \u2014 ${c.data}</option>`).join("")
-        : '<option value="">Nenhum certame publicado</option>';
-    }
-  } catch(_) {
+    sel.innerHTML = lista.length
+      ? '<option value="">— Selecione o certame —</option>' +
+        lista.map(c => '<option value="' + c.id + '" data-titulo="' + (c.titulo||"") + '" data-data="' + (c.data||"") + '">' + (c.titulo||c.id) + '</option>').join("")
+      : '<option value="">Nenhum certame cadastrado</option>';
+  } catch(err) {
     sel.innerHTML = '<option value="">Erro ao carregar</option>';
   }
 }
 
-// \u2500\u2500 Relat\u00F3rio Geral \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-let certameDados = null;
+// ── Relatório Geral ──────────────────────────────────────────────────────
+var _dadosGeral = null;
+
 async function gerarRelatorioGeral() {
   const selRel = document.getElementById("selRelatorio");
   const certameId = selRel.value;
-  if (!certameId) {
-    mostrarStatusRelatorio("Selecione um certame.", false); return;
-  }
+  if (!certameId) { mostrarStatusRelatorio("Selecione um certame.", false); return; }
   const reportWin = window.open("", "_blank");
-  if (!reportWin) {
-    mostrarStatusRelatorio("Pop-up bloqueado. Permita pop-ups para este site nas configura\u00E7\u00F5es do browser.", false); return;
-  }
-  reportWin.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="font-family:Arial;padding:40px;color:#555;text-align:center;"><p style="font-size:16px;margin-top:80px;">\u23F3 Carregando dados do relat\u00F3rio...</p></body></html>');
+  if (!reportWin) { mostrarStatusRelatorio("Pop-up bloqueado. Permita pop-ups para este site.", false); return; }
+  reportWin.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="font-family:Arial;padding:40px;color:#555;text-align:center;"><p style="font-size:16px;margin-top:80px;">⏳ Carregando...</p></body></html>');
   const certameOpt = selRel.selectedOptions[0];
   const certameTitulo = certameOpt.dataset.titulo;
   const certameData   = certameOpt.dataset.data;
@@ -948,55 +937,25 @@ async function gerarRelatorioGeral() {
   btn.disabled = true; btn.textContent = "Buscando dados...";
   mostrarStatusRelatorio("Conectando ao Apps Script...", null);
   try {
-    const rCertame = await fetch(`dados/${certameId}.json?_=${Date.now()}`);
-    if (!rCertame.ok) throw new Error("Certame n\u00E3o encontrado");
-    certameDados = await rCertame.json();
-    const escolasDoCertame = new Set((certameDados.escolas || []).map(e => (e.nome || "").toUpperCase().trim()));
+    const rC = await fetch("dados/" + certameId + ".json?_=" + Date.now());
+    if (!rC.ok) throw new Error("Certame não encontrado");
+    certameDados = await rC.json();
     const url = certameDados.script_url || document.getElementById("fScriptUrl").value.trim();
-    if (!url || !url.startsWith("https://script.google.com")) throw new Error("URL do script n\u00E3o configurada para este certame.");
-    const resp = await fetch((certameDados.script_url || url) + "?action=relatorio");
+    if (!url || !url.startsWith("https://script.google.com")) throw new Error("URL do script não configurada para este certame.");
+    const resp = await fetch(url + "?action=relatorio");
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     const dados = await resp.json();
-    // Todas as escolas retornadas pelo GAS aparecem no relatório
-
-// Merge salas and cargos from local JSON
-var localMap = {};
-(certameDados.escolas || []).forEach(function(le) {
-  localMap[(le.nome||"").toUpperCase().trim()] = le;
-});
-dados.escolas = dados.escolas.map(function(ge) {
-  var local = localMap[(ge.nome||"").toUpperCase().trim()] || {};
-  if (!ge.salas && local.salas) ge.salas = local.salas;
-  if (!ge.cargos && local.cargos) ge.cargos = local.cargos;
-  if (!ge.coord_local && local.coord_local) ge.coord_local = local.coord_local;
-  return ge;
-});
-
-// Merge salas and cargos from local JSON
-var localMap = {};
-(certameDados.escolas || []).forEach(function(le) {
-  localMap[(le.nome||"").toUpperCase().trim()] = le;
-});
-dados.escolas = dados.escolas.map(function(ge) {
-  var local = localMap[(ge.nome||"").toUpperCase().trim()] || {};
-  if (!ge.salas && local.salas) ge.salas = local.salas;
-  if (!ge.cargos && local.cargos) ge.cargos = local.cargos;
-  if (!ge.coord_local && local.coord_local) ge.coord_local = local.coord_local;
-  return ge;
-});
-    function normNomeEsc(n){return(n||'').toUpperCase().normalize('NFD').replace(/[\u0300-\u036F]/g,'').trim();}
-    const salasMapCert = {};
-    (certameDados.escolas || []).forEach(ce => { salasMapCert[normNomeEsc(ce.nome)] = ce.salas||0; });
-    dados.escolas.forEach(e => { if(!e.salas) e.salas = salasMapCert[normNomeEsc(e.nome)]||0; });
-    dados.concurso["T\u00EDtulo do Concurso"] = certameTitulo;
-    dados.concurso["Data da Prova"]      = certameData;
-    dados.concurso["Edital"]             = certameDados.edital || dados.concurso["Edital"] || "";
-    btn.disabled = false; btn.innerHTML = "\uD83D\uDCC4 Gerar Relat\u00F3rio Geral";
-    _dadosGeral = { escolas: dados.escolas, concurso: dados.concurso };
-    abrirRelatorioGeral(dados, { titulo: certameTitulo, data: certameData, edital: certameDados.edital || "" }, reportWin);
+    dados.concurso = dados.concurso || {};
+    dados.concurso["Título do Concurso"] = certameTitulo;
+    dados.concurso["Data da Prova"] = certameData;
+    dados.concurso["Edital"] = certameDados.edital || dados.concurso["Edital"] || "";
+    _dadosGeral = dados;
+    btn.disabled = false; btn.innerHTML = "📄 Gerar Relatório Geral";
+    abrirRelatorioGeral(dados, reportWin);
     mostrarBotoesIndividuais(dados.escolas);
+    mostrarStatusRelatorio("Relatório gerado com sucesso!", true);
   } catch(e) {
-    btn.disabled = false; btn.innerHTML = "\uD83D\uDCC4 Gerar Relat\u00F3rio Geral";
+    btn.disabled = false; btn.innerHTML = "📄 Gerar Relatório Geral";
     mostrarStatusRelatorio("Erro: " + e.message, false);
     if (reportWin && !reportWin.closed) reportWin.close();
   }
@@ -1010,599 +969,364 @@ function mostrarStatusRelatorio(msg, ok) {
   el.textContent = msg;
 }
 
+// ── Helpers de relatório ─────────────────────────────────────────────────
+function _fh(v) {
+  if (!v) return "";
+  var s = String(v);
+  var m = s.match(/T(\d{2}:\d{2})/);
+  if (m) return m[1];
+  if (/^\d{1,2}:\d{2}/.test(s)) return s.substring(0,5);
+  return s;
+}
+function _pc(cor) {
+  return '-webkit-print-color-adjust:exact;print-color-adjust:exact;';
+}
+function _sec(titulo, cor, corpo) {
+  return '<div style="' + _pc() + 'background:#fff;border-radius:6px;margin-bottom:12px;overflow:hidden;page-break-inside:avoid;border:1px solid #E0E0E0;border-left:4px solid ' + cor + ';">'
+    + '<div style="' + _pc() + 'background:' + cor + ';padding:8px 14px;">'
+    + '<h3 style="color:#fff;font-size:11px;margin:0;text-transform:uppercase;letter-spacing:.6px;font-weight:700;">' + titulo + '</h3>'
+    + '</div><div style="padding:12px 16px;">' + corpo + '</div></div>';
+}
+function _g2(l1,v1,l2,v2) {
+  var cel = function(l,v) {
+    return l ? '<div style="padding:6px 0;"><span style="display:block;font-size:9px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;">' + l + '</span>'
+      + '<span style="font-size:12px;color:#1a1a1a;">' + (v||"") + '</span></div>' : '<div></div>';
+  };
+  return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;border-bottom:1px solid #F0F0F0;padding:2px 0;">' + cel(l1,v1) + cel(l2,v2) + '</div>';
+}
+function _th(cor) {
+  return 'style="' + _pc() + 'background:' + cor + ';color:#fff;padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px;"';
+}
+
+// ── Relatório Individual ─────────────────────────────────────────────────
 function abrirRelatorioImprimivel(dados) {
-  const conc = dados.concurso || {};
-  const escolas = dados.escolas || [];
-  const corM = "#1F3A6E", corT = "#CF3432", corH = "#2C2C2C";
+  var conc = dados.concurso || {};
+  var escolas = dados.escolas || [];
+  var COR_M = "#1F3A6E", COR_T = "#CF3432", COR_H = "#2C2C2C";
 
-  function fh(val) {
-    if (!val || val === "") return val || "";
-    const s = String(val);
-    const m = s.match(/T(\d{2}:\d{2})/);
-    if (m) return m[1];
-    if (/^\d{1,2}:\d{2}/.test(s)) return s.substring(0,5);
-    return s;
-  }
+  var CSS = '<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;background:#EFEFEF;padding:24px;font-size:13px;color:#2C2C2C;' + _pc() + '}table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}th{padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px;}td{padding:6px 10px;border-bottom:1px solid #eee;font-size:12px;vertical-align:top;}tr:last-child td{border-bottom:none;}.alt td{background:#F7F7F7;}.tot td{' + _pc() + 'background:#E8E8E8!important;font-weight:700;}.no-print{display:flex;}.foto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:12px;}.foto-item{border:1px solid #eee;border-radius:6px;overflow:hidden;}.foto-item img{width:100%;height:160px;object-fit:cover;display:block;}.foto-label{font-size:10px;color:#666;padding:5px 8px;text-align:center;background:#f9f9f9;}@media print{body{background:#fff;padding:12px;}.no-print{display:none!important;}.pb{page-break-before:always;}.foto-grid{grid-template-columns:repeat(3,1fr);}}</style>';
 
-  function secao(titulo, cor, conteudo) {
-    return '<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#fff;border-radius:6px;margin-bottom:12px;overflow:hidden;page-break-inside:avoid;border:1px solid #E0E0E0;border-left:4px solid ' + cor + ';">'
-      + '<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:' + cor + ';padding:8px 14px;">'
-      + '<h3 style="color:#fff;font-size:11px;margin:0;text-transform:uppercase;letter-spacing:.6px;font-weight:700;">' + titulo + '</h3>'
-      + '</div><div style="padding:12px 16px;">' + conteudo + '</div></div>';
-  }
+  var html = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório Individual IBGP</title>' + CSS + '</head><body>';
 
-  function grid2(l1,v1,l2,v2) {
-    const cel = (l,v) => l
-      ? '<div style="padding:6px 0;"><span style="display:block;font-size:9px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;">' + l + '</span><span style="font-size:12px;color:#1a1a1a;">' + (v||"") + '</span></div>'
-      : "<div></div>";
-    return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;border-bottom:1px solid #F0F0F0;padding:2px 0;">' + cel(l1,v1) + cel(l2,v2) + '</div>';
-  }
-
-  function thS(cor) {
-    return 'style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:' + cor + ';color:#fff;padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px;"';
-  }
-
-  let html = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório Individual  IBGP</title>'
-    + '<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;background:#EFEFEF;padding:24px;font-size:13px;color:#2C2C2C;-webkit-print-color-adjust:exact;print-color-adjust:exact;}table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}th{padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px;}td{padding:6px 10px;border-bottom:1px solid #eee;font-size:12px;vertical-align:top;}tr:last-child td{border-bottom:none;}.alt td{background:#F7F7F7;}.total-row td{-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#E8E8E8!important;font-weight:700;}.no-print{display:flex;}.foto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:12px;}.foto-item{border:1px solid #eee;border-radius:6px;overflow:hidden;}.foto-item img{width:100%;height:160px;object-fit:cover;display:block;}.foto-label{font-size:10px;color:#666;padding:5px 8px;text-align:center;background:#f9f9f9;}@media print{body{background:#fff;padding:12px;}.no-print{display:none!important;}.page-break{page-break-before:always;}.foto-grid{grid-template-columns:repeat(3,1fr);}}</style></head><body>';
-
-  html += '<div class="no-print" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#1F3A6E;color:#fff;padding:12px 20px;margin-bottom:16px;border-radius:8px;align-items:center;justify-content:space-between;">'
-    + '<span style="font-weight:700;">Relatório Individual  IBGP</span>'
-    + '<button onclick="window.print()" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#CF3432;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">= Imprimir / Salvar PDF</button>'
+  html += '<div class="no-print" style="' + _pc() + 'background:#1F3A6E;color:#fff;padding:12px 20px;margin-bottom:16px;border-radius:8px;align-items:center;justify-content:space-between;">'
+    + '<span style="font-weight:700;">Relatório Individual IBGP</span>'
+    + '<button onclick="window.print()" style="' + _pc() + 'background:#CF3432;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">🖨 Imprimir / Salvar PDF</button>'
     + '</div>';
 
   escolas.forEach(function(e, ei) {
-    const d = e.dados || {};
-    const certame = d.concurso || d.certame || conc["Título do Concurso"] || "";
-    const edital  = d.edital   || conc["Edital"]       || "";
-    const data    = d.data     || conc["Data da Prova"] || "";
+    var d = e.dados || {};
+    var certame = conc["Título do Concurso"] || d.certame || "";
+    var edital  = conc["Edital"] || d.edital || "";
+    var dataP   = conc["Data da Prova"] || d.data || "";
 
-    html += '<div class="' + (ei > 0 ? 'page-break' : '') + '">';
+    html += '<div class="' + (ei > 0 ? 'pb' : '') + '">';
 
     // Cabeçalho
-    html += '<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#2C2C2C;padding:16px 20px;border-radius:8px 8px 0 0;">'
-      + '<p style="color:#CF3432;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">IBGP  Relatório de Aplicação de Prova</p>'
+    html += '<div style="' + _pc() + 'background:#2C2C2C;padding:16px 20px;border-radius:8px 8px 0 0;">'
+      + '<p style="color:#CF3432;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">IBGP — Relatório de Aplicação de Prova</p>'
       + '<h1 style="color:#fff;font-size:17px;margin:0 0 4px;">' + (e.nome || "") + '</h1>'
-      + '<p style="color:#bbb;font-size:11px;">' + certame + ' &bull; ' + data + ' &bull; ' + edital + '</p>'
-      + '</div>'
-      + '<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;height:4px;background:#CF3432;margin-bottom:16px;border-radius:0 0 4px 4px;"></div>';
+      + '<p style="color:#bbb;font-size:11px;">' + certame + (edital ? ' &bull; ' + edital : '') + (dataP ? ' &bull; ' + dataP : '') + '</p>'
+      + '</div><div style="' + _pc() + 'height:4px;background:#CF3432;margin-bottom:16px;border-radius:0 0 4px 4px;"></div>';
 
     // 1. Identificação
-    const houveApoio = d.houve_apoio || "";
-    const nomeApoio  = d.nome_apoio  || "";
-    html += secao("Identificação", corH,
-      grid2("Coordenador Local", e.coord_local, "Turno(s)", e.turno) +
-      grid2("Número de Salas", d.salas || "", "", "") +
-      grid2("Apoio à Coordenação", houveApoio, houveApoio === "Sim" ? "Nome do apoiador" : "", houveApoio === "Sim" ? nomeApoio : "")
+    var coordNome = e.coord_local || d.coord_local || "";
+    var numSalas  = d.salas || e.salas || "";
+    html += _sec("Identificação", COR_H,
+      _g2("Coordenador Local", coordNome, "Turno(s)", e.turno || "") +
+      _g2("Número de Salas", numSalas, "", "")
     );
 
-    // 1b. Comissão
-    const houveComissao = d.houve_comissao || "Não";
-    const membrosComissaoStr = Array.isArray(d.membros_comissao) ? d.membros_comissao.join("; ") : (d.membros_comissao || "");
-    if (houveComissao === "Sim") {
-      html += secao("Comissão", "#5A3A8A",
-        grid2("Houve comissão?", "Sim", "Membros", membrosComissaoStr || "")
-      );
-    }
+    // 2. Horários + Testemunhas + Estatística + Ocorrências por turno
+    [["manha","Manhã",COR_M],["tarde","Tarde",COR_T]].forEach(function(par) {
+      var td = d[par[0]];
+      if (!td) return;
+      var cor = par[2], tnome = par[1];
 
-    // 2. Horários por turno
-    (e.horarios || []).forEach(function(h) {
-      const cor = h.turno === "Manhã" ? corM : corT;
-      html += secao("Horários  " + h.turno, cor,
-        grid2("Chegada da equipe",        fh(h.chegada),    "Abertura do portão",         fh(h.ab_portao)) +
-        grid2("Abertura do malote",       fh(h.ab_malote),  "Distribuição dos materiais", fh(h.distrib)) +
-        grid2("Fechamento do portão",     fh(h.fch_portao), "Início da aplicação",        fh(h.inicio)) +
-        grid2("Encerramento da prova",    fh(h.encerr),     "Fechamento do malote",       fh(h.fch_malote))
-      );
-    });
+      // Horários
+      var h = td.horarios || {};
+      if (Object.values(h).some(Boolean)) {
+        html += _sec("Horários — " + tnome, cor,
+          _g2("Chegada da equipe", _fh(h.chegada), "Abertura do portão", _fh(h.ab_portao)) +
+          _g2("Abertura do malote", _fh(h.ab_malote), "Distribuição dos materiais", _fh(h.distrib)) +
+          _g2("Fechamento do portão", _fh(h.fch_portao), "Início da aplicação", _fh(h.inicio)) +
+          _g2("Encerramento da prova", _fh(h.encerr), "Fechamento do malote", _fh(h.fch_malote))
+        );
+      }
 
-    // 3. Estatística por cargo/turno
-    const turnosRes = [...new Set((e.resultados || []).map(r => r.turno))];
-    turnosRes.forEach(function(turno) {
-      const cor  = turno === "Manhã" ? corM : corT;
-      const rows = (e.resultados || []).filter(r => r.turno === turno);
-      let tI=0, tP=0, tA=0, tIn=0;
-      let tab = '<table><thead><tr>'
-        + '<th ' + thS(cor) + '>Cargo</th>'
-        + '<th ' + thS(cor) + ' style="text-align:center;">Inscritos</th>'
-        + '<th ' + thS(cor) + ' style="text-align:center;">Presentes</th>'
-        + '<th ' + thS(cor) + ' style="text-align:center;">Ausentes</th>'
-        + '<th ' + thS(cor) + ' style="text-align:center;">% Aus.</th>'
-        + '<th ' + thS(cor) + ' style="text-align:center;">Inclusão</th>'
-        + '</tr></thead><tbody>';
-      rows.forEach(function(r, i) {
-        tI+=Number(r.inscr)||0; tP+=Number(r.pres)||0; tA+=Number(r.aus)||0; tIn+=Number(r.incl)||0;
-        tab += '<tr class="' + (i%2===1?'alt':'') + '">'
-          + '<td>' + (r.cargo||"") + '</td>'
-          + '<td style="text-align:center;">' + r.inscr + '</td>'
-          + '<td style="text-align:center;">' + r.pres + '</td>'
-          + '<td style="text-align:center;">' + r.aus + '</td>'
-          + '<td style="text-align:center;">' + (r.inscr>0?(r.aus/r.inscr*100).toFixed(1)+'%':'') + '</td>'
-          + '<td style="text-align:center;">' + (r.incl||0) + '</td>'
-          + '</tr>';
+      // Testemunhas
+      var test = td.testemunhas || {};
+      var testHtml = "";
+      [["ab_malote","Abertura do Malote"],["fch_malote","Fechamento do Malote"]].forEach(function(mo) {
+        var arr = (test[mo[0]] || []).filter(function(t) { return t && t.nome; });
+        if (!arr.length) return;
+        testHtml += '<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #f0f0f0;">'
+          + '<div style="font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">' + mo[1] + '</div>'
+          + '<div style="font-size:12px;line-height:2;">'
+          + arr.map(function(t,i){return (i+1)+". "+t.nome+(t.cpf?" — CPF: "+t.cpf:"");}).join("<br>")
+          + '</div></div>';
       });
-      tab += '<tr class="total-row"><td><strong>TOTAL</strong></td>'
-        + '<td style="text-align:center;">' + tI + '</td><td style="text-align:center;">' + tP + '</td>'
-        + '<td style="text-align:center;">' + tA + '</td><td style="text-align:center;">' + (tI>0?(tA/tI*100).toFixed(1)+'%':'') + '</td><td style="text-align:center;">' + tIn + '</td>'
-        + '</tr></tbody></table>';
-      html += secao("Estatística por Cargo  " + turno, cor, tab);
-    });
+      if (testHtml) html += _sec("Testemunhas — " + tnome, cor, testHtml);
 
-    // 4. Testemunhas por turno
-    (function() {
-      // Formato 1: array de objetos {turno, tipo, t1_nome, t1_cpf, ...} (aba TESTEMUNHAS do GAS)
-      const tArr = (e.testemunhas || []).filter(t => t && t.turno);
-      if (tArr.length > 0) {
-        const turnosTest = [...new Set(tArr.map(t => t.turno))];
-        turnosTest.forEach(function(turno) {
-          const cor = turno === "Manhã" ? corM : corT;
-          const tt  = tArr.filter(t => t.turno === turno);
-          let tHtml = "";
-          tt.forEach(function(t) {
-            const pessoas = [];
-            for (let i = 1; i <= 3; i++) {
-              if (t["t"+i+"_nome"]) pessoas.push(i + ". " + t["t"+i+"_nome"] + " — CPF: " + (t["t"+i+"_cpf"]||""));
-            }
-            tHtml += '<div style="margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #f0f0f0;">'
-              + '<div style="font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">' + (t.tipo||"") + '</div>'
-              + '<div style="font-size:12px;line-height:2;">' + (pessoas.join("<br>") || "") + '</div>'
-              + '</div>';
-          });
-          if (tHtml) html += secao("Testemunhas  " + turno, cor, tHtml);
+      // Estatística
+      var stat = td.estatistica || [];
+      if (stat.length) {
+        var tI=0,tP=0,tA=0,tIn=0;
+        var tab = '<table><thead><tr>'
+          + '<th ' + _th(cor) + '>Sala</th>'
+          + '<th ' + _th(cor) + '>Cargo</th>'
+          + '<th ' + _th(cor) + ' style="text-align:center;">Inscritos</th>'
+          + '<th ' + _th(cor) + ' style="text-align:center;">Presentes</th>'
+          + '<th ' + _th(cor) + ' style="text-align:center;">Ausentes</th>'
+          + '<th ' + _th(cor) + ' style="text-align:center;">% Aus.</th>'
+          + '<th ' + _th(cor) + ' style="text-align:center;">Inclusão</th>'
+          + '</tr></thead><tbody>';
+        stat.forEach(function(r,i){
+          tI+=Number(r.inscr)||0; tP+=Number(r.pres)||0; tA+=Number(r.aus)||0; tIn+=Number(r.incl)||0;
+          tab += '<tr class="'+(i%2===1?'alt':'')+'">'
+            +'<td>'+(r.sala||"")+'</td>'
+            +'<td>'+(r.cargo||"")+'</td>'
+            +'<td style="text-align:center;">'+(r.inscr||0)+'</td>'
+            +'<td style="text-align:center;">'+(r.pres||0)+'</td>'
+            +'<td style="text-align:center;">'+(r.aus||0)+'</td>'
+            +'<td style="text-align:center;">'+(r.inscr>0?(r.aus/r.inscr*100).toFixed(1)+"%":"")+'</td>'
+            +'<td style="text-align:center;">'+(r.incl||0)+'</td>'
+            +'</tr>';
         });
-      } else {
-        // Formato 2: dados JSON {manha:{testemunhas:{ab_malote:[{nome,cpf},...],fch_malote:[...]}}}
-        [["manha","Manhã",corM],["tarde","Tarde",corT]].forEach(function(par) {
-          const dt = (d[par[0]] && d[par[0]].testemunhas) ? d[par[0]].testemunhas : null;
-          if (!dt) return;
-          let tHtml = "";
-          [["ab_malote","Abertura do Malote"],["fch_malote","Fechamento do Malote"]].forEach(function(mo) {
-            const arr = dt[mo[0]] || [];
-            if (!arr.length) return;
-            const pessoas = arr.map(function(item, i) {
-              if (!item) return "";
-              if (typeof item === "string") return (i+1) + ". " + item;
-              const nm = item.nome || "";
-              const cp = item.cpf  || "";
-              return (i+1) + ". " + nm + (cp ? " — CPF: " + cp : "");
-            }).filter(Boolean);
-            if (!pessoas.length) return;
-            tHtml += '<div style="margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #f0f0f0;">'
-              + '<div style="font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">' + mo[1] + '</div>'
-              + '<div style="font-size:12px;line-height:2;">' + pessoas.join("<br>") + '</div>'
-              + '</div>';
-          });
-          if (tHtml) html += secao("Testemunhas  " + par[1], par[2], tHtml);
-        });
+        tab += '<tr class="tot"><td colspan="2"><strong>TOTAL</strong></td>'
+          +'<td style="text-align:center;">'+tI+'</td><td style="text-align:center;">'+tP+'</td>'
+          +'<td style="text-align:center;">'+tA+'</td>'
+          +'<td style="text-align:center;">'+(tI>0?(tA/tI*100).toFixed(1)+"%":"")+'</td>'
+          +'<td style="text-align:center;">'+tIn+'</td>'
+          +'</tr></tbody></table>';
+        html += _sec("Estatística por Sala — " + tnome, cor, tab);
       }
-    })();
 
-    // 5. Ocorrências por turno
-    const ocorrLabels = {sala:"Salas c/ ocorrência", cond:"Prova condicional", toque:"Toque de celular", decl:"Decl. de comparecimento"};
-    const candLabels  = {estado:"Estado do aparelho", lacrado:"Lacramento", local:"Local do aparelho"};
-
-    (e.ocorrencias || []).forEach(function(o) {
-      const cor   = o.turno === "Manhã" ? corM : corT;
-      const cands = (e.candidatos || []).filter(c => c.turno === o.turno);
-      const total = (Number(o.sala)||0)+(Number(o.cond)||0)+(Number(o.toque)||0)+(Number(o.decl)||0);
-
-      let oHtml = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:' + (total>0?'16':'4') + 'px;">';
-      ["sala","cond","toque","decl"].forEach(function(k) {
-        const v = Number(o[k]) || 0;
-        oHtml += '<div style="text-align:center;padding:10px 6px;border-radius:6px;background:#f9f9f9;border:1px solid ' + (v>0?'#CF3432':'#eee') + ';">'
-          + '<div style="font-size:22px;font-weight:700;color:' + (v>0?'#CF3432':'#4CAF50') + ';">' + v + '</div>'
-          + '<div style="font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">' + ocorrLabels[k] + '</div>'
-          + '</div>';
+      // Ocorrências
+      var oc = td.ocorrencias || {};
+      var nSala  = ((oc.sala  && oc.sala.candidatos)  || []).length;
+      var nCond  = ((oc.cond  && oc.cond.candidatos)  || []).length;
+      var nToque = ((oc.toque && oc.toque.candidatos) || []).length;
+      var nDecl  = ((oc.decl  && oc.decl.candidatos)  || []).length;
+      var total  = nSala+nCond+nToque+nDecl;
+      var ocHtml = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:'+(total>0?'16':'4')+'px;">';
+      [{k:"sala",n:nSala,l:"Ocorrências em Sala"},{k:"cond",n:nCond,l:"Prova Condicional"},
+       {k:"toque",n:nToque,l:"Toque de Celular"},{k:"decl",n:nDecl,l:"Decl. de Comparecimento"}
+      ].forEach(function(x){
+        ocHtml += '<div style="text-align:center;padding:10px 6px;border-radius:6px;background:#f9f9f9;border:1px solid '+(x.n>0?'#CF3432':'#eee')+';">'
+          +'<div style="font-size:22px;font-weight:700;color:'+(x.n>0?'#CF3432':'#4CAF50')+';">'+x.n+'</div>'
+          +'<div style="font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">'+x.l+'</div>'
+          +'</div>';
       });
-      oHtml += '</div>';
+      ocHtml += '</div>';
+      // Candidatos por tipo
+      [{k:"sala",l:"Ocorrência em Sala"},{k:"cond",l:"Prova Condicional"},
+       {k:"toque",l:"Toque de Celular"},{k:"decl",l:"Declaração de Comparecimento"}
+      ].forEach(function(x){
+        var cands = (oc[x.k] && oc[x.k].candidatos) || [];
+        if (!cands.length) return;
+        ocHtml += '<div style="margin-bottom:12px;">'
+          +'<div style="font-size:10px;font-weight:700;color:#7B3F00;text-transform:uppercase;padding:5px 10px;background:#FFF3CD;border-left:3px solid #FFA000;border-radius:2px;margin-bottom:6px;">'+x.l+' — '+cands.length+' candidato(s)</div>'
+          +'<table><thead><tr><th '+_th(cor)+'>Inscrição</th><th '+_th(cor)+'>Candidato</th><th '+_th(cor)+'>Sala</th></tr></thead><tbody>'
+          +cands.map(function(c,i){return '<tr class="'+(i%2===1?'alt':'')+'"><td>'+(c.inscricao||"")+'</td><td>'+(c.candidato||"")+'</td><td>'+(c.sala||"")+'</td></tr>';}).join("")
+          +'</tbody></table></div>';
+      });
+      if (total>0 || Object.keys(oc).length>0) html += _sec("Ocorrências — " + tnome, cor, ocHtml);
 
-      if (cands.length > 0) {
-        const tipos = [...new Set(cands.map(c => c.tipo))];
-        tipos.forEach(function(tipo) {
-          const grupo = cands.filter(c => c.tipo === tipo);
-          const c0 = grupo[0];
-          const extraCols = Object.keys(c0).filter(k => !["turno","tipo","inscricao","candidato","sala"].includes(k));
-          oHtml += '<div style="margin-bottom:14px;">'
-            + '<div style="font-size:10px;font-weight:700;color:#7B3F00;text-transform:uppercase;letter-spacing:.5px;padding:5px 10px;background:#FFF3CD;border-left:3px solid #FFA000;border-radius:2px;margin-bottom:6px;">'
-            + tipo + '  ' + grupo.length + ' candidato(s)</div>'
-            + '<table><thead><tr>'
-            + '<th ' + thS(cor) + '>Inscrição</th>'
-            + '<th ' + thS(cor) + '>Candidato</th>'
-            + '<th ' + thS(cor) + '>Sala</th>';
-          extraCols.forEach(k => { oHtml += '<th ' + thS(cor) + '>' + (candLabels[k]||k) + '</th>'; });
-          oHtml += '</tr></thead><tbody>';
-          grupo.forEach(function(c, i) {
-            oHtml += '<tr class="' + (i%2===1?'alt':'') + '">'
-              + '<td>' + (c.inscricao||"") + '</td><td>' + (c.candidato||"") + '</td><td>' + (c.sala||"") + '</td>';
-            extraCols.forEach(k => { oHtml += '<td>' + (c[k]||"") + '</td>'; });
-            oHtml += '</tr>';
-          });
-          oHtml += '</tbody></table></div>';
-        });
-      } else if (total === 0) {
-        oHtml += '<p style="color:#4CAF50;font-size:12px;font-style:italic;">Nenhuma ocorrência registrada neste turno.</p>';
+      // Correção de Dados
+      var corr = td.correcao || [];
+      if (corr.length) {
+        var corrHtml = '<table><thead><tr>'
+          +'<th '+_th(cor)+'>Inscrição</th><th '+_th(cor)+'>Candidato</th><th '+_th(cor)+'>Tipo</th><th '+_th(cor)+'>Dado Correto</th>'
+          +'</tr></thead><tbody>'
+          +corr.map(function(c,i){return '<tr class="'+(i%2===1?'alt':'')+'"><td>'+(c.inscricao||"")+'</td><td>'+(c.candidato||"")+'</td><td>'+(c.tipo||"")+'</td><td>'+(c.correcao||"")+'</td></tr>';}).join("")
+          +'</tbody></table>';
+        html += _sec("Correção de Dados Cadastrais — " + tnome, cor, corrHtml);
       }
 
-      if (o.obs) {
-        oHtml += '<div style="margin-top:8px;padding:8px 12px;background:#f5f5f5;border-radius:4px;font-size:12px;color:#555;border-left:3px solid #999;">'
-          + '<strong>Observações do turno:</strong> ' + o.obs + '</div>';
+      // Ampliação de Sala
+      var amp = td.ampliacao || [];
+      if (amp.length) {
+        var ampHtml = amp.map(function(a){
+          return _g2("Ata",a.ata||"","Qtd. Candidatos",a.qtd||"")
+            +(a.justificativa?'<p style="font-size:12px;margin:4px 0;"><strong>Justificativa:</strong> '+a.justificativa+'</p>':"");
+        }).join('<hr style="border:none;border-top:1px solid #eee;margin:4px 0;">');
+        html += _sec("Ampliação de Sala — " + tnome, cor, ampHtml);
       }
-
-      html += secao("Ocorrências  " + o.turno, cor, oHtml);
     });
 
-    // 5b. Ampliação de Sala por turno
-    var _turnoCores = {"Manhã": corM, "Tarde": corT};
-    [["manha","Manhã"],["tarde","Tarde"]].forEach(function(pair) {
-      var td = d[pair[0]] || {};
-      var ampList = td.ampliacao || [];
-      if (ampList.length === 0) return;
-      var ampHtml = ampList.map(function(ap) {
-        return grid2("Ata", ap.ata||"", "Qtd. Candidatos", ap.qtd||"") +
-          (ap.justificativa ? '<p style="font-size:12px;margin:4px 0;"><strong>Justificativa:</strong> '+ap.justificativa+'</p>' : "");
-      }).join('<hr style="border:none;border-top:1px solid #eee;margin:4px 0;">');
-      html += secao("Ampliação de Sala  "+pair[1], _turnoCores[pair[1]]||corH, ampHtml);
-    });
+    // Observações
+    var obs = d.obs || e.obs || "";
+    if (obs) html += _sec("Observações Gerais", COR_H, '<p style="font-size:13px;line-height:1.7;white-space:pre-wrap;">'+obs+'</p>');
 
-    // 5c. Correção de Dados Cadastrais por turno
-    [["manha","Manhã"],["tarde","Tarde"]].forEach(function(pair) {
-      var td = d[pair[0]] || {};
-      var corrList = td.correcao || [];
-      if (corrList.length === 0) return;
-      var corrHtml = '<table style="width:100%;border-collapse:collapse;font-size:12px;">'
-        + '<thead><tr style="background:#555;color:#fff;">'
-        + '<th style="padding:5px 8px;text-align:left;">Inscrição</th>'
-        + '<th style="padding:5px 8px;text-align:left;">Candidato</th>'
-        + '<th style="padding:5px 8px;text-align:left;">Tipo</th>'
-        + '<th style="padding:5px 8px;text-align:left;">Dado Correto</th>'
-        + '</tr></thead><tbody>'
-        + corrList.map(function(c) {
-          return '<tr><td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.inscricao||"")+'</td>'
-            + '<td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.candidato||"")+'</td>'
-            + '<td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.tipo||"")+'</td>'
-            + '<td style="padding:5px 8px;border-bottom:1px solid #eee;">'+(c.correcao||"")+'</td></tr>';
-        }).join("")
-        + '</tbody></table>';
-      html += secao("Correção de Dados Cadastrais  "+pair[1], _turnoCores[pair[1]]||corH, corrHtml);
-    });
-
-    // 6. Observações Gerais
-    const obsTexto = e.obs || d.obs || "";
-    if (obsTexto) {
-      html += secao("Observações Gerais", corH,
-        '<p style="font-size:13px;line-height:1.7;color:#2C2C2C;white-space:pre-wrap;">' + obsTexto + '</p>'
-      );
-    }
-
-    // 7. Registro Fotográfico
-    const fotos = d.fotos || [];
-    let fotoHtml = "";
+    // Fotos
+    var fotos = d.fotos || [];
+    var fotoHtml = "";
     if (fotos.length > 0) {
       fotoHtml = '<p style="font-size:12px;color:#555;margin-bottom:12px;">' + fotos.length + ' foto(s) registrada(s).</p><div class="foto-grid">';
       fotos.forEach(function(f) {
-        const b = f.b64 || f.data || "";
-        const src = b ? (b.startsWith("data:") ? b : "data:image/jpeg;base64," + b) : "";
-        if (src) {
-          fotoHtml += '<div class="foto-item">'
-            + '<img src="' + src + '" alt="' + (f.categoria||f.turno||'foto') + '">'
-            + '<div class="foto-label">' + ([f.categoria, f.turno].filter(Boolean).join("  ") || "Foto") + '</div>'
-            + '</div>';
-        }
+        var b = f.b64 || f.data || "";
+        var src = b ? (b.startsWith("data:") ? b : "data:image/jpeg;base64," + b) : "";
+        if (src) fotoHtml += '<div class="foto-item"><img src="'+src+'" alt="'+(f.categoria||"foto")+'"><div class="foto-label">'+([f.categoria,f.turno].filter(Boolean).join(" — ")||"Foto")+'</div></div>';
       });
       fotoHtml += '</div>';
-      if (e.foto_url) {
-        fotoHtml += '<p style="margin-top:14px;font-size:12px;"><a href="' + e.foto_url + '" target="_blank" style="color:#1F3A6E;font-weight:700;text-decoration:none;">= Ver também no Google Drive →</a></p>';
-      }
-    } else if (e.foto_url) {
-      fotoHtml = '<a href="' + e.foto_url + '" target="_blank" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;display:inline-block;background:#CF3432;color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">= Ver Fotos no Google Drive</a>';
     } else {
       fotoHtml = '<p style="color:#999;font-style:italic;font-size:13px;">Nenhuma foto enviada.</p>';
     }
-    html += secao("Registro Fotográfico", corM, fotoHtml);
+    html += _sec("Registro Fotográfico", COR_M, fotoHtml);
 
+    html += '</div>';
   });
 
-  html += "</body></html>";
-  var _b=new Blob([html],{type:'text/html;charset=utf-8'}),_u=URL.createObjectURL(_b);
+  html += '</body></html>';
+  var _b = new Blob([html],{type:'text/html;charset=utf-8'}), _u = URL.createObjectURL(_b);
   window.open(_u,'_blank');
-  setTimeout(function(){URL.revokeObjectURL(_u);},30000);
+  setTimeout(function(){URL.revokeObjectURL(_u);}, 30000);
 }
 
-
-//  Botões de relatórios individuais 
-async function baixarCorrecoes() {
-  var certameId = document.getElementById("selRelatorio").value;
-  var url = document.getElementById("fScriptUrl").value.trim();
-  if (!certameId) { mostrarStatusRelatorio("Selecione um certame primeiro.", false); return; }
-  if (!url || !url.startsWith("https://script.google.com")) {
-    mostrarStatusRelatorio("Informe a URL do Apps Script.", false); return;
-  }
-  if (typeof XLSX === "undefined") { alert("Biblioteca XLSX não carregada."); return; }
-  mostrarStatusRelatorio("Buscando correções...", null);
-  try {
-    var rC = await fetch("dados/" + certameId + ".json?_=" + Date.now());
-    if (!rC.ok) throw new Error("Certame não encontrado");
-    var certameDados = await rC.json();
-    var escolasSet = new Set((certameDados.escolas || []).map(function(e){ return (e.nome || "").toUpperCase().trim(); }));
-
-    var resp = await fetch(url + "?action=relatorio");
-    if (!resp.ok) throw new Error("HTTP " + resp.status);
-    var dados = await resp.json();
-    var escolas = (dados.escolas || []).filter(function(e){ return escolasSet.has((e.nome || "").toUpperCase().trim()); });
-
-    var rows = [["Escola", "Turno", "Nº Inscrição", "Nome do Candidato", "Tipo de Correção", "Detalhes"]];
-
-    escolas.forEach(function(escola) {
-      var nome = escola.nome || "";
-      // Case 1: aggregated correcoes array on escola
-      var corrs = escola.correcoes || [];
-      if (Array.isArray(corrs) && corrs.length > 0) {
-        corrs.forEach(function(c) {
-          rows.push([nome, c.turno || "", c.inscricao || "", c.candidato || "", c.tipo || "", c.correcao || c.obs || ""]);
-        });
-      } else {
-        // Case 2: per-turno manha.correcao / tarde.correcao
-        [{ turno: "Manhã", data: escola.manha }, { turno: "Tarde", data: escola.tarde }].forEach(function(t) {
-          if (!t.data) return;
-          (t.data.correcao || []).forEach(function(c) {
-            rows.push([nome, t.turno, c.inscricao || "", c.candidato || "", c.tipo || "", c.correcao || c.obs || ""]);
-          });
-        });
-      }
-    });
-
-    if (rows.length <= 1) {
-      mostrarStatusRelatorio("Nenhuma correção de dados encontrada para este certame.", false);
-      return;
-    }
-    var wb = XLSX.utils.book_new();
-    var ws = XLSX.utils.aoa_to_sheet(rows);
-    ws["!cols"] = [30,10,18,30,25,30].map(function(w){ return {wch:w}; });
-    XLSX.utils.book_append_sheet(wb, ws, "Correções");
-    XLSX.writeFile(wb, "correcoes-" + certameId + ".xlsx");
-    mostrarStatusRelatorio("✓ " + (rows.length - 1) + " correção(ões) exportada(s).", true);
-  } catch(e) {
-    mostrarStatusRelatorio("Erro: " + e.message, false);
-  }
-}
-
+// ── Botões individuais ───────────────────────────────────────────────────
 function mostrarBotoesIndividuais(escolas) {
-  if (!escolas || escolas.length === 0) return;
   var el = document.getElementById("statusRelatorio");
-  el.style.display = "block";
-  el.style.background = "#EFF3FB";
-  el.style.color = "#1F3A6E";
-  el.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">= Relatórios Individuais por Local</div>'
-    + '<div style="display:flex;flex-wrap:wrap;gap:8px;">'
-    + escolas.map(function(e, i) {
-        return '<button onclick="abrirIndividualPorIdx(' + i + ')" style="background:#1F3A6E;color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">' + e.nome + '</button>';
-      }).join("")
-    + '</div>';
+  if (!escolas || !escolas.length) return;
+  var btns = escolas.map(function(e,i){
+    return '<button onclick="abrirIndividualPorIdx('+i+')" style="margin:4px;padding:6px 12px;background:#1F3A6E;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;">📄 '+e.nome+'</button>';
+  }).join("");
+  el.insertAdjacentHTML("afterend", '<div id="botoesIndividuais" style="margin-top:10px;flex-wrap:wrap;display:flex;">' + btns + '</div>');
 }
-
 function abrirIndividualPorIdx(i) {
   if (!_dadosGeral) return;
   abrirRelatorioImprimivel({ concurso: _dadosGeral.concurso, escolas: [_dadosGeral.escolas[i]] });
 }
 
-function abrirRelatorioGeral(dados, meta, win) {
-  if (!win) win = window.open("", "_blank");
-  win.document.open();
+// ── Relatório Geral ──────────────────────────────────────────────────────
+function abrirRelatorioGeral(dados, win) {
   var conc = dados.concurso || {};
   var escolas = dados.escolas || [];
-  var totI=0,totP=0,totA=0,totIn=0,totSalas=0,cargosMap={};
+  var COR = "#1F3A6E", COR2 = "#CF3432";
+  var PC = _pc();
+
+  var titulo = conc["Título do Concurso"] || "";
+  var dataP  = conc["Data da Prova"] || "";
+  var edital = conc["Edital"] || "";
+
+  function pct(a,b){return b>0?(a/b*100).toFixed(1)+"%":"—";}
+  function thS(x){return 'style="'+PC+'background:'+COR+';color:#fff;padding:8px 10px;text-align:left;font-size:11px;font-weight:700;'+(x||'')+'"';}
+  function tdZ(i,x){return 'style="'+PC+'background:'+(i%2?'#F5F7FC':'#fff')+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;'+(x||'')+'"';}
+
+  // Aggregated totals from d.manha.estatistica + d.tarde.estatistica
+  var tTotalI=0,tTotalP=0,tTotalA=0,tTotalIn=0;
   escolas.forEach(function(e){
-    totSalas+=Number(e.salas)||0;
-    var eI=0,eP=0,eA=0,eIn=0,melhorCargo=null,maxPct=-1;
-    (e.resultados||[]).forEach(function(r){
-      var ins=Number(r.inscr)||0,pre=Number(r.pres)||0,aus=Number(r.aus)||0,inc=Number(r.incl)||0;
-      totI+=ins;totP+=pre;totA+=aus;totIn+=inc;eI+=ins;eP+=pre;eA+=aus;eIn+=inc;
-      if(ins>0&&aus/ins>maxPct){maxPct=aus/ins;melhorCargo=r;}
-      var cargo=r.cargo.replace(/^SALA\s+\S+\s*[-\u2014]+\s*/i,'').trim();
-      if(!cargosMap[cargo])cargosMap[cargo]={inscr:0,pres:0,aus:0,incl:0};
-      cargosMap[cargo].inscr+=ins;cargosMap[cargo].pres+=pre;cargosMap[cargo].aus+=aus;cargosMap[cargo].incl+=inc;
+    var d = e.dados || {};
+    [d.manha,d.tarde].forEach(function(td){
+      if (!td) return;
+      (td.estatistica||[]).forEach(function(r){
+        tTotalI+=Number(r.inscr)||0; tTotalP+=Number(r.pres)||0;
+        tTotalA+=Number(r.aus)||0;  tTotalIn+=Number(r.incl)||0;
+      });
     });
-    e._tot={ins:eI,pre:eP,aus:eA,inc:eIn};e._cargoMaiorAus=melhorCargo;
-    e._hasOcorr=(e.ocorrencias||[]).some(function(o){return Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0;});
   });
-  function pct(a,b){return b>0?(a/b*100).toFixed(1)+"%":"\u2014";}
-  function pct2(a,b){return b>0?(a/b*100).toFixed(2)+"%":"\u2014";}
-  if(!totSalas)(certameDados.escolas||[]).forEach(function(ce){totSalas+=(ce.salas||0);});
-  if(Object.keys(cargosMap).length===0){(certameDados.escolas||[]).forEach(function(ce){(ce.cargos||[]).forEach(function(r){var cargo=(r.cargo||'').replace(/^SALA\s+\S+\s*[-\u2014]+\s*/i,'').trim();if(!cargo)return;if(!cargosMap[cargo])cargosMap[cargo]={inscr:0,pres:0,aus:0,incl:0};cargosMap[cargo].inscr+=Number(r.inscr)||0;});});}
-  var n=escolas.length,nCargos=Object.keys(cargosMap).length;
-  var cargosArr=Object.keys(cargosMap).map(function(nome){return Object.assign({nome:nome},cargosMap[nome]);});
-  var top5Inscr=cargosArr.slice().sort(function(a,b){return b.inscr-a.inscr;}).slice(0,5);
-  var top5Aus=cargosArr.filter(function(c){return c.inscr>0;}).sort(function(a,b){return b.aus/b.inscr-a.aus/a.inscr;}).slice(0,5);
-  var cargoMaiorInscr=cargosArr.slice().sort(function(a,b){return b.inscr-a.inscr;})[0]||null;
-  var titulo=meta.titulo||conc["Título do Concurso"]||"";
-  var edital=meta.edital||conc["Edital"]||"";
-  var dataProva=meta.data||conc["Data da Prova"]||"";
-  var coordPed="Tiago José Theisen";
-  var coordLog="Marcela Avelar Pedrosa Rocha";
-  var turnosSet={};
-  escolas.forEach(function(e){if(e.turno)String(e.turno).split(/\s+e\s+|\//).forEach(function(t){if(t.trim())turnosSet[t.trim()]=1;});});
-  var turnosStr=Object.keys(turnosSet).filter(Boolean).join(" e ")||"\u2014";
-  var hoje=new Date().toLocaleDateString("pt-BR");
-  var corP="#1F3A6E",corR="#CF3432",corE="#2C2C2C";
-  var PC='-webkit-print-color-adjust:exact;print-color-adjust:exact;';
-  function thS(x){return 'style="'+PC+'background:'+corP+';color:#fff;padding:8px 10px;text-align:left;font-size:11px;font-weight:700;'+(x||'')+'"';}
-  function tdBg(bg,x){return 'style="'+PC+'background:'+(bg||'#fff')+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;'+(x||'')+'"';}
-  function tdZ(i,x){return tdBg(i%2?'#F5F7FC':'#fff',x);}
-  function secH(num,t){return '<h2 style="font-size:12px;font-weight:700;color:#000;text-transform:uppercase;border-bottom:1px solid #ccc;padding-bottom:6px;margin:28px 0 14px;letter-spacing:.3px;">'+num+' '+t+'</h2>';}
-  function infoCell(l,v){return '<div style="padding:4px 0;"><span style="display:block;color:#bbb;font-size:9px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;">'+l+'</span><span style="color:#fff;font-size:11px;font-weight:600;">'+(v||"\u2014")+'</span></div>';}
-  function indCard(v,l,bg,fg){bg=bg||'#EEF2F8';fg=fg||corP;return '<td style="background:'+bg+';padding:18px 10px;text-align:center;border-right:1px solid rgba(255,255,255,0.2);min-width:0;"><div style="'+PC+'font-size:28px;font-weight:700;color:'+fg+';line-height:1;">'+v+'</div><div style="font-size:8px;text-transform:uppercase;letter-spacing:.5px;color:'+fg+';opacity:.8;margin-top:6px;">'+l+'</div></td>';}
-  var html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>IBGP</title>'
-    +'<style>'
-    +'*{box-sizing:border-box;margin:0;padding:0;}'
-    +'body{font-family:Arial,sans-serif;font-size:12px;color:#000;background:#fff;padding:28px;line-height:1.5;text-align:justify;'+PC+'}'
-    +'table{width:100%;border-collapse:collapse;}'
-    +'.card{background:#fff;border:1px solid #CCCCCC;margin-bottom:20px;overflow:hidden;}'
-    +'.no-print{display:flex;}'
-    +'p{line-height:1.5;font-size:12px;margin-bottom:10px;text-align:justify;color:#000;}'
-    +'strong{font-weight:700;}'
-    +'#pgHeader{display:none;}'
-    +'@media print{'
-    +'body{background:#fff;padding:90px 20px 20px 20px;font-size:12px;}'
-    +'.no-print{display:none!important;}'
-    +'.pb{page-break-before:always;padding-top:80px;}'
-    +'#pgHeader{'+PC+'display:block;position:fixed;top:0;left:0;right:0;z-index:999;background:#EFEFEF;border-bottom:2px solid '+corP+';padding:8px 20px;}'
-    +'}'
-    +'</style></head><body>';
 
-  // Cabeçalho fixo (cinza claro, repete em todas as páginas)
-  html+='<div id="pgHeader">'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;">'
-    +'<img src="https://ibgp-aplicacao.github.io/ibgp-relatorios/ibgp-logo.png" style="height:44px;" />'
-    +'<div style="text-align:right;font-size:9px;color:#444;line-height:1.6;">'
-    +titulo.toUpperCase()+'<br>'+edital.toUpperCase()+' | '+dataProva
-    +'</div>'
-    +'</div>'
-    +'</div>';
+  var css = '<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;padding:24px;background:#EFEFEF;'+PC+'}h1,h2,h3{margin:0;}table{width:100%;border-collapse:collapse;}th,td{padding:8px 10px;}@media print{body{background:#fff;padding:12px;}.no-print{display:none!important;}}</style>';
+  var html = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório Geral IBGP</title>' + css + '</head><body>';
 
-  html+='<div class="no-print" style="'+PC+'background:'+corP+';padding:10px 20px;margin-bottom:20px;border-radius:6px;align-items:center;justify-content:flex-end;">'
-    +'<button onclick="window.print()" style="'+PC+'background:'+corR+';color:#fff;border:none;padding:8px 22px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:700;">&#128424; Imprimir / Salvar PDF</button>'
+  html += '<div class="no-print" style="'+PC+'background:'+COR+';color:#fff;padding:12px 20px;margin-bottom:16px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;">'
+    +'<span style="font-weight:700;">Relatório Geral — IBGP</span>'
+    +'<button onclick="window.print()" style="'+PC+'background:'+COR2+';color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;">🖨 Imprimir / Salvar PDF</button>'
     +'</div>';
 
   // Capa
-  html+='<div style="'+PC+'background:'+corE+';padding:32px 32px 24px;border-radius:6px 6px 0 0;">'
-    +'<p style="'+PC+'color:'+corR+';font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;text-align:left;">Instituto Brasileiro de Gestão e Pesquisa</p>'
-    +'<h1 style="color:#fff;font-size:22px;font-weight:700;margin-bottom:6px;text-transform:uppercase;text-align:left;">Relatório Técnico Consolidado</h1>'
-    +'<h2 style="color:#BBBBBB;font-size:13px;font-weight:400;margin-bottom:24px;text-align:left;">'+titulo+'</h2>'
-    +'<div style="border-top:1px solid #3D3D3D;padding-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px 28px;">'
-    +infoCell("Edital",edital)+infoCell("Data da Prova",dataProva)+infoCell("Turno(s)",turnosStr)
-    +infoCell("Total de Locais",n)+infoCell("Coord. Pedagógico",coordPed)+infoCell("Coord. Logístico",coordLog)
-    +'</div></div>'
-    +'<div style="'+PC+'height:4px;background:'+corR+';margin-bottom:28px;border-radius:0 0 6px 6px;"></div>';
+  html += '<div style="'+PC+'background:#2C2C2C;color:#fff;padding:24px 28px;border-radius:10px 10px 0 0;margin-bottom:0;">'
+    +'<p style="color:'+COR2+';font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">IBGP — Relatório de Aplicação de Prova</p>'
+    +'<h1 style="font-size:22px;margin-bottom:6px;">'+titulo+'</h1>'
+    +'<p style="font-size:13px;color:#bbb;">'+dataP+(edital?' &bull; '+edital:'')+'</p>'
+    +'</div>'
+    +'<div style="'+PC+'height:4px;background:'+COR2+';margin-bottom:20px;"></div>';
 
-  // 1. Apresentação
-  html+=secH("1","Apresentação");
-  html+='<p>Este relatório consolida as informações de <strong>'+n+(n===1?" local":" locais")+'</strong> de aplicação das provas objetivas do concurso público <strong>'+titulo+'</strong>, '+edital+', realizadas em '+dataProva+', turno'+(Object.keys(turnosSet).length>1?"s":"")+" "+turnosStr+'. Cada local possui relatório técnico individual arquivado separadamente. Os quantitativos totalizam <strong>'+nCargos+' cargo'+(nCargos!==1?"s":"")+'</strong> distribu\u00EDdos em <strong>'+totSalas+' salas</strong> de prova.</p>';
-
-  // 2. Resumo Executivo
-  html+='<div>';
-  html+=secH("2","Resumo Executivo");
-  var pctPres=pct2(totP,totI),pctAus=pct2(totA,totI);
-  html+='<p>A aplicação foi conduzida em <strong>'+n+'</strong> '+(n===1?"local":"locais")+', com <strong>'+totSalas+'</strong> salas utilizadas. Foram registrados <strong>'+totI+'</strong> candidatos inscritos, sendo <strong>'+totP+'</strong> presentes ('+pctPres+') e <strong>'+totA+'</strong> ausentes ('+pctAus+').'+(cargoMaiorInscr?' O cargo com maior número de inscritos foi <strong>'+cargoMaiorInscr.nome+'</strong>, com '+cargoMaiorInscr.inscr+' candidatos.':'')+'</p>';
-  html+='<div class="card" style="margin-bottom:20px;overflow:hidden;border-radius:8px;"><table style="table-layout:fixed;width:100%;border-collapse:collapse;"><tbody><tr>'+indCard(n,"Locais","#1D4ED8","#fff")+indCard(nCargos,"Cargos","#15803D","#fff")+indCard(totSalas,"Salas","#B91C1C","#fff")+indCard(totI,"Inscritos","#1D4ED8","#fff")+'</tr><tr>'+indCard(totP,"Presentes","#15803D","#fff")+indCard(totA,"Ausentes","#B91C1C","#fff")+indCard(pctPres,"Taxa Presença","#1D4ED8","#fff")+indCard(pctAus,"Taxa Ausência","#15803D","#fff")+'</tr></tbody></table></div>';
-  html+='<p style="font-size:11px;font-weight:600;color:#1F3A6E;margin:16px 0 6px;padding-bottom:4px;border-bottom:2px solid #1F3A6E;">Top 5 Cargos \u2014 Maior Número de Inscritos</p>';
-  if(top5Inscr.length){html+='<table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:12px;"><thead><tr style="background:#1F3A6E;color:#fff;"><th style="padding:5px 8px;text-align:left;">Cargo</th><th style="padding:5px 8px;text-align:right;">Inscritos</th></tr></thead><tbody>';top5Inscr.forEach(function(c,i){html+='<tr style="background:'+(i%2===0?'#F5F7FC':'#fff')+'"><td style="padding:4px 8px;">'+c.nome+'</td><td style="padding:4px 8px;text-align:right;font-weight:600;">'+c.inscr+'</td></tr>';});html+='</tbody></table>';}
-  html+='<p style="font-size:11px;font-weight:700;color:#333;text-transform:uppercase;margin-bottom:8px;">Top 5 Cargos \u2014 Maior Taxa de Ausência</p>';
-  html+='<div class="card"><table><thead><tr><th '+thS()+'>Cargo / Função</th><th '+thS("text-align:center;")+'>Inscritos</th><th '+thS("text-align:center;")+'>Ausentes</th><th '+thS("text-align:center;")+'>% Aus.</th></tr></thead><tbody>';
-  top5Aus.forEach(function(c,i){html+='<tr><td '+tdZ(i)+'>'+c.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.inscr+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(c.aus,c.inscr)+'</td></tr>';});
-  if(!top5Aus.length)html+='<tr><td colspan="4" style="padding:14px;text-align:center;color:#999;">Nenhum dado.</td></tr>';
-  html+='</tbody></table></div></div>';
-  // 3. Procedimentos Padronizados
-  html+='<div class="pb">';
-  html+=secH("3","Procedimentos Padronizados");
-  html+='<p>Em todos os locais de aplicação foram adotados os procedimentos operacionais padronizados do IBGP, conforme descrito a seguir:</p>';
-  html+='<table style="margin-top:10px;width:100%;border-collapse:collapse;">';
-  ["Reunião de alinhamento com a equipe de coordenação e fiscalização antes do início das atividades.",
-   "Abertura do portão e recepção dos candidatos conforme cronograma estabelecido no edital.",
-   "Abertura do malote de provas na presença das testemunhas, com registro fotográfico.",
-   "Fechamento do portão no horário definido, impedindo acesso de candidatos após o limite.",
-   "Início das provas no horário previsto, após conferência da sala e distribuição dos cadernos.",
-   "Identificação individual dos candidatos mediante documento oficial com foto.",
-   "Lacramento dos celulares e equipamentos eletrônicos ao adentrar na sala de prova.",
-   "Fechamento do malote com lacre de segurança e registro fotográfico do procedimento.",
-   "Encaminhamento de formulários, atas e malotes à coordenação logística ao término da aplicação."
-  ].forEach(function(proc,i){var bg=i%2?'#F5F7FC':'#fff';
-    var _hr=(dados.escolas&&dados.escolas[0]&&dados.escolas[0].horarios&&dados.escolas[0].horarios[0])||{};
-    var p=proc;
-    if(i===0&&_hr.chegada)p=proc.replace('de alinhamento com','de alinhamento às '+_hr.chegada+' com');
-    if(i===1&&_hr.ab_portao)p=proc.replace('do portão e','do portão às '+_hr.ab_portao+' e');
-    if(i===3&&_hr.fch_portao)p=proc.replace('no horário definido,','às '+_hr.fch_portao+',');
-    if(i===4&&_hr.inicio)p=proc.replace('no horário','às '+_hr.inicio);
-    html+='<tr><td style="'+PC+'background:'+bg+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;width:30px;text-align:center;font-weight:700;color:'+corP+';">'+(i+1)+'</td>'
-      +'<td style="'+PC+'background:'+bg+'!important;padding:8px 10px;border-bottom:1px solid #E0E0E0;font-size:11px;text-align:justify;">'+p+'</td></tr>';});
-  html+='</table></div>';
-
-  // 4. Locais de Aplicação
-  html+='<div>';
-  html+=secH("4","Locais de Aplicação");
-  html+='<div class="card"><table><thead><tr><th '+thS()+'>Local de Aplicação</th><th '+thS()+'>Coordenador(a) Local</th><th '+thS("text-align:center;")+'>Turno</th><th '+thS("text-align:center;")+'>Salas</th></tr></thead><tbody>';
-  escolas.forEach(function(e,i){html+='<tr><td '+tdZ(i)+'><strong>'+e.nome+'</strong></td><td '+tdZ(i)+'>'+(e.coord_local||"\u2014")+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.turno||"\u2014")+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"\u2014")+'</td></tr>';});
-  html+='</tbody></table></div></div>';
-
-  // 5. Quadro Consolidado
-  html+='<div class="pb">';
-  html+=secH("5","Quadro Consolidado por Cargo");
-  html+='<p style="font-size:11px;color:#555;margin-bottom:8px;text-align:left;">Linhas destacadas em vermelho indicam taxa de ausência superior a 50%.</p>';
-  html+='<div class="card"><table><thead><tr><th '+thS()+'>Cargo / Função</th><th '+thS("text-align:center;")+'>Inscritos</th><th '+thS("text-align:center;")+'>Presentes</th><th '+thS("text-align:center;")+'>Ausentes</th><th '+thS("text-align:center;")+'>Inclusão</th><th '+thS("text-align:center;")+'>% Aus.</th></tr></thead><tbody>';
-  cargosArr.slice().sort(function(a,b){return b.inscr-a.inscr;}).forEach(function(c,i){
-    var pa=c.inscr>0?(c.aus/c.inscr*100):0;
-    if(pa>50){var rd='style="'+PC+'background:#FFF0F0!important;padding:8px 10px;border-bottom:1px solid #F5C6C6;font-size:11px;';
-      html+='<tr><td '+rd+'font-weight:600;color:'+corR+';">'+c.nome+'</td><td '+rd+'text-align:center;">'+c.inscr+'</td><td '+rd+'text-align:center;">'+c.pres+'</td><td '+rd+'text-align:center;font-weight:700;color:'+corR+';">'+c.aus+'</td><td '+rd+'text-align:center;">'+c.incl+'</td><td style="'+PC+'background:'+corR+'!important;padding:8px 10px;border-bottom:1px solid #F5C6C6;font-size:11px;text-align:center;font-weight:700;color:#fff;">'+pct(c.aus,c.inscr)+'</td></tr>';
-    } else {
-      html+='<tr><td '+tdZ(i)+'>'+c.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.inscr+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.pres+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.incl+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(c.aus,c.inscr)+'</td></tr>';
-    }
-  });
-  var tr='style="'+PC+'background:'+corE+'!important;color:#fff!important;padding:8px 10px;font-weight:700;font-size:11px;';
-  html+='<tr><td '+tr+'">TOTAL</td><td '+tr+'text-align:center;">'+totI+'</td><td '+tr+'text-align:center;">'+totP+'</td><td '+tr+'text-align:center;">'+totA+'</td><td '+tr+'text-align:center;">'+totIn+'</td><td '+tr+'text-align:center;">'+pct(totA,totI)+'</td></tr>';
-  html+='</tbody></table></div></div>';
-
-  // 6. Resultado por Local
-  html+='<div>';
-  html+=secH("6","Resultado por Local de Aplicação");
-  escolas.forEach(function(e,ei){
-    var t=e._tot||{ins:0,pre:0,aus:0,inc:0};
-    html+='<div class="card" style="margin-bottom:16px;">'
-      +'<div style="'+PC+'background:'+corP+';padding:10px 16px;"><strong style="color:#fff;font-size:12px;text-transform:uppercase;">'+e.nome+'</strong><span style="color:#AABBD4;font-size:10px;margin-left:14px;">'+(e.coord_local||"")+'</span></div>'
-      +'<div style="padding:14px 16px;">'
-      +'<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px;">'
-      +'<div style="text-align:center;border:1px solid #ddd;padding:10px 6px;border-radius:4px;"><div style="font-size:20px;font-weight:700;color:'+corP+';">'+(e.salas||0)+'</div><div style="font-size:8px;text-transform:uppercase;color:#777;margin-top:4px;">Salas</div></div>'
-      +'<div style="text-align:center;border:1px solid #ddd;padding:10px 6px;border-radius:4px;"><div style="font-size:20px;font-weight:700;color:'+corP+';">'+t.ins+'</div><div style="font-size:8px;text-transform:uppercase;color:#777;margin-top:4px;">Inscritos</div></div>'
-      +'<div style="text-align:center;border:1px solid #ddd;padding:10px 6px;border-radius:4px;"><div style="font-size:20px;font-weight:700;color:#2E7D32;">'+t.pre+'</div><div style="font-size:8px;text-transform:uppercase;color:#777;margin-top:4px;">Presentes</div></div>'
-      +'<div style="text-align:center;border:1px solid #ddd;padding:10px 6px;border-radius:4px;"><div style="font-size:20px;font-weight:700;color:'+corR+';">'+t.aus+'</div><div style="font-size:8px;text-transform:uppercase;color:#777;margin-top:4px;">Ausentes</div></div>'
-      +'<div style="text-align:center;border:1px solid #ddd;padding:10px 6px;border-radius:4px;"><div style="font-size:20px;font-weight:700;color:'+corE+';">'+pct(t.aus,t.ins)+'</div><div style="font-size:8px;text-transform:uppercase;color:#777;margin-top:4px;">Taxa Aus.</div></div>'
+  // Resumo geral
+  html += '<h2 style="font-size:12px;font-weight:700;color:#333;text-transform:uppercase;border-bottom:2px solid '+COR+';padding-bottom:6px;margin-bottom:14px;">1. Resumo Geral</h2>';
+  html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;">';
+  [{v:escolas.length,l:"Escolas"},{v:tTotalI,l:"Inscritos"},{v:tTotalP,l:"Presentes"},{v:tTotalA,l:"Ausentes"}].forEach(function(x){
+    html += '<div style="'+PC+'background:'+COR+';color:#fff;border-radius:8px;padding:16px;text-align:center;">'
+      +'<div style="font-size:28px;font-weight:700;">'+x.v+'</div>'
+      +'<div style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;opacity:.8;margin-top:4px;">'+x.l+'</div>'
       +'</div>';
-    if(e._cargoMaiorAus){var cm=e._cargoMaiorAus;html+='<p style="font-size:11px;margin-bottom:10px;"><strong>Cargo com maior taxa de ausência:</strong> '+(cm.cargo||cm.nome||"\u2014")+' \u2014 '+pct(Number(cm.aus)||0,Number(cm.inscr)||0)+'</p>';}
-    var ocorrs=(e.ocorrencias||[]).filter(function(o){return Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0||o.obs;});
-    if(ocorrs.length>0){
-      html+='<p style="font-size:10px;font-weight:700;text-transform:uppercase;color:#333;margin-bottom:6px;">Ocorrências</p>'
-        +'<table style="font-size:10px;"><thead><tr>'
-        +'<th style="'+PC+'background:#555;color:#fff;padding:5px 8px;text-align:left;">Turno</th>'
-        +'<th style="'+PC+'background:#555;color:#fff;padding:5px 8px;text-align:center;">Saída Ant.</th>'
-        +'<th style="'+PC+'background:#555;color:#fff;padding:5px 8px;text-align:center;">Condução</th>'
-        +'<th style="'+PC+'background:#555;color:#fff;padding:5px 8px;text-align:center;">Celular</th>'
-        +'<th style="'+PC+'background:#555;color:#fff;padding:5px 8px;text-align:center;">Decl.</th>'
-        +'<th style="'+PC+'background:#555;color:#fff;padding:5px 8px;text-align:left;">Obs.</th>'
-        +'</tr></thead><tbody>';
-      ocorrs.forEach(function(o,oi){var ob=oi%2?'#F5F7FC':'#fff';
-        html+='<tr><td style="'+PC+'background:'+ob+'!important;padding:5px 8px;border-bottom:1px solid #eee;">'+(o.turno||"\u2014")+'</td><td style="'+PC+'background:'+ob+'!important;padding:5px 8px;border-bottom:1px solid #eee;text-align:center;">'+(Number(o.sala)||0)+'</td><td style="'+PC+'background:'+ob+'!important;padding:5px 8px;border-bottom:1px solid #eee;text-align:center;">'+(Number(o.cond)||0)+'</td><td style="'+PC+'background:'+ob+'!important;padding:5px 8px;border-bottom:1px solid #eee;text-align:center;">'+(Number(o.toque)||0)+'</td><td style="'+PC+'background:'+ob+'!important;padding:5px 8px;border-bottom:1px solid #eee;text-align:center;">'+(Number(o.decl)||0)+'</td><td style="'+PC+'background:'+ob+'!important;padding:5px 8px;border-bottom:1px solid #eee;">'+(o.obs||"\u2014")+'</td></tr>';});
-      html+='</tbody></table>';
-    } else { html+='<p style="font-size:11px;color:#999;font-style:italic;">Nenhuma ocorrência registrada.</p>'; }
-    html+='</div></div>';
   });
-  html+='</div>';
+  html += '</div>';
+  html += '<p style="font-size:12px;color:#555;margin-bottom:20px;">Frequência geral: <strong>'+pct(tTotalP,tTotalI)+'</strong> &nbsp;|&nbsp; Ausência geral: <strong>'+pct(tTotalA,tTotalI)+'</strong></p>';
 
-  var escolasComFoto=escolas.filter(function(e){return e.dados&&e.dados.fotos&&e.dados.fotos.length>0;});
-  if(escolasComFoto.length>0){
-    html+='<div class="pb">';
-    html+=secH("7","Registro Fotográfico");
-    escolasComFoto.forEach(function(e){
-      var fotos=e.dados.fotos||[];
-      html+='<div style="margin-bottom:20px;">';
-      html+='<p style="'+PC+'font-size:12px;font-weight:700;color:'+corP+';margin-bottom:8px;border-bottom:1px solid #EEE;padding-bottom:4px;">'+e.nome+'</p>';
-      html+='<div style="display:flex;flex-wrap:wrap;gap:10px;">';
-      fotos.forEach(function(f){
-        html+='<div style="text-align:center;max-width:210px;">';
-        html+='<img src="data:image/jpeg;base64,'+f.b64+'" style="width:100%;max-width:210px;border-radius:4px;border:1px solid #DDD;" />';
-        html+='<p style="font-size:9px;color:#555;margin-top:4px;">'+f.categoria+'</p>';
-        html+='</div>';
-      });
-      html+='</div></div>';
+  // Por escola
+  html += '<h2 style="font-size:12px;font-weight:700;color:#333;text-transform:uppercase;border-bottom:2px solid '+COR+';padding-bottom:6px;margin-bottom:14px;">2. Estatística por Escola</h2>';
+  html += '<table><thead><tr>'
+    +'<th '+thS()+'>Escola</th>'
+    +'<th '+thS('text-align:center;')+'>Turno</th>'
+    +'<th '+thS('text-align:center;')+'>Inscritos</th>'
+    +'<th '+thS('text-align:center;')+'>Presentes</th>'
+    +'<th '+thS('text-align:center;')+'>Ausentes</th>'
+    +'<th '+thS('text-align:center;')+'>% Aus.</th>'
+    +'</tr></thead><tbody>';
+
+  escolas.forEach(function(e,i){
+    var d = e.dados || {};
+    var eI=0,eP=0,eA=0;
+    [d.manha,d.tarde].forEach(function(td){
+      if (!td) return;
+      (td.estatistica||[]).forEach(function(r){eI+=Number(r.inscr)||0;eP+=Number(r.pres)||0;eA+=Number(r.aus)||0;});
     });
-    html+='</div>';
-  }
+    html += '<tr><td '+tdZ(i)+'>'+e.nome+'</td>'
+      +'<td '+tdZ(i,'text-align:center;')+'>'+( e.turno||"")+'</td>'
+      +'<td '+tdZ(i,'text-align:center;')+'>'+eI+'</td>'
+      +'<td '+tdZ(i,'text-align:center;')+'>'+eP+'</td>'
+      +'<td '+tdZ(i,'text-align:center;')+'>'+eA+'</td>'
+      +'<td '+tdZ(i,'text-align:center;')+'>'+pct(eA,eI)+'</td>'
+      +'</tr>';
+  });
+  html += '</tbody></table>';
 
-  // Rodapé
-  html+='<div style="border-top:1px solid #CCC;margin-top:28px;padding-top:12px;display:flex;justify-content:space-between;font-size:9px;color:#888;">'
-    +'<span>IBGP \u2014 Instituto Brasileiro de Gestão e Pesquisa</span>'
-    +'</div>';
-  html+='</body></html>';
-  var _b=new Blob([html],{type:'text/html;charset=utf-8'}),_u=URL.createObjectURL(_b);
-  window.open(_u,'_blank');
-  setTimeout(function(){URL.revokeObjectURL(_u);},30000);
+  html += '</body></html>';
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
 }
+
+// ── Download correções ───────────────────────────────────────────────────
+async function baixarCorrecoes() {
+  var certameId = document.getElementById("selRelatorio").value;
+  if (!certameId) { mostrarStatusRelatorio("Selecione um certame primeiro.", false); return; }
+  if (typeof XLSX === "undefined") { alert("Biblioteca XLSX não carregada."); return; }
+  mostrarStatusRelatorio("Buscando correções...", null);
+  try {
+    var rC = await fetch("dados/" + certameId + ".json?_=" + Date.now());
+    if (!rC.ok) throw new Error("Certame não encontrado");
+    var cdados = await rC.json();
+    var url = cdados.script_url || document.getElementById("fScriptUrl").value.trim();
+    if (!url || !url.startsWith("https://script.google.com")) throw new Error("URL do Apps Script não configurada.");
+    var resp = await fetch(url + "?action=relatorio");
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    var dados = await resp.json();
+    var escolas = dados.escolas || [];
+    var rows = [["Escola","Turno","Nº Inscrição","Nome do Candidato","Tipo de Correção","Detalhes"]];
+    escolas.forEach(function(escola) {
+      var nome = escola.nome || "";
+      var d = escola.dados || {};
+      [["manha","Manhã"],["tarde","Tarde"]].forEach(function(par){
+        var td = d[par[0]];
+        if (!td) return;
+        (td.correcao || []).forEach(function(c){
+          rows.push([nome, par[1], c.inscricao||"", c.candidato||"", c.tipo||"", c.correcao||""]);
+        });
+      });
+    });
+    if (rows.length <= 1) { mostrarStatusRelatorio("Nenhuma correção encontrada.", false); return; }
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.aoa_to_sheet(rows);
+    ws["!cols"] = [30,10,18,30,25,30].map(function(w){return {wch:w};});
+    XLSX.utils.book_append_sheet(wb, ws, "Correções");
+    XLSX.writeFile(wb, "correcoes-" + certameId + ".xlsx");
+    mostrarStatusRelatorio("✓ " + (rows.length-1) + " correção(ões) exportada(s).", true);
+  } catch(e) {
+    mostrarStatusRelatorio("Erro: " + e.message, false);
+  }
+}
+
 </script>
 </body>
 </html>
