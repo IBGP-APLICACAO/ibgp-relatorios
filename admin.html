@@ -1134,8 +1134,10 @@ function abrirRelatorioImprimivel(dados) {
     });
 
     // Ocorrências por turno
-    (e.ocorrencias||[]).forEach(function(o) {
-      const cor = o.turno==="Manhã" ? corM : corT;
+    const _ov = function(v){ return Number(v)>0||v==="Sim"||v===true; };
+    const ocorrFiltradas = (e.ocorrencias||[]).filter(function(o){ return _ov(o.sala)||_ov(o.cond)||_ov(o.toque)||_ov(o.decl); });
+    (ocorrFiltradas.length>0 ? ocorrFiltradas : (e.ocorrencias||[])).forEach(function(o) {
+      const cor = (o.turno||"Manhã").includes("Manhã") ? corM : corT;
       const cands = (e.candidatos||[]).filter(c=>c.turno===o.turno);
       let oHtml = grid2("Ocorrências em sala", o.sala, "Prova condicional", o.cond) +
                   grid2("Toque de celular", o.toque, "Declaração de comparecimento", o.decl);
@@ -1152,6 +1154,24 @@ function abrirRelatorioImprimivel(dados) {
         oHtml += "</tbody></table>";
       }
       html += secao("Ocorrências — " + o.turno, cor, oHtml);
+    });
+
+    // Correção de Dados Cadastrais por turno
+    ["Manhã","Tarde"].forEach(function(turno) {
+      const cor = turno==="Manhã" ? corM : corT;
+      const lista = (e.correcoes||[]).filter(function(c){ return (c.turno||"Manhã")===turno; });
+      if (lista.length === 0) return;
+      let corrHtml = `<table><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
+        <th style="background:${cor};">Nº Inscrição</th>
+        <th style="background:${cor};">Candidato</th>
+        <th style="background:${cor};">Tipo</th>
+        <th style="background:${cor};">Dado Correto</th>
+      </tr></thead><tbody>`;
+      lista.forEach(function(c, i) {
+        corrHtml += `<tr class="${i%2===1?'alt':''}"><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.tipo||"—"}</td><td>${c.correcao||"—"}</td></tr>`;
+      });
+      corrHtml += "</tbody></table>";
+      html += secao("Correção de Dados Cadastrais — " + turno, cor, corrHtml);
     });
 
     // Observações — ao final
@@ -1541,7 +1561,8 @@ function abrirRelatorioGeral(dados, meta, win) {
     });
     e._tot = {ins:eI, pre:eP, aus:eA, inc:eIn};
     e._cargoMaiorAus = melhorCargo;
-    e._hasOcorr = (e.ocorrencias||[]).some(function(o){ return Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0; });
+    function _ocorrVal(v){ return Number(v)>0||v==="Sim"||v===true; }
+  e._hasOcorr = (e.ocorrencias||[]).some(function(o){ return _ocorrVal(o.sala)||_ocorrVal(o.cond)||_ocorrVal(o.toque)||_ocorrVal(o.decl); });
   });
 
   function pct(a,b){ return b>0?(a/b*100).toFixed(1)+"%":"—"; }
