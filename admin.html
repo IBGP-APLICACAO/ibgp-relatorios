@@ -1089,14 +1089,14 @@ function abrirRelatorioImprimivel(dados) {
     });
 
     // Testemunhas por turno
-    const turnosTest = [...new Set((e.testemunhas||[]).map(t=>t.turno))];
+    const turnosTest = [...new Set((e.testemunhas||[]).map(t=>t.turno||"Manhã").filter(Boolean))];
     turnosTest.forEach(function(turno) {
       const cor = turno==="Manhã" ? corM : corT;
-      const tt = (e.testemunhas||[]).filter(t=>t.turno===turno);
+      const tt = (e.testemunhas||[]).filter(t=>(t.turno||"Manhã")===turno);
       let tHtml = "";
       tt.forEach(function(t) {
         tHtml += `<div style="margin-bottom:12px;">
-          <div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">${t.tipo}</div>
+          <div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">${t.tipo||""}</div>
           <div style="font-size:12px;line-height:1.8;">
             1. ${t.t1_nome||"—"} — ${t.t1_cpf||"—"}<br>
             2. ${t.t2_nome||"—"} — ${t.t2_cpf||"—"}<br>
