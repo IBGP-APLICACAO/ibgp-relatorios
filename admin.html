@@ -1583,7 +1583,6 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'.ph{display:none;}'
     +'</style></head><body>';
 
-  // Cabeçalho de impressão (logo em todas as páginas)
   html+='<div class="ph"><img src="'+LOGO_B64+'" style="height:45px;" /></div>';
 
   // Barra (só tela)
@@ -1660,7 +1659,7 @@ function abrirRelatorioGeral(dados, meta, win) {
       html+='<tr><td '+tdZ(i)+'>'+c.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.inscr+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(c.aus,c.inscr)+'</td></tr>';
     });
   } else {
-pan="4" style="padding:10px 12px;color:#888;font-size:12px;text-align:center;">Sem dados disponíveis.</td></tr>';
+    html+='<tr><td colspan="4" style="padding:10px 12px;color:#888;font-size:12px;text-align:center;">Sem dados disponíveis.</td></tr>';
   }
   html+='</tbody></table></div>';
   html+='</div>';
