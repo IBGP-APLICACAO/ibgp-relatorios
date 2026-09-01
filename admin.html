@@ -1568,7 +1568,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   function tdZ(i,extra){ return td(i%2?'#F5F7FC':'#fff',extra); }
   function secH(num,t){ return '<h2 style="font-size:15px;font-weight:700;color:'+corP+';border-bottom:3px solid '+corR+';padding-bottom:10px;margin:36px 0 18px;letter-spacing:.3px;">'+num+'. '+t+'</h2>'; }
   function infoCell(l,v){ return '<div style="padding:4px 0;"><span style="display:block;color:#aaa;font-size:9px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;">'+l+'</span><span style="color:#fff;font-size:12px;font-weight:600;">'+(v||"—")+'</span></div>'; }
-  function indCard(v,l){ return '<td style="'+PC+'background:#fff;padding:20px 14px;text-align:center;border:1px solid #D8DEEC;width:25%;"><div style="'+PC+'font-size:30px;font-weight:700;color:'+corP+';line-height:1;">'+v+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#777;margin-top:8px;line-height:1.3;">'+l+'</div></td>'; }
+  function indCard(v,l,bg){ var b=bg||corP; return '<td style="'+PC+'background:'+b+'!important;padding:20px 14px;text-align:center;border:1px solid #D8DEEC;width:25%;"><div style="'+PC+'font-size:30px;font-weight:700;color:#fff;line-height:1;">'+v+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.75);margin-top:8px;line-height:1.3;">'+l+'</div></td>'; }
   function totalRow(cols){ return '<tr>'+cols.map(function(c){ var attr=c[2]?' '+c[2]:''; return '<td'+attr+' style="'+PC+'background:'+corE+'!important;color:#fff!important;padding:10px 12px;font-weight:700;font-size:12px;'+(c[1]||'')+'">'+(c[0])+'</td>'; }).join('')+'</tr>'; }
 
   // ── HTML ──
@@ -1579,11 +1579,11 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'.card{background:#fff;border-radius:6px;border:1px solid #DDE3EE;margin-bottom:24px;overflow:hidden;}'
     +'.no-print{display:flex;}'
     +'p{line-height:1.8;color:#444;font-size:13px;margin-bottom:12px;}'
-    +'@media print{body{background:#fff;padding:14px;}.no-print{display:none!important;}.pb{page-break-before:always;padding-top:70px;}' +'.ph{display:flex!important;position:fixed;top:0;left:0;right:0;width:100%;background:#fff;border-bottom:2px solid #1F3A6E;padding:6px 20px;align-items:center;z-index:9999;}' +'body{padding-top:70px !important;}}'
-    +'.ph{display:none;}'
-    +'</style></head><body>';
+    +'@media print{body{background:#fff;padding:14px;}.no-print{display:none!important;}.pb{page-break-before:always;}}'
+    +'table.repeat-header{width:100%;border-collapse:collapse;}' +'table.repeat-header thead{display:table-header-group;}' +'table.repeat-header .print-logo{border-bottom:2px solid #1F3A6E;padding:6px 0;text-align:left;}' +'@media print{table.repeat-header .print-logo{display:table-cell;}}' +'@media screen{table.repeat-header{display:none;}}' +'</style></head><body>'
+  +'<table class="repeat-header"><thead><tr><td class="print-logo"><img src="'+LOGO_B64+'" style="height:40px;"/></td></tr></thead><tbody><tr><td>';
 
-  html+='<div class="ph" style="display:none;"><img src="'+LOGO_B64+'" style="height:45px;" /></div>';
+  
 
   // Barra (só tela)
   html+='<div class="no-print" style="'+PC+'background:'+corP+';padding:12px 20px;margin-bottom:20px;border-radius:8px;align-items:center;justify-content:flex-end;">'
@@ -1627,8 +1627,8 @@ function abrirRelatorioGeral(dados, meta, win) {
   // Indicadores Globais (tabela 2×4 como no Word)
   html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Indicadores Globais</p>';
   html+='<div class="card" style="margin-bottom:28px;"><table><tbody>'
-    +'<tr>'+indCard(n,"Locais de Aplicação")+indCard(nCargos,"Cargos")+indCard(totSalas,"Salas Utilizadas")+indCard(totI,"Candidatos Inscritos")+'</tr>'
-    +'<tr>'+indCard(totP,"Candidatos Presentes")+indCard(totA,"Candidatos Ausentes")+indCard(pctPres,"Taxa de Presença")+indCard(pctAus,"Taxa de Ausência")+'</tr>'
+    +'<tr>'+indCard(n,"Locais de Aplicação",corP)+indCard(nCargos,"Cargos",corP)+indCard(totSalas,"Salas Utilizadas",corP)+indCard(totI,"Candidatos Inscritos",corP)+'</tr>'
+    +'<tr>'+indCard(totP,"Candidatos Presentes",'#2E7D32')+indCard(totA,"Candidatos Ausentes",corR)+indCard(pctPres,"Taxa de Presença",'#1565C0')+indCard(pctAus,"Taxa de Ausência",'#BF360C')+'</tr>'
     +'</tbody></table></div>';
 
   // Top 5 locais (inscritos)
@@ -1788,11 +1788,11 @@ function abrirRelatorioGeral(dados, meta, win) {
   });
 
   // ── 7. REGISTRO FOTOGRÁFICO ──
-  var temFotos=escolas.some(function(e){return(e.fotos||[]).length>0;});
+  var temFotos=escolas.some(function(e){return((e.dados||{}).fotos||e.fotos||[]).length>0;});
   if(temFotos){
     html+=secH("7","Registro Fotográfico");
     escolas.forEach(function(e){
-      var fotos=e.fotos||[];
+      var fotos=(e.dados||{}).fotos||e.fotos||[];
       if(!fotos.length)return;
       html+='<p style="font-size:12px;font-weight:700;color:'+corP+';text-transform:uppercase;border-bottom:1px solid '+corP+';padding-bottom:4px;margin:16px 0 12px;">'+e.nome+'</p>'
         +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">';
@@ -1811,7 +1811,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   }
 
   html+='<div style="margin-top:32px;padding-top:12px;border-top:1px solid #ccc;font-size:10px;color:#888;text-align:center;">IBGP — Instituto Brasileiro de Gestão e Pesquisa</div>';
-  html+='</body></html>';
+  html+='</td></tr></tbody></table></body></html>';
   win.document.open();
   win.document.write(html);
   win.document.close();
