@@ -1462,10 +1462,9 @@ function abrirRelatorioGeral(dados, meta, win) {
   // ── 2. MEMBROS DA COMISSÃO ──
   var escolasComComissao = escolas.filter(function(e){ return (e.comissao||[]).length > 0; });
   if (escolasComComissao.length > 0) {
-    html+='<div class="pb"></div>';
     html+=secH("2","Membros da Comissão de Fiscalização");
     html+='<p style="font-size:12px;color:#444;margin-bottom:12px;">Relação dos membros da comissão presentes nos locais de aplicação.</p>';
-    html+='<div class="card"><table><thead><tr>'+thS()+'Local de Aplicação</th>'+thS()+'Membro da Comissão</th></tr></thead><tbody>';
+    html+='<div class="card"><table><thead><tr><th '+thS()+'>Local de Aplicação</th><th '+thS()+'>Membro da Comissão</th></tr></thead><tbody>';
     var _comissaoRows=[];
     escolasComComissao.forEach(function(e){
       (e.comissao||[]).forEach(function(m,i){
