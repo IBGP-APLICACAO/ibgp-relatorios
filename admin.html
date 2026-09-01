@@ -1684,6 +1684,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   }
   function _ht(v){return v?" às "+v:"";}
 
+  html+='<div class="pb"></div>';
   html+=secH("3","Procedimentos Padronizados");
   html+='<p style="font-size:12px;margin-bottom:14px;">Em todos os locais foram adotados os procedimentos operacionais padronizados do IBGP:</p>';
   html+='<div class="card"><table><tbody>';
@@ -1725,6 +1726,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+='</tbody></table></div>';
 
   // ── 5. QUADRO CONSOLIDADO POR CARGO ──
+  html+='<div class="pb"></div>';
   html+=secH("5","Quadro Consolidado por Cargo");
   html+='<p style="font-size:12px;color:#444;margin-bottom:6px;">Consolidado de todos os cargos do certame com quantitativos de candidatos inscritos, presentes, ausentes e de inclusão (PCD/NEE).</p>';
   html+='<p style="font-size:11px;color:#888;margin-bottom:12px;">Linhas destacadas em vermelho indicam taxa de ausência superior a 50%.</p>';
@@ -1762,7 +1764,7 @@ function abrirRelatorioGeral(dados, meta, win) {
       +'</div>';
     html+='<div style="'+PC+'display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:#e0e0e0;">';
     [{v:(e.salas||0),l:'SALAS',c:'#fff',fc:'#333'},{v:t.ins,l:'INSCRITOS',c:'#fff',fc:'#333'},
-     {v:t.pre,l:'PRESENTES',c:'#E8F5E9',fc:'#2E7D32'},{v:t.aus,l:'AUSENTES',c:'#FFEBEE',fc:corR},
+     {v:t.pre,l:'PRESENTES',c:'#A5D6A7',fc:'#1B5E20'},{v:t.aus,l:'AUSENTES',c:'#EF9A9A',fc:'#7F0000'},
      {v:pct(t.aus,t.ins),l:'TAXA AUS.',c:'#FFF3E0',fc:'#E65100'}].forEach(function(x){
       html+='<div style="'+PC+'background:'+x.c+';padding:14px 10px;text-align:center;">'
         +'<div style="font-size:26px;font-weight:700;color:'+x.fc+';">'+x.v+'</div>'
