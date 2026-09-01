@@ -1119,17 +1119,66 @@ function abrirRelatorioImprimivel(dados) {
       });
       ocHtml += '</div>';
       // Candidatos por tipo
-      [{k:"sala",l:"Ocorrência em Sala"},{k:"cond",l:"Prova Condicional"},
-       {k:"toque",l:"Toque de Celular"},{k:"decl",l:"Declaração de Comparecimento"}
-      ].forEach(function(x){
-        var cands = (oc[x.k] && oc[x.k].candidatos) || [];
+      // Ocorrências em Sala — usa tipos[] para detalhes, candidatos[] como fallback
+      (function(){
+        var tipos = (oc.sala && oc.sala.tipos) || [];
+        var cands = (oc.sala && oc.sala.candidatos) || [];
+        var tipoLabels = {folha_falt:"Folha de Resposta Faltando",banheiro:"Candidato ao Banheiro",fiscal_cand:"Fiscal como Candidato",cand_fiscal:"Candidato como Fiscal",test_fiscal:"Testemunha como Fiscal",cond_esp:"Condição Especial",folha_imp:"Folha Impressa Incorretamente",folha_erro:"Folha com Erro",errata:"Errata",pacote_danif:"Pacote Danificado",outros:"Outros"};
+        var lista = tipos.length ? tipos : cands;
+        if (!lista.length) return;
+        ocHtml += '<div style="margin-bottom:12px;"><div style="font-size:10px;font-weight:700;color:#7B3F00;text-transform:uppercase;padding:5px 10px;background:#FFF3CD;border-left:3px solid #FFA000;border-radius:2px;margin-bottom:6px;">Ocorrência em Sala — '+lista.length+' registro(s)</div>';
+        if (tipos.length) {
+          tipos.forEach(function(t,i){
+            var tLabel = tipoLabels[t.tipo] || t.tipo || "Ocorrência";
+            var detalhes = [];
+            if (t.inscricao || t.candidato) detalhes.push("Candidato: "+(t.candidato||"")+" (Inscrição: "+(t.inscricao||"")+", Sala: "+(t.sala||"")+")");
+            if (t.candidato_correto && t.candidato_correto.inscricao) detalhes.push("Candidato correto: "+(t.candidato_correto.candidato||"")+" ("+t.candidato_correto.inscricao+")");
+            if (t.candidato_incorreto && t.candidato_incorreto.inscricao) detalhes.push("Candidato incorreto: "+(t.candidato_incorreto.candidato||"")+" ("+t.candidato_incorreto.inscricao+")");
+            if (t.ata_reserva) detalhes.push("Ata reserva: "+t.ata_reserva);
+            if (t.folha_reserva) detalhes.push("Folha reserva: "+t.folha_reserva);
+            if (t.questao) detalhes.push("Questão: "+t.questao+(t.cargo?" / Cargo: "+t.cargo:""));
+            if (t.descricao) detalhes.push("Descrição: "+t.descricao);
+            if (t.novo_pacote) detalhes.push("Novo pacote: "+t.novo_pacote);
+            if (t.marcou_assinatura) detalhes.push("Assinou folha reserva");
+            ocHtml += '<div style="'+(i%2===1?'background:#F7F7F7;':'')+' border:1px solid #eee;border-radius:4px;padding:8px 10px;margin-bottom:6px;">'
+              +'<div style="font-weight:700;font-size:11px;color:#333;margin-bottom:4px;">'+tLabel+'</div>'
+              +(detalhes.length?'<div style="font-size:11px;color:#555;line-height:1.8;">'+detalhes.join('<br>')+'</div>':'')
+              +'</div>';
+          });
+        } else {
+          ocHtml += '<table><thead><tr><th '+_th(cor)+'>Inscrição</th><th '+_th(cor)+'>Candidato</th><th '+_th(cor)+'>Sala</th><th '+_th(cor)+'>Obs.</th></tr></thead><tbody>'
+            +cands.map(function(c,i){return '<tr class="'+(i%2===1?'alt':'')+'"><td>'+(c.inscricao||"")+'</td><td>'+(c.candidato||"")+'</td><td>'+(c.sala||"")+'</td><td>'+(c.desc||"")+'</td></tr>';}).join("")
+            +'</tbody></table>';
+        }
+        ocHtml += '</div>';
+      })();
+      // Prova Condicional
+      (function(){
+        var cands = (oc.cond && oc.cond.candidatos) || [];
         if (!cands.length) return;
-        ocHtml += '<div style="margin-bottom:12px;">'
-          +'<div style="font-size:10px;font-weight:700;color:#7B3F00;text-transform:uppercase;padding:5px 10px;background:#FFF3CD;border-left:3px solid #FFA000;border-radius:2px;margin-bottom:6px;">'+x.l+' — '+cands.length+' candidato(s)</div>'
+        ocHtml += '<div style="margin-bottom:12px;"><div style="font-size:10px;font-weight:700;color:#7B3F00;text-transform:uppercase;padding:5px 10px;background:#FFF3CD;border-left:3px solid #FFA000;border-radius:2px;margin-bottom:6px;">Prova Condicional — '+cands.length+' candidato(s)</div>'
           +'<table><thead><tr><th '+_th(cor)+'>Inscrição</th><th '+_th(cor)+'>Candidato</th><th '+_th(cor)+'>Sala</th></tr></thead><tbody>'
           +cands.map(function(c,i){return '<tr class="'+(i%2===1?'alt':'')+'"><td>'+(c.inscricao||"")+'</td><td>'+(c.candidato||"")+'</td><td>'+(c.sala||"")+'</td></tr>';}).join("")
           +'</tbody></table></div>';
-      });
+      })();
+      // Toque de Celular — com estado, lacração, local
+      (function(){
+        var cands = (oc.toque && oc.toque.candidatos) || [];
+        if (!cands.length) return;
+        ocHtml += '<div style="margin-bottom:12px;"><div style="font-size:10px;font-weight:700;color:#7B3F00;text-transform:uppercase;padding:5px 10px;background:#FFF3CD;border-left:3px solid #FFA000;border-radius:2px;margin-bottom:6px;">Toque de Celular — '+cands.length+' candidato(s)</div>'
+          +'<table><thead><tr><th '+_th(cor)+'>Inscrição</th><th '+_th(cor)+'>Candidato</th><th '+_th(cor)+'>Sala</th><th '+_th(cor)+'>Estado</th><th '+_th(cor)+'>Lacração</th><th '+_th(cor)+'>Local</th></tr></thead><tbody>'
+          +cands.map(function(c,i){return '<tr class="'+(i%2===1?'alt':'')+'"><td>'+(c.inscricao||"")+'</td><td>'+(c.candidato||"")+'</td><td>'+(c.sala||"")+'</td><td>'+(c.estado||"")+'</td><td>'+(c.lacrado||"")+'</td><td>'+(c.local||"")+'</td></tr>';}).join("")
+          +'</tbody></table></div>';
+      })();
+      // Declaração de Comparecimento
+      (function(){
+        var cands = (oc.decl && oc.decl.candidatos) || [];
+        if (!cands.length) return;
+        ocHtml += '<div style="margin-bottom:12px;"><div style="font-size:10px;font-weight:700;color:#7B3F00;text-transform:uppercase;padding:5px 10px;background:#FFF3CD;border-left:3px solid #FFA000;border-radius:2px;margin-bottom:6px;">Declaração de Comparecimento — '+cands.length+' candidato(s)</div>'
+          +'<table><thead><tr><th '+_th(cor)+'>Inscrição</th><th '+_th(cor)+'>Candidato</th><th '+_th(cor)+'>Sala</th></tr></thead><tbody>'
+          +cands.map(function(c,i){return '<tr class="'+(i%2===1?'alt':'')+'"><td>'+(c.inscricao||"")+'</td><td>'+(c.candidato||"")+'</td><td>'+(c.sala||"")+'</td></tr>';}).join("")
+          +'</tbody></table></div>';
+      })();
       if (total>0 || Object.keys(oc).length>0) html += _sec("Ocorrências — " + tnome, cor, ocHtml);
 
       // Correção de Dados
