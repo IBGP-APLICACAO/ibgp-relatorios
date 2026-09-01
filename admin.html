@@ -1458,9 +1458,32 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'<p>Em todos os locais a aplicação transcorreu conforme o cronograma definido no edital. Os procedimentos padronizados do IBGP foram aplicados integralmente, incluindo controle de acesso, distribuição de provas, identificação de candidatos e encerramento com lacre de malotes.</p>'
     +'</div>';
 
-  // ── 2. RESUMO EXECUTIVO (2ª página) ──
+
+  // ── 2. MEMBROS DA COMISSÃO ──
+  var escolasComComissao = escolas.filter(function(e){ return (e.comissao||[]).length > 0; });
+  if (escolasComComissao.length > 0) {
+    html+='<div class="pb"></div>';
+    html+=secH("2","Membros da Comissão de Fiscalização");
+    html+='<p style="font-size:12px;color:#444;margin-bottom:12px;">Relação dos membros da comissão presentes nos locais de aplicação.</p>';
+    html+='<div class="card"><table><thead><tr>'+thS()+'Local de Aplicação</th>'+thS()+'Membro da Comissão</th></tr></thead><tbody>';
+    var _comissaoRows=[];
+    escolasComComissao.forEach(function(e){
+      (e.comissao||[]).forEach(function(m,i){
+        _comissaoRows.push({escola:e.nome,membro:m,first:i===0,count:(e.comissao||[]).length});
+      });
+    });
+    _comissaoRows.forEach(function(r,i){
+      html+='<tr style="background:'+(i%2===0?'#fff':'#F5F7FC')+';">'
+        +'<td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+(r.first?'<strong>'+r.escola+'</strong>':'<span style="color:#aaa;">—</span>')+'</td>'
+        +'<td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+r.membro+'</td>'
+        +'</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+
+  // ── 3. RESUMO EXECUTIVO (2ª página) ──
   html+='<div class="pb">';
-  html+=secH("2","Resumo Executivo");
+  html+=secH("3","Resumo Executivo");
 
   // Texto resumo
   var pctPres=pct2(totP,totI), pctAus=pct2(totA,totI);
@@ -1513,7 +1536,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+='</tbody></table></div>';
   html+='</div>';
 
-  // ── 3. PROCEDIMENTOS PADRONIZADOS ──
+  // ── 4. PROCEDIMENTOS PADRONIZADOS ──
   // Extrai horários da primeira escola com dados de manhã
   var _h0={};
   for(var _i=0;_i<escolas.length;_i++){
@@ -1525,7 +1548,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   function _ht(v){return v?" às "+v:"";}
 
   html+='<div class="pb"></div>';
-  html+=secH("3","Procedimentos Padronizados");
+  html+=secH("4","Procedimentos Padronizados");
   html+='<p style="font-size:12px;margin-bottom:14px;">Em todos os locais foram adotados os procedimentos operacionais padronizados do IBGP:</p>';
   html+='<div class="card"><table><tbody>';
   [
@@ -1546,8 +1569,8 @@ function abrirRelatorioGeral(dados, meta, win) {
   });
   html+='</tbody></table></div>';
 
-  // ── 4. LOCAIS DE APLICAÇÃO ──
-  html+=secH("4","Locais de Aplicação");
+  // ── 5. LOCAIS DE APLICAÇÃO ──
+  html+=secH("5","Locais de Aplicação");
   html+='<p style="font-size:12px;color:#444;margin-bottom:12px;">Relação dos locais de aplicação com respectivos coordenadores locais, turno de aplicação e número de salas utilizadas.</p>';
   html+='<div class="card"><table><thead><tr>'
     +'<th '+thS()+'>Local de Aplicação</th>'
@@ -1564,28 +1587,6 @@ function abrirRelatorioGeral(dados, meta, win) {
       +'</tr>';
   });
   html+='</tbody></table></div>';
-
-  // ── 5. MEMBROS DA COMISSÃO ──
-  var escolasComComissao = escolas.filter(function(e){ return (e.comissao||[]).length > 0; });
-  if (escolasComComissao.length > 0) {
-    html+='<div class="pb"></div>';
-    html+=secH("5","Membros da Comissão de Fiscalização");
-    html+='<p style="font-size:12px;color:#444;margin-bottom:12px;">Relação dos membros da comissão presentes nos locais de aplicação.</p>';
-    html+='<div class="card"><table><thead><tr>'+thS()+'Local de Aplicação</th>'+thS()+'Membro da Comissão</th></tr></thead><tbody>';
-    var _comissaoRows=[];
-    escolasComComissao.forEach(function(e){
-      (e.comissao||[]).forEach(function(m,i){
-        _comissaoRows.push({escola:e.nome,membro:m,first:i===0,count:(e.comissao||[]).length});
-      });
-    });
-    _comissaoRows.forEach(function(r,i){
-      html+='<tr style="background:'+(i%2===0?'#fff':'#F5F7FC')+';">'
-        +'<td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+(r.first?'<strong>'+r.escola+'</strong>':'<span style="color:#aaa;">—</span>')+'</td>'
-        +'<td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+r.membro+'</td>'
-        +'</tr>';
-    });
-    html+='</tbody></table></div>';
-  }
 
   // ── 6. QUADRO CONSOLIDADO POR CARGO ──
   html+='<div class="pb"></div>';
@@ -1613,7 +1614,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+=totalRow([["TOTAL",""],[""+totI,"text-align:center;"],[""+totP,"text-align:center;"],[""+totA,"text-align:center;"],[""+pct(totA,totI),"text-align:center;"]]);
   html+='</tbody></table></div>';
 
-  // ── 6. RESULTADO POR LOCAL ──
+  // ── 7. RESULTADO POR LOCAL ──
   html+=secH("7","Resultado por Local de Aplicação");
   escolas.forEach(function(e){
     var t=e._tot||{ins:0,pre:0,aus:0,inc:0};
@@ -1664,6 +1665,15 @@ function abrirRelatorioGeral(dados, meta, win) {
       }
       html+='</div>';
     }
+    if((e.correcoes||[]).length>0){
+      html+='<div style="padding:10px 16px;border-top:1px solid #eee;">'
+        +'<div style="font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">CORREÇÃO DE DADOS CADASTRAIS</div>'
+        +'<table><thead><tr><th '+thS("font-size:9px;")+'>Turno</th><th '+thS("font-size:9px;")+'>Nº Inscrição</th><th '+thS("font-size:9px;")+'>Candidato</th><th '+thS("font-size:9px;")+'>Tipo</th><th '+thS("font-size:9px;")+'>Dado Correto</th></tr></thead><tbody>';
+      (e.correcoes||[]).forEach(function(c,i){
+        html+='<tr style="background:'+(i%2===0?'#fff':'#F5F7FC')+';"><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+( c.turno||'')+'</td><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+c.inscricao+'</td><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+c.candidato+'</td><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+c.tipo+'</td><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+c.correcao+'</td></tr>';
+      });
+      html+='</tbody></table></div>';
+    }
     if(e.obs){
       html+='<div style="padding:10px 16px;border-top:1px solid #eee;background:#FFFDE7;">'
         +'<div style="font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">OBSERVAÇÕES</div>'
@@ -1673,7 +1683,7 @@ function abrirRelatorioGeral(dados, meta, win) {
     html+='</div>';
   });
 
-  // ── 7. REGISTRO FOTOGRÁFICO ──
+  // ── 8. REGISTRO FOTOGRÁFICO ──
   var temFotos=escolas.some(function(e){return((e.dados||{}).fotos||e.fotos||[]).length>0;});
   if(temFotos){
     html+=secH("8","Registro Fotográfico");
