@@ -1182,16 +1182,27 @@ function abrirRelatorioImprimivel(dados) {
     }
 
     // Registro Fotográfico
-    html += secao("Registro Fotográfico", corM,
-      e.foto_url
-        ? `<p style="font-size:13px;margin-bottom:12px;color:#444;">Fotos registradas pelo coordenador e armazenadas no Google Drive:</p>
-           <a href="${e.foto_url}" target="_blank"
-              style="-webkit-print-color-adjust:exact;print-color-adjust:exact;display:inline-block;background:#CF3432;color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">
-             📁 Ver Fotos no Google Drive
-           </a>
-           <p style="margin-top:10px;font-size:11px;color:#888;">Categorias: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>`
-        : `<p style="color:#999;font-style:italic;font-size:13px;">Fotos não enviadas ou ainda não processadas pelo sistema.</p>`
-    );
+    const fotos = e.fotos || [];
+    let fotoHtml = "";
+    if (fotos.length > 0) {
+      fotoHtml = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:8px;">`;
+      fotos.forEach(function(f) {
+        fotoHtml += `<div style="border:1px solid #ddd;border-radius:6px;overflow:hidden;page-break-inside:avoid;">
+          <img src="${f.url}" alt="${f.categoria||'Foto'}" style="width:100%;height:160px;object-fit:cover;display:block;" onerror="this.style.display='none'">
+          <div style="padding:4px 8px;font-size:10px;color:#555;text-align:center;background:#f9f9f9;">${f.categoria||''}${f.turno?' — '+f.turno:''}</div>
+        </div>`;
+      });
+      fotoHtml += `</div>`;
+      if (e.foto_url) {
+        fotoHtml += `<p style="margin-top:12px;font-size:11px;"><a href="${e.foto_url}" target="_blank" style="color:#1F3A6E;font-weight:700;">📁 Ver todas no Google Drive →</a></p>`;
+      }
+    } else if (e.foto_url) {
+      fotoHtml = `<p style="font-size:13px;margin-bottom:12px;color:#444;">Fotos armazenadas no Google Drive:</p>
+        <a href="${e.foto_url}" target="_blank" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;display:inline-block;background:#CF3432;color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">📁 Ver Fotos no Google Drive</a>`;
+    } else {
+      fotoHtml = `<p style="color:#999;font-style:italic;font-size:13px;">Fotos não enviadas ou ainda não processadas pelo sistema.</p>`;
+    }
+    html += secao("Registro Fotográfico", corM, fotoHtml);
 
     // Rodapé
     html += `<div style="text-align:center;font-size:10px;color:#aaa;margin-top:8px;padding-bottom:8px;">
