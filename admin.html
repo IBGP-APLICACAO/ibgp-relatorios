@@ -954,8 +954,11 @@ async function gerarRelatorioGeral() {
     const certameDados = await rCertame.json();
     const escolasDoCertame = new Set((certameDados.escolas || []).map(e => (e.nome || "").toUpperCase().trim()));
 
+    // Usa script_url do certame (ou campo manual como fallback)
+    const scriptUrlFinal = certameDados.script_url || url;
+    if (!scriptUrlFinal) throw new Error("URL do Apps Script não configurada para este certame.");
     // Busca dados do Apps Script
-    const resp = await fetch(url + "?action=relatorio");
+    const resp = await fetch(scriptUrlFinal + "?action=relatorio");
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     const dados = await resp.json();
 
