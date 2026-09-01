@@ -1660,4 +1660,149 @@ function abrirRelatorioGeral(dados, meta, win) {
       html+='<tr><td '+tdZ(i)+'>'+c.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.inscr+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(c.aus,c.inscr)+'</td></tr>';
     });
   } else {
-    html+='<tr><td cols
+pan="4" style="padding:10px 12px;color:#888;font-size:12px;text-align:center;">Sem dados disponíveis.</td></tr>';
+  }
+  html+='</tbody></table></div>';
+  html+='</div>';
+
+  // ── 3. PROCEDIMENTOS PADRONIZADOS ──
+  html+=secH("3","Procedimentos Padronizados");
+  html+='<p style="font-size:12px;margin-bottom:14px;">Em todos os locais foram adotados os procedimentos operacionais padronizados do IBGP:</p>';
+  html+='<div class="card"><table><tbody>';
+  ['Reunião de alinhamento com a equipe de coordenação e fiscalização antes do início das atividades.',
+   'Abertura do portão e recepção dos candidatos conforme cronograma estabelecido no edital.',
+   'Abertura do malote de provas na presença das testemunhas, com registro fotográfico.',
+   'Fechamento do portão, impedindo acesso de candidatos após o limite regimental.',
+   'Início das provas após conferência da sala e distribuição dos cadernos.',
+   'Identificação individual dos candidatos mediante documento oficial com foto.',
+   'Lacramento dos celulares e equipamentos eletrônicos ao adentrar na sala de prova.',
+   'Fechamento do malote com lacre de segurança e registro fotográfico do procedimento.',
+   'Encaminhamento de formulários, atas e malotes à coordenação logística ao término.'].forEach(function(txt,i){
+    html+='<tr style="border-bottom:1px solid #eee;">'
+      +'<td style="padding:10px 14px;font-weight:700;font-size:12px;color:'+corP+';width:36px;">'+(i+1)+'</td>'
+      +'<td style="padding:10px 8px;font-size:12px;line-height:1.6;">'+txt+'</td></tr>';
+  });
+  html+='</tbody></table></div>';
+
+  // ── 4. LOCAIS DE APLICAÇÃO ──
+  html+=secH("4","Locais de Aplicação");
+  html+='<div class="card"><table><thead><tr>'
+    +'<th '+thS()+'>Local de Aplicação</th>'
+    +'<th '+thS()+'>Coordenador(a) Local</th>'
+    +'<th '+thS("text-align:center;")+'>Turno</th>'
+    +'<th '+thS("text-align:center;")+'>Salas</th>'
+    +'</tr></thead><tbody>';
+  escolas.forEach(function(e,i){
+    html+='<tr>'
+      +'<td '+tdZ(i)+'><strong>'+e.nome+'</strong></td>'
+      +'<td '+tdZ(i)+'>'+(e.coord_local||"")+'</td>'
+      +'<td '+tdZ(i,"text-align:center;")+'>'+(e.turno||"")+'</td>'
+      +'<td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"")+'</td>'
+      +'</tr>';
+  });
+  html+='</tbody></table></div>';
+
+  // ── 5. QUADRO CONSOLIDADO POR CARGO ──
+  html+=secH("5","Quadro Consolidado por Cargo");
+  html+='<p style="font-size:11px;color:#666;margin-bottom:10px;">Linhas destacadas em vermelho indicam taxa de ausência superior a 50%.</p>';
+  html+='<div class="card"><table><thead><tr>'
+    +'<th '+thS()+'>Cargo / Função</th>'
+    +'<th '+thS("text-align:center;")+'>Inscritos</th>'
+    +'<th '+thS("text-align:center;")+'>Presentes</th>'
+    +'<th '+thS("text-align:center;")+'>Ausentes</th>'
+    +'<th '+thS("text-align:center;")+'>Inclusão</th>'
+    +'<th '+thS("text-align:center;")+'>% Aus.</th>'
+    +'</tr></thead><tbody>';
+  cargosArr.forEach(function(c,i){
+    var alta=c.inscr>0&&c.aus/c.inscr>0.5;
+    var bg=alta?'#FFF5F5':(i%2===0?'#fff':'#F5F7FC');
+    html+='<tr>'
+      +'<td '+td(bg)+'>'+c.nome+'</td>'
+      +'<td '+td(bg,"text-align:center;")+'>'+c.inscr+'</td>'
+      +'<td '+td(bg,"text-align:center;")+'>'+c.pres+'</td>'
+      +'<td '+td(bg,"text-align:center;")+'>'+c.aus+'</td>'
+      +'<td '+td(bg,"text-align:center;")+'>'+c.incl+'</td>'
+      +'<td '+td(bg,"text-align:center;font-weight:700;color:"+(alta?corR:"inherit")+";")+'>'+pct(c.aus,c.inscr)+'</td>'
+      +'</tr>';
+  });
+  html+=totalRow([["TOTAL",""],[""+totI,"text-align:center;"],[""+totP,"text-align:center;"],[""+totA,"text-align:center;"],[""+totIn,"text-align:center;"],[""+pct(totA,totI),"text-align:center;"]]);
+  html+='</tbody></table></div>';
+
+  // ── 6. RESULTADO POR LOCAL ──
+  html+=secH("6","Resultado por Local de Aplicação");
+  escolas.forEach(function(e){
+    var t=e._tot||{ins:0,pre:0,aus:0,inc:0};
+    html+='<div class="card" style="margin-bottom:16px;">';
+    html+='<div style="'+PC+'background:'+corP+';padding:12px 16px;">'
+      +'<span style="font-size:13px;font-weight:700;color:#fff;">'+e.nome+'</span>'
+      +(e.coord_local?' <span style="font-size:11px;color:rgba(255,255,255,.7);">'+e.coord_local+'</span>':'')
+      +'</div>';
+    html+='<div style="'+PC+'display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:#e0e0e0;">';
+    [{v:(e.salas||0),l:'SALAS',c:'#fff',fc:'#333'},{v:t.ins,l:'INSCRITOS',c:'#fff',fc:'#333'},
+     {v:t.pre,l:'PRESENTES',c:'#E8F5E9',fc:'#2E7D32'},{v:t.aus,l:'AUSENTES',c:'#FFEBEE',fc:corR},
+     {v:pct(t.aus,t.ins),l:'TAXA AUS.',c:'#FFF3E0',fc:'#E65100'}].forEach(function(x){
+      html+='<div style="'+PC+'background:'+x.c+';padding:14px 10px;text-align:center;">'
+        +'<div style="font-size:26px;font-weight:700;color:'+x.fc+';">'+x.v+'</div>'
+        +'<div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#888;margin-top:4px;">'+x.l+'</div>'
+        +'</div>';
+    });
+    html+='</div>';
+    if(e._cargoMaiorAus){
+      var cm=e._cargoMaiorAus;
+      html+='<div style="padding:8px 16px;font-size:11px;background:#f9f9f9;border-top:1px solid #eee;">'
+        +'<strong>Cargo com maior taxa de ausência:</strong> '+cm.cargo+' — '+pct(Number(cm.aus),Number(cm.inscr))
+        +'</div>';
+    }
+    if(e._hasOcorr||(e.ocorrencias&&e.ocorrencias.length)){
+      html+='<div style="padding:10px 16px;border-top:1px solid #eee;">'
+        +'<div style="font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">OCORRÊNCIAS</div>'
+        +'<table><thead><tr>'
+        +'<th style="'+PC+'background:#555;color:#fff;padding:6px 10px;font-size:10px;text-align:center;">Em Sala</th>'
+        +'<th style="'+PC+'background:#555;color:#fff;padding:6px 10px;font-size:10px;text-align:center;">Cond. Prova</th>'
+        +'<th style="'+PC+'background:#555;color:#fff;padding:6px 10px;font-size:10px;text-align:center;">Toque Celular</th>'
+        +'<th style="'+PC+'background:#555;color:#fff;padding:6px 10px;font-size:10px;text-align:center;">Declaração</th>'
+        +'</tr></thead><tbody>';
+      (e.ocorrencias||[]).forEach(function(o){
+        html+='<tr style="border-bottom:1px solid #eee;">'
+          +'<td style="padding:6px 10px;font-size:11px;text-align:center;">'+Number(o.sala||0)+'</td>'
+          +'<td style="padding:6px 10px;font-size:11px;text-align:center;">'+Number(o.cond||0)+'</td>'
+          +'<td style="padding:6px 10px;font-size:11px;text-align:center;">'+Number(o.toque||0)+'</td>'
+          +'<td style="padding:6px 10px;font-size:11px;text-align:center;">'+Number(o.decl||0)+'</td>'
+          +'</tr>';
+      });
+      html+='</tbody></table></div>';
+    }
+    html+='</div>';
+  });
+
+  // ── 7. REGISTRO FOTOGRÁFICO ──
+  var temFotos=escolas.some(function(e){return(e.fotos||[]).length>0;});
+  if(temFotos){
+    html+=secH("7","Registro Fotográfico");
+    escolas.forEach(function(e){
+      var fotos=e.fotos||[];
+      if(!fotos.length)return;
+      html+='<p style="font-size:12px;font-weight:700;color:'+corP+';text-transform:uppercase;border-bottom:1px solid '+corP+';padding-bottom:4px;margin:16px 0 12px;">'+e.nome+'</p>'
+        +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">';
+      fotos.forEach(function(f){
+        var b=f.b64||f.data||"";
+        if(!b)return;
+        var src=b.startsWith("data:")?b:"data:image/jpeg;base64,"+b;
+        html+='<div style="border:1px solid #eee;border-radius:6px;overflow:hidden;">'
+          +'<img src="'+src+'" alt="'+(f.categoria||"foto")+'" style="width:100%;height:160px;object-fit:cover;display:block;">'
+          +'<div style="font-size:10px;color:#666;padding:5px 8px;text-align:center;background:#f9f9f9;">'
+          +([f.categoria,f.turno].filter(Boolean).join(" — ")||"Foto")+'</div>'
+          +'</div>';
+      });
+      html+='</div>';
+    });
+  }
+
+  html+='<div style="margin-top:32px;padding-top:12px;border-top:1px solid #ccc;font-size:10px;color:#888;text-align:center;">IBGP — Instituto Brasileiro de Gestão e Pesquisa</div>';
+  html+='</body></html>';
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+}
+</script>
+</html>
