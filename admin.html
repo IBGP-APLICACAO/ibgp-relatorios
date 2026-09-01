@@ -1665,18 +1665,31 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+='</div>';
 
   // ── 3. PROCEDIMENTOS PADRONIZADOS ──
+  // Extrai horários da primeira escola com dados de manhã
+  var _h0={};
+  for(var _i=0;_i<escolas.length;_i++){
+    var _d0=(escolas[_i].dados||{});
+    if(_d0.manha&&_d0.manha.horarios){_h0=_d0.manha.horarios;break;}
+    var _hs=escolas[_i].horarios||[];
+    if(_hs.length>0){_h0=_hs[0];break;}
+  }
+  function _ht(v){return v?" às "+v:"";}
+
   html+=secH("3","Procedimentos Padronizados");
   html+='<p style="font-size:12px;margin-bottom:14px;">Em todos os locais foram adotados os procedimentos operacionais padronizados do IBGP:</p>';
   html+='<div class="card"><table><tbody>';
-  ['Reunião de alinhamento com a equipe de coordenação e fiscalização antes do início das atividades.',
-   'Abertura do portão e recepção dos candidatos conforme cronograma estabelecido no edital.',
-   'Abertura do malote de provas na presença das testemunhas, com registro fotográfico.',
-   'Fechamento do portão, impedindo acesso de candidatos após o limite regimental.',
-   'Início das provas após conferência da sala e distribuição dos cadernos.',
-   'Identificação individual dos candidatos mediante documento oficial com foto.',
-   'Lacramento dos celulares e equipamentos eletrônicos ao adentrar na sala de prova.',
-   'Fechamento do malote com lacre de segurança e registro fotográfico do procedimento.',
-   'Encaminhamento de formulários, atas e malotes à coordenação logística ao término.'].forEach(function(txt,i){
+  [
+    'Reunião de alinhamento'+_ht(_h0.chegada)+' com a equipe de coordenação e fiscalização.',
+    'Abertura do portão'+_ht(_h0.ab_portao)+' e recepção dos candidatos conforme cronograma estabelecido no edital.',
+    'Abertura do malote de provas'+_ht(_h0.ab_malote)+' na presença das testemunhas, com registro fotográfico.',
+    'Fechamento do portão'+_ht(_h0.fch_portao)+', impedindo acesso de candidatos após o limite regimental.',
+    'Início das provas'+_ht(_h0.inicio)+' após conferência da sala e distribuição dos cadernos.',
+    'Identificação individual dos candidatos mediante documento oficial com foto.',
+    'Lacramento dos celulares e equipamentos eletrônicos ao adentrar na sala de prova.',
+    'Encerramento da aplicação'+_ht(_h0.encerr)+' com recolhimento dos cadernos.',
+    'Fechamento do malote com lacre de segurança'+_ht(_h0.fch_malote)+' e registro fotográfico.',
+    'Encaminhamento de formulários, atas e malotes à coordenação logística ao término.'
+  ].forEach(function(txt,i){
     html+='<tr style="border-bottom:1px solid #eee;">'
       +'<td style="padding:10px 14px;font-weight:700;font-size:12px;color:'+corP+';width:36px;">'+(i+1)+'</td>'
       +'<td style="padding:10px 8px;font-size:12px;line-height:1.6;">'+txt+'</td></tr>';
