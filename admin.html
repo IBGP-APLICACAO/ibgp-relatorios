@@ -1077,6 +1077,14 @@ function abrirRelatorioImprimivel(dados) {
       grid2("Houve Apoio?", e.houve_apoio, "Nome do Apoio", e.nome_apoio||"—")
     );
 
+    // Membros da Comissão (se houver)
+    if ((e.comissao||[]).length > 0) {
+      let cHtml = e.comissao.map(function(m,i){
+        return `<div style="padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px;">${i+1}. ${m}</div>`;
+      }).join('');
+      html += secao("Membros da Comissão", corH, cHtml);
+    }
+
     // Horários por turno
     (e.horarios||[]).forEach(function(h) {
       const cor = h.turno==="Manhã" ? corM : corT;
@@ -1118,17 +1126,16 @@ function abrirRelatorioImprimivel(dados) {
         <th style="background:${cor};text-align:center;">Inscritos</th>
         <th style="background:${cor};text-align:center;">Presentes</th>
         <th style="background:${cor};text-align:center;">Ausentes</th>
-        <th style="background:${cor};text-align:center;">Inclusões</th>
       </tr></thead><tbody>`;
       rows.forEach(function(r, i){
-        tI+=Number(r.inscr)||0; tP+=Number(r.pres)||0; tA+=Number(r.aus)||0; tIn+=Number(r.incl)||0;
+        tI+=Number(r.inscr)||0; tP+=Number(r.pres)||0; tA+=Number(r.aus)||0;
         tabela+=`<tr class="${i%2===1?'alt':''}"><td>${r.sala} — ${r.cargo.replace(/^\d+\s+-\s+/,"")}</td>
           <td style="text-align:center;">${r.inscr}</td><td style="text-align:center;">${r.pres}</td>
-          <td style="text-align:center;">${r.aus}</td><td style="text-align:center;">${r.incl||0}</td></tr>`;
+          <td style="text-align:center;">${r.aus}</td></tr>`;
       });
       tabela+=`<tr class="total-row"><td><strong>TOTAL</strong></td>
         <td style="text-align:center;">${tI}</td><td style="text-align:center;">${tP}</td>
-        <td style="text-align:center;">${tA}</td><td style="text-align:center;">${tIn}</td></tr>`;
+        <td style="text-align:center;">${tA}</td></tr>`;
       tabela += "</tbody></table>";
       html += secao("Estatística por Cargo — " + turno, cor, tabela);
     });
@@ -1721,15 +1728,15 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+='<p style="font-size:12px;margin-bottom:14px;">Em todos os locais foram adotados os procedimentos operacionais padronizados do IBGP:</p>';
   html+='<div class="card"><table><tbody>';
   [
-    'Reunião de alinhamento'+_ht(_h0.chegada)+' com a equipe de coordenação e fiscalização.',
-    'Abertura do portão'+_ht(_h0.ab_portao)+' e recepção dos candidatos conforme cronograma estabelecido no edital.',
-    'Abertura do malote de provas'+_ht(_h0.ab_malote)+' na presença das testemunhas, com registro fotográfico.',
-    'Fechamento do portão'+_ht(_h0.fch_portao)+', impedindo acesso de candidatos após o limite regimental.',
-    'Início das provas'+_ht(_h0.inicio)+' após conferência da sala e distribuição dos cadernos.',
+    'Reunião de alinhamento com a equipe de coordenação e fiscalização.',
+    'Abertura do portão e recepção dos candidatos conforme cronograma estabelecido no edital.',
+    'Abertura do malote de provas na presença das testemunhas, com registro fotográfico.',
+    'Fechamento do portão, impedindo acesso de candidatos após o limite regimental.',
+    'Início das provas após conferência da sala e distribuição dos cadernos.',
     'Identificação individual dos candidatos mediante documento oficial com foto.',
     'Lacramento dos celulares e equipamentos eletrônicos ao adentrar na sala de prova.',
-    'Encerramento da aplicação'+_ht(_h0.encerr)+' com recolhimento dos cadernos.',
-    'Fechamento do malote com lacre de segurança'+_ht(_h0.fch_malote)+' e registro fotográfico.',
+    'Encerramento da aplicação com recolhimento dos cadernos.',
+    'Fechamento do malote com lacre de segurança e registro fotográfico.',
     'Encaminhamento de formulários, atas e malotes à coordenação logística ao término.'
   ].forEach(function(txt,i){
     html+='<tr style="border-bottom:1px solid #eee;">'
@@ -1757,17 +1764,38 @@ function abrirRelatorioGeral(dados, meta, win) {
   });
   html+='</tbody></table></div>';
 
-  // ── 5. QUADRO CONSOLIDADO POR CARGO ──
+  // ── 5. MEMBROS DA COMISSÃO ──
+  var escolasComComissao = escolas.filter(function(e){ return (e.comissao||[]).length > 0; });
+  if (escolasComComissao.length > 0) {
+    html+='<div class="pb"></div>';
+    html+=secH("5","Membros da Comissão de Fiscalização");
+    html+='<p style="font-size:12px;color:#444;margin-bottom:12px;">Relação dos membros da comissão presentes nos locais de aplicação.</p>';
+    html+='<div class="card"><table><thead><tr>'+thS()+'Local de Aplicação</th>'+thS()+'Membro da Comissão</th></tr></thead><tbody>';
+    var _comissaoRows=[];
+    escolasComComissao.forEach(function(e){
+      (e.comissao||[]).forEach(function(m,i){
+        _comissaoRows.push({escola:e.nome,membro:m,first:i===0,count:(e.comissao||[]).length});
+      });
+    });
+    _comissaoRows.forEach(function(r,i){
+      html+='<tr style="background:'+(i%2===0?'#fff':'#F5F7FC')+';">'
+        +'<td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+(r.first?'<strong>'+r.escola+'</strong>':'<span style="color:#aaa;">—</span>')+'</td>'
+        +'<td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+r.membro+'</td>'
+        +'</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+
+  // ── 6. QUADRO CONSOLIDADO POR CARGO ──
   html+='<div class="pb"></div>';
-  html+=secH("5","Quadro Consolidado por Cargo");
-  html+='<p style="font-size:12px;color:#444;margin-bottom:6px;">Consolidado de todos os cargos do certame com quantitativos de candidatos inscritos, presentes, ausentes e de inclusão (PCD/NEE).</p>';
+  html+=secH("6","Quadro Consolidado por Cargo");
+  html+='<p style="font-size:12px;color:#444;margin-bottom:6px;">Consolidado de todos os cargos do certame com quantitativos de candidatos inscritos, presentes e ausentes.</p>';
   html+='<p style="font-size:11px;color:#888;margin-bottom:12px;">Linhas destacadas em vermelho indicam taxa de ausência superior a 50%.</p>';
   html+='<div class="card"><table><thead><tr>'
     +'<th '+thS()+'>Cargo / Função</th>'
     +'<th '+thS("text-align:center;")+'>Inscritos</th>'
     +'<th '+thS("text-align:center;")+'>Presentes</th>'
     +'<th '+thS("text-align:center;")+'>Ausentes</th>'
-    +'<th '+thS("text-align:center;")+'>Inclusão</th>'
     +'<th '+thS("text-align:center;")+'>% Aus.</th>'
     +'</tr></thead><tbody>';
   cargosArr.forEach(function(c,i){
@@ -1778,15 +1806,14 @@ function abrirRelatorioGeral(dados, meta, win) {
       +'<td '+td(bg,"text-align:center;")+'>'+c.inscr+'</td>'
       +'<td '+td(bg,"text-align:center;")+'>'+c.pres+'</td>'
       +'<td '+td(bg,"text-align:center;")+'>'+c.aus+'</td>'
-      +'<td '+td(bg,"text-align:center;")+'>'+c.incl+'</td>'
       +'<td '+td(bg,"text-align:center;font-weight:700;color:"+(alta?corR:"inherit")+";")+'>'+pct(c.aus,c.inscr)+'</td>'
       +'</tr>';
   });
-  html+=totalRow([["TOTAL",""],[""+totI,"text-align:center;"],[""+totP,"text-align:center;"],[""+totA,"text-align:center;"],[""+totIn,"text-align:center;"],[""+pct(totA,totI),"text-align:center;"]]);
+  html+=totalRow([["TOTAL",""],[""+totI,"text-align:center;"],[""+totP,"text-align:center;"],[""+totA,"text-align:center;"],[""+pct(totA,totI),"text-align:center;"]]);
   html+='</tbody></table></div>';
 
   // ── 6. RESULTADO POR LOCAL ──
-  html+=secH("6","Resultado por Local de Aplicação");
+  html+=secH("7","Resultado por Local de Aplicação");
   escolas.forEach(function(e){
     var t=e._tot||{ins:0,pre:0,aus:0,inc:0};
     html+='<div class="card" style="margin-bottom:16px;">';
@@ -1812,22 +1839,35 @@ function abrirRelatorioGeral(dados, meta, win) {
     }
     if(e._hasOcorr||(e.ocorrencias&&e.ocorrencias.length)){
       html+='<div style="padding:10px 16px;border-top:1px solid #eee;">'
-        +'<div style="font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">OCORRÊNCIAS</div>'
-        +'<table><thead><tr>'
-        +'<th style="'+PC+'background:#555;color:#fff;padding:6px 10px;font-size:10px;text-align:center;">Em Sala</th>'
-        +'<th style="'+PC+'background:#555;color:#fff;padding:6px 10px;font-size:10px;text-align:center;">Cond. Prova</th>'
-        +'<th style="'+PC+'background:#555;color:#fff;padding:6px 10px;font-size:10px;text-align:center;">Toque Celular</th>'
-        +'<th style="'+PC+'background:#555;color:#fff;padding:6px 10px;font-size:10px;text-align:center;">Declaração</th>'
-        +'</tr></thead><tbody>';
+        +'<div style="font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">OCORRÊNCIAS</div>';
+      var _ov2=function(v){return v==="Sim"||v===true||Number(v)>0;};
+      var ocorrLabels={sala:'Ocorrências em sala',cond:'Prova condicional',toque:'Toque de celular',decl:'Declaração de comparecimento'};
+      var ocorrItems=[];
       (e.ocorrencias||[]).forEach(function(o){
-        html+='<tr style="border-bottom:1px solid #eee;">'
-          +'<td style="padding:6px 10px;font-size:11px;text-align:center;">'+Number(o.sala||0)+'</td>'
-          +'<td style="padding:6px 10px;font-size:11px;text-align:center;">'+Number(o.cond||0)+'</td>'
-          +'<td style="padding:6px 10px;font-size:11px;text-align:center;">'+Number(o.toque||0)+'</td>'
-          +'<td style="padding:6px 10px;font-size:11px;text-align:center;">'+Number(o.decl||0)+'</td>'
-          +'</tr>';
+        ['sala','cond','toque','decl'].forEach(function(k){
+          if(_ov2(o[k])){
+            var nCands=(e.candidatos||[]).filter(function(c){return c.turno===o.turno&&c.tipo===ocorrLabels[k];}).length;
+            ocorrItems.push({turno:(o.turno||'Manhã'),label:ocorrLabels[k],n:nCands});
+          }
+        });
       });
-      html+='</tbody></table></div>';
+      if(ocorrItems.length===0){
+        html+='<p style="font-size:11px;color:#4CAF50;font-style:italic;">Nenhuma ocorrência registrada.</p>';
+      } else {
+        ocorrItems.forEach(function(oc){
+          var cor=oc.turno==='Manhã'?'#1F3A6E':'#CF3432';
+          var badge='<span style="'+PC+'display:inline-block;background:'+cor+';color:#fff;border-radius:3px;padding:2px 7px;font-size:10px;font-weight:700;margin-right:6px;">'+oc.turno+'</span>';
+          var cands=oc.n>0?' <span style="font-size:10px;color:#888;">('+oc.n+' candidato'+(oc.n>1?'s':'')+' envolvido'+(oc.n>1?'s':'')+')</span>':'';
+          html+='<div style="padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:11px;">'+badge+oc.label+cands+'</div>';
+        });
+      }
+      html+='</div>';
+    }
+    if(e.obs){
+      html+='<div style="padding:10px 16px;border-top:1px solid #eee;background:#FFFDE7;">'
+        +'<div style="font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">OBSERVAÇÕES</div>'
+        +'<p style="font-size:12px;color:#444;line-height:1.6;white-space:pre-wrap;">'+e.obs+'</p>'
+        +'</div>';
     }
     html+='</div>';
   });
@@ -1835,7 +1875,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   // ── 7. REGISTRO FOTOGRÁFICO ──
   var temFotos=escolas.some(function(e){return((e.dados||{}).fotos||e.fotos||[]).length>0;});
   if(temFotos){
-    html+=secH("7","Registro Fotográfico");
+    html+=secH("8","Registro Fotográfico");
     escolas.forEach(function(e){
       var fotos=(e.dados||{}).fotos||e.fotos||[];
       if(!fotos.length)return;
