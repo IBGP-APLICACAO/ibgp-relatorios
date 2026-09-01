@@ -1584,8 +1584,8 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'.no-print{display:flex;}'
     +'p{line-height:1.8;color:#444;font-size:13px;margin-bottom:12px;}'
     +'@media print{body{background:#fff;padding:14px;}.no-print{display:none!important;}.pb{page-break-before:always;}}'
-    +'table.repeat-header{width:100%;border-collapse:collapse;}' +'table.repeat-header thead{display:table-header-group;}' +'table.repeat-header .print-logo{border-bottom:2px solid #1F3A6E;padding:6px 0;text-align:left;}' +'@media print{table.repeat-header .print-logo{display:table-cell;}}' +'@media screen{table.repeat-header thead{display:none;}}' +'</style></head><body>'
-  +'<table class="repeat-header"><thead><tr><td class="print-logo"><img src="'+LOGO_B64+'" style="height:40px;"/></td></tr></thead><tbody><tr><td>';
+    +'table.repeat-header{width:100%;border-collapse:collapse;}' +'table.repeat-header thead{display:table-header-group;}' +'table.repeat-header .print-logo{border-bottom:2px solid #1F3A6E;padding:6px 0;}' +'@media print{table.repeat-header .print-logo{display:table-cell;}}' +'@media screen{table.repeat-header thead{display:none;}}' +'</style></head><body>'
+  +'<table class="repeat-header"><thead><tr><td class="print-logo" style="text-align:left;vertical-align:middle;"><img src="'+LOGO_B64+'" style="height:40px;"/></td><td class="print-logo" style="text-align:right;vertical-align:middle;padding-right:4px;"><span style="font-size:11px;font-weight:700;color:#1F3A6E;letter-spacing:.3px;">'+titulo+'</span></td></tr></thead><tbody><tr><td colspan="2">';
 
   
 
