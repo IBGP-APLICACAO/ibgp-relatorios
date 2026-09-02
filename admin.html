@@ -959,6 +959,7 @@ async function gerarRelatorioGeral() {
     const resp = await fetch(scriptUrlFinal + "?action=relatorio");
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     const dados = await resp.json();
+    if (dados.erro) throw new Error("Erro no servidor: " + dados.erro);
 
     // Filtra apenas escolas do certame selecionado (case-insensitive)
     dados.escolas = (dados.escolas || []).filter(e => escolasDoCertame.has((e.nome || "").toUpperCase().trim()));
