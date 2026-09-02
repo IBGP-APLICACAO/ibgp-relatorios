@@ -1145,10 +1145,14 @@ function abrirRelatorioImprimivel(dados) {
     (ocorrFiltradas.length>0 ? ocorrFiltradas : (e.ocorrencias||[])).forEach(function(o) {
       const cor = (o.turno||"Manhã").includes("Manhã") ? corM : corT;
       const cands = (e.candidatos||[]).filter(c=>c.turno===o.turno);
+      // Tipos específicos vêm dos candidatos; fallback: categorias Sim/Não
+      var tiposEspec = [];
+      cands.forEach(function(c){ if(c.tipo && tiposEspec.indexOf(c.tipo)<0) tiposEspec.push(c.tipo); });
       const tiposOcorr = Object.keys(_ocorrLabelsInd).filter(function(k){ return _ov(o[k]); });
       let oHtml;
-      if(tiposOcorr.length>0){
-        oHtml='<ul style="margin:0 0 8px 16px;padding:0;">'+tiposOcorr.map(function(k){return '<li style="margin-bottom:4px;">'+_ocorrLabelsInd[k]+'</li>';}).join('')+'</ul>';
+      var listaFinal = tiposEspec.length>0 ? tiposEspec : tiposOcorr.map(function(k){ return _ocorrLabelsInd[k]; });
+      if(listaFinal.length>0){
+        oHtml='<ul style="margin:0 0 8px 16px;padding:0;">'+listaFinal.map(function(t){return '<li style="margin-bottom:4px;">'+t+'</li>';}).join('')+'</ul>';
       } else {
         oHtml='<p style="font-size:11px;color:#4CAF50;font-style:italic;">Nenhuma ocorrência registrada.</p>';
       }
@@ -1651,12 +1655,24 @@ function abrirRelatorioGeral(dados, meta, win) {
       var ocorrLabels={sala:'Ocorrências em sala',cond:'Prova condicional',toque:'Toque de celular',decl:'Declaração de comparecimento'};
       var ocorrItems=[];
       (e.ocorrencias||[]).forEach(function(o){
-        ['sala','cond','toque','decl'].forEach(function(k){
-          if(_ov2(o[k])){
-            var nCands=(e.candidatos||[]).filter(function(c){return c.turno===o.turno&&c.tipo===ocorrLabels[k];}).length;
-            ocorrItems.push({turno:(o.turno||'Manhã'),label:ocorrLabels[k],n:nCands});
-          }
-        });
+        var turno=o.turno||'Manhã';
+        // Tenta usar tipos específicos dos candidatos
+        var candsT=(e.candidatos||[]).filter(function(c){return c.turno===turno;});
+        var tiposEsp=[];
+        candsT.forEach(function(c){if(c.tipo&&tiposEsp.indexOf(c.tipo)<0)tiposEsp.push(c.tipo);});
+        if(tiposEsp.length>0){
+          tiposEsp.forEach(function(t){
+            var n=candsT.filter(function(c){return c.tipo===t;}).length;
+            ocorrItems.push({turno:turno,label:t,n:n});
+          });
+        } else {
+          // fallback: categorias Sim/Não
+          ['sala','cond','toque','decl'].forEach(function(k){
+            if(_ov2(o[k])){
+              ocorrItems.push({turno:turno,label:ocorrLabels[k],n:0});
+            }
+          });
+        }
       });
       if(ocorrItems.length===0){
         html+='<p style="font-size:11px;color:#4CAF50;font-style:italic;">Nenhuma ocorrência registrada.</p>';
