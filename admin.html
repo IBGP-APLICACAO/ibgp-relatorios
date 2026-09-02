@@ -1184,7 +1184,7 @@ function abrirRelatorioImprimivel(dados) {
         <th style="background:${cor};">Dado Correto</th>
       </tr></thead><tbody>`;
       lista.forEach(function(c, i) {
-        corrHtml += `<tr class="${i%2===1?'alt':''}"><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.tipo||"—"}</td><td>${c.correcao||"—"}</td></tr>`;
+        corrHtml += `<tr class="${i%2===1?'alt':''}"><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.tipo||"—"}</td><td>${fmtVal(c.correcao)}</td></tr>`;
       });
       corrHtml += "</tbody></table>";
       html += secao("Correção de Dados Cadastrais — " + turno, cor, corrHtml);
@@ -1397,6 +1397,7 @@ function abrirRelatorioGeral(dados, meta, win) {
 
   function pct(a,b){ return b>0?(a/b*100).toFixed(1)+"%":"—"; }
   function pct2(a,b){ return b>0?(a/b*100).toFixed(2)+"%":"—"; }
+  function fmtVal(v){ if(!v)return"—"; var d=new Date(v); if(!isNaN(d.getTime())&&String(v).match(/^\d{4}-\d{2}/)){ return('0'+d.getUTCDate()).slice(-2)+'/'+('0'+(d.getUTCMonth()+1)).slice(-2)+'/'+d.getUTCFullYear(); } return v; }
   var n=escolas.length;
   var nCargos=Object.keys(cargosMap).length;
   var top5Locais=escolas.slice().sort(function(a,b){return (b._tot.ins||0)-(a._tot.ins||0);}).slice(0,Math.min(5,n));
@@ -1706,7 +1707,7 @@ function abrirRelatorioGeral(dados, meta, win) {
         +'<div style="font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">CORREÇÃO DE DADOS CADASTRAIS</div>'
         +'<table><thead><tr><th '+thS("font-size:9px;")+'>Turno</th><th '+thS("font-size:9px;")+'>Nº Inscrição</th><th '+thS("font-size:9px;")+'>Candidato</th><th '+thS("font-size:9px;")+'>Tipo</th><th '+thS("font-size:9px;")+'>Dado Correto</th></tr></thead><tbody>';
       (e.correcoes||[]).forEach(function(c,i){
-        html+='<tr style="background:'+(i%2===0?'#fff':'#F5F7FC')+';"><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+( c.turno||'')+'</td><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+c.inscricao+'</td><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+c.candidato+'</td><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+c.tipo+'</td><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+c.correcao+'</td></tr>';
+        html+='<tr style="background:'+(i%2===0?'#fff':'#F5F7FC')+';"><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+( c.turno||'')+'</td><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+c.inscricao+'</td><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+c.candidato+'</td><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+c.tipo+'</td><td '+td(i%2===0?'#fff':'#F5F7FC')+'>'+fmtVal(c.correcao)+'</td></tr>';
       });
       html+='</tbody></table></div>';
     }
