@@ -1000,6 +1000,8 @@ function mostrarStatusRelatorio(msg, ok) {
   el.textContent = msg;
 }
 
+function fmtVal(v){ if(!v)return"—"; var d=new Date(v); if(!isNaN(d.getTime())&&String(v).match(/^\d{4}-\d{2}/)){ return('0'+d.getUTCDate()).slice(-2)+'/'+('0'+(d.getUTCMonth()+1)).slice(-2)+'/'+d.getUTCFullYear(); } return String(v); }
+
 function abrirRelatorioImprimivel(dados) {
   const win = window.open("", "_blank");
   const conc = dados.concurso || {};
@@ -1397,7 +1399,6 @@ function abrirRelatorioGeral(dados, meta, win) {
 
   function pct(a,b){ return b>0?(a/b*100).toFixed(1)+"%":"—"; }
   function pct2(a,b){ return b>0?(a/b*100).toFixed(2)+"%":"—"; }
-  function fmtVal(v){ if(!v)return"—"; var d=new Date(v); if(!isNaN(d.getTime())&&String(v).match(/^\d{4}-\d{2}/)){ return('0'+d.getUTCDate()).slice(-2)+'/'+('0'+(d.getUTCMonth()+1)).slice(-2)+'/'+d.getUTCFullYear(); } return v; }
   var n=escolas.length;
   var nCargos=Object.keys(cargosMap).length;
   var top5Locais=escolas.slice().sort(function(a,b){return (b._tot.ins||0)-(a._tot.ins||0);}).slice(0,Math.min(5,n));
