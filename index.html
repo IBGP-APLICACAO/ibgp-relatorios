@@ -23,6 +23,7 @@
     .card-title { font-size: 14px; font-weight: 700; color: #FFF; background: #7A1A1A; padding: 8px 14px; margin: -24px -28px 20px; border-radius: 8px 8px 0 0; letter-spacing: .4px; text-transform: uppercase; }
     .card-title.manha { background: #1F3A6E; }
     .card-title.tarde  { background: #CF3432; }
+    .card-title.sabado { background: #6A0DAD; }
     .card-title.neutra { background: #393939; }
 
     label { display: block; font-size: 11px; font-weight: 700; color: #666; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .4px; }
@@ -160,12 +161,6 @@
       </div>
       <button type="button" class="add-btn" onclick="addComissaoEntry()" style="margin-bottom:4px;">+ Adicionar membro</button>
     </div>
-  </div>
-
-  <!-- Controles de rascunho -->
-  <div id="rascunho-controls" style="display:none; gap:8px; margin:8px 0; justify-content:flex-end;">
-    <button type="button" onclick="restaurarRascunho()" style="background:#2e7d32;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;">📋 Carregar Rascunho</button>
-    <button type="button" onclick="limparRascunho()" style="background:#c62828;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;">🗑️ Limpar Rascunho</button>
   </div>
 
   <!-- TURNO MANHÃ -->
@@ -514,6 +509,179 @@
 
   </div></div><!-- /secTarde -->
 
+  <!-- TURNO SÁBADO TARDE -->
+  <div class="hidden" id="secSabadoTarde">
+
+    <div class="card">
+      <div class="card-title sabado">11. Turno Sáb. Tarde — Horários</div>
+      <div class="horarios-grid">
+        <div class="form-group"><label>Chegada da equipe</label><input type="time" id="s_chegada"></div>
+        <div class="form-group"><label>Abertura do portão</label><input type="time" id="s_ab_portao"></div>
+        <div class="form-group"><label>Abertura do malote</label><input type="time" id="s_ab_malote"></div>
+        <div class="form-group"><label>Distribuição dos pacotes</label><input type="time" id="s_distrib"></div>
+        <div class="form-group"><label>Fechamento do portão</label><input type="time" id="s_fch_portao"></div>
+        <div class="form-group"><label>Início da aplicação</label><input type="time" id="s_inicio"></div>
+        <div class="form-group"><label>Encerramento</label><input type="time" id="s_encerr"></div>
+        <div class="form-group"><label>Fechamento do malote</label><input type="time" id="s_fch_malote"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title sabado">12. Turno Sáb. Tarde — Testemunhas</div>
+      <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Malote</p>
+      <table class="test-table">
+        <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
+        <tbody>
+          <tr><td class="cpf-col"><input type="text" id="s_t1_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('s_t1_ab_malote_cpf','s_t1_ab_malote_nome')"></td><td><input type="text" id="s_t1_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="s_t2_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('s_t2_ab_malote_cpf','s_t2_ab_malote_nome')"></td><td><input type="text" id="s_t2_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="s_t3_ab_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('s_t3_ab_malote_cpf','s_t3_ab_malote_nome')"></td><td><input type="text" id="s_t3_ab_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title sabado">13. Turno Sáb. Tarde — Estatística por Cargo</div>
+      <div style="overflow-x:auto;"><table class="stat-table" id="tabelaSabadoTarde">
+        <thead><tr><th>Cargo / Função</th><th>Previstos</th><th>Presentes</th><th>Ausentes</th><th>Inclusões</th><th>% Ausência</th></tr></thead><tfoot></tfoot>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title sabado">13b. Turno Sáb. Tarde — Ampliação de Sala</div>
+      <div class="ocorr-block">
+        <h4>Houve ampliação de sala?</h4>
+        <div class="radio-row"><label><input type="radio" name="s_ampliacao" value="Não" checked onchange="toggleOcorrEntries('s_ampliacao','s_ampliacao_wrap')"> Não</label><label><input type="radio" name="s_ampliacao" value="Sim" onchange="toggleOcorrEntries('s_ampliacao','s_ampliacao_wrap')"> Sim</label></div>
+        <div id="s_ampliacao_wrap" class="hidden">
+          <div id="s_ampliacao_entries"></div>
+          <button type="button" class="add-btn" onclick="addAmpliacaoEntry('s_ampliacao_entries')">+ Adicionar ampliação</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title sabado">14. Turno Sáb. Tarde — Ocorrências</div>
+      <div class="ocorr-block">
+        <h4>Ocorrências em sala</h4>
+        <div class="radio-row"><label><input type="radio" name="s_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('s_ocorr_sala','s_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="s_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('s_ocorr_sala','s_ocorr_sala_wrap')"> Sim</label></div>
+        <div id="s_ocorr_sala_wrap" class="hidden">
+          <div id="s_ocorr_sala_items">
+            <div class="ocorr-item-block" style="border:1px solid #d0d0d0;border-radius:6px;padding:10px;margin-bottom:8px;">
+                <select style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;background:#fafafa;" onchange="selectOcorrTipo(this)">
+                  <option value="">— Selecione o tipo de ocorrência —</option>
+                  <option value="folha_falt">Ausência de folha de resposta</option>
+                  <option value="cand_fiscal">Candidato assinou no local do fiscal</option>
+                  <option value="cond_esp">Condição Especial em Caráter Excepcional</option>
+                  <option value="folha_erro">Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</option>
+                  <option value="errata">Errata de questão</option>
+                  <option value="fiscal_cand">Fiscal assinou no local do candidato</option>
+                  <option value="folha_imp">Folha de resposta com erro de impressão</option>
+                  <option value="pacote_danif">Pacote de retorno danificado — uso de novo pacote</option>
+                  <option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>
+                  <option value="test_fiscal">Testemunha assinou no campo do fiscal de sala na ata</option>
+                  <option value="outros">Outros</option>
+                </select>
+                <div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:8px;">
+                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                </div>
+                <div class="ocorr-fields hidden" data-tipo="banheiro" style="margin-top:8px;">
+                  <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+                </div>
+                <div class="ocorr-fields hidden" data-tipo="folha_erro" style="margin-top:8px;"><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px;">Candidato correto</div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.3px;">Candidato incorreto (utilizou a folha)</div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><div style="margin-top:10px;padding-top:8px;border-top:1px solid #eee;"><div style="font-size:12px;font-weight:700;color:#333;margin-bottom:6px;">Qual marcação ocorreu:</div><div style="display:flex;flex-direction:column;gap:6px;font-size:13px;"><label style="cursor:pointer;"><input type="checkbox"> Assinatura</label><div><label style="cursor:pointer;"><input type="checkbox" onchange="this.closest('div').querySelector('.folha-tipo-sub').style.display=this.checked?'block':'none'"> Tipo de prova</label><div class="folha-tipo-sub" style="display:none;margin-top:4px;margin-left:20px;font-size:12px;color:#555;">Qual foi marcado: <input type="text" placeholder="ex: Tipo B" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;">&nbsp;&nbsp;Qual é o correto: <input type="text" placeholder="ex: Tipo A" style="width:110px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;font-size:12px;"></div></div><label style="cursor:pointer;"><input type="checkbox"> Marcou as alternativas na questão?</label></div><div style="margin-top:8px;font-size:12px;color:#333;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_reserva_s_0" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_reserva_s_0" value="Não"> Não</label></div></div></div>
+                <div class="ocorr-fields hidden" data-tipo="errata" style="margin-top:8px;">
+                  <div style="display:flex;gap:8px;margin-bottom:6px;"><input type="text" placeholder="Questão(ões)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div>
+                  <textarea rows="2" placeholder="Descrição da errata..." style="width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
+                </div>
+                <div class="ocorr-fields hidden" data-tipo="cond_esp" style="margin-top:8px;"><div style="margin-bottom:6px;"><label style="font-size:12px;font-weight:600;">Nome da ata reserva:</label><input type="text" placeholder="Nome da ata reserva" style="display:block;width:100%;margin-top:3px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="fiscal_cand" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="cand_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div><div class="ocorr-fields hidden" data-tipo="folha_imp" style="margin-top:8px;"><div style="font-size:12px;color:#333;margin-bottom:6px;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_s_0" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_imp_reserva_s_0" value="Não"> Não</label></div><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <div class="ocorr-fields hidden" data-tipo="pacote_danif" style="margin-top:8px;"><div style="display:flex;gap:8px;"><input type="text" placeholder="Nº do novo pacote" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Sala" style="width:80px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:12px;"></div></div>
+                <div class="ocorr-fields hidden" data-tipo="test_fiscal" style="margin-top:8px;"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                <div class="ocorr-fields hidden" data-tipo="outros" style="margin-top:8px;">
+                  <div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo:<label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_s_0_ou" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="tipo_s_0_ou" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label></div>
+                  <div class="outros-cand-fields" style="display:none"><div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div></div>
+                  <textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea>
+                </div>
+              </div>
+          </div>
+          <button type="button" class="add-btn" style="margin-top:4px;" onclick="addOcorrItem('s_ocorr_sala_items','s')">+ Adicionar ocorrência</button>
+        </div>
+      <div class="ocorr-block">
+        <h4>Prova condicional</h4>
+        <div class="radio-row"><label><input type="radio" name="s_cond" value="Não" checked onchange="toggleOcorrEntries('s_cond','s_cond_wrap')"> Não</label><label><input type="radio" name="s_cond" value="Sim" onchange="toggleOcorrEntries('s_cond','s_cond_wrap')"> Sim</label></div>
+        <div id="s_cond_wrap" class="hidden">
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="s_cond_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('s_cond_entries')">+ Adicionar</button>
+        </div>
+      </div>
+      <div class="ocorr-block">
+        <h4>Toque de celular</h4>
+        <div class="radio-row"><label><input type="radio" name="s_toque" value="Não" checked onchange="toggleOcorrEntries('s_toque','s_toque_wrap')"> Não</label><label><input type="radio" name="s_toque" value="Sim" onchange="toggleOcorrEntries('s_toque','s_toque_wrap')"> Sim</label></div>
+        <div id="s_toque_wrap" class="hidden">
+          <div id="s_toque_entries">
+            <div class="toque-entry-block" style="border:1px solid #d8d8d8;border-radius:6px;padding:10px;margin-bottom:8px;">
+              <div class="entry-header" style="margin-bottom:4px;"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+              <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <div class="toque-radios" style="margin-top:8px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:#333;">
+                <div><strong>Estado do aparelho:</strong>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="s_toque_estado_1" value="Ligado"> Ligado</label>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="s_toque_estado_1" value="Desligado"> Desligado</label>
+                </div>
+                <div><strong>Lacração:</strong>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="s_toque_lacrado_1" value="Lacrado"> Lacrado</label>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="s_toque_lacrado_1" value="Não lacrado"> Não lacrado</label>
+                </div>
+                <div><strong>Local do aparelho:</strong>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="s_toque_local_1" value="Com o candidato"> Com o candidato</label>
+                  <label style="margin-left:10px;cursor:pointer;"><input type="radio" name="s_toque_local_1" value="No local indicado pelo fiscal"> No local indicado pelo fiscal</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="add-btn" onclick="addToqueEntry('s_toque_entries','s')">+ Adicionar</button>
+        </div>
+      </div>
+      <div class="ocorr-block">
+        <h4>Declaração de comparecimento</h4>
+        <div class="radio-row"><label><input type="radio" name="s_decl" value="Não" checked onchange="toggleOcorrEntries('s_decl','s_decl_wrap')"> Não</label><label><input type="radio" name="s_decl" value="Sim" onchange="toggleOcorrEntries('s_decl','s_decl_wrap')"> Sim</label></div>
+        <div id="s_decl_wrap" class="hidden">
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="s_decl_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('s_decl_entries')">+ Adicionar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title sabado">14b. Turno Sáb. Tarde — Correção de Dados Cadastrais</div>
+      <div class="ocorr-block">
+        <h4>Houve correção de dados cadastrais?</h4>
+        <div class="radio-row"><label><input type="radio" name="s_correcao" value="Não" checked onchange="toggleOcorrEntries('s_correcao','s_correcao_wrap')"> Não</label><label><input type="radio" name="s_correcao" value="Sim" onchange="toggleOcorrEntries('s_correcao','s_correcao_wrap')"> Sim</label></div>
+        <div id="s_correcao_wrap" class="hidden">
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Tipo</span></div>
+          <div id="s_correcao_entries"></div>
+          <button type="button" class="add-btn" onclick="addCorrecaoEntry('s_correcao_entries','s')">+ Adicionar correção</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title sabado">15. Turno Sáb. Tarde — Testemunhas — Fechamento do Malote</div>
+      <table class="test-table">
+        <thead><tr><th class="cpf-col">CPF</th><th>Nome Completo da Testemunha</th></tr></thead>
+        <tbody>
+          <tr><td class="cpf-col"><input type="text" id="s_t1_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('s_t1_fch_malote_cpf','s_t1_fch_malote_nome')"></td><td><input type="text" id="s_t1_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="s_t2_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('s_t2_fch_malote_cpf','s_t2_fch_malote_nome')"></td><td><input type="text" id="s_t2_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+          <tr><td class="cpf-col"><input type="text" id="s_t3_fch_malote_cpf" placeholder="000.000.000-00" maxlength="14" oninput="formatCPF(this)" onblur="lookupCPF('s_t3_fch_malote_cpf','s_t3_fch_malote_nome')"></td><td><input type="text" id="s_t3_fch_malote_nome" placeholder="Nome (auto ou manual)"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div></div><!-- /secSabadoTarde -->
+
   <!-- REGISTRO FOTOGRÁFICO -->
   <div class="card hidden" id="cardFotos">
     <div class="card-title neutra">Registro Fotográfico</div>
@@ -579,28 +747,26 @@ function salvarRascunho(){
     if(el.type==='radio'||el.type==='file'||['selCertame','sel'].includes(el.id)) return;
     d[el.id]=el.value;
   });
-  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl','m_correcao','t_correcao'].forEach(n=>{
+  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl','s_ocorr_sala','s_cond','s_toque','s_decl'].forEach(n=>{
     const el=document.querySelector('input[name="'+n+'"]:checked');
     if(el) d['r_'+n]=el.value;
   });
   d['_apoio']=Array.from(document.querySelectorAll('#apoio_entries input')).map(i=>i.value);
-  ['m_ocorr_sala_items','t_ocorr_sala_items'].forEach(id=>{
+  ['m_ocorr_sala_entries','t_ocorr_sala_entries','s_ocorr_sala_entries'].forEach(id=>{
     const el=document.getElementById(id); if(!el) return;
-    d['_'+id]=Array.from(el.querySelectorAll('.ocorr-item-block')).map(b=>{
-      const tipo=b.querySelector('select')?.value||'';
-      const inputs=Array.from(b.querySelectorAll('input')).map(i=>(i.type==='radio'||i.type==='checkbox')?{type:i.type,name:i.name,value:i.value,checked:i.checked}:{type:i.type,value:i.value});
-      const textareas=Array.from(b.querySelectorAll('textarea')).map(t=>t.value);
-      return{tipo,inputs,textareas};
+    d['_'+id]=Array.from(el.querySelectorAll('.entry-sala-block')).map(b=>{
+      const ins=b.querySelectorAll('input'),ta=b.querySelector('textarea');
+      return{a:ins[0]?.value||'',b:ins[1]?.value||'',c:ins[2]?.value||'',d:ta?.value||''};
     });
   });
-  ['m_cond_entries','m_decl_entries','t_cond_entries','t_decl_entries'].forEach(id=>{
+  ['m_cond_entries','m_decl_entries','t_cond_entries','t_decl_entries','s_cond_entries','s_decl_entries'].forEach(id=>{
     const el=document.getElementById(id); if(!el) return;
     d['_'+id]=Array.from(el.querySelectorAll('.entry-row')).map(r=>{
       const ins=r.querySelectorAll('input');
       return{a:ins[0]?.value||'',b:ins[1]?.value||'',c:ins[2]?.value||''};
     });
   });
-  ['m_toque_entries','t_toque_entries'].forEach(id=>{
+  ['m_toque_entries','t_toque_entries','s_toque_entries'].forEach(id=>{
     const el=document.getElementById(id); if(!el) return;
     d['_'+id]=Array.from(el.querySelectorAll('.toque-entry-block')).map(block=>{
       const ins=block.querySelectorAll('.entry-row input');
@@ -615,11 +781,7 @@ function salvarRascunho(){
     });
   });
   d['_gerado_em'] = CONCURSO?.gerado_em || '';
-  ['m','t'].forEach(function(turno){var container=document.getElementById(turno+'_correcao_entries');if(!container)return;d['_correcao_'+turno]=Array.from(container.querySelectorAll('.correcao-block')).map(function(b){var ins=b.querySelectorAll('input'),sel=b.querySelector('select');return{inscricao:(ins[0]&&ins[0].value)||'',nome:(ins[1]&&ins[1].value)||'',tipo:(sel&&sel.value)||'',correcao:(ins[2]&&ins[2].value)||''};});});
-  d['_comissao_entries']=Array.from(document.querySelectorAll('#comissao_entries input')).map(i=>i.value);
-  if(window._fotosB64Cache) d['_fotosB64']=window._fotosB64Cache;
   try{localStorage.setItem(k,JSON.stringify(d));}catch(e){}
-  document.getElementById('rascunho-controls').style.display='flex';
   _rascunhoToast('💾 Rascunho salvo');
 }
 let _rascunhoToastT;
@@ -650,7 +812,7 @@ function restaurarRascunho(){
     const el=document.getElementById(id);
     if(el&&el.type!=='file') el.value=val;
   });
-  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl','m_correcao','t_correcao'].forEach(n=>{
+  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl','s_ocorr_sala','s_cond','s_toque','s_decl'].forEach(n=>{
     const val=d['r_'+n]; if(!val) return;
     const el=document.querySelector('input[name="'+n+'"][value="'+val+'"]');
     if(el){el.checked=true; el.dispatchEvent(new Event('change'));}
@@ -667,52 +829,45 @@ function restaurarRascunho(){
       });
     }
   }
-  ['m_ocorr_sala_items','t_ocorr_sala_items'].forEach(id=>{
+  ['m_ocorr_sala_entries','t_ocorr_sala_entries','s_ocorr_sala_entries'].forEach(id=>{
     const entries=d['_'+id]; if(!entries||!entries.length) return;
-    const list=document.getElementById(id); if(!list) return;
-    const px=id.startsWith('m')?'m':'t';
-    list.innerHTML='';
+    const list=document.getElementById(id); if(!list) return; list.innerHTML='';
     entries.forEach(e=>{
-      addOcorrItem(id,px);
-      const block=list.lastElementChild;
-      const selEl=block.querySelector('select');
-      if(selEl&&e.tipo){selEl.value=e.tipo;selectOcorrTipo(selEl);}
-      const inputs=block.querySelectorAll('input');
-      (e.inputs||[]).forEach((saved,i)=>{
-        if(!inputs[i]) return;
-        if(saved.type==='radio'||saved.type==='checkbox'){if(saved.checked){const r=block.querySelector('input[name="'+saved.name+'"][value="'+saved.value+'"]');if(r)r.checked=true;}}
-        else inputs[i].value=saved.value||'';
+      const block=document.createElement('div'); block.className='entry-sala-block';
+      const row=document.createElement('div'); row.className='entry-row';
+      [['a','Nº Inscrição'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
+        const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; row.appendChild(inp);
       });
-      const textareas=block.querySelectorAll('textarea');
-      (e.textareas||[]).forEach((v,i)=>{if(textareas[i])textareas[i].value=v;});
+      const ta=document.createElement('textarea'); ta.rows=2; ta.placeholder='Descrição da ocorrência...'; ta.value=e.d||'';
+      block.appendChild(row); block.appendChild(ta); list.appendChild(block);
     });
   });
-  ['m_cond_entries','t_cond_entries'].forEach(id=>{
+  ['m_cond_entries','t_cond_entries','s_cond_entries'].forEach(id=>{
     const entries=d['_'+id]; if(!entries||!entries.length) return;
     const list=document.getElementById(id); if(!list) return; list.innerHTML='';
     entries.forEach(e=>{
       const row=document.createElement('div'); row.className='entry-row';
       [['a','Nº Inscrição'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
-        const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; if(k2==='a'){inp.style.cursor='text';inp.oninput=function(){lookupInscricao(this);};} row.appendChild(inp);
+        const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; row.appendChild(inp);
       });
       list.appendChild(row);
     });
   });
-  ['m_decl_entries','t_decl_entries'].forEach(id=>{
+  ['m_decl_entries','t_decl_entries','s_decl_entries'].forEach(id=>{
     const entries=d['_'+id]; if(!entries||!entries.length) return;
     const list=document.getElementById(id); if(!list) return; list.innerHTML='';
     entries.forEach(e=>{
       const row=document.createElement('div'); row.className='entry-row';
       [['a','Nº Inscrição'],['b','Nome do Candidato'],['c','Sala']].forEach(([k2,ph])=>{
-        const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; if(k2==='a'){inp.style.cursor='text';inp.oninput=function(){lookupInscricao(this);};} row.appendChild(inp);
+        const inp=document.createElement('input'); inp.type='text'; inp.placeholder=ph; inp.value=e[k2]||''; row.appendChild(inp);
       });
       list.appendChild(row);
     });
   });
-  ['m_toque_entries','t_toque_entries'].forEach(id=>{
+  ['m_toque_entries','t_toque_entries','s_toque_entries'].forEach(id=>{
     const entries=d['_'+id]; if(!entries||!entries.length) return;
     const list=document.getElementById(id); if(!list) return; list.innerHTML='';
-    const px=id.startsWith('m')?'m':'t';
+    const px=id.startsWith('m')?'m':(id.startsWith('t')?'t':'s');
     entries.forEach((e,i)=>{
       _toqueIdx++;
       const idx=_toqueIdx;
@@ -734,10 +889,6 @@ function restaurarRascunho(){
       list.appendChild(block);
     });
   });
-  ['m','t'].forEach(function(turno){var entries=d['_correcao_'+turno];if(!entries||!entries.length)return;var container=document.getElementById(turno+'_correcao_entries');if(!container)return;container.innerHTML='';entries.forEach(function(e){addCorrecaoEntry(turno+'_correcao_entries',turno);var blocks=container.querySelectorAll('.correcao-block');var b=blocks[blocks.length-1];if(b){var ins=b.querySelectorAll('input'),sel=b.querySelector('select');if(ins[0])ins[0].value=e.inscricao||'';if(ins[1])ins[1].value=e.nome||'';if(sel)sel.value=e.tipo||'';if(ins[2])ins[2].value=e.correcao||'';}});});
-  if(d['_comissao_entries']&&d['_comissao_entries'].length){const mList=document.getElementById('comissao_entries');if(mList){mList.innerHTML='';d['_comissao_entries'].forEach(v=>{if(typeof addComissaoEntry==='function')addComissaoEntry();const inps=mList.querySelectorAll('input');const inp=inps[inps.length-1];if(inp)inp.value=v||'';});}}
-  if(d['_fotosB64']){window._fotosB64Cache=d['_fotosB64'];Object.entries(d['_fotosB64']).forEach(([catId,items])=>{const previewEl=document.getElementById('prev_'+catId);if(!previewEl||!items||!items.length)return;items.forEach((item)=>{const wrap=document.createElement('div');wrap.style.cssText='position:relative;display:inline-block;';const img=document.createElement('img');img.src='data:image/jpeg;base64,'+item.b64;img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #DDD;display:block;';wrap.appendChild(img);previewEl.appendChild(wrap);});});}
-
   _rascunhoToast('📋 Rascunho restaurado!','#1F3A6E');
   // Recalcula % ausência após restaurar
   document.querySelectorAll('[id*="_pct_"]').forEach(el=>{
@@ -745,14 +896,8 @@ function restaurarRascunho(){
     if(m) recalcStat(m[1],parseInt(m[2]),null);
   });
 }
-function limparRascunho(silencioso){
-  if(!silencioso && !confirm('Limpar o rascunho e reiniciar o formulário?')) return;
-  clearTimeout(_rascunhoSaveT);
+function limparRascunho(){
   const k=_rascunhoKey(); if(k) localStorage.removeItem(k);
-  if(!silencioso){
-    _rascunhoToast('🗑️ Rascunho limpo!','#CF3432');
-    setTimeout(()=>location.reload(), 800);
-  }
 }
 let _rascunhoSaveT;
 document.addEventListener('input',()=>{clearTimeout(_rascunhoSaveT);_rascunhoSaveT=setTimeout(salvarRascunho,1500);});
@@ -802,7 +947,7 @@ function onCertameChange(){
 
   // Reseta escola
   sel.innerHTML = '<option value="">— Selecione seu local de aplicação —</option>';
-  ["rowEscola","rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"]
+  ["rowEscola","rowIdent2","rowApoioNome","secManha","secTarde","secSabadoTarde","cardFotos","cardObs","divBtn"]
     .forEach(id => { const el = document.getElementById(id); if(el) el.classList.add("hidden"); });
 
   fetch("dados/" + info.id + ".json?v="+Date.now())
@@ -828,7 +973,7 @@ function toggleApoio(){
 function onEscolaChange(){
   const idx = sel.value;
   if(idx === "" || !CONCURSO){
-    ["rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+    ["rowIdent2","rowApoioNome","secManha","secTarde","secSabadoTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
     return;
   }
   const escola = CONCURSO.escolas[parseInt(idx)];
@@ -837,14 +982,17 @@ function onEscolaChange(){
 
   const hasManha = escola.cargos.some(c=>c.turno==="Manhã");
   const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
+  const haSabadoTarde = escola.cargos.some(c=>c.turno==="Sábado Tarde");
 
   document.getElementById("secManha").classList.toggle("hidden", !hasManha);
   document.getElementById("secTarde").classList.toggle("hidden", !haTarde);
+  document.getElementById("secSabadoTarde").classList.toggle("hidden", !haSabadoTarde);
 
   if(hasManha) renderStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã"));
   if(haTarde)  renderStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde"));
+  if(haSabadoTarde) renderStat("tabelaSabadoTarde", escola.cargos.filter(c=>c.turno==="Sábado Tarde"));
 
-  renderFotosCategorias(hasManha, haTarde);
+  renderFotosCategorias(hasManha, haTarde, haSabadoTarde);
   document.getElementById("cardFotos").classList.remove("hidden");
   document.getElementById("cardObs").classList.remove("hidden");
   document.getElementById("divBtn").classList.remove("hidden");
@@ -854,9 +1002,6 @@ function onEscolaChange(){
   sel.disabled = true;
   document.getElementById("btnAlterar").style.display = "inline";
   setTimeout(restaurarRascunho, 200);
-  // Mostra controles de rascunho se já existe um rascunho para esta escola
-  const _k=_rascunhoKey();
-  if(_k&&localStorage.getItem(_k)) document.getElementById('rascunho-controls').style.display='flex';
 }
 
 function alterarEscola(){
@@ -867,7 +1012,7 @@ function alterarEscola(){
   document.getElementById("btnAlterar").style.display = "none";
   // Reseta form
   sel.value = "";
-  ["rowIdent2","rowApoioNome","secManha","secTarde","cardFotos","cardObs","divBtn"]
+  ["rowIdent2","rowApoioNome","secManha","secTarde","secSabadoTarde","cardFotos","cardObs","divBtn"]
     .forEach(id => document.getElementById(id).classList.add("hidden"));
 }
 
@@ -884,7 +1029,7 @@ function renderStat(tableId, cargos){
       <td><input type="number" id="${tableId}_inscr_${i}" value="${c.inscr}" min="0" style="${sr}" readonly tabindex="-1"></td>
       <td><input type="number" id="${tableId}_pres_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'pres')"></td>
       <td><input type="number" id="${tableId}_aus_${i}"   value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'aus')"></td>
-      <td><input type="number" id="${tableId}_incl_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig oninput="recalcStat('${tableId}',${i},'incl')"></td>
+      <td><input type="number" id="${tableId}_incl_${i}"  value="" min="0" placeholder="0" style="${s}" data-obrig></td>
       <td><span id="${tableId}_pct_${i}" style="${sp}">—</span></td>
     </tr>`;
   });
@@ -969,7 +1114,7 @@ function validarCPFsDuplicados(prefix, sufixo, secoes){
 function checkCPFDupGroup(cpfId){
   // Determina o grupo de testemunhas e valida duplicados em tempo real
   // cpfId pattern: {prefix}_t{n}_{sufixo}_cpf
-  const m = cpfId.match(/^([mt])_t\d+_(.+)_cpf$/);
+  const m = cpfId.match(/^([mts])_t\d+_(.+)_cpf$/);
   if(!m) return;
   validarCPFsDuplicados(m[1], m[2]);
 }
@@ -1260,16 +1405,15 @@ function addApoioEntry(){
 
 
 
-function buildInscrIndex() {
-  if (window._inscrIndex) return window._inscrIndex;
+function buildInscrIndex(){
+  if(window._inscrIndex) return;
   window._inscrIndex = {};
-  if (!CONCURSO || !CONCURSO.escolas) return window._inscrIndex;
-  CONCURSO.escolas.forEach(function(e) {
-    (e.candidatos || []).forEach(function(c) {
-      if (c.inscricao) window._inscrIndex[String(c.inscricao).trim()] = c;
-    });
+  const idx = document.getElementById('selEscola')?.value;
+  const escola = CONCURSO && idx !== '' ? CONCURSO.escolas[parseInt(idx)] : null;
+  (escola?.candidatos || []).forEach(c => {
+    const k = String(c.inscricao || '').trim().replace(/\D/g,'');
+    if(k) window._inscrIndex[k] = {nome: c.nome||'', sala: c.sala||''};
   });
-  return window._inscrIndex;
 }
 
 function lookupInscricao(inscrEl){
@@ -1277,18 +1421,18 @@ function lookupInscricao(inscrEl){
   const row  = inscrEl.closest('.entry-row');
   if(!row) return;
   const inputs = row.querySelectorAll('input');
-  if(inputs.length < 2) return;
+  if(inputs.length < 3) return;
   const nomeEl = inputs[1];
-  const salaEl = inputs.length >= 3 ? inputs[2] : null;
-  const key = inscrEl.value.trim();
-  if(!key){ nomeEl.readOnly=false; nomeEl.style.background=''; if(salaEl){salaEl.readOnly=false; salaEl.style.background='';} return; }
+  const salaEl = inputs[2];
+  const key = inscrEl.value.trim().replace(/\D/g,'');
+  if(!key){ nomeEl.readOnly=false; nomeEl.style.background=''; salaEl.readOnly=false; salaEl.style.background=''; return; }
   const found = window._inscrIndex && window._inscrIndex[key];
   if(found){
     nomeEl.value = found.nome; nomeEl.readOnly = true; nomeEl.style.background='#EEF3FB';
-    if(salaEl){salaEl.value = found.sala; salaEl.readOnly = true; salaEl.style.background='#EEF3FB';}
+    salaEl.value = found.sala; salaEl.readOnly = true; salaEl.style.background='#EEF3FB';
   } else {
     nomeEl.value = ''; nomeEl.readOnly = false; nomeEl.style.background='#FFF9EC';
-    if(salaEl){salaEl.value = ''; salaEl.readOnly = false; salaEl.style.background='#FFF9EC';}
+    salaEl.value = ''; salaEl.readOnly = false; salaEl.style.background='#FFF9EC';
   }
 }
 
@@ -1342,7 +1486,7 @@ function coletarToqueEntries(listId){
 let fotosMap = {};
 let fotasCats = [];
 
-function renderFotosCategorias(hasManha, haTarde){
+function renderFotosCategorias(hasManha, haTarde, haSabadoTarde){
   fotosMap = {};
   fotasCats = [];
 
@@ -1363,6 +1507,14 @@ function renderFotosCategorias(hasManha, haTarde){
     cats.push({id:'fc_portao_fch_t', label:'🚪 Fechamento do Portão — Tarde',  cor:'#CF3432'});
   }
 
+
+  if(haSabadoTarde){
+    cats.push({id:'fc_portao_ab_s',  label:'🚪 Abertura do Portão — Sáb. Tarde',    cor:'#6A0DAD'});
+    cats.push({id:'fc_aplic_s',      label:'📝 Aplicação — Sáb. Tarde',             cor:'#6A0DAD'});
+    cats.push({id:'fc_abm_s',        label:'📦 Abertura do Malote — Sáb. Tarde',    cor:'#6A0DAD'});
+    cats.push({id:'fc_fchm_s',       label:'📦 Fechamento do Malote — Sáb. Tarde',  cor:'#6A0DAD'});
+    cats.push({id:'fc_portao_fch_s', label:'🚪 Fechamento do Portão — Sáb. Tarde',  cor:'#6A0DAD'});
+  }
   fotasCats = cats;
   cats.forEach(c => fotosMap[c.id] = []);
 
@@ -1395,15 +1547,7 @@ function renderPreview(inputId, previewId){
     const img = document.createElement('img');
     img.style.cssText = 'width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #DDD;display:block;';
     const reader = new FileReader();
-    reader.onload = e => {
-      img.src = e.target.result;
-      const b64data = e.target.result.split(',')[1];
-      if(!window._fotosB64Cache) window._fotosB64Cache={};
-      if(!window._fotosB64Cache[inputId]) window._fotosB64Cache[inputId]=[];
-      const catLabel=(fotasCats||[]).find(c=>c.id===inputId)?.label||inputId;
-      window._fotosB64Cache[inputId].push({nome:file.name,b64:b64data,categoria:catLabel});
-      clearTimeout(window._rascunhoSaveT);window._rascunhoSaveT=setTimeout(salvarRascunho,2000);
-    };
+    reader.onload = e => img.src = e.target.result;
     reader.readAsDataURL(file);
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -1445,11 +1589,9 @@ function comprimirImagem(file, categoria){
 
 async function coletarFotos(){
   const fotos = [];
-  for(const cat of fotasCats){
-    const catFiles=fotosMap[cat.id]||[];
-    if(catFiles.length){for(const f of catFiles)fotos.push(await comprimirImagem(f,cat.label.replace(/^[^\s]+\s/,'')));}
-    else{const cached=(window._fotosB64Cache&&window._fotosB64Cache[cat.id])||[];for(const item of cached)fotos.push(item);}
-  }
+  for(const cat of fotasCats)
+    for(const f of (fotosMap[cat.id]||[]))
+      fotos.push(await comprimirImagem(f, cat.label.replace(/^[^\s]+\s/,'')));
   return fotos;
 }
 
@@ -1478,6 +1620,7 @@ function validar(){
 
   const hasManha = !document.getElementById('secManha').classList.contains('hidden');
   const haTarde  = !document.getElementById('secTarde').classList.contains('hidden');
+  const haSabadoTarde = !document.getElementById('secSabadoTarde').classList.contains('hidden');
 
   // ── Horários ──
   if(hasManha){
@@ -1487,6 +1630,10 @@ function validar(){
   if(haTarde){
     ['t_chegada','t_ab_portao','t_ab_malote','t_distrib','t_fch_portao','t_inicio','t_encerr','t_fch_malote']
       .forEach(id => checar(document.getElementById(id), 'Horários — Tarde'));
+  }
+  if(haSabadoTarde){
+    ['s_chegada','s_ab_portao','s_ab_malote','s_distrib','s_fch_portao','s_inicio','s_encerr','s_fch_malote']
+      .forEach(id => checar(document.getElementById(id), 'Horários — Sáb. Tarde'));
   }
 
   // ── Testemunhas ──
@@ -1502,6 +1649,12 @@ function validar(){
       checar(document.getElementById(`t_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote — Tarde');
     }
   }
+  if(haSabadoTarde){
+    for(let i=1;i<=3;i++){
+      checar(document.getElementById(`s_t${i}_ab_malote_nome`),  'Testemunhas Abertura Malote — Sáb. Tarde');
+      checar(document.getElementById(`s_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote — Sáb. Tarde');
+    }
+  }
 
   // ── CPFs duplicados nas testemunhas ──
   if(hasManha){
@@ -1512,13 +1665,19 @@ function validar(){
     if(validarCPFsDuplicados('t','ab_malote',secoes))  { if(!secoes.includes('Testemunhas Abertura Malote — Tarde (CPFs duplicados)'))  secoes.push('Testemunhas Abertura Malote — Tarde (CPFs duplicados)');  }
     if(validarCPFsDuplicados('t','fch_malote',secoes)) { if(!secoes.includes('Testemunhas Fechamento Malote — Tarde (CPFs duplicados)')) secoes.push('Testemunhas Fechamento Malote — Tarde (CPFs duplicados)'); }
   }
+  if(haSabadoTarde){
+    if(validarCPFsDuplicados('s','ab_malote',secoes))  { if(!secoes.includes('Testemunhas Abertura Malote — Sáb. Tarde (CPFs duplicados)'))  secoes.push('Testemunhas Abertura Malote — Sáb. Tarde (CPFs duplicados)');  }
+    if(validarCPFsDuplicados('s','fch_malote',secoes)) { if(!secoes.includes('Testemunhas Fechamento Malote — Sáb. Tarde (CPFs duplicados)')) secoes.push('Testemunhas Fechamento Malote — Sáb. Tarde (CPFs duplicados)'); }
+  }
 
   // ── Estatística (pres / aus / incl) ──
   document.querySelectorAll('[data-obrig]').forEach(el => {
     const inManha = !!el.closest('#secManha');
     const inTarde = !!el.closest('#secTarde');
+    const inSabadoTarde = !!el.closest('#secSabadoTarde');
     if(inManha && hasManha) checar(el, 'Estatística — Manhã');
     if(inTarde && haTarde)  checar(el, 'Estatística — Tarde');
+    if(inSabadoTarde && haSabadoTarde) checar(el, 'Estatística — Sáb. Tarde');
   });
 
   if(secoes.length > 0){
@@ -1580,6 +1739,7 @@ async function enviar(){
   const escola = CONCURSO.escolas[parseInt(idx)];
   const hasManha = escola.cargos.some(c=>c.turno==="Manhã");
   const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
+  const haSabadoTarde = escola.cargos.some(c=>c.turno==="Sábado Tarde");
 
   const payload = {
     escola:      escola.nome,
@@ -1656,6 +1816,37 @@ async function enviar(){
       ampliacao: getRad("t_ampliacao")==="Sim" ? coletarAmpliacaoEntries("t_ampliacao_entries") : [],
       correcao:  getRad("t_correcao")==="Sim"  ? coletarCorrecaoEntries("t_correcao_entries")  : [],
     },
+
+    sabado_tarde: !haSabadoTarde ? null : {
+      horarios: {
+        chegada:    getTxt("s_chegada"),    ab_portao:  getTxt("s_ab_portao"),
+        fch_portao: getTxt("s_fch_portao"), distrib:    getTxt("s_distrib"),
+        inicio:     getTxt("s_inicio"),     encerr:     getTxt("s_encerr"),
+        fch_malote: getTxt("s_fch_malote"), ab_malote:  getTxt("s_ab_malote"),
+      },
+      testemunhas: {
+        ab_malote: [
+          {nome:getTxt("s_t1_ab_malote_nome"), cpf:getTxt("s_t1_ab_malote_cpf")},
+          {nome:getTxt("s_t2_ab_malote_nome"), cpf:getTxt("s_t2_ab_malote_cpf")},
+          {nome:getTxt("s_t3_ab_malote_nome"), cpf:getTxt("s_t3_ab_malote_cpf")},
+        ],
+        fch_malote: [
+          {nome:getTxt("s_t1_fch_malote_nome"), cpf:getTxt("s_t1_fch_malote_cpf")},
+          {nome:getTxt("s_t2_fch_malote_nome"), cpf:getTxt("s_t2_fch_malote_cpf")},
+          {nome:getTxt("s_t3_fch_malote_nome"), cpf:getTxt("s_t3_fch_malote_cpf")},
+        ],
+      },
+      estatistica: coletarStat("tabelaSabadoTarde", escola.cargos.filter(c=>c.turno==="Sábado Tarde")),
+      ocorrencias: {
+        sala:  {resp:getRad("s_ocorr_sala"), candidatos:coletarSalaEntries("s_ocorr_sala_entries"),
+          tipos: coletarTiposOcorr("s_ocorr"),},
+        cond:  {resp:getRad("s_cond"),       candidatos:coletarSalaEntries("s_cond_entries")},
+        toque: {resp:getRad("s_toque"),      candidatos:coletarToqueEntries("s_toque_entries")},
+        decl:  {resp:getRad("s_decl"),       candidatos:coletarEntries("s_decl_entries")},
+      },
+      ampliacao: getRad("s_ampliacao")==="Sim" ? coletarAmpliacaoEntries("s_ampliacao_entries") : [],
+      correcao:  getRad("s_correcao")==="Sim"  ? coletarCorrecaoEntries("s_correcao_entries")  : [],
+    },
   };
 
   btn.disabled = true; btn.textContent = "Comprimindo fotos...";
@@ -1675,9 +1866,9 @@ async function enviar(){
       headers:{"Content-Type":"text/plain"},
       body: JSON.stringify(payload)
     });
-    limparRascunho(true);
+    limparRascunho();
     document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
-    ["cardIdent","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>{const _e=document.getElementById(id);if(_e)_e.classList.add("hidden");});
+    ["cardIdent","secManha","secTarde","secSabadoTarde","cardFotos","cardObs","divBtn"].forEach(id=>{const _e=document.getElementById(id);if(_e)_e.classList.add("hidden");});
     const cs2=document.getElementById("cardSucesso");cs2.classList.remove("hidden");cs2.scrollIntoView({behavior:"smooth",block:"center"});
   } catch(e) {
     btn.disabled = false; btn.textContent = "Enviar Formulário";
