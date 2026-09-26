@@ -660,12 +660,25 @@ function processarPlanilha(wb, nomeArquivo) {
 
   // ── Detecta índices de coluna dinamicamente pelo cabeçalho ──
   const header = linhas[0].map(h => String(h||"").trim().toUpperCase());
-  const iEscola = header.indexOf("ESCOLA") !== -1 ? header.indexOf("ESCOLA") : 13;
-  const iSala   = header.indexOf("SALA")   !== -1 ? header.indexOf("SALA")   : 10;
-  const iTurno  = header.indexOf("TURNO")  !== -1 ? header.indexOf("TURNO")  : 9;
-  const iCargo  = header.indexOf("CARGO")  !== -1 ? header.indexOf("CARGO")  : 7;
+  const iEscola     = header.indexOf("ESCOLA")     !== -1 ? header.indexOf("ESCOLA")     : 13;
+  const iSala       = header.indexOf("SALA")       !== -1 ? header.indexOf("SALA")       : 10;
+  const iTurno      = header.indexOf("TURNO")      !== -1 ? header.indexOf("TURNO")      : 9;
+  const iCargo      = header.indexOf("CARGO")      !== -1 ? header.indexOf("CARGO")      : 7;
+  const iDataProva  = header.indexOf("DATA PROVA") !== -1 ? header.indexOf("DATA PROVA") : 8;
   const iCoordEsc  = header.indexOf("ESCOLA_COORD")  !== -1 ? header.indexOf("ESCOLA_COORD")  : -1;
   const iCoordNome = header.indexOf("COORDENADOR")   !== -1 ? header.indexOf("COORDENADOR")   : -1;
+
+  // Helper: parse DATA PROVA cell (Date object, serial number, or "DD/MM/YYYY" string) → JS Date
+  function parseDataProva(v) {
+    if (!v) return null;
+    if (v instanceof Date) return v;
+    if (typeof v === "number") return new Date(Math.round((v - 25569) * 86400 * 1000));
+    if (typeof v === "string") {
+      const m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (m) return new Date(`${m[3]}-${m[2]}-${m[1]}`);
+    }
+    return null;
+  }
 
   // ── Mapa de coordenadores (se coluna existir na planilha) ──
   const coordMap = {};
@@ -685,9 +698,13 @@ function processarPlanilha(wb, nomeArquivo) {
     const escola = String(r[iEscola] || "").trim();
     if (!escola) continue;
     const sala  = String(r[iSala]  || "").trim();
-    const turno = String(r[iTurno] || "").trim();
+    const turnoRaw = String(r[iTurno] || "").trim();
     const cargo = String(r[iCargo] || "").trim();
-    if (!sala || !turno || !cargo) continue;
+    if (!sala || !turnoRaw || !cargo) continue;
+    // Detecta Sábado Tarde: TURNO="TARDE" + DATA PROVA em um sábado (getDay()===6)
+    const dpDate = parseDataProva(r[iDataProva]);
+    const isSabTarde = turnoRaw === "TARDE" && dpDate && dpDate.getDay() === 6;
+    const turno = isSabTarde ? "SÁBADO TARDE" : turnoRaw;
 
     if (!escMap[escola]) escMap[escola] = {cargosMap:{}, candidatos:[]};
     const inscr_cand = String(r[1] || "").trim();
@@ -704,7 +721,7 @@ function processarPlanilha(wb, nomeArquivo) {
   const escolas = Object.keys(escMap).map(nome => {
     const cargos = Object.entries(escMap[nome].cargosMap).map(([key, inscr]) => {
       const [sala, turno, cargo] = key.split("|");
-      return { sala, turno: turno === "MANHÃ" ? "Manhã" : "Tarde", cargo, inscr };
+      return { sala, turno: turno === "MANHÃ" ? "Manhã" : (turno === "SÁBADO TARDE" || turno === "SABADO TARDE" || turno === "SÁBADO" || turno === "SABADO") ? "Sábado Tarde" : "Tarde", cargo, inscr };
     });
     cargos.sort((a, b) => {
       const na = parseInt(a.sala.replace(/\D/g,"")) || 0;
@@ -714,6 +731,7 @@ function processarPlanilha(wb, nomeArquivo) {
     const salas = new Set(cargos.map(c => c.sala)).size;
     const hasManha = cargos.some(c => c.turno === "Manhã");
     const haTarde  = cargos.some(c => c.turno === "Tarde");
+    const hasSabadoTarde = cargos.some(c => c.turno === "Sábado Tarde");
 
     // Tenta achar coordenador: match exato ou parcial
     let coord = "";
@@ -724,7 +742,7 @@ function processarPlanilha(wb, nomeArquivo) {
     }
 
     const candArr = escMap[nome].candidatos;
-    return { nome, coord_local: coord, salas, cargos, hasManha, haTarde,
+    return { nome, coord_local: coord, salas, cargos, hasManha, haTarde, hasSabadoTarde,
              candidatos: candArr, candidatosCount: candArr.length };
   });
 
@@ -741,8 +759,12 @@ function renderRevisao(nomeArquivo) {
   const tbody = document.getElementById("tabelaEscolas");
   tbody.innerHTML = "";
   dadosCertame.escolas.forEach((e, i) => {
-    const turno = e.hasManha && e.haTarde ? '<span class="badge badge-mt">Manhã e Tarde</span>'
+    const turno = e.hasManha && e.haTarde && e.hasSabadoTarde ? '<span class="badge badge-mt">Manhã, Tarde e Sáb. Tarde</span>'
+                : e.hasManha && e.haTarde ? '<span class="badge badge-mt">Manhã e Tarde</span>'
+                : e.hasManha && e.hasSabadoTarde ? '<span class="badge badge-mt">Manhã e Sáb. Tarde</span>'
+                : e.haTarde && e.hasSabadoTarde ? '<span class="badge badge-mt">Tarde e Sáb. Tarde</span>'
                 : e.hasManha ? '<span class="badge badge-m">Manhã</span>'
+                : e.hasSabadoTarde ? '<span class="badge badge-t">Sábado Tarde</span>'
                 : '<span class="badge badge-t">Tarde</span>';
     const dropId  = `drop_${i}`;
     const inputId = `cinput_${i}`;
@@ -1007,7 +1029,7 @@ function abrirRelatorioImprimivel(dados) {
   const win = window.open("", "_blank");
   const conc = dados.concurso || {};
   const escolas = dados.escolas || [];
-  const corM = "#1F3A6E", corT = "#CF3432", corH = "#2C2C2C";
+  const corM = "#1F3A6E", corT = "#CF3432", corS = "#6A0DAD", corH = "#2C2C2C";
 
   // ── Formata hora: converte ISO timestamp ou string para "HH:mm"
   function fh(val) {
@@ -1088,7 +1110,7 @@ function abrirRelatorioImprimivel(dados) {
 
     // Horários por turno
     (e.horarios||[]).forEach(function(h) {
-      const cor = h.turno==="Manhã" ? corM : corT;
+      const cor = h.turno==="Manhã" ? corM : h.turno==="Tarde" ? corT : corS;
       html += secao("Horários — " + h.turno, cor,
         grid2("Chegada da equipe", fh(h.chegada), "Abertura do portão", fh(h.ab_portao)) +
         grid2("Abertura do malote", fh(h.ab_malote), "Distribuição dos pacotes", fh(h.distrib)) +
@@ -1100,7 +1122,7 @@ function abrirRelatorioImprimivel(dados) {
     // Testemunhas por turno
     const turnosTest = [...new Set((e.testemunhas||[]).map(t=>t.turno||"Manhã").filter(Boolean))];
     turnosTest.forEach(function(turno) {
-      const cor = turno==="Manhã" ? corM : corT;
+      const cor = turno==="Manhã" ? corM : turno==="Tarde" ? corT : corS;
       const tt = (e.testemunhas||[]).filter(t=>(t.turno||"Manhã")===turno);
       let tHtml = "";
       tt.forEach(function(t) {
@@ -1119,7 +1141,7 @@ function abrirRelatorioImprimivel(dados) {
     // Estatística por turno
     const turnosRes = [...new Set((e.resultados||[]).map(r=>r.turno))];
     turnosRes.forEach(function(turno) {
-      const cor = turno==="Manhã" ? corM : corT;
+      const cor = turno==="Manhã" ? corM : turno==="Tarde" ? corT : corS;
       const rows = (e.resultados||[]).filter(r=>r.turno===turno);
       let tI=0,tP=0,tA=0,tIn=0;
       let tabela = `<table><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
@@ -1146,7 +1168,7 @@ function abrirRelatorioImprimivel(dados) {
     const _ocorrLabelsInd = {sala:'Ocorrências em sala',cond:'Prova condicional',toque:'Toque de celular',decl:'Declaração de comparecimento'};
     const ocorrFiltradas = (e.ocorrencias||[]).filter(function(o){ return _ov(o.sala)||_ov(o.cond)||_ov(o.toque)||_ov(o.decl); });
     (ocorrFiltradas.length>0 ? ocorrFiltradas : (e.ocorrencias||[])).forEach(function(o) {
-      const cor = (o.turno||"Manhã").includes("Manhã") ? corM : corT;
+      const cor = (o.turno||"Manhã")==="Manhã" ? corM : (o.turno||"Manhã")==="Tarde" ? corT : corS;
       const cands = (e.candidatos||[]).filter(c=>c.turno===o.turno);
       // Tipos específicos vêm dos candidatos; fallback: categorias Sim/Não
       var tiposEspec = [];
@@ -1176,8 +1198,8 @@ function abrirRelatorioImprimivel(dados) {
     });
 
     // Correção de Dados Cadastrais por turno
-    ["Manhã","Tarde"].forEach(function(turno) {
-      const cor = turno==="Manhã" ? corM : corT;
+    ["Manhã","Tarde","Sábado Tarde"].forEach(function(turno) {
+      const cor = turno==="Manhã" ? corM : turno==="Tarde" ? corT : corS;
       const lista = (e.correcoes||[]).filter(function(c){ return (c.turno||"Manhã")===turno; });
       if (lista.length === 0) return;
       let corrHtml = `<table><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
