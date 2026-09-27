@@ -747,7 +747,7 @@ function salvarRascunho(){
     if(el.type==='radio'||el.type==='file'||['selCertame','sel'].includes(el.id)) return;
     d[el.id]=el.value;
   });
-  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl','s_ocorr_sala','s_cond','s_toque','s_decl'].forEach(n=>{
+  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','m_correcao','t_ocorr_sala','t_cond','t_toque','t_decl','t_correcao','s_ocorr_sala','s_cond','s_toque','s_decl','s_correcao'].forEach(n=>{
     const el=document.querySelector('input[name="'+n+'"]:checked');
     if(el) d['r_'+n]=el.value;
   });
@@ -778,6 +778,13 @@ function salvarRascunho(){
       const laN=namesArr.find(n=>n.includes('_lacrado_'))||'';
       const loN=namesArr.find(n=>n.includes('_local_'))||'';
       return{a:ins[0]?.value||'',b:ins[1]?.value||'',c:ins[2]?.value||'',estado:gR(eN),lacrado:gR(laN),local:gR(loN)};
+    });
+  });
+  ['m_correcao_entries','t_correcao_entries','s_correcao_entries'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    d['_'+id]=Array.from(el.querySelectorAll('.correcao-block')).map(b=>{
+      const ins=b.querySelectorAll('input'), sel2=b.querySelector('select');
+      return{a:ins[0]?.value||'',b:ins[1]?.value||'',tipo:sel2?.value||'',correcao:ins[2]?.value||''};
     });
   });
   d['_gerado_em'] = CONCURSO?.gerado_em || '';
@@ -812,7 +819,7 @@ function restaurarRascunho(){
     const el=document.getElementById(id);
     if(el&&el.type!=='file') el.value=val;
   });
-  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','t_ocorr_sala','t_cond','t_toque','t_decl','s_ocorr_sala','s_cond','s_toque','s_decl'].forEach(n=>{
+  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','m_correcao','t_ocorr_sala','t_cond','t_toque','t_decl','t_correcao','s_ocorr_sala','s_cond','s_toque','s_decl','s_correcao'].forEach(n=>{
     const val=d['r_'+n]; if(!val) return;
     const el=document.querySelector('input[name="'+n+'"][value="'+val+'"]');
     if(el){el.checked=true; el.dispatchEvent(new Event('change'));}
@@ -887,6 +894,21 @@ function restaurarRascunho(){
       if(e.lacrado){ const r=block.querySelector('input[name="'+px+'_toque_lacrado_'+idx+'"][value="'+e.lacrado+'"]'); if(r) r.checked=true; }
       if(e.local)  { const r=block.querySelector('input[name="'+px+'_toque_local_'+idx+'"][value="'+e.local+'"]');   if(r) r.checked=true; }
       list.appendChild(block);
+    });
+  });
+  ['m_correcao_entries','t_correcao_entries','s_correcao_entries'].forEach(id=>{
+    const entries=d['_'+id]; if(!entries||!entries.length) return;
+    const list=document.getElementById(id); if(!list) return; list.innerHTML='';
+    entries.forEach(e=>{
+      const b=document.createElement('div'); b.className='correcao-block';
+      b.style.cssText='border:1px solid #d0d0d0;border-radius:6px;padding:10px;margin-bottom:8px;margin-top:6px;';
+      b.innerHTML='<div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)" style="cursor:text"><input type="text" placeholder="Nome do Candidato"><select><option value="">Tipo</option><option value="Nome">Nome</option><option value="Data de Nascimento">Data de Nascimento</option></select></div><div class="form-group" style="margin-top:6px;"><label>Dado Correto</label><input type="text" placeholder="Informe o dado correto..."></div>';
+      const ins=b.querySelectorAll('input'), sel2=b.querySelector('select');
+      if(ins[0]) ins[0].value=e.a||'';
+      if(ins[1]) ins[1].value=e.b||'';
+      if(sel2)   sel2.value=e.tipo||'';
+      if(ins[2]) ins[2].value=e.correcao||'';
+      list.appendChild(b);
     });
   });
   _rascunhoToast('📋 Rascunho restaurado!','#1F3A6E');
