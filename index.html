@@ -699,6 +699,11 @@
   </div>
 
   <div class="hidden" id="divBtn">
+    <div id="selTurnosEnvio" style="background:#f0f4ff;border:1px solid #c0cce8;border-radius:10px;padding:16px 20px;margin-bottom:16px;">
+      <p style="font-weight:600;color:#1F3A6E;margin:0 0 10px;">📤 Selecione os turnos a enviar agora:</p>
+      <div id="checkboxTurnos" style="display:flex;gap:18px;flex-wrap:wrap;"></div>
+      <p style="font-size:12px;color:#666;margin:10px 0 0;">Você pode enviar o sábado hoje e o domingo amanhã — os dados se acumulam na planilha.</p>
+    </div>
     <div id="msgValidacao"></div>
     <button class="btn" id="btnEnviar" onclick="enviar()">Enviar Formulário</button>
   </div>
@@ -1018,6 +1023,26 @@ function onEscolaChange(){
   document.getElementById("cardFotos").classList.remove("hidden");
   document.getElementById("cardObs").classList.remove("hidden");
   document.getElementById("divBtn").classList.remove("hidden");
+
+  // Popula checkboxes de seleção de turnos
+  const checkDiv = document.getElementById("checkboxTurnos");
+  checkDiv.innerHTML = "";
+  const turnosDisponiveis = [];
+  if(haSabadoTarde) turnosDisponiveis.push({key:"sabado_tarde", label:"Sábado Tarde"});
+  if(hasManha)      turnosDisponiveis.push({key:"manha",        label:"Domingo Manhã"});
+  if(haTarde)       turnosDisponiveis.push({key:"tarde",        label:"Domingo Tarde"});
+  turnosDisponiveis.forEach(function(t){
+    const lbl = document.createElement("label");
+    lbl.style.cssText="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;cursor:pointer;";
+    const cb = document.createElement("input");
+    cb.type="checkbox"; cb.id="cbTurno_"+t.key; cb.value=t.key; cb.checked=true;
+    cb.style.cssText="width:16px;height:16px;cursor:pointer;";
+    lbl.appendChild(cb);
+    lbl.appendChild(document.createTextNode(t.label));
+    checkDiv.appendChild(lbl);
+  });
+  // Mostra seletor só se tiver mais de 1 turno
+  document.getElementById("selTurnosEnvio").style.display = turnosDisponiveis.length > 1 ? "" : "none";
 
   // Trava os selects após a escolha
   selCertame.disabled = true;
@@ -1763,6 +1788,18 @@ async function enviar(){
   const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
   const haSabadoTarde = escola.cargos.some(c=>c.turno==="Sábado Tarde");
 
+  // Lê quais turnos foram marcados para enviar agora
+  const cbManha       = document.getElementById("cbTurno_manha");
+  const cbTarde       = document.getElementById("cbTurno_tarde");
+  const cbSabadoTarde = document.getElementById("cbTurno_sabado_tarde");
+  const enviarManha       = hasManha       && (!cbManha       || cbManha.checked);
+  const enviarTarde       = haTarde        && (!cbTarde       || cbTarde.checked);
+  const enviarSabadoTarde = haSabadoTarde  && (!cbSabadoTarde || cbSabadoTarde.checked);
+  if(!enviarManha && !enviarTarde && !enviarSabadoTarde){
+    alert("Selecione pelo menos um turno para enviar.");
+    return;
+  }
+
   const payload = {
     escola:      escola.nome,
     coord_local: getTxt("inputCoord"),
@@ -1777,7 +1814,7 @@ async function enviar(){
     enviado_em:  new Date().toLocaleString("pt-BR"),
     obs:         getTxt("textObs"),
 
-    manha: !hasManha ? null : {
+    manha: !enviarManha ? null : {
       horarios: {
         chegada:    getTxt("m_chegada"),    ab_portao:  getTxt("m_ab_portao"),
         fch_portao: getTxt("m_fch_portao"), distrib:    getTxt("m_distrib"),
@@ -1808,7 +1845,7 @@ async function enviar(){
       correcao:  getRad("m_correcao")==="Sim"  ? coletarCorrecaoEntries("m_correcao_entries")  : [],
     },
 
-    tarde: !haTarde ? null : {
+    tarde: !enviarTarde ? null : {
       horarios: {
         chegada:    getTxt("t_chegada"),    ab_portao:  getTxt("t_ab_portao"),
         fch_portao: getTxt("t_fch_portao"), distrib:    getTxt("t_distrib"),
@@ -1839,7 +1876,7 @@ async function enviar(){
       correcao:  getRad("t_correcao")==="Sim"  ? coletarCorrecaoEntries("t_correcao_entries")  : [],
     },
 
-    sabado_tarde: !haSabadoTarde ? null : {
+    sabado_tarde: !enviarSabadoTarde ? null : {
       horarios: {
         chegada:    getTxt("s_chegada"),    ab_portao:  getTxt("s_ab_portao"),
         fch_portao: getTxt("s_fch_portao"), distrib:    getTxt("s_distrib"),
