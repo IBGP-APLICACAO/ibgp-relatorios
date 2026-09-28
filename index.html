@@ -336,6 +336,13 @@
 
   </div></div><!-- /secSabadoTarde -->
 
+  <!-- FOTOS SÁBADO TARDE (card separado, aparece logo abaixo da seção sábado) -->
+  <div class="card hidden" id="cardFotosSabado">
+    <div class="card-title sabado">📷 Registro Fotográfico — Sábado Tarde</div>
+    <p style="font-size:13px;color:#666;margin-bottom:16px;">Selecione 2 fotos para cada categoria do turno Sábado Tarde.</p>
+    <div id="fotosGridSabado" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;"></div>
+  </div>
+
   <!-- TURNO MANHÃ -->
   <div class="hidden" id="secManha">
 
@@ -974,7 +981,7 @@ function onCertameChange(){
 
   // Reseta escola
   sel.innerHTML = '<option value="">— Selecione seu local de aplicação —</option>';
-  ["rowEscola","rowIdent2","rowApoioNome","secManha","secTarde","secSabadoTarde","cardFotos","cardObs","divBtn"]
+  ["rowEscola","rowIdent2","rowApoioNome","secManha","secTarde","secSabadoTarde","cardFotosSabado","cardFotos","cardObs","divBtn"]
     .forEach(id => { const el = document.getElementById(id); if(el) el.classList.add("hidden"); });
 
   fetch("dados/" + info.id + ".json?v="+Date.now())
@@ -1000,7 +1007,7 @@ function toggleApoio(){
 function onEscolaChange(){
   const idx = sel.value;
   if(idx === "" || !CONCURSO){
-    ["rowIdent2","rowApoioNome","secManha","secTarde","secSabadoTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+    ["rowIdent2","rowApoioNome","secManha","secTarde","secSabadoTarde","cardFotosSabado","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
     return;
   }
   const escola = CONCURSO.escolas[parseInt(idx)];
@@ -1059,7 +1066,7 @@ function alterarEscola(){
   document.getElementById("btnAlterar").style.display = "none";
   // Reseta form
   sel.value = "";
-  ["rowIdent2","rowApoioNome","secManha","secTarde","secSabadoTarde","cardFotos","cardObs","divBtn"]
+  ["rowIdent2","rowApoioNome","secManha","secTarde","secSabadoTarde","cardFotosSabado","cardFotos","cardObs","divBtn"]
     .forEach(id => document.getElementById(id).classList.add("hidden"));
 }
 
@@ -1533,12 +1540,36 @@ function coletarToqueEntries(listId){
 let fotosMap = {};
 let fotasCats = [];
 
+function _fotoCard(c){
+  return `<div style="border:1px solid #EEE;border-radius:8px;padding:14px;">
+    <p style="font-size:11px;font-weight:700;color:${c.cor};text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;">${c.label} <span style="color:#888;font-weight:400;">(2 fotos)</span></p>
+    <label for="${c.id}" style="display:inline-block;padding:7px 14px;background:${c.cor};color:#FFF;border-radius:5px;cursor:pointer;font-size:12px;font-weight:700;margin-bottom:8px;">Selecionar</label>
+    <input type="file" id="${c.id}" multiple accept="image/*" onchange="previewCat('${c.id}','prev_${c.id}')" style="display:none;">
+    <div id="prev_${c.id}" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+  </div>`;
+}
+
 function renderFotosCategorias(hasManha, haTarde, haSabadoTarde){
   fotosMap = {};
   fotasCats = [];
 
+  // ── Categorias Sábado Tarde (card separado, com Sinalização) ──
+  const catsSab = [];
+  if(haSabadoTarde){
+    catsSab.push({id:'fc_sinal_s',       label:'📌 Sinalização — Sáb. Tarde',          cor:'#6A0DAD'});
+    catsSab.push({id:'fc_portao_ab_s',   label:'🚪 Abertura do Portão — Sáb. Tarde',    cor:'#6A0DAD'});
+    catsSab.push({id:'fc_aplic_s',       label:'📝 Aplicação — Sáb. Tarde',             cor:'#6A0DAD'});
+    catsSab.push({id:'fc_abm_s',         label:'📦 Abertura do Malote — Sáb. Tarde',    cor:'#6A0DAD'});
+    catsSab.push({id:'fc_fchm_s',        label:'📦 Fechamento do Malote — Sáb. Tarde',  cor:'#6A0DAD'});
+    catsSab.push({id:'fc_portao_fch_s',  label:'🚪 Fechamento do Portão — Sáb. Tarde',  cor:'#6A0DAD'});
+  }
+
+  // ── Categorias Domingo (Manhã / Tarde) — sem Sinalização se houver Sábado ──
   const cats = [];
-  cats.push({id:'fc_sinal_m',   label:'📌 Sinalização — Manhã',          cor:'#393939'});
+  if(!haSabadoTarde){
+    // Sem sábado: Sinalização fica no Domingo Manhã
+    cats.push({id:'fc_sinal_m', label:'📌 Sinalização — Manhã', cor:'#393939'});
+  }
   if(hasManha){
     cats.push({id:'fc_portao_ab_m',  label:'🚪 Abertura do Portão — Manhã',    cor:'#1F3A6E'});
     cats.push({id:'fc_aplic_m',      label:'📝 Aplicação — Manhã',             cor:'#1F3A6E'});
@@ -1554,29 +1585,23 @@ function renderFotosCategorias(hasManha, haTarde, haSabadoTarde){
     cats.push({id:'fc_portao_fch_t', label:'🚪 Fechamento do Portão — Tarde',  cor:'#CF3432'});
   }
 
+  fotasCats = [...catsSab, ...cats];
+  fotasCats.forEach(c => fotosMap[c.id] = []);
 
+  // Popula grid do Sábado (card separado)
+  const gridSab = document.getElementById('fotosGridSabado');
+  const cardSab = document.getElementById('cardFotosSabado');
   if(haSabadoTarde){
-    cats.push({id:'fc_portao_ab_s',  label:'🚪 Abertura do Portão — Sáb. Tarde',    cor:'#6A0DAD'});
-    cats.push({id:'fc_aplic_s',      label:'📝 Aplicação — Sáb. Tarde',             cor:'#6A0DAD'});
-    cats.push({id:'fc_abm_s',        label:'📦 Abertura do Malote — Sáb. Tarde',    cor:'#6A0DAD'});
-    cats.push({id:'fc_fchm_s',       label:'📦 Fechamento do Malote — Sáb. Tarde',  cor:'#6A0DAD'});
-    cats.push({id:'fc_portao_fch_s', label:'🚪 Fechamento do Portão — Sáb. Tarde',  cor:'#6A0DAD'});
+    gridSab.innerHTML = catsSab.map(_fotoCard).join('');
+    cardSab.classList.remove('hidden');
+  } else {
+    gridSab.innerHTML = '';
+    cardSab.classList.add('hidden');
   }
-  fotasCats = cats;
-  cats.forEach(c => fotosMap[c.id] = []);
 
+  // Popula grid principal (Domingo)
   const grid = document.getElementById('fotosGrid');
-  grid.innerHTML = '';
-  cats.forEach(c => {
-    const labelText = c.label.replace(/^[^\s]+\s/, ''); // sem emoji para o input label
-    grid.innerHTML += `
-      <div style="border:1px solid #EEE;border-radius:8px;padding:14px;">
-        <p style="font-size:11px;font-weight:700;color:${c.cor};text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;">${c.label} <span style="color:#888;font-weight:400;">(2 fotos)</span></p>
-        <label for="${c.id}" style="display:inline-block;padding:7px 14px;background:${c.cor};color:#FFF;border-radius:5px;cursor:pointer;font-size:12px;font-weight:700;margin-bottom:8px;">Selecionar</label>
-        <input type="file" id="${c.id}" multiple accept="image/*" onchange="previewCat('${c.id}','prev_${c.id}')" style="display:none;">
-        <div id="prev_${c.id}" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
-      </div>`;
-  });
+  grid.innerHTML = cats.map(_fotoCard).join('');
 }
 
 function previewCat(inputId, previewId){
@@ -1927,7 +1952,7 @@ async function enviar(){
     });
     limparRascunho();
     document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
-    ["cardIdent","secManha","secTarde","secSabadoTarde","cardFotos","cardObs","divBtn"].forEach(id=>{const _e=document.getElementById(id);if(_e)_e.classList.add("hidden");});
+    ["cardIdent","secManha","secTarde","secSabadoTarde","cardFotosSabado","cardFotos","cardObs","divBtn"].forEach(id=>{const _e=document.getElementById(id);if(_e)_e.classList.add("hidden");});
     const cs2=document.getElementById("cardSucesso");cs2.classList.remove("hidden");cs2.scrollIntoView({behavior:"smooth",block:"center"});
   } catch(e) {
     btn.disabled = false; btn.textContent = "Enviar Formulário";
