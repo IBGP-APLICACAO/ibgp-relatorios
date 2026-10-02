@@ -703,7 +703,7 @@ function processarPlanilha(wb, nomeArquivo) {
     if (!sala || !turnoRaw || !cargo) continue;
     // Detecta Sábado Tarde: TURNO="TARDE" + DATA PROVA em um sábado (getDay()===6)
     const dpDate = parseDataProva(r[iDataProva]);
-    const isSabTarde = turnoRaw === "TARDE" && dpDate && dpDate.getDay() === 6;
+    const isSabTarde = turnoRaw === "TARDE" && dpDate && dpDate.getUTCDay() === 6;
     const turno = isSabTarde ? "SÁBADO TARDE" : turnoRaw;
 
     if (!escMap[escola]) escMap[escola] = {cargosMap:{}, candidatos:[]};
@@ -723,6 +723,15 @@ function processarPlanilha(wb, nomeArquivo) {
       const [sala, turno, cargo] = key.split("|");
       return { sala, turno: turno === "MANHÃ" ? "Manhã" : (turno === "SÁBADO TARDE" || turno === "SABADO TARDE" || turno === "SÁBADO" || turno === "SABADO") ? "Sábado Tarde" : "Tarde", cargo, inscr };
     });
+
+    // Se a escola tem "Sábado Tarde" mas NÃO tem "Tarde" (domingo tarde),
+    // é uma escola de 2 turnos — renomeia "Sábado Tarde" para "Tarde"
+    const temSabTarde = cargos.some(c => c.turno === "Sábado Tarde");
+    const temTarde    = cargos.some(c => c.turno === "Tarde");
+    if (temSabTarde && !temTarde) {
+      cargos.forEach(c => { if (c.turno === "Sábado Tarde") c.turno = "Tarde"; });
+    }
+
     cargos.sort((a, b) => {
       const na = parseInt(a.sala.replace(/\D/g,"")) || 0;
       const nb = parseInt(b.sala.replace(/\D/g,"")) || 0;
