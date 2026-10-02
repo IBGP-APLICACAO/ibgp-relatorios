@@ -19,26 +19,26 @@
         {
           "sala": "SALA 01",
           "turno": "Sábado Tarde",
-          "cargo": "101 - AUXILIAR DE SERVIÇOS GERAIS",
-          "inscr": 24
-        },
-        {
-          "sala": "SALA 01",
-          "turno": "Tarde",
           "cargo": "302 - AGENTE COMUNITÁRIO DE SAÚDE (ACS) - UBS ESPERANÇA",
           "inscr": 6
         },
         {
           "sala": "SALA 01",
-          "turno": "Tarde",
+          "turno": "Sábado Tarde",
           "cargo": "303 - AGENTE COMUNITÁRIO DE SAÚDE (ACS) - UBS SAÚDE PARA TODOS",
           "inscr": 13
         },
         {
           "sala": "SALA 01",
-          "turno": "Tarde",
+          "turno": "Sábado Tarde",
           "cargo": "304 - AGENTE DE SAÚDE – COMBATE ÀS ENDEMIAS",
           "inscr": 5
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Tarde",
+          "cargo": "101 - AUXILIAR DE SERVIÇOS GERAIS",
+          "inscr": 24
         },
         {
           "sala": "SALA 02",
@@ -55,20 +55,20 @@
         {
           "sala": "SALA 02",
           "turno": "Sábado Tarde",
-          "cargo": "101 - AUXILIAR DE SERVIÇOS GERAIS",
-          "inscr": 21
-        },
-        {
-          "sala": "SALA 02",
-          "turno": "Tarde",
           "cargo": "301  - AGENTE COMUNITÁRIO DE SAÚDE (ACS) - UBS CAFARNAUM",
           "inscr": 7
         },
         {
           "sala": "SALA 02",
-          "turno": "Tarde",
+          "turno": "Sábado Tarde",
           "cargo": "302 - AGENTE COMUNITÁRIO DE SAÚDE (ACS) - UBS ESPERANÇA",
           "inscr": 2
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Tarde",
+          "cargo": "101 - AUXILIAR DE SERVIÇOS GERAIS",
+          "inscr": 21
         },
         {
           "sala": "SALA 03",
@@ -103,50 +103,50 @@
         {
           "sala": "SALA 03",
           "turno": "Sábado Tarde",
+          "cargo": "304 - AGENTE DE SAÚDE – COMBATE ÀS ENDEMIAS",
+          "inscr": 31
+        },
+        {
+          "sala": "SALA 03",
+          "turno": "Tarde",
           "cargo": "101 - AUXILIAR DE SERVIÇOS GERAIS",
           "inscr": 15
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "103 - CALCETEIRO",
           "inscr": 2
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "104 - COVEIRO",
           "inscr": 7
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "106 - OPERÁRIO",
           "inscr": 2
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "108 - SERVENTE DE PEDREIRO",
           "inscr": 1
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "201 - ELETRICISTA",
           "inscr": 2
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "203 - MOTORISTA",
           "inscr": 2
-        },
-        {
-          "sala": "SALA 03",
-          "turno": "Tarde",
-          "cargo": "304 - AGENTE DE SAÚDE – COMBATE ÀS ENDEMIAS",
-          "inscr": 31
         },
         {
           "sala": "SALA 05",
@@ -157,18 +157,18 @@
         {
           "sala": "SALA 05",
           "turno": "Sábado Tarde",
-          "cargo": "101 - AUXILIAR DE SERVIÇOS GERAIS",
+          "cargo": "304 - AGENTE DE SAÚDE – COMBATE ÀS ENDEMIAS",
           "inscr": 25
         },
         {
           "sala": "SALA 05",
           "turno": "Tarde",
-          "cargo": "304 - AGENTE DE SAÚDE – COMBATE ÀS ENDEMIAS",
+          "cargo": "101 - AUXILIAR DE SERVIÇOS GERAIS",
           "inscr": 25
         },
         {
           "sala": "SALA O6",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "101 - AUXILIAR DE SERVIÇOS GERAIS",
           "inscr": 12
         },
@@ -181,13 +181,13 @@
         {
           "sala": "SALA 07",
           "turno": "Sábado Tarde",
-          "cargo": "101 - AUXILIAR DE SERVIÇOS GERAIS",
+          "cargo": "302 - AGENTE COMUNITÁRIO DE SAÚDE (ACS) - UBS ESPERANÇA",
           "inscr": 24
         },
         {
           "sala": "SALA 07",
           "turno": "Tarde",
-          "cargo": "302 - AGENTE COMUNITÁRIO DE SAÚDE (ACS) - UBS ESPERANÇA",
+          "cargo": "101 - AUXILIAR DE SERVIÇOS GERAIS",
           "inscr": 24
         }
       ],
@@ -2367,37 +2367,37 @@
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "523 - PROFESSOR DE EDUCAÇÃO FÍSICA",
           "inscr": 6
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "526 - PSICÓLOGO EM ABA",
           "inscr": 5
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "527 - PSICOMOTRICISTA",
           "inscr": 2
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "528 - PSICOPEDAGOGO",
           "inscr": 1
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "529 - SUPERVISOR ESCOLAR",
           "inscr": 5
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "601 - NEUROPSICOPEDAGOGO",
           "inscr": 7
         },
@@ -2421,13 +2421,13 @@
         },
         {
           "sala": "SALA 04",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "522 - PROFESSOR DE EDUCAÇÃO BÁSICA – AEE – SALA DE RECURSOS",
           "inscr": 6
         },
         {
           "sala": "SALA 04",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "523 - PROFESSOR DE EDUCAÇÃO FÍSICA",
           "inscr": 20
         },
@@ -2445,7 +2445,7 @@
         },
         {
           "sala": "SALA 05",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "522 - PROFESSOR DE EDUCAÇÃO BÁSICA – AEE – SALA DE RECURSOS",
           "inscr": 26
         },
@@ -2469,13 +2469,13 @@
         },
         {
           "sala": "SALA 06",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "521 - PROFESSOR I",
           "inscr": 17
         },
         {
           "sala": "SALA 06",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "522 - PROFESSOR DE EDUCAÇÃO BÁSICA – AEE – SALA DE RECURSOS",
           "inscr": 9
         },
@@ -2499,7 +2499,7 @@
         },
         {
           "sala": "SALA 07",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "521 - PROFESSOR I",
           "inscr": 26
         },
@@ -2517,7 +2517,7 @@
         },
         {
           "sala": "SALA 012",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "521 - PROFESSOR I",
           "inscr": 26
         },
@@ -2529,7 +2529,7 @@
         },
         {
           "sala": "SALA 013",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "521 - PROFESSOR I",
           "inscr": 26
         },
@@ -2565,7 +2565,7 @@
         },
         {
           "sala": "SALA 014",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "521 - PROFESSOR I",
           "inscr": 25
         }
@@ -5076,13 +5076,13 @@
         },
         {
           "sala": "SALA 01",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "508 - ENGENHEIRO CIVIL",
           "inscr": 9
         },
         {
           "sala": "SALA 01",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "521 - PROFESSOR I",
           "inscr": 21
         },
@@ -5094,13 +5094,13 @@
         },
         {
           "sala": "SALA 02",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "301 - AGENTE ADMINISTRATIVO",
           "inscr": 10
         },
         {
           "sala": "SALA 02",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "303 - AGENTE TRIBUTÁRIO",
           "inscr": 8
         },
@@ -5124,13 +5124,13 @@
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "505 - CONTROLADOR INTERNO",
           "inscr": 26
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "508 - ENGENHEIRO CIVIL",
           "inscr": 4
         },
@@ -5154,19 +5154,19 @@
         },
         {
           "sala": "SALA 04",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "402 - TÉCNICO EM ENFERMAGEM",
           "inscr": 10
         },
         {
           "sala": "SALA 04",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "504 - CONTADOR",
           "inscr": 6
         },
         {
           "sala": "SALA 04",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "505 - CONTROLADOR INTERNO",
           "inscr": 14
         },
@@ -5190,25 +5190,25 @@
         },
         {
           "sala": "SALA 05",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "307 - AUXILIAR EM SAÚDE BUCAL",
           "inscr": 2
         },
         {
           "sala": "SALA 05",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "311 - SECRETÁRIO ESCOLAR",
           "inscr": 10
         },
         {
           "sala": "SALA 05",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "312 - TESOUREIRO",
           "inscr": 11
         },
         {
           "sala": "SALA 05",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "402 - TÉCNICO EM ENFERMAGEM",
           "inscr": 7
         },
@@ -5220,19 +5220,19 @@
         },
         {
           "sala": "SALA 06",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "303 - AGENTE TRIBUTÁRIO",
           "inscr": 22
         },
         {
           "sala": "SALA 06",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "305 - AUXILIAR DE FARMÁCIA",
           "inscr": 2
         },
         {
           "sala": "SALA 06",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "306 - AUXILIAR DE SECRETARIA",
           "inscr": 6
         }
@@ -7281,13 +7281,13 @@
         },
         {
           "sala": "SALA 101",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "203 - MOTORISTA",
           "inscr": 23
         },
         {
           "sala": "SALA 101",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "301 - AGENTE ADMINISTRATIVO",
           "inscr": 7
         },
@@ -7317,7 +7317,7 @@
         },
         {
           "sala": "SALA 102",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "203 - MOTORISTA",
           "inscr": 30
         },
@@ -7329,7 +7329,7 @@
         },
         {
           "sala": "SALA 103",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "203 - MOTORISTA",
           "inscr": 30
         },
@@ -7371,37 +7371,37 @@
         },
         {
           "sala": "SALA 104",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "101 - AUXILIAR DE SERVIÇOS GERAIS",
           "inscr": 7
         },
         {
           "sala": "SALA 104",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "103 - CALCETEIRO",
           "inscr": 3
         },
         {
           "sala": "SALA 104",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "104 - COVEIRO",
           "inscr": 5
         },
         {
           "sala": "SALA 104",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "201 - ELETRICISTA",
           "inscr": 3
         },
         {
           "sala": "SALA 104",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "203 - MOTORISTA",
           "inscr": 12
         },
         {
           "sala": "SALA 105",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "101 - AUXILIAR DE SERVIÇOS GERAIS",
           "inscr": 30
         }
@@ -9054,37 +9054,37 @@
         },
         {
           "sala": "SALA 01",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "521 - PROFESSOR I",
           "inscr": 7
         },
         {
           "sala": "SALA 01",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "522 - PROFESSOR DE EDUCAÇÃO BÁSICA – AEE – SALA DE RECURSOS",
           "inscr": 4
         },
         {
           "sala": "SALA 01",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "523 - PROFESSOR DE EDUCAÇÃO FÍSICA",
           "inscr": 8
         },
         {
           "sala": "SALA 01",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "528 - PSICOPEDAGOGO",
           "inscr": 1
         },
         {
           "sala": "SALA 01",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "529 - SUPERVISOR ESCOLAR",
           "inscr": 4
         },
         {
           "sala": "SALA 01",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "601 - NEUROPSICOPEDAGOGO",
           "inscr": 1
         },
@@ -9132,7 +9132,7 @@
         },
         {
           "sala": "SALA 02",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "521 - PROFESSOR I",
           "inscr": 25
         },
@@ -9144,25 +9144,25 @@
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "402 - TÉCNICO EM ENFERMAGEM",
           "inscr": 13
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "505 - CONTROLADOR INTERNO",
           "inscr": 6
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "508 - ENGENHEIRO CIVIL",
           "inscr": 1
         },
         {
           "sala": "SALA 03",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "521 - PROFESSOR I",
           "inscr": 5
         },
@@ -9180,19 +9180,19 @@
         },
         {
           "sala": "SALA 04",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "311 - SECRETÁRIO ESCOLAR",
           "inscr": 8
         },
         {
           "sala": "SALA 04",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "312 - TESOUREIRO",
           "inscr": 10
         },
         {
           "sala": "SALA 04",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "402 - TÉCNICO EM ENFERMAGEM",
           "inscr": 7
         },
@@ -9204,19 +9204,19 @@
         },
         {
           "sala": "SALA 05",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "306 - AUXILIAR DE SECRETARIA",
           "inscr": 13
         },
         {
           "sala": "SALA 05",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "307 - AUXILIAR EM SAÚDE BUCAL",
           "inscr": 6
         },
         {
           "sala": "SALA 05",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "311 - SECRETÁRIO ESCOLAR",
           "inscr": 6
         },
@@ -9234,19 +9234,19 @@
         },
         {
           "sala": "SALA 06",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "303 - AGENTE TRIBUTÁRIO",
           "inscr": 13
         },
         {
           "sala": "SALA 06",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "305 - AUXILIAR DE FARMÁCIA",
           "inscr": 9
         },
         {
           "sala": "SALA 06",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "306 - AUXILIAR DE SECRETARIA",
           "inscr": 3
         },
@@ -9270,19 +9270,19 @@
         },
         {
           "sala": "SALA 07",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "203 - MOTORISTA",
           "inscr": 3
         },
         {
           "sala": "SALA 07",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "301 - AGENTE ADMINISTRATIVO",
           "inscr": 17
         },
         {
           "sala": "SALA 07",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "303 - AGENTE TRIBUTÁRIO",
           "inscr": 5
         },
@@ -9294,7 +9294,7 @@
         },
         {
           "sala": "SALA 08",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "203 - MOTORISTA",
           "inscr": 25
         },
@@ -9306,7 +9306,7 @@
         },
         {
           "sala": "SALA 09",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "203 - MOTORISTA",
           "inscr": 15
         },
@@ -9324,7 +9324,7 @@
         },
         {
           "sala": "SALA 10",
-          "turno": "Sábado Tarde",
+          "turno": "Tarde",
           "cargo": "203 - MOTORISTA",
           "inscr": 15
         }
