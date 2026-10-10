@@ -1,0 +1,552 @@
+{
+  "id": "alto-rio-doce-2026-10-10",
+  "titulo": "PROCESSO SELETIVO PÚBLICO DO MUNICÍPIO DE ALTO RIO DOCE/MG",
+  "edital": "Edital nº 02/2026",
+  "data": "10 de outubro de 2026",
+  "script_url": "https://script.google.com/macros/s/AKfycbxLVXbcNVoTI9dtvBc0ByXABVja9QEaqUf29N4hgYXCWCYAG8xMB4MmNfXa5kklJo08fw/exec",
+  "escolas": [
+    {
+      "nome": "SECRETÁRIA DE EDUCAÇÃO",
+      "coord_local": "GABRIEL SANTOS SILVA LOPES",
+      "salas": 2,
+      "cargos": [
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "301 - AGENTE COMUNITÁRIO DE SAÚDE - ESF CROATAS",
+          "inscr": 10
+        },
+        {
+          "sala": "SALA 01",
+          "turno": "Manhã",
+          "cargo": "302 - AGENTE COMUNITÁRIO DE SAÚDE - ESF VITORINOS",
+          "inscr": 34
+        },
+        {
+          "sala": "SALA 02",
+          "turno": "Manhã",
+          "cargo": "301 - AGENTE COMUNITÁRIO DE SAÚDE - ESF CROATAS",
+          "inscr": 42
+        }
+      ],
+      "candidatos": [
+        {
+          "inscricao": "16382979",
+          "nome": "ADELIANE APARECIDA MARTINS",
+          "cpf": "09188970680",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16360242",
+          "nome": "ANALICE DAS GRACAS SILVA PEREIRA",
+          "cpf": "14123056679",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16383636",
+          "nome": "ARTHUR DE FREITAS SOUZA ARAÚJO",
+          "cpf": "15350406612",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16357979",
+          "nome": "CAMILE VITORIA LADEIRA PEREIRA",
+          "cpf": "13177550735",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16382746",
+          "nome": "CHARLES ANDRE DE SOUZA",
+          "cpf": "06753992626",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16362758",
+          "nome": "CLEITON MIRANDA DOS REIS",
+          "cpf": "13850502686",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16376013",
+          "nome": "DAIANY APARECIDA DE MELO",
+          "cpf": "11878621696",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16358912",
+          "nome": "ELAINE CRISTINA DA ROCHA CALAIS",
+          "cpf": "08310257600",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16382944",
+          "nome": "ELENICE APARECIDA JUVÊNCIO",
+          "cpf": "12736248660",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16363893",
+          "nome": "GUILHERME LOPES DE MEDEIROS",
+          "cpf": "18161088632",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16383878",
+          "nome": "ISABEL CRISTINA DE FREITAS",
+          "cpf": "04580316665",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16361765",
+          "nome": "JAILMA SILVA SANTANA RODRIGUES",
+          "cpf": "02190557500",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16374991",
+          "nome": "JOSEANE PEREIRA JUVENCIO",
+          "cpf": "13448418641",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16373713",
+          "nome": "JULIANA MANSUETA DE SOUZA",
+          "cpf": "02193375607",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16367812",
+          "nome": "KARLA SILVA",
+          "cpf": "06989418613",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16381167",
+          "nome": "LÍDIA DAS GRAÇAS MACHADO FREITAS",
+          "cpf": "11924248670",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16362069",
+          "nome": "LIDIANE DE MATOS VITOR",
+          "cpf": "14188073624",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16382806",
+          "nome": "LUCAS ALVES SOARES",
+          "cpf": "10175587604",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16380622",
+          "nome": "LUCAS ARAÚJO MIRANDA",
+          "cpf": "12270337611",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16381759",
+          "nome": "LUIZ FELIPE DA SILVA",
+          "cpf": "16536865618",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16359202",
+          "nome": "MARIA JOSE FARIA DE PAULA",
+          "cpf": "00176322698",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16371426",
+          "nome": "MIRIAN DE FREITAS MIRANDA",
+          "cpf": "08429850694",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16379246",
+          "nome": "NATALIA APARECIDA GONÇALVES",
+          "cpf": "12734125676",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16358011",
+          "nome": "NATALINO CASSIANO DE SOUZA",
+          "cpf": "06445132685",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16367432",
+          "nome": "PABLO HENRIQUE DA ASSUNCAO SILVA",
+          "cpf": "16459788693",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16360441",
+          "nome": "PATRICK FERNANDES MARTINS",
+          "cpf": "15307001673",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16382733",
+          "nome": "ROSILENE APARECIDA SANTANA SOUZA",
+          "cpf": "09720130679",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16378393",
+          "nome": "TACIANA CRISCIANA REIS",
+          "cpf": "11053597606",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16359588",
+          "nome": "TADEU MANOEL BITTENCOURT",
+          "cpf": "07993425646",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16382310",
+          "nome": "TAINARA DE ALMEIDA MENDES REIS",
+          "cpf": "12818718694",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16382229",
+          "nome": "TATIANE DE FATIMA VICTOR",
+          "cpf": "10367809613",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16382377",
+          "nome": "TELMA EMILIA NOGUEIRA",
+          "cpf": "08991084664",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16370964",
+          "nome": "THAIS MARA CAMPOS",
+          "cpf": "14583900635",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16361868",
+          "nome": "VALQUIRIA MEDEIROS DOS REIS",
+          "cpf": "11296901645",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16363465",
+          "nome": "ÁLVARO CAMARGO RODRIGUES",
+          "cpf": "09021942674",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16375167",
+          "nome": "FABRICIO CESAR DA SILVA",
+          "cpf": "06686272639",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16381116",
+          "nome": "JOSIANE MORAIS",
+          "cpf": "08039416680",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16358413",
+          "nome": "LAURA JULIA MORAIS",
+          "cpf": "02297735677",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16366448",
+          "nome": "MARIA IMACULADA DA CONCEICAO DE SOUZA",
+          "cpf": "03852774667",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16380141",
+          "nome": "MARINA DA SILVA PINTO VIEIRA",
+          "cpf": "09301944626",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16376374",
+          "nome": "NANCI ROSA DE CARVALHO",
+          "cpf": "00577899678",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16359097",
+          "nome": "NIZIA MARIA DA SILVA",
+          "cpf": "08705459656",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16383955",
+          "nome": "SUSANA REGINA DE REZENDE",
+          "cpf": "00356211681",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16382061",
+          "nome": "WILLS ALAN CARDOZO NASCIMENTO",
+          "cpf": "06916995696",
+          "sala": "SALA 01"
+        },
+        {
+          "inscricao": "16376120",
+          "nome": "ALESSON AISLAN MOREIRA COELHO",
+          "cpf": "12218116650",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16368723",
+          "nome": "ANA PAULA APARECIDA DAS DORES CARDOSO",
+          "cpf": "09784415674",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16377271",
+          "nome": "ANA PAULA DE CARVALHO",
+          "cpf": "10469372605",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16381087",
+          "nome": "ANDRE LUCAS RIBAS DE ALMEIDA SANTOS",
+          "cpf": "18332335736",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16367764",
+          "nome": "CAMILA DE FÁTIMA LUZIA",
+          "cpf": "12700306635",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16364124",
+          "nome": "CINTIA APARECIDA DE PAIVA MIRANDA",
+          "cpf": "13362491618",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16370338",
+          "nome": "CRISTIANO GONÇALVES MARINHO COUTO",
+          "cpf": "99776022634",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16359533",
+          "nome": "DHENEFFER KAROLAINE SILVA MARTINS",
+          "cpf": "17136175607",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16382522",
+          "nome": "DULCINEIA FLAVIANA DA COSTA",
+          "cpf": "10094201781",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16373226",
+          "nome": "DYORDAN DE BARROS BRASILINO",
+          "cpf": "10857962647",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16358840",
+          "nome": "ELLEN LORRAYNE DE SOUZA",
+          "cpf": "14448988686",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16384470",
+          "nome": "EMANUELY CRISTINA SIQUEIRA",
+          "cpf": "15108540612",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16384168",
+          "nome": "EMMERSON CAIO ALVES MALTA",
+          "cpf": "18492749679",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16363606",
+          "nome": "ERICA APARECIDA DE SOUZA",
+          "cpf": "13671064609",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16385005",
+          "nome": "FRANZ MARTINO DOBSCHA",
+          "cpf": "96835923687",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16384034",
+          "nome": "IARA BRASILEIRO DE SOUZA PAIVA",
+          "cpf": "31561818895",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16375736",
+          "nome": "IDERLANIA ALVES DA SILVA",
+          "cpf": "09609295410",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16381444",
+          "nome": "JAQUELINE APARECIDA DO CARMO LOURDES",
+          "cpf": "17977324636",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16382343",
+          "nome": "JEFFERSON LOPES VIEIRA",
+          "cpf": "14297254603",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16368149",
+          "nome": "JORGE BRUNO MORAIS",
+          "cpf": "13365414665",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16369492",
+          "nome": "JULIANA VIEIRA DA CUNHA",
+          "cpf": "31312574828",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16383175",
+          "nome": "KAMILA FRANCIANE CARDOSO DIAS",
+          "cpf": "13249267678",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16373140",
+          "nome": "LARISSA ALVES COUTINHO",
+          "cpf": "44710650845",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16380979",
+          "nome": "LAURA ADRIANE DE ARRUDA ARAUJO",
+          "cpf": "15208557614",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16357680",
+          "nome": "LEIDIANE APARECIDA DA CUNHA SILVA",
+          "cpf": "70104561602",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16366457",
+          "nome": "LEILIANE KARLA MACHADO",
+          "cpf": "13367190608",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16373099",
+          "nome": "LEISMAR MARTINS DE PAULA CARVALHO",
+          "cpf": "09746132660",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16362863",
+          "nome": "LIDIANE FERNANDES DE OLIVEIRA",
+          "cpf": "11973227606",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16378826",
+          "nome": "LUCAS PEREIRA MARTINS",
+          "cpf": "15102703706",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16374740",
+          "nome": "MARAISA ONORINA DA SILVA DE MELO",
+          "cpf": "11442320664",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16384373",
+          "nome": "MARCOS VINICIUS FILIPE",
+          "cpf": "41311772855",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16381514",
+          "nome": "MARIA ALEXANDRA DA SILVA VIEIRA",
+          "cpf": "16666634683",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16371349",
+          "nome": "MARIA EDUARDA",
+          "cpf": "44148913885",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16369480",
+          "nome": "MARIANE SOARES COELHO",
+          "cpf": "10400597675",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16357908",
+          "nome": "PAOLA INACIO VIEIRA",
+          "cpf": "15373998613",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16359766",
+          "nome": "RAQUEL SIQUEIRA SOUZA",
+          "cpf": "12248340621",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16382694",
+          "nome": "ROGERIO RANGEL DE ALMEIDA",
+          "cpf": "14204953646",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16369491",
+          "nome": "RONALDO ADRIANO MODESTO",
+          "cpf": "09659268696",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16362280",
+          "nome": "SAMIRA LUNA DA ROCHA",
+          "cpf": "11638815623",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16357190",
+          "nome": "TERESINHA FLAVIA CARDOSO DIAS",
+          "cpf": "12196099600",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16359828",
+          "nome": "THATIANA APARECIDA ARANTES ARRUDA",
+          "cpf": "15784068628",
+          "sala": "SALA 02"
+        },
+        {
+          "inscricao": "16361652",
+          "nome": "THAYNA MARCIANO",
+          "cpf": "13620336695",
+          "sala": "SALA 02"
+        }
+      ]
+    }
+  ]
+}
