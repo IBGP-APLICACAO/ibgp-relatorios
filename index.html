@@ -756,7 +756,7 @@ function salvarRascunho(){
   const d={};
   document.querySelectorAll('input[id],textarea[id],select[id]').forEach(el=>{
     if(el.type==='checkbox'){ d[el.id]=el.checked; return; }
-    if(el.type==='radio'||el.type==='file'||['selCertame','sel'].includes(el.id)) return;
+    if(el.type==='radio'||el.type==='file'||['selCertame','selEscola'].includes(el.id)) return;
     d[el.id]=el.value;
   });
   ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','m_correcao','t_ocorr_sala','t_cond','t_toque','t_decl','t_correcao','s_ocorr_sala','s_cond','s_toque','s_decl','s_correcao'].forEach(n=>{
@@ -929,6 +929,23 @@ function restaurarRascunho(){
     const m=el.id.match(/^(.+)_pct_(\d+)$/);
     if(m) recalcStat(m[1],parseInt(m[2]),null);
   });
+  // Garante que as seções da escola permaneçam visíveis após restauração
+  if(CONCURSO && sel && sel.disabled && sel.value !== ""){
+    const _idx = parseInt(sel.value);
+    if(!isNaN(_idx) && CONCURSO.escolas[_idx]){
+      const _e = CONCURSO.escolas[_idx];
+      const _hM = _e.cargos.some(c=>c.turno==="Manhã");
+      const _hT = _e.cargos.some(c=>c.turno==="Tarde");
+      const _hS = _e.cargos.some(c=>c.turno==="Sábado Tarde");
+      const _hTfinal = _hT || (!_hM && !_hS && _e.cargos.length > 0);
+      document.getElementById("secManha").classList.toggle("hidden", !_hM);
+      document.getElementById("secTarde").classList.toggle("hidden", !_hTfinal);
+      document.getElementById("secSabadoTarde").classList.toggle("hidden", !_hS);
+      document.getElementById("cardFotos").classList.remove("hidden");
+      document.getElementById("cardObs").classList.remove("hidden");
+      document.getElementById("divBtn").classList.remove("hidden");
+    }
+  }
 }
 function limparRascunho(){
   const k=_rascunhoKey(); if(k) localStorage.removeItem(k);
