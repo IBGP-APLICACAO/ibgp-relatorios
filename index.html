@@ -818,6 +818,7 @@ function _rascunhoToast(msg,cor){
 function restaurarRascunho(){
   const k=_rascunhoKey(); if(!k) return;
   let d; try{d=JSON.parse(localStorage.getItem(k)||'null');}catch(e){return;}
+  alert("restaurarRascunho — secTarde.hidden ANTES=" + document.getElementById("secTarde").classList.contains("hidden") + "\nrascunho tem dados=" + (!!d));
   if(!d) return;
   // Se o certame foi republicado, invalida o rascunho anterior
   if(d._gerado_em && CONCURSO?.gerado_em && d._gerado_em !== CONCURSO.gerado_em){
@@ -1046,6 +1047,7 @@ function onEscolaChange(){
     document.getElementById("secManha").classList.toggle("hidden", !hasManha);
     document.getElementById("secTarde").classList.toggle("hidden", !haTarde);
     document.getElementById("secSabadoTarde").classList.toggle("hidden", !haSabadoTarde);
+    alert("APÓS TOGGLE — secTarde.hidden=" + document.getElementById("secTarde").classList.contains("hidden"));
 
     if(hasManha) renderStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã"));
     if(haTarde)  renderStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde"));
