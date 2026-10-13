@@ -698,7 +698,7 @@
 
   <!-- OBSERVAÇÕES GERAIS -->
   <div class="card hidden" id="cardObs">
-    <div class="card-title neutra">10. Observações Gerais</div>
+    <div class="card-title neutra">Observações Gerais</div>
     <div class="form-group">
       <label>Informações adicionais relevantes</label>
       <textarea id="textObs" rows="4" placeholder="Descreva qualquer informação adicional. Se não houver, deixe em branco."></textarea>
@@ -759,11 +759,12 @@ function salvarRascunho(){
     if(el.type==='radio'||el.type==='file'||['selCertame','selEscola'].includes(el.id)) return;
     d[el.id]=el.value;
   });
-  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','m_correcao','t_ocorr_sala','t_cond','t_toque','t_decl','t_correcao','s_ocorr_sala','s_cond','s_toque','s_decl','s_correcao'].forEach(n=>{
+  ['comissao','apoio','m_ocorr_sala','m_cond','m_toque','m_decl','m_correcao','t_ocorr_sala','t_cond','t_toque','t_decl','t_correcao','s_ocorr_sala','s_cond','s_toque','s_decl','s_correcao'].forEach(n=>{
     const el=document.querySelector('input[name="'+n+'"]:checked');
     if(el) d['r_'+n]=el.value;
   });
   d['_apoio']=Array.from(document.querySelectorAll('#apoio_entries input')).map(i=>i.value);
+  d['_comissao']=Array.from(document.querySelectorAll('#comissao_entries input')).map(i=>i.value);
   ['m_ocorr_sala_entries','t_ocorr_sala_entries','s_ocorr_sala_entries'].forEach(id=>{
     const el=document.getElementById(id); if(!el) return;
     d['_'+id]=Array.from(el.querySelectorAll('.entry-sala-block')).map(b=>{
@@ -828,10 +829,11 @@ function restaurarRascunho(){
   if(!d) return;
   Object.entries(d).forEach(([id,val])=>{
     if(id.startsWith('_')||id.startsWith('r_')) return;
+    if(id==='selEscola'||id==='selCertame') return; // nunca sobrescrever os selects principais
     const el=document.getElementById(id);
     if(el&&el.type!=='file') el.value=val;
   });
-  ['apoio','m_ocorr_sala','m_cond','m_toque','m_decl','m_correcao','t_ocorr_sala','t_cond','t_toque','t_decl','t_correcao','s_ocorr_sala','s_cond','s_toque','s_decl','s_correcao'].forEach(n=>{
+  ['comissao','apoio','m_ocorr_sala','m_cond','m_toque','m_decl','m_correcao','t_ocorr_sala','t_cond','t_toque','t_decl','t_correcao','s_ocorr_sala','s_cond','s_toque','s_decl','s_correcao'].forEach(n=>{
     const val=d['r_'+n]; if(!val) return;
     const el=document.querySelector('input[name="'+n+'"][value="'+val+'"]');
     if(el){el.checked=true; el.dispatchEvent(new Event('change'));}
@@ -841,6 +843,18 @@ function restaurarRascunho(){
     if(list){
       list.innerHTML='';
       d['_apoio'].forEach(v=>{
+        const div=document.createElement('div'); div.style.marginBottom='6px';
+        const inp=document.createElement('input'); inp.type='text'; inp.placeholder='Nome completo'; inp.value=v;
+        Object.assign(inp.style,{width:'100%',padding:'9px 12px',border:'1px solid #CCC',borderRadius:'6px',fontSize:'13px',background:'#FAFAFA'});
+        div.appendChild(inp); list.appendChild(div);
+      });
+    }
+  }
+  if(d['_comissao']&&d['_comissao'].length){
+    const list=document.getElementById('comissao_entries');
+    if(list){
+      list.innerHTML='';
+      d['_comissao'].forEach(v=>{
         const div=document.createElement('div'); div.style.marginBottom='6px';
         const inp=document.createElement('input'); inp.type='text'; inp.placeholder='Nome completo'; inp.value=v;
         Object.assign(inp.style,{width:'100%',padding:'9px 12px',border:'1px solid #CCC',borderRadius:'6px',fontSize:'13px',background:'#FAFAFA'});
@@ -1612,8 +1626,9 @@ function renderFotosCategorias(hasManha, haTarde, haSabadoTarde){
   // ── Categorias Domingo (Manhã / Tarde) — sem Sinalização se houver Sábado ──
   const cats = [];
   if(!haSabadoTarde){
-    // Sem sábado: Sinalização fica no Domingo Manhã
-    cats.push({id:'fc_sinal_m', label:'📌 Sinalização — Manhã', cor:'#393939'});
+    // Sem sábado: Sinalização fica no Domingo (Manhã ou Tarde conforme disponível)
+    const _sinalLabel = hasManha ? '📌 Sinalização — Manhã' : '📌 Sinalização — Domingo';
+    cats.push({id:'fc_sinal_m', label:_sinalLabel, cor:'#393939'});
   }
   if(hasManha){
     cats.push({id:'fc_portao_ab_m',  label:'🚪 Abertura do Portão — Manhã',    cor:'#1F3A6E'});
@@ -1907,7 +1922,7 @@ async function enviar(){
       ocorrencias: {
         sala:  {resp:getRad("m_ocorr_sala"), candidatos:coletarSalaEntries("m_ocorr_sala_entries"),
           tipos: coletarTiposOcorr("m_ocorr"),},
-        cond:  {resp:getRad("m_cond"),       candidatos:coletarSalaEntries("m_cond_entries")},
+        cond:  {resp:getRad("m_cond"),       candidatos:coletarEntries("m_cond_entries")},
         toque: {resp:getRad("m_toque"),      candidatos:coletarToqueEntries("m_toque_entries")},
         decl:  {resp:getRad("m_decl"),       candidatos:coletarEntries("m_decl_entries")},
       },
@@ -1938,7 +1953,7 @@ async function enviar(){
       ocorrencias: {
         sala:  {resp:getRad("t_ocorr_sala"), candidatos:coletarSalaEntries("t_ocorr_sala_entries"),
           tipos: coletarTiposOcorr("t_ocorr"),},
-        cond:  {resp:getRad("t_cond"),       candidatos:coletarSalaEntries("t_cond_entries")},
+        cond:  {resp:getRad("t_cond"),       candidatos:coletarEntries("t_cond_entries")},
         toque: {resp:getRad("t_toque"),      candidatos:coletarToqueEntries("t_toque_entries")},
         decl:  {resp:getRad("t_decl"),       candidatos:coletarEntries("t_decl_entries")},
       },
@@ -1969,7 +1984,7 @@ async function enviar(){
       ocorrencias: {
         sala:  {resp:getRad("s_ocorr_sala"), candidatos:coletarSalaEntries("s_ocorr_sala_entries"),
           tipos: coletarTiposOcorr("s_ocorr"),},
-        cond:  {resp:getRad("s_cond"),       candidatos:coletarSalaEntries("s_cond_entries")},
+        cond:  {resp:getRad("s_cond"),       candidatos:coletarEntries("s_cond_entries")},
         toque: {resp:getRad("s_toque"),      candidatos:coletarToqueEntries("s_toque_entries")},
         decl:  {resp:getRad("s_decl"),       candidatos:coletarEntries("s_decl_entries")},
       },
