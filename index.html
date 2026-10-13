@@ -1014,9 +1014,25 @@ function onEscolaChange(){
   document.getElementById("inputCoord").value = escola.coord_local;
   document.getElementById("rowIdent2").classList.remove("hidden");
 
-  const hasManha = escola.cargos.some(c=>c.turno==="Manhã");
-  const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
-  const haSabadoTarde = escola.cargos.some(c=>c.turno==="Sábado Tarde");
+  let hasManha = escola.cargos.some(c=>c.turno==="Manhã");
+  let haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
+  let haSabadoTarde = escola.cargos.some(c=>c.turno==="Sábado Tarde");
+
+  // Fallback: se a escola tem cargos mas nenhum turno foi reconhecido,
+  // normaliza todos como "Tarde" para não deixar a tela em branco
+  if (!hasManha && !haTarde && !haSabadoTarde) {
+    if (escola.cargos && escola.cargos.length > 0) {
+      console.warn("Escola sem turno reconhecido, usando Tarde como fallback:", escola.nome, escola.cargos.map(c=>c.turno));
+      escola.cargos.forEach(c => { c.turno = "Tarde"; });
+      haTarde = true;
+    } else {
+      // Escola sem cargos — avisa coordenador
+      document.getElementById("rowIdent2").classList.add("hidden");
+      alert("Atenção: a escola "" + escola.nome + "" não possui cargos/salas cadastrados no sistema. Reimporte a planilha de alocação no painel admin.");
+      sel.value = ""; selCertame.disabled = false; sel.disabled = false;
+      return;
+    }
+  }
 
   document.getElementById("secManha").classList.toggle("hidden", !hasManha);
   document.getElementById("secTarde").classList.toggle("hidden", !haTarde);
