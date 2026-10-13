@@ -1022,6 +1022,9 @@ function onEscolaChange(){
   let hasManha = escola.cargos.some(c=>c.turno==="Manhã");
   let haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
   let haSabadoTarde = escola.cargos.some(c=>c.turno==="Sábado Tarde");
+  // DEBUG TEMPORÁRIO
+  console.log("hasManha (local):", hasManha, "haTarde (local):", haTarde, "hasSab (local):", haSabadoTarde);
+  alert("DEBUG\nhasManha=" + hasManha + "\nhaTarde=" + haTarde + "\nhasSabadoTarde=" + haSabadoTarde + "\ncargos.length=" + escola.cargos.length);
 
   // Fallback: se a escola tem cargos mas nenhum turno foi reconhecido,
   // normaliza todos como "Tarde" para não deixar a tela em branco
