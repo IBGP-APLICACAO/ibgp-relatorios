@@ -1014,6 +1014,11 @@ function onEscolaChange(){
   document.getElementById("inputCoord").value = escola.coord_local;
   document.getElementById("rowIdent2").classList.remove("hidden");
 
+  // DEBUG TEMPORÁRIO — remover após diagnóstico
+  console.log("=== ESCOLA SELECIONADA ===", escola.nome);
+  console.log("cargos:", JSON.stringify(escola.cargos));
+  console.log("hasManha:", escola.hasManha, "haTarde:", escola.haTarde, "hasSabadoTarde:", escola.hasSabadoTarde);
+
   let hasManha = escola.cargos.some(c=>c.turno==="Manhã");
   let haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
   let haSabadoTarde = escola.cargos.some(c=>c.turno==="Sábado Tarde");
@@ -1034,18 +1039,23 @@ function onEscolaChange(){
     }
   }
 
-  document.getElementById("secManha").classList.toggle("hidden", !hasManha);
-  document.getElementById("secTarde").classList.toggle("hidden", !haTarde);
-  document.getElementById("secSabadoTarde").classList.toggle("hidden", !haSabadoTarde);
+  try {
+    document.getElementById("secManha").classList.toggle("hidden", !hasManha);
+    document.getElementById("secTarde").classList.toggle("hidden", !haTarde);
+    document.getElementById("secSabadoTarde").classList.toggle("hidden", !haSabadoTarde);
 
-  if(hasManha) renderStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã"));
-  if(haTarde)  renderStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde"));
-  if(haSabadoTarde) renderStat("tabelaSabadoTarde", escola.cargos.filter(c=>c.turno==="Sábado Tarde"));
+    if(hasManha) renderStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã"));
+    if(haTarde)  renderStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde"));
+    if(haSabadoTarde) renderStat("tabelaSabadoTarde", escola.cargos.filter(c=>c.turno==="Sábado Tarde"));
 
-  renderFotosCategorias(hasManha, haTarde, haSabadoTarde);
-  document.getElementById("cardFotos").classList.remove("hidden");
-  document.getElementById("cardObs").classList.remove("hidden");
-  document.getElementById("divBtn").classList.remove("hidden");
+    renderFotosCategorias(hasManha, haTarde, haSabadoTarde);
+    document.getElementById("cardFotos").classList.remove("hidden");
+    document.getElementById("cardObs").classList.remove("hidden");
+    document.getElementById("divBtn").classList.remove("hidden");
+  } catch(err) {
+    console.error("ERRO em onEscolaChange:", err);
+    alert("Erro ao carregar seções da escola:\n" + err.message + "\n\nAbra o console (F12) e copie o erro para o suporte.");
+  }
 
   // Popula checkboxes de seleção de turnos
   const checkDiv = document.getElementById("checkboxTurnos");
