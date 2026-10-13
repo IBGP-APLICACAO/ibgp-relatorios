@@ -943,23 +943,6 @@ function restaurarRascunho(){
     const m=el.id.match(/^(.+)_pct_(\d+)$/);
     if(m) recalcStat(m[1],parseInt(m[2]),null);
   });
-  // Garante que as seções da escola permaneçam visíveis após restauração
-  if(CONCURSO && sel && sel.disabled && sel.value !== ""){
-    const _idx = parseInt(sel.value);
-    if(!isNaN(_idx) && CONCURSO.escolas[_idx]){
-      const _e = CONCURSO.escolas[_idx];
-      const _hM = _e.cargos.some(c=>c.turno==="Manhã");
-      const _hT = _e.cargos.some(c=>c.turno==="Tarde");
-      const _hS = _e.cargos.some(c=>c.turno==="Sábado Tarde");
-      const _hTfinal = _hT || (!_hM && !_hS && _e.cargos.length > 0);
-      document.getElementById("secManha").classList.toggle("hidden", !_hM);
-      document.getElementById("secTarde").classList.toggle("hidden", !_hTfinal);
-      document.getElementById("secSabadoTarde").classList.toggle("hidden", !_hS);
-      document.getElementById("cardFotos").classList.remove("hidden");
-      document.getElementById("cardObs").classList.remove("hidden");
-      document.getElementById("divBtn").classList.remove("hidden");
-    }
-  }
 }
 function limparRascunho(){
   const k=_rascunhoKey(); if(k) localStorage.removeItem(k);
@@ -1110,7 +1093,25 @@ function onEscolaChange(){
   selCertame.disabled = true;
   sel.disabled = true;
   document.getElementById("btnAlterar").style.display = "inline";
-  setTimeout(restaurarRascunho, 200);
+
+  // Captura booleans de turno AGORA (antes de qualquer restauração)
+  const _snapHM = hasManha, _snapHT = haTarde, _snapHS = haSabadoTarde;
+
+  // Função utilitária: garante visibilidade das seções desta escola
+  function _assertSections(){
+    document.getElementById("secManha").classList.toggle("hidden", !_snapHM);
+    document.getElementById("secTarde").classList.toggle("hidden", !_snapHT);
+    document.getElementById("secSabadoTarde").classList.toggle("hidden", !_snapHS);
+    document.getElementById("cardFotos").classList.remove("hidden");
+    document.getElementById("cardObs").classList.remove("hidden");
+    document.getElementById("divBtn").classList.remove("hidden");
+  }
+
+  setTimeout(() => {
+    restaurarRascunho();    // restaura rascunho (pode alterar DOM)
+    _assertSections();      // re-garante seções imediatamente após
+    setTimeout(_assertSections, 50); // re-check após microtasks pendentes
+  }, 200);
 }
 
 function alterarEscola(){
