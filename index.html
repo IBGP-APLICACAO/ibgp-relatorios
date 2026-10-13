@@ -1028,7 +1028,7 @@ function onEscolaChange(){
     } else {
       // Escola sem cargos — avisa coordenador
       document.getElementById("rowIdent2").classList.add("hidden");
-      alert("Atenção: a escola "" + escola.nome + "" não possui cargos/salas cadastrados no sistema. Reimporte a planilha de alocação no painel admin.");
+      alert("Atenção: a escola '" + escola.nome + "' não possui cargos/salas cadastrados no sistema. Reimporte a planilha de alocação no painel admin.");
       sel.value = ""; selCertame.disabled = false; sel.disabled = false;
       return;
     }
