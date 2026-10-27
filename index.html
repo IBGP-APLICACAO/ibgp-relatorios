@@ -865,6 +865,41 @@ async function coletarFotos(){
 }
 
 // ════════════════════════════════════════════════════════
+//  CONFETES
+// ════════════════════════════════════════════════════════
+function _dispararConfetes(){
+  const canvas=document.createElement('canvas');
+  canvas.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99999;';
+  document.body.appendChild(canvas);
+  const ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+  const cores=['#CF3432','#1F3A6E','#1E6B3B','#F4C430','#6A0DAD','#FF6B35'];
+  const particulas=Array.from({length:140},()=>({
+    x:Math.random()*canvas.width, y:-10-Math.random()*100,
+    r:5+Math.random()*5, cor:cores[Math.floor(Math.random()*cores.length)],
+    vx:(Math.random()-0.5)*4, vy:3+Math.random()*4,
+    angulo:Math.random()*360, giro:(Math.random()-0.5)*8,
+    forma:Math.random()>0.5?'rect':'circle'
+  }));
+  let frame=0;
+  function animar(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particulas.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.angulo+=p.giro; p.vy+=0.08;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.angulo*Math.PI/180);
+      ctx.fillStyle=p.cor; ctx.globalAlpha=Math.max(0,1-(frame/220));
+      if(p.forma==='rect'){ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*0.6);}
+      else{ctx.beginPath();ctx.arc(0,0,p.r/2,0,Math.PI*2);ctx.fill();}
+      ctx.restore();
+    });
+    frame++;
+    if(frame<240) requestAnimationFrame(animar);
+    else canvas.remove();
+  }
+  animar();
+}
+
+// ════════════════════════════════════════════════════════
 //  FOTOS — IndexedDB (rascunho persistente)
 // ════════════════════════════════════════════════════════
 let _fotosDB=null;
@@ -1125,6 +1160,7 @@ async function enviar(){
     document.getElementById("turnosSections").innerHTML="";
     ["cardIdent","cardFotos","cardObs","divBtn"].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add("hidden");});
     const cs=document.getElementById("cardSucesso");cs.classList.remove("hidden");cs.scrollIntoView({behavior:"smooth",block:"center"});
+    _dispararConfetes();
   }catch(e){
     if(btn){btn.disabled=false;btn.textContent="Enviar Formulário";}
     alert("Erro ao enviar: "+e.message+"\n\nVerifique sua conexão e tente novamente.");
