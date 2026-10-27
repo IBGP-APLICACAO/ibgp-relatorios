@@ -821,6 +821,7 @@ function previewCat(inputId,previewId){
   const files=Array.from(document.getElementById(inputId).files);
   fotosMap[inputId]=[...(fotosMap[inputId]||[]),...files];
   _renderPreview(inputId,previewId);
+  setTimeout(()=>_salvarFotosDB(),100);
 }
 function _renderPreview(inputId,previewId){
   const preview=document.getElementById(previewId); preview.innerHTML='';
@@ -830,7 +831,7 @@ function _renderPreview(inputId,previewId){
     const reader=new FileReader(); reader.onload=e=>img.src=e.target.result; reader.readAsDataURL(file);
     const btn=document.createElement('button'); btn.type='button'; btn.textContent='✕';
     btn.style.cssText='position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.6);color:#FFF;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;line-height:1;padding:0;';
-    btn.onclick=()=>{fotosMap[inputId].splice(idx,1);_renderPreview(inputId,previewId);};
+    btn.onclick=()=>{fotosMap[inputId].splice(idx,1);_renderPreview(inputId,previewId);_salvarFotosDB();};
     wrap.appendChild(img); wrap.appendChild(btn); preview.appendChild(wrap);
   });
 }
@@ -861,6 +862,86 @@ async function coletarFotos(){
     for(const f of (fotosMap[cat.id]||[]))
       fotos.push(await _comprimirImagem(f,cat.label.replace(/^[^\s]+\s/,'')));
   return fotos;
+}
+
+// ════════════════════════════════════════════════════════
+//  FOTOS — IndexedDB (rascunho persistente)
+// ════════════════════════════════════════════════════════
+let _fotosDB=null;
+function _openFotosDB(){
+  return new Promise((resolve,reject)=>{
+    if(_fotosDB){resolve(_fotosDB);return;}
+    const req=indexedDB.open('ibgp_fotos_v1',1);
+    req.onupgradeneeded=e=>e.target.result.createObjectStore('fotos');
+    req.onsuccess=e=>{_fotosDB=e.target.result;resolve(_fotosDB);};
+    req.onerror=()=>reject(req.error);
+  });
+}
+async function _salvarFotosDB(){
+  const k=_rascunhoKey(); if(!k||!fotasCats.length) return;
+  try{
+    const data={};
+    for(const cat of fotasCats){
+      const files=fotosMap[cat.id]||[]; data[cat.id]=[];
+      for(const f of files){
+        try{const c=await _comprimirImagem(f,cat.id);data[cat.id].push({nome:f.name||'foto.jpg',b64:c.b64});}catch(e){}
+      }
+    }
+    const db=await _openFotosDB();
+    await new Promise((res,rej)=>{
+      const tx=db.transaction('fotos','readwrite');
+      tx.objectStore('fotos').put(data,k);
+      tx.oncomplete=res; tx.onerror=()=>rej(tx.error);
+    });
+  }catch(e){console.warn('salvarFotosDB:',e);}
+}
+async function _restaurarFotosDB(){
+  const k=_rascunhoKey(); if(!k) return;
+  try{
+    const db=await _openFotosDB();
+    const data=await new Promise((res,rej)=>{
+      const tx=db.transaction('fotos','readonly');
+      const req=tx.objectStore('fotos').get(k);
+      req.onsuccess=()=>res(req.result); req.onerror=()=>rej(req.error);
+    });
+    if(!data) return;
+    let restored=0;
+    for(const catId in data){
+      const items=data[catId]; if(!items||!items.length) continue;
+      fotosMap[catId]=items.map(item=>{
+        const bin=atob(item.b64),bytes=new Uint8Array(bin.length);
+        for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+        const blob=new Blob([bytes],{type:'image/jpeg'});
+        Object.defineProperty(blob,'name',{value:item.nome||'foto.jpg'});
+        return blob;
+      });
+      const previewEl=document.getElementById('prev_'+catId); if(!previewEl) continue;
+      previewEl.innerHTML='';
+      items.forEach((item,idx)=>{
+        const wrap=document.createElement('div'); wrap.style.cssText='position:relative;display:inline-block;';
+        const img=document.createElement('img');
+        img.src='data:image/jpeg;base64,'+item.b64;
+        img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #DDD;display:block;';
+        const btn=document.createElement('button'); btn.type='button'; btn.textContent='✕';
+        btn.style.cssText='position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.6);color:#FFF;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;line-height:1;padding:0;';
+        btn.onclick=()=>{fotosMap[catId].splice(idx,1);_renderPreview(catId,'prev_'+catId);_salvarFotosDB();};
+        wrap.appendChild(img); wrap.appendChild(btn); previewEl.appendChild(wrap);
+        restored++;
+      });
+    }
+    if(restored>0) _rascunhoToast('🖼️ '+restored+' foto(s) restaurada(s)!','#6A0DAD');
+  }catch(e){console.warn('restaurarFotosDB:',e);}
+}
+async function _limparFotosDB(){
+  const k=_rascunhoKey(); if(!k) return;
+  try{
+    const db=await _openFotosDB();
+    await new Promise((res,rej)=>{
+      const tx=db.transaction('fotos','readwrite');
+      tx.objectStore('fotos').delete(k);
+      tx.oncomplete=res; tx.onerror=()=>rej(tx.error);
+    });
+  }catch(e){}
 }
 
 // ════════════════════════════════════════════════════════
@@ -934,9 +1015,11 @@ function restaurarRascunho(){
     if(m) recalcStat(m[1],parseInt(m[2]),null);
   });
   _rascunhoToast('📋 Rascunho restaurado!','#1F3A6E');
+  _restaurarFotosDB();
 }
 function limparRascunho(){
   const k=_rascunhoKey(); if(k) localStorage.removeItem(k);
+  _limparFotosDB();
 }
 let _saveT;
 document.addEventListener('input',()=>{clearTimeout(_saveT);_saveT=setTimeout(salvarRascunho,1500);});
