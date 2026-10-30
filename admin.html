@@ -939,13 +939,7 @@ async function carregarCertamesRelatorio() {
         lista.map(c => `<option value="${c.id}" data-titulo="${c.titulo}" data-data="${c.data}">${c.titulo} — ${c.data}</option>`).join("")
       : '<option value="">Nenhum certame publicado</option>';
     sel.innerHTML = optsRel;
-    // Populate edit-coords select too (simpler options without data attrs)
-    const selE = document.getElementById("selEditarCoords");
-    if (selE) {
-      selE.innerHTML = lista.length
-        ? '<option value="">— Selecione —</option>' + lista.map(c => `<option value="${c.id}">${c.titulo} — ${c.data}</option>`).join("")
-        : '<option value="">Nenhum certame publicado</option>';
-    }
+    // selEditarCoords é populado por carregarListaCertames() — não duplicar aqui
   } catch(_) {
     sel.innerHTML = '<option value="">Erro ao carregar</option>';
   }
@@ -1006,6 +1000,7 @@ async function gerarRelatorioGeral() {
       return e;
     });
 
+    dados.concurso = dados.concurso || {};
     dados.concurso["Título do Concurso"] = certameTitulo;
     dados.concurso["Data da Prova"]      = certameData;
     dados.concurso["Edital"]             = certameDados.edital || dados.concurso["Edital"] || "";
@@ -1039,6 +1034,16 @@ function abrirRelatorioImprimivel(dados) {
   const conc = dados.concurso || {};
   const escolas = dados.escolas || [];
   const corM = "#1F3A6E", corT = "#CF3432", corS = "#6A0DAD", corH = "#2C2C2C";
+  const _PALETA = ["#1F3A6E","#CF3432","#6A0DAD","#1E6B3B"];
+  const _corTurnoCache = {};
+  function corTurno(nome) {
+    if (!nome) return corH;
+    if (_corTurnoCache[nome] === undefined) {
+      const idx = Object.keys(_corTurnoCache).length;
+      _corTurnoCache[nome] = _PALETA[idx % _PALETA.length];
+    }
+    return _corTurnoCache[nome];
+  }
 
   // ── Formata hora: converte ISO timestamp ou string para "HH:mm"
   function fh(val) {
@@ -1112,14 +1117,16 @@ function abrirRelatorioImprimivel(dados) {
     // Membros da Comissão (se houver)
     if ((e.comissao||[]).length > 0) {
       let cHtml = e.comissao.map(function(m,i){
-        return `<div style="padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px;">${i+1}. ${m}</div>`;
+        return `<div style="padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:12px;">
+          ${i+1}. ${String(m)}
+        </div>`;
       }).join('');
-      html += secao("Membros da Comissão", corH, cHtml);
+      html += secao("Membros da Comissão Fiscalizadora", corH, cHtml);
     }
 
     // Horários por turno
     (e.horarios||[]).forEach(function(h) {
-      const cor = h.turno==="Manhã" ? corM : h.turno==="Tarde" ? corT : corS;
+      const cor = corTurno(h.turno);
       html += secao("Horários — " + h.turno, cor,
         grid2("Chegada da equipe", fh(h.chegada), "Abertura do portão", fh(h.ab_portao)) +
         grid2("Abertura do malote", fh(h.ab_malote), "Distribuição dos pacotes", fh(h.distrib)) +
@@ -1129,10 +1136,10 @@ function abrirRelatorioImprimivel(dados) {
     });
 
     // Testemunhas por turno
-    const turnosTest = [...new Set((e.testemunhas||[]).map(t=>t.turno||"Manhã").filter(Boolean))];
+    const turnosTest = [...new Set((e.testemunhas||[]).map(t=>t.turno).filter(Boolean))];
     turnosTest.forEach(function(turno) {
-      const cor = turno==="Manhã" ? corM : turno==="Tarde" ? corT : corS;
-      const tt = (e.testemunhas||[]).filter(t=>(t.turno||"Manhã")===turno);
+      const cor = corTurno(turno);
+      const tt = (e.testemunhas||[]).filter(t=>t.turno===turno);
       let tHtml = "";
       tt.forEach(function(t) {
         tHtml += `<div style="margin-bottom:12px;">
@@ -1148,9 +1155,9 @@ function abrirRelatorioImprimivel(dados) {
     });
 
     // Estatística por turno
-    const turnosRes = [...new Set((e.resultados||[]).map(r=>r.turno))];
+    const turnosRes = [...new Set((e.resultados||[]).map(r=>r.turno).filter(Boolean))];
     turnosRes.forEach(function(turno) {
-      const cor = turno==="Manhã" ? corM : turno==="Tarde" ? corT : corS;
+      const cor = corTurno(turno);
       const rows = (e.resultados||[]).filter(r=>r.turno===turno);
       let tI=0,tP=0,tA=0,tIn=0;
       let tabela = `<table><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
@@ -1161,7 +1168,7 @@ function abrirRelatorioImprimivel(dados) {
       </tr></thead><tbody>`;
       rows.forEach(function(r, i){
         tI+=Number(r.inscr)||0; tP+=Number(r.pres)||0; tA+=Number(r.aus)||0;
-        tabela+=`<tr class="${i%2===1?'alt':''}"><td>${r.sala} — ${r.cargo.replace(/^\d+\s+-\s+/,"")}</td>
+        tabela+=`<tr class="${i%2===1?'alt':''}"><td>${r.sala?r.sala+' — ':''}${r.cargo.replace(/^\d+\s+-\s+/,"")}</td>
           <td style="text-align:center;">${r.inscr}</td><td style="text-align:center;">${r.pres}</td>
           <td style="text-align:center;">${r.aus}</td></tr>`;
       });
@@ -1177,8 +1184,12 @@ function abrirRelatorioImprimivel(dados) {
     const _ocorrLabelsInd = {sala:'Ocorrências em sala',cond:'Prova condicional',toque:'Toque de celular',decl:'Declaração de comparecimento'};
     const ocorrFiltradas = (e.ocorrencias||[]).filter(function(o){ return _ov(o.sala)||_ov(o.cond)||_ov(o.toque)||_ov(o.decl); });
     (ocorrFiltradas.length>0 ? ocorrFiltradas : (e.ocorrencias||[])).forEach(function(o) {
-      const cor = (o.turno||"Manhã")==="Manhã" ? corM : (o.turno||"Manhã")==="Tarde" ? corT : corS;
-      const cands = (e.candidatos||[]).filter(c=>c.turno===o.turno);
+      const cor = corTurno(o.turno);
+      const turnoOcorr = (o.turno||"").trim();
+      // Filtra candidatos estritamente pelo turno desta ocorrência (trim p/ evitar espaços)
+      const cands = (e.candidatos||[]).filter(function(c){
+        return turnoOcorr && (c.turno||"").trim() === turnoOcorr;
+      });
       // Tipos específicos vêm dos candidatos; fallback: categorias Sim/Não
       var tiposEspec = [];
       cands.forEach(function(c){ if(c.tipo && tiposEspec.indexOf(c.tipo)<0) tiposEspec.push(c.tipo); });
@@ -1206,10 +1217,11 @@ function abrirRelatorioImprimivel(dados) {
       html += secao("Ocorrências — " + o.turno, cor, oHtml);
     });
 
-    // Correção de Dados Cadastrais por turno
-    ["Manhã","Tarde","Sábado Tarde"].forEach(function(turno) {
-      const cor = turno==="Manhã" ? corM : turno==="Tarde" ? corT : corS;
-      const lista = (e.correcoes||[]).filter(function(c){ return (c.turno||"Manhã")===turno; });
+    // Correção de Dados Cadastrais por turno (dinâmico)
+    const turnosCorr = [...new Set((e.correcoes||[]).map(c=>c.turno).filter(Boolean))];
+    (turnosCorr.length > 0 ? turnosCorr : []).forEach(function(turno) {
+      const cor = corTurno(turno);
+      const lista = (e.correcoes||[]).filter(function(c){ return c.turno===turno; });
       if (lista.length === 0) return;
       let corrHtml = `<table><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
         <th style="background:${cor};">Nº Inscrição</th>
@@ -1252,7 +1264,7 @@ function abrirRelatorioImprimivel(dados) {
     } else {
       fotoHtml = `<p style="color:#999;font-style:italic;font-size:13px;">Fotos não enviadas ou ainda não processadas pelo sistema.</p>`;
     }
-    html += secao("Registro Fotográfico", corM, fotoHtml);
+    html += secao("Registro Fotográfico", corH, fotoHtml);
 
     // Rodapé
     html += `<div style="text-align:center;font-size:10px;color:#aaa;margin-top:8px;padding-bottom:8px;">
@@ -1683,57 +1695,49 @@ function abrirRelatorioGeral(dados, meta, win) {
         +'<strong>Cargo com maior taxa de ausência:</strong> '+cm.cargo+' — '+pct(Number(cm.aus),Number(cm.inscr))
         +'</div>';
     }
-    if(e._hasOcorr||(e.ocorrencias&&e.ocorrencias.length)){
-      html+='<div style="padding:10px 16px;border-top:1px solid #eee;">'
-        +'<div style="font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">OCORRÊNCIAS</div>';
+    if(e.ocorrencias&&e.ocorrencias.length){
       var _ov2=function(v){return v==="Sim"||v===true||Number(v)>0;};
-      var ocorrLabels={sala:'Ocorrências em sala',cond:'Prova condicional',toque:'Toque de celular',decl:'Declaração de comparecimento'};
-      var ocorrItems=[];
-      (e.ocorrencias||[]).forEach(function(o){
-        var turno=o.turno||'Manhã';
-        // Tenta usar tipos específicos dos candidatos
-        var candsT=(e.candidatos||[]).filter(function(c){return c.turno===turno;});
-        var tiposEsp=[];
-        candsT.forEach(function(c){if(c.tipo&&tiposEsp.indexOf(c.tipo)<0)tiposEsp.push(c.tipo);});
-        if(tiposEsp.length>0){
-          tiposEsp.forEach(function(t){
-            var n=candsT.filter(function(c){return c.tipo===t;}).length;
-            ocorrItems.push({turno:turno,label:t,n:n});
+      // Tabela compacta de ocorrências: uma linha por turno com contagens por categoria
+      var _cntCands=function(turno,tipo){
+        return (e.candidatos||[]).filter(function(c){return c.turno===turno&&c.tipo===tipo;}).length;
+      };
+      var _ocTd=function(v,bg){bg=bg||'#fff';return '<td style="'+PC+'text-align:center;padding:6px 8px;font-size:11px;background:'+bg+';">'+v+'</td>';};
+      var _ocTh=function(v){return '<th style="'+PC+'background:#393939;color:#fff;font-size:9px;padding:6px 8px;text-align:center;font-weight:700;letter-spacing:.4px;text-transform:uppercase;">'+v+'</th>';};
+      html+='<div style="padding:10px 16px;border-top:1px solid #eee;">'
+        +'<div style="font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Ocorrências</div>'
+        +'<table style="width:100%;border-collapse:collapse;"><thead><tr>'
+        +_ocTh('Turno')+_ocTh('Ocorr. Sala')+_ocTh('Prova Cond.')+_ocTh('Celular')+_ocTh('Declaração')+_ocTh('Obs.')
+        +'</tr></thead><tbody>';
+      (e.ocorrencias||[]).forEach(function(o,ri){
+        var bg=ri%2===0?'#fff':'#f7f7f7';
+        var nSala=(e.candidatos||[]).filter(function(c){return c.turno===o.turno&&(c.tipo==='Ocorrências em sala'||c.tipo==='Ocorrências');}).length;
+        if(nSala===0&&_ov2(o.sala)) nSala='Sim';
+        var nCond=_cntCands(o.turno,'Prova condicional'); if(nCond===0&&_ov2(o.cond)) nCond='Sim';
+        var nToque=_cntCands(o.turno,'Toque de celular'); if(nToque===0&&_ov2(o.toque)) nToque='Sim';
+        var nDecl=_cntCands(o.turno,'Declaração de comparecimento'); if(nDecl===0&&_ov2(o.decl)) nDecl='Sim';
+        var _palOcT=["#1F3A6E","#CF3432","#6A0DAD","#1E6B3B"];
+        var _corOcT=_palOcT[ri%_palOcT.length];
+        html+='<tr>'
+          +'<td style="'+PC+'padding:6px 10px;font-size:11px;font-weight:700;background:'+bg+';"><span style="'+PC+'display:inline-block;background:'+_corOcT+';color:#fff;border-radius:3px;padding:1px 8px;font-size:10px;">'+o.turno+'</span></td>'
+          +_ocTd(nSala||0,bg)+_ocTd(nCond||0,bg)+_ocTd(nToque||0,bg)+_ocTd(nDecl||0,bg)
+          +'<td style="'+PC+'padding:6px 10px;font-size:10px;color:#777;background:'+bg+';">—</td>'
+          +'</tr>';
+        // Detalhe candidatos logo abaixo da linha do turno
+        var candsDet=(e.candidatos||[]).filter(function(c){return c.turno===o.turno;});
+        if(candsDet.length>0){
+          html+='<tr><td colspan="6" style="'+PC+'padding:4px 10px 8px 22px;background:'+bg+';">';
+          candsDet.forEach(function(c){
+            var linha=[]; if(c.tipo)linha.push('<strong>'+c.tipo+'</strong>');
+            if(c.inscricao)linha.push('Insc. '+c.inscricao);
+            if(c.candidato)linha.push(c.candidato);
+            if(c.sala)linha.push('Sala '+c.sala);
+            if(c.desc)linha.push('<em>'+c.desc+'</em>');
+            html+='<div style="font-size:10px;color:#555;padding:1px 0;">'+linha.join(' — ')+'</div>';
           });
-        } else {
-          // fallback: categorias Sim/Não
-          ['sala','cond','toque','decl'].forEach(function(k){
-            if(_ov2(o[k])){
-              ocorrItems.push({turno:turno,label:ocorrLabels[k],n:0});
-            }
-          });
+          html+='</td></tr>';
         }
       });
-      if(ocorrItems.length===0){
-        html+='<p style="font-size:11px;color:#4CAF50;font-style:italic;">Nenhuma ocorrência registrada.</p>';
-      } else {
-        ocorrItems.forEach(function(oc){
-          var cor=oc.turno==='Manhã'?'#1F3A6E':'#CF3432';
-          var badge='<span style="'+PC+'display:inline-block;background:'+cor+';color:#fff;border-radius:3px;padding:2px 7px;font-size:10px;font-weight:700;margin-right:6px;">'+oc.turno+'</span>';
-          var nStr=oc.n>0?' <span style="font-size:10px;color:#888;">('+oc.n+' candidato'+(oc.n>1?'s':'')+' envolvido'+(oc.n>1?'s':'')+')</span>':'';
-          var candsDet=(e.candidatos||[]).filter(function(c){return c.turno===oc.turno&&c.tipo===oc.label;});
-          var detHtml='';
-          if(candsDet.length>0){
-            detHtml='<div style="margin:4px 0 4px 12px;font-size:10px;color:#555;">';
-            candsDet.forEach(function(c){
-              var linha=[];
-              if(c.inscricao)linha.push('Insc. '+c.inscricao);
-              if(c.candidato)linha.push(c.candidato);
-              if(c.sala)linha.push('Sala '+c.sala);
-              if(c.desc)linha.push('<em>'+c.desc+'</em>');
-              detHtml+='<div style="padding:2px 0;">'+linha.join(' — ')+'</div>';
-            });
-            detHtml+='</div>';
-          }
-          html+='<div style="padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:11px;">'+badge+oc.label+nStr+detHtml+'</div>';
-        });
-      }
-      html+='</div>';
+      html+='</tbody></table></div>';
     }
     if((e.correcoes||[]).length>0){
       html+='<div style="padding:10px 16px;border-top:1px solid #eee;">'
