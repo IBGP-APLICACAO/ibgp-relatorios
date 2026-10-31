@@ -543,20 +543,29 @@ async function buscarTestemunha(cpfInput) {
   const nomeId = cpfInput.id.replace("_cpf","_nome");
   const nomeEl = document.getElementById(nomeId);
   if (!nomeEl) return;
+  nomeEl.value = "";
   nomeEl.placeholder = "Buscando...";
   try {
     const url = (CONCURSO?.script_url || SCRIPT_URL) + "?action=buscarCandidato&cpf=" + cpf;
-    const res = await fetch(url);
-    const json = await res.json();
+    const res = await fetch(url, { redirect: "follow" });
+    const text = await res.text();
+    let json;
+    try { json = JSON.parse(text); } catch(_) {
+      nomeEl.placeholder = "Resposta inválida do servidor";
+      console.error("Resposta não-JSON:", text.substring(0, 200));
+      return;
+    }
     if (json.nome) {
       nomeEl.value = json.nome;
       nomeEl.style.background = "#e8f5e9";
       setTimeout(()=>{ nomeEl.style.background=""; }, 2000);
     } else {
-      nomeEl.placeholder = "Não encontrado — preencha manualmente";
+      nomeEl.placeholder = json.erro || "Não encontrado — preencha manualmente";
+      console.warn("buscarCandidato:", json);
     }
-  } catch(_) {
-    nomeEl.placeholder = "Erro — preencha manualmente";
+  } catch(err) {
+    nomeEl.placeholder = "Erro de conexão — preencha manualmente";
+    console.error("buscarTestemunha erro:", err);
   }
 }
 
