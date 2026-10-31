@@ -1,12 +1,21 @@
 // ════════════════════════════════════════════════════════════════
-//  IBGP — Apps Script (versão completa)
+//  IBGP — Apps Script (versão dinâmica — suporta N turnos)
 //  Cole em: script.google.com → projeto vinculado à planilha
 //  Depois: Implantar → Nova implantação → Aplicativo da Web
 //  Executar como: Eu | Acesso: Qualquer pessoa
+//  ⚠️  OBRIGATÓRIO: Configurações (engrenagem) → ativar "Ambiente V8"
+//      Sem V8, Object.values() não funciona e o relatório não gera.
 // ════════════════════════════════════════════════════════════════
 
-// E-mail que recebe os relatórios de cada escola
 var EMAIL_DESTINO = "natalia.matias@ibgp.org.br";
+
+// ────────────────────────────────────────────────────────────────
+//  Helper — retorna array de nomes de turnos ativos no payload
+// ────────────────────────────────────────────────────────────────
+function getTurnosAtivos(data) {
+  var t = data.turnos || {};
+  return Object.keys(t).filter(function(k) { return t[k] !== null; });
+}
 
 // ────────────────────────────────────────────────────────────────
 //  doPost — recebe formulário do coordenador
@@ -23,9 +32,9 @@ function doPost(e) {
     salvarTestemunhas(ss, data);
     salvarOcorrencias(ss, data);
     salvarCandidatos(ss, data);
-    var fotoResult = salvarFotos(data);
+    var linkFotos = salvarFotos(data);
 
-    enviarEmailRelatorio(data, fotoResult.link, fotoResult.urls);
+    enviarEmailRelatorio(data, linkFotos);
 
     return ContentService
       .createTextOutput(JSON.stringify({ status: "ok" }))
@@ -51,13 +60,50 @@ function doGet(e) {
       .setMimeType(ContentService.MimeType.JSON);
   }
 
+  // ── Lookup de candidato por CPF ─────────────────────────────────
+  if (action === "buscarCandidato") {
+    var cpf = String((e.parameter && e.parameter.cpf) || "").replace(/\D/g, "");
+    if (!cpf) {
+      return ContentService
+        .createTextOutput(JSON.stringify({ erro: "CPF não informado" }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    var ss   = SpreadsheetApp.getActiveSpreadsheet();
+    var wsAl = ss.getSheetByName("DADOS ALOCAÇÃO");
+    if (!wsAl || wsAl.getLastRow() < 2) {
+      return ContentService
+        .createTextOutput(JSON.stringify({ erro: "Aba DADOS ALOCAÇÃO não encontrada" }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    // Colunas: 1=Índice 2=INSCRIÇÃO 3=CANDIDATO 4=CPF 8=CARGO 10=TURNO 11=SALA 14=ESCOLA
+    var dados = wsAl.getRange(2, 1, wsAl.getLastRow() - 1, 14).getValues();
+    for (var i = 0; i < dados.length; i++) {
+      var cpfPlanilha = String(dados[i][3]).replace(/\D/g, "").padStart(11, "0");
+      if (cpfPlanilha === cpf) {
+        return ContentService
+          .createTextOutput(JSON.stringify({
+            nome:      String(dados[i][2]),
+            inscricao: String(dados[i][1]),
+            cargo:     String(dados[i][7]),
+            turno:     String(dados[i][9]),
+            sala:      String(dados[i][10]),
+            escola:    String(dados[i][13])
+          }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+    return ContentService
+      .createTextOutput(JSON.stringify({ erro: "Candidato não encontrado" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
   return ContentService
     .createTextOutput(JSON.stringify({ status: "ok" }))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
 // ────────────────────────────────────────────────────────────────
-//  Helper — formata valor de hora do Sheets como "HH:mm"
+//  Helper — formata hora do Sheets como "HH:mm"
 // ────────────────────────────────────────────────────────────────
 function horaStr(v) {
   if (!v) return "";
@@ -74,58 +120,67 @@ function coletarDadosRelatorio() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var resultado = { concurso: {}, escolas: [] };
 
-  // CONCURSO
   var wsConcurso = ss.getSheetByName("CONCURSO");
   if (wsConcurso && wsConcurso.getLastRow() > 1) {
-    var rows = wsConcurso.getRange(2, 1, wsConcurso.getLastRow() - 1, 2).getValues();
-    rows.forEach(function(r) { resultado.concurso[r[0]] = r[1]; });
+    wsConcurso.getRange(2, 1, wsConcurso.getLastRow() - 1, 2).getValues()
+      .forEach(function(r) { resultado.concurso[r[0]] = r[1]; });
   }
 
-  // LOCAIS — monta lista de escolas
   var wsLocais = ss.getSheetByName("LOCAIS");
   var escolas = {};
   if (wsLocais && wsLocais.getLastRow() > 1) {
-    var lRows = wsLocais.getRange(2, 1, wsLocais.getLastRow() - 1, 9).getValues();
-    lRows.forEach(function(r) {
-      if (!r[0]) return;
-      escolas[r[0]] = {
-        nome: r[0], coord_local: r[1], salas: r[2], turno: r[3],
-        houve_apoio: r[4], nome_apoio: r[5], obs: r[6], enviado_em: r[7],
-        foto_url: r[8] || "",
-        horarios: [], resultados: [], testemunhas: [], ocorrencias: [], candidatos: []
-      };
-    });
+    wsLocais.getRange(2, 1, wsLocais.getLastRow() - 1, 10).getValues()
+      .forEach(function(r) {
+        if (!r[0]) return;
+        var membStr = r[7] ? String(r[7]) : "";
+        escolas[r[0]] = {
+          nome: r[0], coord_local: r[1], salas: r[2], turno: r[3],
+          houve_apoio: r[4], nome_apoio: r[5],
+          houve_comissao: r[6], membros_comissao: membStr,
+          // comissao como array (esperado pelo admin.html)
+          comissao: membStr ? membStr.split("; ").filter(Boolean) : [],
+          obs: r[8], enviado_em: r[9], foto_url: "",
+          horarios: [], resultados: [], testemunhas: [],
+          ocorrencias: [], candidatos: [], correcoes: [], fotos: []
+        };
+      });
   }
 
-  // HORÁRIOS
+  // Foto URL (coluna 11)
+  if (wsLocais && wsLocais.getLastRow() > 1) {
+    wsLocais.getRange(2, 1, wsLocais.getLastRow() - 1, 11).getValues()
+      .forEach(function(r) {
+        if (escolas[r[0]]) escolas[r[0]].foto_url = r[10] || "";
+      });
+  }
+
   var wsHor = ss.getSheetByName("HORÁRIOS");
   if (wsHor && wsHor.getLastRow() > 1) {
     wsHor.getRange(2, 1, wsHor.getLastRow() - 1, 11).getValues().forEach(function(r) {
       if (!escolas[r[0]]) return;
       escolas[r[0]].horarios.push({
         turno: r[1],
-        chegada:   horaStr(r[2]),  ab_portao: horaStr(r[3]),
-        fch_portao: horaStr(r[4]), distrib:   horaStr(r[5]),
-        inicio:    horaStr(r[6]),  encerr:    horaStr(r[7]),
+        chegada: horaStr(r[2]), ab_portao: horaStr(r[3]),
+        fch_portao: horaStr(r[4]), distrib: horaStr(r[5]),
+        inicio: horaStr(r[6]), encerr: horaStr(r[7]),
         fch_malote: horaStr(r[8]), ab_malote: horaStr(r[9])
       });
     });
   }
 
-  // RESULTADOS
   var wsRes = ss.getSheetByName("RESULTADOS");
   if (wsRes && wsRes.getLastRow() > 1) {
     wsRes.getRange(2, 1, wsRes.getLastRow() - 1, 9).getValues().forEach(function(r) {
       if (!escolas[r[0]]) return;
-      if (!r[3]) return; // ignora linhas sem cargo
+      if (!r[3]) return;
       escolas[r[0]].resultados.push({
-        sala: r[1], turno: r[2], cargo: String(r[3]),
+        sala: r[1] || "", turno: r[2] || "",
+        cargo: String(r[3]),
         inscr: r[4], pres: r[5], aus: r[6], incl: r[7]
       });
     });
   }
 
-  // TESTEMUNHAS
   var wsTest = ss.getSheetByName("TESTEMUNHAS");
   if (wsTest && wsTest.getLastRow() > 1) {
     wsTest.getRange(2, 1, wsTest.getLastRow() - 1, 10).getValues().forEach(function(r) {
@@ -139,294 +194,202 @@ function coletarDadosRelatorio() {
     });
   }
 
-  // OCORRÊNCIAS
   var wsOcorr = ss.getSheetByName("OCORRÊNCIAS");
   if (wsOcorr && wsOcorr.getLastRow() > 1) {
     wsOcorr.getRange(2, 1, wsOcorr.getLastRow() - 1, 7).getValues().forEach(function(r) {
       if (!escolas[r[0]]) return;
       escolas[r[0]].ocorrencias.push({
-        turno: r[1],
+        turno: r[1] || "",
         sala: r[2], cond: r[3], toque: r[4], decl: r[5]
       });
     });
   }
 
-  // CANDIDATOS
   var wsCand = ss.getSheetByName("CANDIDATOS");
   if (wsCand && wsCand.getLastRow() > 1) {
-    wsCand.getRange(2, 1, wsCand.getLastRow() - 1, 7).getValues().forEach(function(r) {
+    wsCand.getRange(2, 1, wsCand.getLastRow() - 1, 8).getValues().forEach(function(r) {
       if (!escolas[r[0]]) return;
       escolas[r[0]].candidatos.push({
-        turno: r[1], tipo: r[2], inscricao: r[3], candidato: r[4], sala: r[5]
+        turno: r[1], tipo: r[2], inscricao: r[3],
+        candidato: r[4], sala: r[5], desc: r[6] || ""
       });
     });
   }
+
+  // Fotos individuais (IDs para embutir no relatório)
+  var wsFotos = ss.getSheetByName("FOTOS");
+  if (wsFotos && wsFotos.getLastRow() > 1) {
+    wsFotos.getRange(2, 1, wsFotos.getLastRow() - 1, 6).getValues().forEach(function(r) {
+      if (!escolas[r[0]]) return;
+      var fileId = r[3] ? String(r[3]).trim() : "";
+      if (!fileId) return;
+      escolas[r[0]].fotos.push({
+        categoria: r[1] || "Foto",
+        turno:     r[2] || "",
+        fileId:    fileId,
+        thumbUrl:  r[4] || ("https://drive.google.com/thumbnail?id=" + fileId + "&sz=w600")
+      });
+    });
+  }
+
+  // Extrai correcoes e ampliacao dos candidatos (subtipos especiais)
+  Object.values(escolas).forEach(function(esc) {
+    // Correções de dados: tipo="Correção de Dados", desc="tipoCampo → valorCorreto"
+    esc.correcoes = esc.candidatos
+      .filter(function(c) { return c.tipo === "Correção de Dados"; })
+      .map(function(c) {
+        var partes = (c.desc || "").split(" → ");
+        return {
+          turno: c.turno,
+          inscricao: c.inscricao,
+          candidato: c.candidato,
+          tipo: partes[0] || "",
+          correcao: partes[1] || c.desc
+        };
+      });
+    // Remove correções e ampliações da lista de candidatos (são seções separadas)
+    esc.candidatos = esc.candidatos.filter(function(c) {
+      return c.tipo !== "Correção de Dados" && c.tipo !== "Ampliação de Sala";
+    });
+  });
 
   resultado.escolas = Object.values(escolas);
   return resultado;
 }
 
 // ────────────────────────────────────────────────────────────────
-//  E-mail — envia relatório do coordenador após cada envio
+//  E-mail
 // ────────────────────────────────────────────────────────────────
-function enviarEmailRelatorio(data, linkFotos, fotoUrls) {
+function enviarEmailRelatorio(data, linkFotos) {
   try {
     var assunto = "Relatório de Aplicação — " + data.escola + " — " + data.data;
-    var html = montarHtmlEmail(data, linkFotos, fotoUrls);
-    MailApp.sendEmail({ to: EMAIL_DESTINO, subject: assunto, htmlBody: html });
-  } catch(e) { /* não bloqueia o fluxo principal */ }
+    MailApp.sendEmail({ to: EMAIL_DESTINO, subject: assunto, htmlBody: montarHtmlEmail(data, linkFotos) });
+  } catch(e) {}
 }
 
-// Rótulos dos tipos de ocorrência
-var TIPO_LABELS = {
-  folha_falt:   "Ausência de folha de resposta",
-  cand_fiscal:  "Candidato assinou no local do fiscal",
-  cond_esp:     "Condição Especial em Caráter Excepcional",
-  folha_erro:   "Entrega incorreta de folha de resposta",
-  errata:       "Errata de questão",
-  fiscal_cand:  "Fiscal assinou no local do candidato",
-  folha_imp:    "Folha de resposta com erro de impressão",
-  pacote_danif: "Pacote de retorno danificado — novo pacote",
-  banheiro:     "Saída do candidato antes do período de sigilo",
-  test_fiscal:  "Testemunha assinou no campo do fiscal na ata",
-  outros:       "Outros"
-};
-
-function renderCand(c) {
-  if (!c || (!c.candidato && !c.inscricao)) return "";
-  var s = "";
-  if (c.candidato) s += c.candidato;
-  if (c.inscricao) s += " (Insc. " + c.inscricao + ")";
-  if (c.sala)      s += " — Sala " + c.sala;
-  return s;
-}
-
-function renderOcorrItem(item) {
-  var tipo  = item.tipo;
-  var label = TIPO_LABELS[tipo] || tipo;
-  var h  = '<div style="margin-bottom:8px;padding:8px 10px;background:#FEF9F9;border-radius:6px;border-left:3px solid #CF3432;">';
-  h += '<div style="font-size:11px;font-weight:700;color:#CF3432;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;">' + label + '</div>';
-
-  var simples = ["folha_falt","banheiro","fiscal_cand","cand_fiscal","test_fiscal"];
-  if (simples.indexOf(tipo) > -1) {
-    var cs = renderCand(item);
-    if (cs) h += '<div style="font-size:13px;color:#333;">' + cs + '</div>';
-
-  } else if (tipo === "cond_esp") {
-    if (item.ata_reserva) h += '<div style="font-size:12px;color:#555;">Ata reserva: ' + item.ata_reserva + '</div>';
-    var cs2 = renderCand(item);
-    if (cs2) h += '<div style="font-size:13px;color:#333;">' + cs2 + '</div>';
-
-  } else if (tipo === "folha_imp") {
-    if (item.folha_reserva) h += '<div style="font-size:12px;color:#555;">Utilizou folha reserva: ' + item.folha_reserva + '</div>';
-    var cs3 = renderCand(item);
-    if (cs3) h += '<div style="font-size:13px;color:#333;">' + cs3 + '</div>';
-
-  } else if (tipo === "folha_erro") {
-    var c1 = item.candidato_correto   || {};
-    var c2 = item.candidato_incorreto || {};
-    if (renderCand(c1)) {
-      h += '<div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-top:4px;">Candidato correto:</div>';
-      h += '<div style="font-size:13px;color:#333;">' + renderCand(c1) + '</div>';
-    }
-    if (renderCand(c2)) {
-      h += '<div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-top:4px;">Candidato incorreto (utilizou a folha):</div>';
-      h += '<div style="font-size:13px;color:#333;">' + renderCand(c2) + '</div>';
-    }
-    var marcacoes = [];
-    if (item.marcou_assinatura)  marcacoes.push("Assinatura");
-    if (item.marcou_tipo_prova) {
-      var tp = "Tipo de prova";
-      if (item.tipo_prova_marcado || item.tipo_prova_correto)
-        tp += " (marcado: " + (item.tipo_prova_marcado || "—") + ", correto: " + (item.tipo_prova_correto || "—") + ")";
-      marcacoes.push(tp);
-    }
-    if (item.marcou_alternativas) marcacoes.push("Marcou alternativas na questão");
-    if (marcacoes.length) h += '<div style="font-size:12px;color:#555;margin-top:4px;">Marcações: ' + marcacoes.join(", ") + '</div>';
-    if (item.folha_reserva)      h += '<div style="font-size:12px;color:#555;">Utilizou folha reserva: ' + item.folha_reserva + '</div>';
-
-  } else if (tipo === "errata") {
-    if (item.questao)   h += '<div style="font-size:12px;color:#555;">Questão(ões): ' + item.questao + '</div>';
-    if (item.cargo)     h += '<div style="font-size:12px;color:#555;">Cargo: ' + item.cargo + '</div>';
-    if (item.descricao) h += '<div style="font-size:13px;color:#333;margin-top:4px;">' + item.descricao + '</div>';
-
-  } else if (tipo === "pacote_danif") {
-    if (item.novo_pacote) h += '<div style="font-size:12px;color:#555;">Novo pacote nº: ' + item.novo_pacote + '</div>';
-    if (item.sala)        h += '<div style="font-size:12px;color:#555;">Sala: ' + item.sala + '</div>';
-
-  } else if (tipo === "outros") {
-    h += '<div style="font-size:12px;color:#555;">Tipo: ' + (item.tipo_outros === "cand" ? "Candidato específico" : "Sala toda") + '</div>';
-    if (item.tipo_outros === "cand" && renderCand(item)) {
-      h += '<div style="font-size:13px;color:#333;">' + renderCand(item) + '</div>';
-    }
-    if (item.descricao) h += '<div style="font-size:13px;color:#333;margin-top:4px;">' + item.descricao + '</div>';
-  }
-
-  h += '</div>';
-  return h;
-}
-
-function montarHtmlEmail(data, linkFotos, fotoUrls) {
+function montarHtmlEmail(data, linkFotos) {
   var s = [];
-  var cor = { manha: "#1F3A6E", tarde: "#CF3432", header: "#393939" };
+  var CORES = ["#1F3A6E","#CF3432","#6A0DAD","#1E6B3B"];
+  var header = "#393939";
+  var turnosAtivos = getTurnosAtivos(data);
 
   s.push('<div style="font-family:Arial,sans-serif;max-width:800px;margin:0 auto;background:#F2F2F2;padding:20px;">');
   s.push('<div style="background:#393939;padding:16px 24px;border-radius:8px 8px 0 0;">');
   s.push('<h1 style="color:#FFF;font-size:16px;margin:0;">IBGP — Relatório de Aplicação de Prova</h1>');
   s.push('<p style="color:#BBB;font-size:13px;margin:4px 0 0;">Enviado automaticamente pelo sistema</p>');
-  s.push('</div>');
-  s.push('<div style="height:4px;background:#CF3432;margin-bottom:16px;"></div>');
+  s.push('</div><div style="height:4px;background:#CF3432;margin-bottom:16px;"></div>');
 
   // Identificação
-  s.push(card("Identificação", cor.header, [
-    row2col("Escola", data.escola, "Concurso", data.concurso || ""),
-    row2col("Coordenador Local", data.coord_local, "Data da Prova", data.data || ""),
-    row2col("Houve Apoio?", data.houve_apoio, "Nome do Apoio", data.nome_apoio || "—"),
+  var memb = (data.membros_comissao||[]).join(", ")||"—";
+  s.push(card("Identificação", header, [
+    row2col("Escola", data.escola, "Concurso", data.concurso||""),
+    row2col("Coordenador Local", data.coord_local, "Data da Prova", data.data||""),
+    row2col("Houve Apoio?", data.houve_apoio, "Nome do Apoio", data.nome_apoio||"—"),
+    row2col("Houve Comissão?", data.houve_comissao, "Membros", memb),
     row2col("Enviado em", data.enviado_em, "", "")
   ]));
 
   // Turnos
-  [["manha", "Manhã", cor.manha], ["tarde", "Tarde", cor.tarde]].forEach(function(par) {
-    var key = par[0], label = par[1], c = par[2];
-    if (!data[key]) return;
-    var d = data[key];
-    var h = d.horarios;
+  turnosAtivos.forEach(function(nomeTurno, idx) {
+    var cor = CORES[idx % CORES.length];
+    var d = data.turnos[nomeTurno];
+    var h = d.horarios || {};
 
-    // Horários
-    s.push(card("Turno " + label + " — Horários", c, [
+    s.push(card("Turno " + nomeTurno + " — Horários", cor, [
       row2col("Chegada da equipe", h.chegada, "Abertura do portão", h.ab_portao),
       row2col("Abertura do malote", h.ab_malote, "Distribuição dos pacotes", h.distrib),
       row2col("Fechamento do portão", h.fch_portao, "Início da aplicação", h.inicio),
       row2col("Encerramento", h.encerr, "Fechamento do malote", h.fch_malote)
     ]));
 
-    // Testemunhas
-    var t = d.testemunhas;
-    s.push(card("Turno " + label + " — Testemunhas Abertura do Malote", c, [
-      row2col("Testemunha 1", t.ab_malote[0].nome + " — " + t.ab_malote[0].cpf, "Testemunha 2", t.ab_malote[1].nome + " — " + t.ab_malote[1].cpf),
-      row2col("Testemunha 3", t.ab_malote[2].nome + " — " + t.ab_malote[2].cpf, "", "")
+    var t = d.testemunhas || {};
+    var abm = t.ab_malote || [{},{},{}];
+    var fchm = t.fch_malote || [{},{},{}];
+    s.push(card("Turno " + nomeTurno + " — Testemunhas Abertura do Malote", cor, [
+      row2col("Testemunha 1", (abm[0].nome||"—")+" — "+(abm[0].cpf||"—"), "Testemunha 2", (abm[1].nome||"—")+" — "+(abm[1].cpf||"—")),
+      row2col("Testemunha 3", (abm[2].nome||"—")+" — "+(abm[2].cpf||"—"), "", "")
     ]));
-    s.push(card("Turno " + label + " — Testemunhas Fechamento do Malote", c, [
-      row2col("Testemunha 1", t.fch_malote[0].nome + " — " + t.fch_malote[0].cpf, "Testemunha 2", t.fch_malote[1].nome + " — " + t.fch_malote[1].cpf),
-      row2col("Testemunha 3", t.fch_malote[2].nome + " — " + t.fch_malote[2].cpf, "", "")
+    s.push(card("Turno " + nomeTurno + " — Testemunhas Fechamento do Malote", cor, [
+      row2col("Testemunha 1", (fchm[0].nome||"—")+" — "+(fchm[0].cpf||"—"), "Testemunha 2", (fchm[1].nome||"—")+" — "+(fchm[1].cpf||"—")),
+      row2col("Testemunha 3", (fchm[2].nome||"—")+" — "+(fchm[2].cpf||"—"), "", "")
     ]));
 
     // Estatística
     var tabela = '<table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;">';
-    tabela += '<tr style="background:' + c + ';color:#FFF;"><th style="padding:7px 8px;text-align:left;">Cargo</th><th style="padding:7px 8px;">Inscritos</th><th style="padding:7px 8px;">Presentes</th><th style="padding:7px 8px;">Ausentes</th><th style="padding:7px 8px;">Inclusões</th></tr>';
+    tabela += '<tr style="background:'+cor+';color:#FFF;"><th style="padding:7px 8px;text-align:left;">Sala — Cargo</th><th style="padding:7px 8px;">Inscritos</th><th style="padding:7px 8px;">Presentes</th><th style="padding:7px 8px;">Ausentes</th><th style="padding:7px 8px;">Inclusões</th></tr>';
     var totI=0,totP=0,totA=0,totIn=0;
-    d.estatistica.forEach(function(r,i) {
-      totI+=r.inscr; totP+=r.pres; totA+=r.aus; totIn+=r.incl||0;
-      tabela += '<tr style="background:' + (i%2===0?'#FFF':'#F4F4F4') + ';">';
-      tabela += '<td style="padding:6px 8px;">' + r.sala + ' — ' + r.cargo.replace(/^01\s+/,'') + '</td>';
-      tabela += '<td style="text-align:center;padding:6px 8px;">' + r.inscr + '</td>';
-      tabela += '<td style="text-align:center;padding:6px 8px;">' + r.pres + '</td>';
-      tabela += '<td style="text-align:center;padding:6px 8px;">' + r.aus + '</td>';
-      tabela += '<td style="text-align:center;padding:6px 8px;">' + (r.incl||0) + '</td></tr>';
+    (d.estatistica||[]).forEach(function(r,i){
+      totI+=Number(r.inscr)||0; totP+=Number(r.pres)||0; totA+=Number(r.aus)||0; totIn+=Number(r.incl)||0;
+      tabela+='<tr style="background:'+(i%2===0?'#FFF':'#F4F4F4')+'">';
+      tabela+='<td style="padding:6px 8px;">'+(r.sala||"")+(r.sala?" — ":"")+r.cargo.replace(/^01\s+/,'')+'</td>';
+      tabela+='<td style="text-align:center;padding:6px 8px;">'+r.inscr+'</td>';
+      tabela+='<td style="text-align:center;padding:6px 8px;">'+r.pres+'</td>';
+      tabela+='<td style="text-align:center;padding:6px 8px;">'+r.aus+'</td>';
+      tabela+='<td style="text-align:center;padding:6px 8px;">'+(r.incl||0)+'</td></tr>';
     });
-    tabela += '<tr style="background:#EEE;font-weight:700;"><td style="padding:7px 8px;">TOTAL</td>';
-    tabela += '<td style="text-align:center;padding:7px 8px;">' + totI + '</td>';
-    tabela += '<td style="text-align:center;padding:7px 8px;">' + totP + '</td>';
-    tabela += '<td style="text-align:center;padding:7px 8px;">' + totA + '</td>';
-    tabela += '<td style="text-align:center;padding:7px 8px;">' + totIn + '</td></tr>';
-    tabela += '</table>';
-    s.push(card("Turno " + label + " — Estatística por Cargo", c, [tabela], true));
+    tabela+='<tr style="background:#EEE;font-weight:700;"><td style="padding:7px 8px;">TOTAL</td>';
+    tabela+='<td style="text-align:center;padding:7px 8px;">'+totI+'</td><td style="text-align:center;padding:7px 8px;">'+totP+'</td>';
+    tabela+='<td style="text-align:center;padding:7px 8px;">'+totA+'</td><td style="text-align:center;padding:7px 8px;">'+totIn+'</td></tr></table>';
+    s.push(card("Turno " + nomeTurno + " — Estatística por Cargo", cor, [tabela], true));
+
+    // Ampliação
+    if (d.ampliacao && d.ampliacao.length > 0) {
+      var ampHtml = d.ampliacao.map(function(a){
+        return '<div style="margin-bottom:8px;"><strong>'+a.ata+'</strong> — '+a.qtd+' candidatos<br><span style="font-size:12px;color:#555;">'+a.justificativa+'</span></div>';
+      }).join('');
+      s.push(card("Turno " + nomeTurno + " — Ampliação de Sala", cor, [ampHtml], true));
+    }
 
     // Ocorrências
-    var o = d.ocorrencias;
+    var o = d.ocorrencias || {};
     var linhasOcorr = [
-      row2col("Ocorrências em sala", o.sala.resp, "Prova condicional", o.cond.resp),
-      row2col("Toque de celular", o.toque.resp, "Declaração de comparecimento", o.decl.resp)
+      row2col("Ocorrências em sala", (o.sala&&o.sala.resp)||"Não", "Prova condicional", (o.cond&&o.cond.resp)||"Não"),
+      row2col("Toque de celular", (o.toque&&o.toque.resp)||"Não", "Declaração de comparecimento", (o.decl&&o.decl.resp)||"Não")
     ];
-
-    // Ocorrências em sala — nova estrutura com tipos
-    var tiposOcorr = o.sala.tipos || [];
-    if (tiposOcorr.length > 0) {
-      var blocoOcorr = '<div style="margin-top:8px;">';
-      tiposOcorr.forEach(function(item) { blocoOcorr += renderOcorrItem(item); });
-      blocoOcorr += '</div>';
-      linhasOcorr.push(blocoOcorr);
+    ["cond","toque","decl"].forEach(function(tipo){
+      var cands = (o[tipo]&&o[tipo].candidatos)||[];
+      if (cands.length > 0) {
+        var lista = cands.map(function(c){
+          return c.candidato+(c.inscricao?" ("+c.inscricao+")":"")+(c.sala?" — Sala "+c.sala:"");
+        }).join("<br>");
+        linhasOcorr.push('<div style="padding:6px 0;font-size:13px;color:#555;">'+lista+'</div>');
+      }
+    });
+    if (o.sala && o.sala.tipos && o.sala.tipos.length > 0) {
+      var tiposHtml = o.sala.tipos.map(function(t2){
+        return '<li>'+t2.tipo+(t2.candidato?" — "+t2.candidato:"")+(t2.sala?" (Sala "+t2.sala+")":"")+'</li>';
+      }).join('');
+      linhasOcorr.push('<ul style="margin:4px 0 0 16px;font-size:13px;color:#555;">'+tiposHtml+'</ul>');
     }
+    s.push(card("Turno " + nomeTurno + " — Ocorrências", cor, linhasOcorr, true));
 
-    // Prova condicional
-    var candsCond = (o.cond && o.cond.candidatos) || [];
-    if (candsCond.length > 0) {
-      var listaCond = candsCond.map(function(cv) {
-        return renderCand(cv) || cv.candidato || cv.inscricao;
-      }).join("<br>");
-      linhasOcorr.push('<div style="margin-top:4px;padding:6px 0;font-size:13px;color:#555;"><strong>Prova condicional:</strong><br>' + listaCond + '</div>');
-    }
-
-    // Toque de celular — campos estado, lacrado, local
-    var candsToque = (o.toque && o.toque.candidatos) || [];
-    if (candsToque.length > 0) {
-      var blocoToque = '<div style="margin-top:8px;">';
-      candsToque.forEach(function(cv) {
-        blocoToque += '<div style="margin-bottom:6px;padding:6px 10px;background:#FEF9F9;border-radius:6px;border-left:3px solid #CF3432;">';
-        blocoToque += '<div style="font-size:13px;color:#333;">' + renderCand(cv) + '</div>';
-        var det = [];
-        if (cv.estado)  det.push("Estado: " + cv.estado);
-        if (cv.lacrado) det.push("Lacração: " + cv.lacrado);
-        if (cv.local)   det.push("Local: " + cv.local);
-        if (det.length) blocoToque += '<div style="font-size:12px;color:#555;margin-top:2px;">' + det.join(" &nbsp;|&nbsp; ") + '</div>';
-        blocoToque += '</div>';
+    // Correção de dados
+    if (d.correcao && d.correcao.length > 0) {
+      var corrHtml = '<table style="width:100%;border-collapse:collapse;font-size:13px;">';
+      corrHtml += '<tr style="background:'+cor+';color:#FFF;"><th style="padding:6px;">Inscrição</th><th style="padding:6px;">Candidato</th><th style="padding:6px;">Tipo</th><th style="padding:6px;">Dado Correto</th></tr>';
+      d.correcao.forEach(function(r,i){
+        corrHtml += '<tr style="background:'+(i%2===0?'#FFF':'#F4F4F4')+'"><td style="padding:5px 8px;">'+r.inscricao+'</td><td style="padding:5px 8px;">'+r.candidato+'</td><td style="padding:5px 8px;">'+r.tipo+'</td><td style="padding:5px 8px;">'+r.correcao+'</td></tr>';
       });
-      blocoToque += '</div>';
-      linhasOcorr.push(blocoToque);
+      corrHtml += '</table>';
+      s.push(card("Turno " + nomeTurno + " — Correção de Dados Cadastrais", cor, [corrHtml], true));
     }
-
-    // Declaração de comparecimento
-    var candsDecl = (o.decl && o.decl.candidatos) || [];
-    if (candsDecl.length > 0) {
-      var listaDecl = candsDecl.map(function(cv) { return renderCand(cv) || cv.candidato || cv.inscricao; }).join("<br>");
-      linhasOcorr.push('<div style="margin-top:4px;padding:6px 0;font-size:13px;color:#555;"><strong>Declaração de comparecimento:</strong><br>' + listaDecl + '</div>');
-    }
-
-    s.push(card("Turno " + label + " — Ocorrências", c, linhasOcorr, true));
   });
 
-  // Observações
   if (data.obs) {
-    s.push(card("Observações Gerais", cor.header, [
-      '<p style="font-size:13px;color:#393939;margin:0;">' + data.obs + '</p>'
-    ], true));
+    s.push(card("Observações Gerais", header, ['<p style="font-size:13px;color:#393939;margin:0;">'+data.obs+'</p>'], true));
   }
-
-  // Fotos
-  fotoUrls = fotoUrls || [];
-  if (fotoUrls.length > 0) {
-    var fotosHtml = '<div style="display:flex;flex-wrap:wrap;gap:8px;">';
-    fotoUrls.forEach(function(foto) {
-      fotosHtml += '<div style="text-align:center;max-width:180px;">';
-      fotosHtml += '<img src="' + foto.url + '" width="180" height="135" style="width:180px;height:135px;object-fit:cover;border-radius:4px;border:1px solid #ddd;" alt="' + foto.categoria + '">';
-      fotosHtml += '<div style="font-size:10px;color:#666;margin-top:3px;">' + foto.categoria + '</div>';
-      fotosHtml += '</div>';
-    });
-    fotosHtml += '</div>';
-    if (linkFotos) {
-      fotosHtml += '<p style="font-size:12px;margin-top:10px;"><a href="' + linkFotos + '" style="color:#CF3432;">Ver todas as fotos no Google Drive →</a></p>';
-    }
-    s.push(card("Registro Fotográfico", cor.header, [fotosHtml], true));
-  } else if (linkFotos) {
-    s.push(card("Registro Fotográfico", cor.header, [
-      '<p style="font-size:13px;"><a href="' + linkFotos + '" style="color:#CF3432;">Ver fotos no Google Drive →</a></p>'
-    ], true));
+  if (linkFotos) {
+    s.push(card("Registro Fotográfico", header, ['<p style="font-size:13px;"><a href="'+linkFotos+'" style="color:#CF3432;">Ver fotos no Google Drive →</a></p>'], true));
   }
-
   s.push('</div>');
   return s.join('');
 }
 
 function card(titulo, cor, linhas, raw) {
   var html = '<div style="background:#FFF;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.07);margin-bottom:16px;overflow:hidden;">';
-  html += '<div style="background:' + cor + ';padding:10px 16px;">';
-  html += '<h3 style="color:#FFF;font-size:13px;margin:0;text-transform:uppercase;letter-spacing:.4px;">' + titulo + '</h3></div>';
+  html += '<div style="background:'+cor+';padding:10px 16px;"><h3 style="color:#FFF;font-size:13px;margin:0;text-transform:uppercase;letter-spacing:.4px;">'+titulo+'</h3></div>';
   html += '<div style="padding:16px;">';
-  if (raw) {
-    linhas.forEach(function(l){ html += l; });
-  } else {
-    linhas.forEach(function(l){ html += l; });
-  }
+  linhas.forEach(function(l){ html += l; });
   html += '</div></div>';
   return html;
 }
@@ -434,11 +397,11 @@ function card(titulo, cor, linhas, raw) {
 function row2col(l1, v1, l2, v2) {
   var cell = function(l, v) {
     if (!l) return '<td style="width:50%;"></td>';
-    return '<td style="width:50%;padding:4px 8px 4px 0;vertical-align:top;">' +
-      '<span style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.4px;">' + l + '</span>' +
-      '<br><span style="font-size:13px;color:#393939;">' + (v || '—') + '</span></td>';
+    return '<td style="width:50%;padding:4px 8px 4px 0;vertical-align:top;">'
+      +'<span style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.4px;">'+l+'</span>'
+      +'<br><span style="font-size:13px;color:#393939;">'+(v||'—')+'</span></td>';
   };
-  return '<table style="width:100%;margin-bottom:10px;"><tr>' + cell(l1,v1) + cell(l2,v2) + '</tr></table>';
+  return '<table style="width:100%;margin-bottom:10px;"><tr>'+cell(l1,v1)+cell(l2,v2)+'</tr></table>';
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -446,10 +409,7 @@ function row2col(l1, v1, l2, v2) {
 // ════════════════════════════════════════════════════════════════
 function getOrCreateSheet(ss, nome, cabecalho) {
   var ws = ss.getSheetByName(nome);
-  if (!ws) {
-    ws = ss.insertSheet(nome);
-    ws.appendRow(cabecalho);
-  }
+  if (!ws) { ws = ss.insertSheet(nome); ws.appendRow(cabecalho); }
   return ws;
 }
 
@@ -477,7 +437,7 @@ function atualizarOuInserir(ws, escola, novaLinha) {
 }
 
 // ════════════════════════════════════════════════════════════════
-//  Abas de dados
+//  Abas de dados — versão dinâmica (data.turnos)
 // ════════════════════════════════════════════════════════════════
 
 function salvarConcurso(ss, data) {
@@ -501,15 +461,20 @@ function salvarConcurso(ss, data) {
 
 function salvarLocais(ss, data) {
   var ws = getOrCreateSheet(ss, "LOCAIS", [
-    "Local / Escola", "Coordenador Local", "Nº Salas", "Turno",
-    "Houve apoio?", "Nome do apoio", "Observações gerais", "Enviado em"
+    "Local / Escola", "Coordenador Local", "Nº Salas", "Turno(s)",
+    "Houve apoio?", "Nome do apoio",
+    "Houve comissão?", "Membros da comissão",
+    "Observações gerais", "Enviado em", "Foto URL"
   ]);
-  var turnos = [];
-  if (data.manha) turnos.push("MANHÃ");
-  if (data.tarde) turnos.push("TARDE");
+  var turnosAtivos = getTurnosAtivos(data);
+  var memb = (data.membros_comissao || []).map(function(m) {
+    return typeof m === "object" && m !== null ? (m.nome || "") : String(m);
+  }).filter(Boolean).join("; ");
   atualizarOuInserir(ws, data.escola, [
-    data.escola, data.coord_local, data.salas, turnos.join(" e ") || "",
-    data.houve_apoio, data.nome_apoio, data.obs, data.enviado_em
+    data.escola, data.coord_local, data.salas, turnosAtivos.join(" e "),
+    data.houve_apoio, data.nome_apoio,
+    data.houve_comissao, memb,
+    data.obs, data.enviado_em, ""
   ]);
 }
 
@@ -519,10 +484,17 @@ function salvarResultados(ss, data) {
     "Inscritos", "Presentes", "Ausentes", "Inclusões", "Enviado em"
   ]);
   deletarLinhasEscola(ws, data.escola);
-  ["manha", "tarde"].forEach(function(t) {
-    if (!data[t]) return;
-    data[t].estatistica.forEach(function(r) {
-      ws.appendRow([data.escola, r.sala, r.turno, r.cargo, r.inscr, r.pres, r.aus, r.incl || 0, data.enviado_em]);
+  getTurnosAtivos(data).forEach(function(nomeTurno) {
+    var d = data.turnos[nomeTurno];
+    (d.estatistica||[]).forEach(function(r) {
+      ws.appendRow([
+        data.escola,
+        r.sala || "",
+        nomeTurno,
+        r.cargo,
+        r.inscr, r.pres, r.aus, r.incl || 0,
+        data.enviado_em
+      ]);
     });
   });
 }
@@ -535,11 +507,10 @@ function salvarHorarios(ss, data) {
     "Fechamento do malote", "Abertura do malote", "Enviado em"
   ]);
   deletarLinhasEscola(ws, data.escola);
-  [["manha","Manhã"],["tarde","Tarde"]].forEach(function(par) {
-    if (!data[par[0]]) return;
-    var h = data[par[0]].horarios;
+  getTurnosAtivos(data).forEach(function(nomeTurno) {
+    var h = (data.turnos[nomeTurno].horarios) || {};
     ws.appendRow([
-      data.escola, par[1],
+      data.escola, nomeTurno,
       h.chegada, h.ab_portao, h.fch_portao,
       h.distrib, h.inicio, h.encerr,
       h.fch_malote, h.ab_malote, data.enviado_em
@@ -555,20 +526,19 @@ function salvarTestemunhas(ss, data) {
     "Testemunha 3 — Nome", "Testemunha 3 — CPF", "Enviado em"
   ]);
   deletarLinhasEscola(ws, data.escola);
-  [["manha","Manhã"],["tarde","Tarde"]].forEach(function(par) {
-    if (!data[par[0]]) return;
-    var t = data[par[0]].testemunhas;
+  getTurnosAtivos(data).forEach(function(nomeTurno) {
+    var t = (data.turnos[nomeTurno].testemunhas) || {};
+    var abm = t.ab_malote  || [{nome:"",cpf:""},{nome:"",cpf:""},{nome:"",cpf:""}];
+    var fch = t.fch_malote || [{nome:"",cpf:""},{nome:"",cpf:""},{nome:"",cpf:""}];
     ws.appendRow([
-      data.escola, par[1], "Abertura do Malote",
-      t.ab_malote[0].nome, t.ab_malote[0].cpf,
-      t.ab_malote[1].nome, t.ab_malote[1].cpf,
-      t.ab_malote[2].nome, t.ab_malote[2].cpf, data.enviado_em
+      data.escola, nomeTurno, "Abertura do Malote",
+      abm[0].nome, abm[0].cpf, abm[1].nome, abm[1].cpf, abm[2].nome, abm[2].cpf,
+      data.enviado_em
     ]);
     ws.appendRow([
-      data.escola, par[1], "Fechamento do Malote",
-      t.fch_malote[0].nome, t.fch_malote[0].cpf,
-      t.fch_malote[1].nome, t.fch_malote[1].cpf,
-      t.fch_malote[2].nome, t.fch_malote[2].cpf, data.enviado_em
+      data.escola, nomeTurno, "Fechamento do Malote",
+      fch[0].nome, fch[0].cpf, fch[1].nome, fch[1].cpf, fch[2].nome, fch[2].cpf,
+      data.enviado_em
     ]);
   });
 }
@@ -580,12 +550,14 @@ function salvarOcorrencias(ss, data) {
     "Toque de celular", "Declaração de comparecimento", "Enviado em"
   ]);
   deletarLinhasEscola(ws, data.escola);
-  [["manha","Manhã"],["tarde","Tarde"]].forEach(function(par) {
-    if (!data[par[0]]) return;
-    var o = data[par[0]].ocorrencias;
+  getTurnosAtivos(data).forEach(function(nomeTurno) {
+    var o = (data.turnos[nomeTurno].ocorrencias) || {};
     ws.appendRow([
-      data.escola, par[1],
-      o.sala.resp, o.cond.resp, o.toque.resp, o.decl.resp,
+      data.escola, nomeTurno,
+      (o.sala && o.sala.resp) || "Não",
+      (o.cond && o.cond.resp) || "Não",
+      (o.toque && o.toque.resp) || "Não",
+      (o.decl && o.decl.resp) || "Não",
       data.enviado_em
     ]);
   });
@@ -597,74 +569,109 @@ function salvarCandidatos(ss, data) {
   ]);
   deletarLinhasEscola(ws, data.escola);
 
-  var tipos = [
-    {key:"sala",  label:"Ocorrências em sala"},
-    {key:"cond",  label:"Prova condicional"},
-    {key:"toque", label:"Toque de celular"},
-    {key:"decl",  label:"Declaração de comparecimento"},
-  ];
-
-  [["manha","Manhã"],["tarde","Tarde"]].forEach(function(par) {
-    if (!data[par[0]]) return;
-    tipos.forEach(function(tipo) {
-      var ocorr = data[par[0]].ocorrencias[tipo.key];
-      if (!ocorr || !ocorr.candidatos) return;
-      ocorr.candidatos.forEach(function(c) {
-        ws.appendRow([data.escola, par[1], tipo.label, c.inscricao, c.candidato, c.sala, c.desc || "", data.enviado_em]);
+  getTurnosAtivos(data).forEach(function(nomeTurno) {
+    var o = (data.turnos[nomeTurno].ocorrencias) || {};
+    // Ocorrências em sala — tipos detalhados
+    ((o.sala && o.sala.tipos) || []).forEach(function(t) {
+      ws.appendRow([
+        data.escola, nomeTurno, "Ocorrências em sala",
+        t.inscricao || "", t.candidato || "", t.sala || "",
+        t.tipo + (t.candidato ? " — " + t.candidato : "") + (t.sala ? " (Sala " + t.sala + ")" : ""), data.enviado_em
+      ]);
+    });
+    // Prova condicional, Toque, Declaração — candidatos
+    [
+      {key:"cond",  label:"Prova condicional"},
+      {key:"toque", label:"Toque de celular"},
+      {key:"decl",  label:"Declaração de comparecimento"},
+    ].forEach(function(tipo) {
+      var cands = (o[tipo.key] && o[tipo.key].candidatos) || [];
+      cands.forEach(function(c) {
+        ws.appendRow([
+          data.escola, nomeTurno, tipo.label,
+          c.inscricao || "", c.candidato || "", c.sala || "", c.desc || "",
+          data.enviado_em
+        ]);
       });
+    });
+    // Correção de dados
+    (data.turnos[nomeTurno].correcao || []).forEach(function(c) {
+      ws.appendRow([
+        data.escola, nomeTurno, "Correção de Dados",
+        c.inscricao || "", c.candidato || "", "", c.tipo+" → "+c.correcao,
+        data.enviado_em
+      ]);
+    });
+    // Ampliação de sala
+    (data.turnos[nomeTurno].ampliacao || []).forEach(function(a) {
+      ws.appendRow([
+        data.escola, nomeTurno, "Ampliação de Sala",
+        "", "", "", a.ata+" — "+a.qtd+" cand. — "+a.justificativa,
+        data.enviado_em
+      ]);
     });
   });
 }
 
 function salvarFotos(data) {
-  if (!data.fotos || data.fotos.length === 0) return {link: null, urls: []};
+  if (!data.fotos || data.fotos.length === 0) return null;
+
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
 
   var root = DriveApp.getRootFolder();
-  var ibgpFolder;
   var ibgpIt = root.getFoldersByName("IBGP_RELATORIOS");
-  ibgpFolder = ibgpIt.hasNext() ? ibgpIt.next() : root.createFolder("IBGP_RELATORIOS");
+  var ibgpFolder = ibgpIt.hasNext() ? ibgpIt.next() : root.createFolder("IBGP_RELATORIOS");
 
   var nomeEscola = data.escola.replace(/[\/\\:*?"<>|]/g, "_");
-  var escolaFolder;
   var escolaIt = ibgpFolder.getFoldersByName(nomeEscola);
-  escolaFolder = escolaIt.hasNext() ? escolaIt.next() : ibgpFolder.createFolder(nomeEscola);
+  var escolaFolder = escolaIt.hasNext() ? escolaIt.next() : ibgpFolder.createFolder(nomeEscola);
 
-  // Compartilha a pasta
-  escolaFolder.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  // Aba FOTOS — salva ID individual de cada foto para embutir no relatório
+  var wsFotos = getOrCreateSheet(ss, "FOTOS", [
+    "Local / Escola", "Categoria", "Turno", "File ID", "URL Thumbnail", "Enviado em"
+  ]);
+  deletarLinhasEscola(wsFotos, data.escola);
 
-  var fotoUrls = [];
   data.fotos.forEach(function(foto, idx) {
     try {
       var bytes = Utilities.base64Decode(foto.b64);
       var cat   = (foto.categoria || "Foto").replace(/[\/\\:*?"<>|]/g, "_");
-      var nome  = cat + "_" + (idx + 1) + "_" + foto.nome;
-      var blob  = Utilities.newBlob(bytes, "image/jpeg", nome);
-      var file  = escolaFolder.createFile(blob);
+      var nome  = cat + "_" + (idx + 1) + "_" + (foto.nome || "foto.jpg");
+      var file  = escolaFolder.createFile(Utilities.newBlob(bytes, "image/jpeg", nome));
+
+      // Torna cada arquivo individualmente público
       file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-      fotoUrls.push({
-        url:       "https://drive.google.com/uc?export=view&id=" + file.getId(),
-        nome:      nome,
-        categoria: foto.categoria || ""
-      });
+
+      var fileId    = file.getId();
+      var thumbUrl  = "https://drive.google.com/thumbnail?id=" + fileId + "&sz=w600";
+
+      wsFotos.appendRow([
+        data.escola,
+        foto.categoria || "Foto",
+        foto.turno || "",
+        fileId,
+        thumbUrl,
+        data.enviado_em
+      ]);
     } catch(e) {}
   });
 
+  escolaFolder.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   var link = "https://drive.google.com/drive/folders/" + escolaFolder.getId();
 
-  // Salva o link na aba LOCAIS (coluna 9) para uso no Relatório Geral
+  // Salva link da pasta na aba LOCAIS (coluna 11)
   try {
-    var ss2 = SpreadsheetApp.getActiveSpreadsheet();
-    var wsL = ss2.getSheetByName("LOCAIS");
+    var wsL = ss.getSheetByName("LOCAIS");
     if (wsL && wsL.getLastRow() > 1) {
       var nomes = wsL.getRange(2, 1, wsL.getLastRow() - 1, 1).getValues();
       for (var i = 0; i < nomes.length; i++) {
         if (String(nomes[i][0]).trim() === String(data.escola).trim()) {
-          wsL.getRange(i + 2, 9).setValue(link);
+          wsL.getRange(i + 2, 11).setValue(link);
           break;
         }
       }
     }
-  } catch(e2) {}
+  } catch(e) {}
 
-  return {link: link, urls: fotoUrls};
+  return link;
 }
