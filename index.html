@@ -537,35 +537,32 @@ function renderStat(tableId, cargos){
 }
 
 // ── Lookup de candidato por CPF (testemunhas) ──────────────────
-async function buscarTestemunha(cpfInput) {
-  const cpf = cpfInput.value.replace(/\D/g,"");
-  if (cpf.length < 11) return;
+function buscarTestemunha(cpfInput) {
+  const cpf = cpfInput.value.replace(/\D/g,"").padStart(11,"0");
+  if (cpf.replace(/^0+/,"").length < 1) return;
   const nomeId = cpfInput.id.replace("_cpf","_nome");
   const nomeEl = document.getElementById(nomeId);
   if (!nomeEl) return;
-  nomeEl.value = "";
-  nomeEl.placeholder = "Buscando...";
-  try {
-    const url = (CONCURSO?.script_url || SCRIPT_URL) + "?action=buscarCandidato&cpf=" + cpf;
-    const res = await fetch(url, { redirect: "follow" });
-    const text = await res.text();
-    let json;
-    try { json = JSON.parse(text); } catch(_) {
-      nomeEl.placeholder = "Resposta inválida do servidor";
-      console.error("Resposta não-JSON:", text.substring(0, 200));
-      return;
-    }
-    if (json.nome) {
-      nomeEl.value = json.nome;
-      nomeEl.style.background = "#e8f5e9";
-      setTimeout(()=>{ nomeEl.style.background=""; }, 2000);
-    } else {
-      nomeEl.placeholder = json.erro || "Não encontrado — preencha manualmente";
-      console.warn("buscarCandidato:", json);
-    }
-  } catch(err) {
-    nomeEl.placeholder = "Erro de conexão — preencha manualmente";
-    console.error("buscarTestemunha erro:", err);
+  // Aguarda 11 dígitos
+  if (cpf.length < 11) { nomeEl.placeholder = "Nome"; return; }
+  // Busca local no JSON do certame já carregado
+  if (!CONCURSO || !CONCURSO.escolas) {
+    nomeEl.placeholder = "Selecione o certame primeiro";
+    return;
+  }
+  let encontrado = null;
+  for (const esc of CONCURSO.escolas) {
+    const cands = esc.candidatos || [];
+    const c = cands.find(c => String(c.cpf||"").replace(/\D/g,"").padStart(11,"0") === cpf);
+    if (c) { encontrado = c; break; }
+  }
+  if (encontrado) {
+    nomeEl.value = encontrado.nome;
+    nomeEl.style.background = "#e8f5e9";
+    setTimeout(()=>{ nomeEl.style.background=""; }, 2000);
+  } else {
+    nomeEl.value = "";
+    nomeEl.placeholder = "Não encontrado — preencha manualmente";
   }
 }
 
