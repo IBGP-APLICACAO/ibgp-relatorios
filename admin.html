@@ -1160,8 +1160,6 @@ function abrirRelatorioImprimivel(dados) {
       const cor = corTurno(turno);
       const rows = (e.resultados||[]).filter(r=>r.turno===turno);
       let tI=0,tP=0,tA=0,tIn=0;
-      const pct = function(a,b){ return b>0 ? (a/b*100).toFixed(1)+"%" : "—"; };
-      const pct = function(a,b){ return b>0 ? (a/b*100).toFixed(1)+"%" : "—"; };
       let tabela = `<table><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
         <th style="background:${cor};text-align:center;width:60px;">Sala</th>
         <th style="background:${cor};">Cargo</th>
