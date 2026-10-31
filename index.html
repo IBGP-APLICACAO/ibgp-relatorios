@@ -79,6 +79,10 @@
     .entry-header { display: grid; grid-template-columns: 130px 1fr 90px; gap: 8px; margin-bottom: 4px; font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .4px; }
     .entry-sala-block { border-left: 3px solid #ddd; padding-left: 10px; margin-bottom: 12px; }
     .entry-sala-block textarea { margin-top: 6px; font-size: 12px; padding: 6px 8px; }
+    .entry-toque-block { border-left: 3px solid #ff9800; padding-left: 10px; margin-bottom: 12px; }
+    .toque-extras { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; font-size: 12px; background: #fff8f0; border-radius: 6px; padding: 6px 10px; }
+    .toque-label { font-weight: 700; color: #e65100; }
+    .toque-extras label { display: flex; align-items: center; gap: 3px; cursor: pointer; }
     .add-btn { background: none; border: 1px dashed #CF3432; color: #CF3432; border-radius: 4px; padding: 5px 14px; cursor: pointer; font-size: 12px; font-weight: 700; margin-top: 6px; transition: all .2s; }
     .add-btn:hover { background: #CF3432; color: #FFF; }
   </style>
@@ -205,14 +209,8 @@
         <h4>Ocorrências em sala</h4>
         <div class="radio-row"><label><input type="radio" name="m_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="m_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('m_ocorr_sala','m_ocorr_sala_wrap')"> Sim</label></div>
         <div id="m_ocorr_sala_wrap" class="hidden">
-          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-          <div id="m_ocorr_sala_entries">
-            <div class="entry-sala-block">
-              <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-              <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
-            </div>
-          </div>
-          <button type="button" class="add-btn" onclick="addSalaEntry('m_ocorr_sala_entries')">+ Adicionar</button>
+          <div id="m_ocorr_sala_items"></div>
+          <button type="button" class="add-btn" onclick="addOcorrItem('m_ocorr_sala_items','m')">+ Adicionar ocorrência</button>
         </div>
       </div>
       <div class="ocorr-block">
@@ -221,12 +219,9 @@
         <div id="m_cond_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="m_cond_entries">
-            <div class="entry-sala-block">
-              <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-              <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
-            </div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="buscarPorInscricao(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
-          <button type="button" class="add-btn" onclick="addSalaEntry('m_cond_entries')">+ Adicionar</button>
+          <button type="button" class="add-btn" onclick="addEntry('m_cond_entries')">+ Adicionar</button>
         </div>
       </div>
       <div class="ocorr-block">
@@ -234,10 +229,8 @@
         <div class="radio-row"><label><input type="radio" name="m_toque" value="Não" checked onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Não</label><label><input type="radio" name="m_toque" value="Sim" onchange="toggleOcorrEntries('m_toque','m_toque_wrap')"> Sim</label></div>
         <div id="m_toque_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-          <div id="m_toque_entries">
-            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          </div>
-          <button type="button" class="add-btn" onclick="addEntry('m_toque_entries')">+ Adicionar</button>
+          <div id="m_toque_entries"></div>
+          <button type="button" class="add-btn" onclick="addToqueEntry('m_toque_entries')">+ Adicionar</button>
         </div>
       </div>
       <div class="ocorr-block">
@@ -312,14 +305,8 @@
         <h4>Ocorrências em sala</h4>
         <div class="radio-row"><label><input type="radio" name="t_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="t_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('t_ocorr_sala','t_ocorr_sala_wrap')"> Sim</label></div>
         <div id="t_ocorr_sala_wrap" class="hidden">
-          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-          <div id="t_ocorr_sala_entries">
-            <div class="entry-sala-block">
-              <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-              <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
-            </div>
-          </div>
-          <button type="button" class="add-btn" onclick="addSalaEntry('t_ocorr_sala_entries')">+ Adicionar</button>
+          <div id="t_ocorr_sala_items"></div>
+          <button type="button" class="add-btn" onclick="addOcorrItem('t_ocorr_sala_items','t')">+ Adicionar ocorrência</button>
         </div>
       </div>
       <div class="ocorr-block">
@@ -328,12 +315,9 @@
         <div id="t_cond_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
           <div id="t_cond_entries">
-            <div class="entry-sala-block">
-              <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-              <textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>
-            </div>
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="buscarPorInscricao(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
-          <button type="button" class="add-btn" onclick="addSalaEntry('t_cond_entries')">+ Adicionar</button>
+          <button type="button" class="add-btn" onclick="addEntry('t_cond_entries')">+ Adicionar</button>
         </div>
       </div>
       <div class="ocorr-block">
@@ -341,10 +325,8 @@
         <div class="radio-row"><label><input type="radio" name="t_toque" value="Não" checked onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Não</label><label><input type="radio" name="t_toque" value="Sim" onchange="toggleOcorrEntries('t_toque','t_toque_wrap')"> Sim</label></div>
         <div id="t_toque_wrap" class="hidden">
           <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
-          <div id="t_toque_entries">
-            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
-          </div>
-          <button type="button" class="add-btn" onclick="addEntry('t_toque_entries')">+ Adicionar</button>
+          <div id="t_toque_entries"></div>
+          <button type="button" class="add-btn" onclick="addToqueEntry('t_toque_entries')">+ Adicionar</button>
         </div>
       </div>
       <div class="ocorr-block">
@@ -618,11 +600,182 @@ function coletarStat(tableId, cargos){
   }));
 }
 
+function buscarPorInscricao(inscricaoInput) {
+  const inscr = inscricaoInput.value.trim();
+  if (!inscr) return;
+  if (!CONCURSO || !CONCURSO.escolas) return;
+  let encontrado = null;
+  for (const esc of CONCURSO.escolas) {
+    const c = (esc.candidatos || []).find(c => String(c.inscricao||"").trim() === inscr);
+    if (c) { encontrado = c; break; }
+  }
+  const row = inscricaoInput.closest('.entry-row');
+  if (!row) return;
+  const inputs = row.querySelectorAll('input');
+  const nomeEl = inputs[1];
+  const salaEl = inputs[2];
+  if (encontrado) {
+    if (nomeEl) { nomeEl.value = encontrado.nome || ""; nomeEl.style.background = "#e8f5e9"; setTimeout(()=>{ nomeEl.style.background=""; }, 2000); }
+    if (salaEl) { salaEl.value = encontrado.sala || ""; salaEl.style.background = "#e8f5e9"; setTimeout(()=>{ salaEl.style.background=""; }, 2000); }
+  } else {
+    if (nomeEl) { nomeEl.value = ""; nomeEl.placeholder = "Não encontrado — preencha manualmente"; }
+  }
+}
+
+function lookupInscricao(el){ buscarPorInscricao(el); }
+
+let _ocorrIdx = 0;
+function selectOcorrTipo(sel){
+  const item = sel.closest('.ocorr-item-block');
+  item.querySelectorAll('.ocorr-fields').forEach(f => f.classList.add('hidden'));
+  if(sel.value){
+    const target = item.querySelector('.ocorr-fields[data-tipo="'+sel.value+'"]');
+    if(target) target.classList.remove('hidden');
+  }
+}
+function toggleOutrosCand(radio){
+  const block = radio.closest('.ocorr-fields') || radio.closest('.outros-block');
+  const fields = block ? block.querySelector('.outros-cand-fields') : null;
+  if(fields) fields.style.display = radio.value === 'cand' ? 'block' : 'none';
+}
+function addOcorrItem(listId, prefix){
+  _ocorrIdx++;
+  const uid = prefix + '_' + _ocorrIdx;
+  const list = document.getElementById(listId);
+  const wrap = document.createElement('div');
+  wrap.className = 'ocorr-item-block';
+  wrap.style.cssText = 'border:1px solid #d0d0d0;border-radius:6px;padding:10px;margin-bottom:8px;';
+  const ENTRY = '<div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="lookupInscricao(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>';
+  wrap.innerHTML =
+    '<select style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:4px;font-size:13px;background:#fafafa;margin-bottom:4px;" onchange="selectOcorrTipo(this)">' +
+    '<option value="">— Selecione o tipo de ocorrência —</option>' +
+    '<option value="folha_falt">Ausência de folha de resposta</option>' +
+    '<option value="cand_fiscal">Candidato assinou no local do fiscal</option>' +
+    '<option value="cond_esp">Condição Especial em Caráter Excepcional</option>' +
+    '<option value="folha_erro">Entrega incorreta de folha de resposta pelo fiscal, com preenchimento por candidato distinto</option>' +
+    '<option value="errata">Errata de questão</option>' +
+    '<option value="fiscal_cand">Fiscal assinou no local do candidato</option>' +
+    '<option value="folha_imp">Folha de resposta com erro de impressão</option>' +
+    '<option value="pacote_danif">Pacote de retorno danificado — uso de novo pacote</option>' +
+    '<option value="banheiro">Saída do candidato de sala antes do período de sigilo</option>' +
+    '<option value="test_fiscal">Testemunha assinou no campo do fiscal de sala na ata</option>' +
+    '<option value="outros">Outros</option>' +
+    '</select>' +
+    '<div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:6px;">'+ENTRY+'</div>' +
+    '<div class="ocorr-fields hidden" data-tipo="banheiro" style="margin-top:6px;">'+ENTRY+'</div>' +
+    '<div class="ocorr-fields hidden" data-tipo="fiscal_cand" style="margin-top:6px;">'+ENTRY+'</div>' +
+    '<div class="ocorr-fields hidden" data-tipo="cand_fiscal" style="margin-top:6px;">'+ENTRY+'</div>' +
+    '<div class="ocorr-fields hidden" data-tipo="test_fiscal" style="margin-top:6px;">'+ENTRY+'</div>' +
+    '<div class="ocorr-fields hidden" data-tipo="cond_esp" style="margin-top:6px;"><div style="margin-bottom:6px;"><label style="font-size:12px;font-weight:600;">Nome da ata reserva:</label><input type="text" placeholder="Nome da ata reserva" style="display:block;width:100%;margin-top:3px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div>'+ENTRY+'</div>' +
+    '<div class="ocorr-fields hidden" data-tipo="folha_imp" style="margin-top:6px;"><div style="font-size:12px;color:#333;margin-bottom:6px;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_imp_r_'+uid+'" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_imp_r_'+uid+'" value="Não"> Não</label></div>'+ENTRY+'</div>' +
+    '<div class="ocorr-fields hidden" data-tipo="folha_erro" style="margin-top:6px;"><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;">Candidato correto</div>'+ENTRY+'<div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;">Candidato incorreto (utilizou a folha)</div>'+ENTRY+'<div style="margin-top:8px;font-size:12px;color:#333;"><strong>Utilizou folha reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_r_'+uid+'" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_r_'+uid+'" value="Não"> Não</label></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="errata" style="margin-top:6px;"><div style="display:flex;gap:8px;margin-bottom:6px;"><input type="text" placeholder="Questão(ões)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div><textarea rows="2" placeholder="Descrição da errata..." style="width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="pacote_danif" style="margin-top:6px;"><div style="display:flex;gap:8px;"><input type="text" placeholder="Nº do novo pacote" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Sala" style="width:80px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="outros" style="margin-top:6px;"><div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo:<label style="margin-left:8px;cursor:pointer;"><input type="radio" name="ou_'+uid+'" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="ou_'+uid+'" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label></div><div class="outros-cand-fields" style="display:none;">'+ENTRY+'</div><textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea></div>';
+  list.appendChild(wrap);
+}
+
+function coletarTiposOcorr(prefix){
+  const list = document.getElementById(prefix + '_sala_items');
+  if(!list) return [];
+  const items = [];
+  list.querySelectorAll('.ocorr-item-block').forEach(block => {
+    const sel = block.querySelector('select');
+    const tipo = sel ? sel.value : '';
+    if(!tipo) return;
+    const fields = block.querySelector('.ocorr-fields[data-tipo="'+tipo+'"]');
+    if(!fields) return;
+    function eR(n){
+      const rows = fields.querySelectorAll('.entry-row');
+      const row = rows[n]; if(!row) return {inscricao:'',candidato:'',sala:''};
+      const ins = row.querySelectorAll('input');
+      return {inscricao:(ins[0]?.value||'').trim(), candidato:(ins[1]?.value||'').trim(), sala:(ins[2]?.value||'').trim()};
+    }
+    const item = {tipo};
+    const simples = ['folha_falt','banheiro','fiscal_cand','cand_fiscal','test_fiscal'];
+    if(simples.includes(tipo)){
+      Object.assign(item, eR(0));
+    } else if(tipo === 'cond_esp'){
+      const ataIn = fields.querySelector('input[placeholder="Nome da ata reserva"]');
+      item.ata_reserva = ataIn ? ataIn.value.trim() : '';
+      Object.assign(item, eR(0));
+    } else if(tipo === 'folha_imp'){
+      const r = fields.querySelector('input[type="radio"]:checked');
+      item.folha_reserva = r ? r.value : '';
+      Object.assign(item, eR(0));
+    } else if(tipo === 'folha_erro'){
+      item.candidato_correto = eR(0);
+      item.candidato_incorreto = eR(1);
+      const r = fields.querySelector('input[type="radio"]:checked');
+      item.folha_reserva = r ? r.value : '';
+    } else if(tipo === 'errata'){
+      const ins = fields.querySelectorAll('input[type="text"]');
+      item.questoes = ins[0]?.value.trim()||'';
+      item.cargo    = ins[1]?.value.trim()||'';
+      item.descricao = fields.querySelector('textarea')?.value.trim()||'';
+    } else if(tipo === 'pacote_danif'){
+      const ins = fields.querySelectorAll('input[type="text"]');
+      item.novo_pacote = ins[0]?.value.trim()||'';
+      item.sala = ins[1]?.value.trim()||'';
+    } else if(tipo === 'outros'){
+      const r = fields.querySelector('input[type="radio"]:checked');
+      item.escopo = r ? r.value : 'sala';
+      if(item.escopo === 'cand') Object.assign(item, eR(0));
+      item.descricao = fields.querySelector('textarea')?.value.trim()||'';
+    }
+    items.push(item);
+  });
+  return items;
+}
+
+let _toqueIdx = 0;
+function addToqueEntry(listId){
+  const list = document.getElementById(listId);
+  const idx = _toqueIdx++;
+  const div = document.createElement('div');
+  div.className = 'entry-toque-block';
+  div.innerHTML = `
+    <div class="entry-row">
+      <input type="text" placeholder="Nº Inscrição" oninput="buscarPorInscricao(this)">
+      <input type="text" placeholder="Nome do Candidato">
+      <input type="text" placeholder="Sala">
+    </div>
+    <div class="toque-extras">
+      <span class="toque-label">Lacrado:</span>
+      <label><input type="radio" name="toque_lacr_${idx}" value="Sim"> Sim</label>
+      <label><input type="radio" name="toque_lacr_${idx}" value="Não" checked> Não</label>
+      <span class="toque-label">No local indicado para o fiscal:</span>
+      <label><input type="radio" name="toque_local_${idx}" value="Sim"> Sim</label>
+      <label><input type="radio" name="toque_local_${idx}" value="Não" checked> Não</label>
+      <span class="toque-label">Situação:</span>
+      <label><input type="radio" name="toque_sit_${idx}" value="Ligado" checked> Ligado</label>
+      <label><input type="radio" name="toque_sit_${idx}" value="Desligado"> Desligado</label>
+    </div>`;
+  list.appendChild(div);
+}
+
+function coletarToqueEntries(listId){
+  const list = document.getElementById(listId);
+  if(!list) return [];
+  return Array.from(list.querySelectorAll('.entry-toque-block')).map(block=>{
+    const ins = block.querySelectorAll('input[type="text"]');
+    const checked = block.querySelectorAll('.toque-extras input[type="radio"]:checked');
+    return {
+      inscricao:     ins[0]?.value.trim()||"",
+      candidato:     ins[1]?.value.trim()||"",
+      sala:          ins[2]?.value.trim()||"",
+      lacrado:       checked[0]?.value||"Não",
+      local_indicado:checked[1]?.value||"Não",
+      situacao:      checked[2]?.value||"Ligado"
+    };
+  }).filter(e=>e.inscricao||e.candidato||e.sala);
+}
+
 function addEntry(listId){
   const list = document.getElementById(listId);
   const row = document.createElement('div');
   row.className = 'entry-row';
-  row.innerHTML = '<input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala">';
+  row.innerHTML = '<input type="text" placeholder="Nº Inscrição" oninput="buscarPorInscricao(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala">';
   list.appendChild(row);
 }
 
@@ -630,7 +783,7 @@ function addSalaEntry(listId){
   const list = document.getElementById(listId);
   const block = document.createElement('div');
   block.className = 'entry-sala-block';
-  block.innerHTML = '<div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>';
+  block.innerHTML = '<div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="buscarPorInscricao(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div><textarea rows="2" placeholder="Descrição da ocorrência..."></textarea>';
   list.appendChild(block);
 }
 
@@ -901,9 +1054,9 @@ async function enviar(){
       },
       estatistica: coletarStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã")),
       ocorrencias: {
-        sala:  {resp:getRad("m_ocorr_sala"), candidatos:coletarSalaEntries("m_ocorr_sala_entries")},
-        cond:  {resp:getRad("m_cond"),       candidatos:coletarSalaEntries("m_cond_entries")},
-        toque: {resp:getRad("m_toque"),      candidatos:coletarEntries("m_toque_entries")},
+        sala:  {resp:getRad("m_ocorr_sala"), tipos:coletarTiposOcorr("m_ocorr")},
+        cond:  {resp:getRad("m_cond"),       candidatos:coletarEntries("m_cond_entries")},
+        toque: {resp:getRad("m_toque"),      candidatos:coletarToqueEntries("m_toque_entries")},
         decl:  {resp:getRad("m_decl"),       candidatos:coletarEntries("m_decl_entries")},
       },
     },
@@ -929,9 +1082,9 @@ async function enviar(){
       },
       estatistica: coletarStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde")),
       ocorrencias: {
-        sala:  {resp:getRad("t_ocorr_sala"), candidatos:coletarSalaEntries("t_ocorr_sala_entries")},
-        cond:  {resp:getRad("t_cond"),       candidatos:coletarSalaEntries("t_cond_entries")},
-        toque: {resp:getRad("t_toque"),      candidatos:coletarEntries("t_toque_entries")},
+        sala:  {resp:getRad("t_ocorr_sala"), tipos:coletarTiposOcorr("t_ocorr")},
+        cond:  {resp:getRad("t_cond"),       candidatos:coletarEntries("t_cond_entries")},
+        toque: {resp:getRad("t_toque"),      candidatos:coletarToqueEntries("t_toque_entries")},
         decl:  {resp:getRad("t_decl"),       candidatos:coletarEntries("t_decl_entries")},
       },
     },
