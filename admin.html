@@ -1136,15 +1136,30 @@ function abrirRelatorioImprimivel(dados) {
     }
 
     // Registro Fotográfico
-    if (e.foto_url) {
-      html += secao("Registro Fotográfico", corH,
-        `<p style="font-size:13px;margin-bottom:12px;color:#444;">Fotos coletadas durante a aplicação (Sinalização, Abertura do Malote, Andamento, Fechamento):</p>
-         <a href="${e.foto_url}" target="_blank" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;display:inline-block;background:#CF3432;color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">📁 Ver Fotos no Google Drive</a>`
-      );
+    const fotos = e.fotos || [];
+    if (fotos.length > 0) {
+      // Agrupa por categoria
+      const catMap = {};
+      fotos.forEach(function(f) {
+        const cat = f.categoria || "Foto";
+        if (!catMap[cat]) catMap[cat] = [];
+        catMap[cat].push(f);
+      });
+      let fHtml = "";
+      Object.keys(catMap).forEach(function(cat) {
+        fHtml += `<div style="margin-bottom:14px;">
+          <div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">${cat}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">`;
+        catMap[cat].forEach(function(f) {
+          fHtml += `<img src="${f.thumbUrl}" alt="${cat}" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;width:180px;height:135px;object-fit:cover;border-radius:4px;border:1px solid #ddd;">`;
+        });
+        fHtml += `</div></div>`;
+      });
+      html += secao("Registro Fotográfico", corH, fHtml);
     } else {
       html += secao("Registro Fotográfico", corH,
-        `<p style="font-size:13px;color:#999;font-style:italic;">[ Fotos a serem inseridas a partir do formulário individual deste local ]</p>
-         <p style="font-size:11px;color:#bbb;margin-top:6px;">Categorias: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>`
+        `<p style="font-size:13px;color:#999;font-style:italic;">[ Nenhuma foto registrada para este local ]</p>
+         <p style="font-size:11px;color:#bbb;margin-top:6px;">Categorias esperadas: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>`
       );
     }
 
