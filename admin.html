@@ -1248,8 +1248,8 @@ function abrirRelatorioGeral(dados, meta, win) {
   function pct2(a,b){ return b>0?(a/b*100).toFixed(2)+"%":"—"; }
   var n=escolas.length;
   var nCargos=Object.keys(cargosMap).length;
-  var top5Locais=escolas.slice().sort(function(a,b){return (b._tot.ins||0)-(a._tot.ins||0);}).slice(0,Math.min(5,n));
   var cargosArr=Object.keys(cargosMap).map(function(nome){return Object.assign({nome:nome},cargosMap[nome]);});
+  var top5Inscr=cargosArr.filter(function(c){return c.inscr>0;}).sort(function(a,b){return b.inscr-a.inscr;}).slice(0,5);
   var top5Aus=cargosArr.filter(function(c){return c.inscr>0;}).sort(function(a,b){return b.aus/b.inscr-a.aus/a.inscr;}).slice(0,5);
 
   var titulo   = meta.titulo   || conc["Título do Concurso"] || "";
@@ -1330,8 +1330,8 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'<tr>'+indCard(totP,"Candidatos Presentes")+indCard(totA,"Candidatos Ausentes")+indCard(pctPres,"Taxa de Presença")+indCard(pctAus,"Taxa de Ausência")+'</tr>'
     +'</tbody></table></div>';
 
-  // Top 5 locais (inscritos)
-  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Top '+Math.min(5,n)+' Cargos com Maior Número de Inscritos</p>';
+  // Top 5 cargos (inscritos)
+  html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Top '+Math.min(5,top5Inscr.length)+' Cargos com Maior Número de Inscritos</p>';
   html+='<div class="card" style="margin-bottom:24px;"><table><thead><tr>'
     +'<th '+thS()+'>Cargo / Função</th>'
     +'<th '+thS("text-align:center;")+'>Inscritos</th>'
@@ -1339,10 +1339,13 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'<th '+thS("text-align:center;")+'>Ausentes</th>'
     +'<th '+thS("text-align:center;")+'>% Aus.</th>'
     +'</tr></thead><tbody>';
-  top5Locais.forEach(function(e,i){
-    var t=e._tot||{ins:0,pre:0,aus:0};
-    html+='<tr><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.ins+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.pre+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(t.aus,t.ins)+'</td></tr>';
-  });
+  if(top5Inscr.length>0){
+    top5Inscr.forEach(function(c,i){
+      html+='<tr><td '+tdZ(i)+'>'+c.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.inscr+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.pres+'</td><td '+tdZ(i,"text-align:center;")+'>'+c.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(c.aus,c.inscr)+'</td></tr>';
+    });
+  } else {
+    html+='<tr><td colspan="5" '+td()+' style="text-align:center;color:#999;">Dados insuficientes</td></tr>';
+  }
   html+='</tbody></table></div>';
 
   // Top 5 cargos (ausência)
@@ -1474,9 +1477,9 @@ function abrirRelatorioGeral(dados, meta, win) {
 
   html+='</div>'; // fecha div pb da seção 3
 
-  // ── 4. DETALHAMENTO OPERACIONAL POR LOCAL (nova página) ──
+  // ── 5. DETALHAMENTO OPERACIONAL POR LOCAL (nova página) ──
   html+='<div class="pb">';
-  html+=secH("4","Detalhamento Operacional por Local");
+  html+=secH("5","Detalhamento Operacional por Local");
   html+='<p>Para cada local são apresentadas as informações operacionais e os quantitativos por cargo.</p>';
 
   escolas.forEach(function(e,ei){
@@ -1533,29 +1536,53 @@ function abrirRelatorioGeral(dados, meta, win) {
 
   html+='</div>'; // fim div pb detalhamento
 
-  // ── 5. REGISTRO FOTOGRÁFICO POR LOCAL ──
+  // ── 6. REGISTRO FOTOGRÁFICO POR LOCAL ──
   html+='<div class="pb">';
-  html+=secH("5","Registro Fotográfico por Local");
+  html+=secH("6","Registro Fotográfico por Local");
   html+='<p>Imagens coletadas pelos coordenadores locais durante a aplicação, documentando: Sinalização da Escola, Abertura do Malote, Andamento da Aplicação e Fechamento do Malote.</p>';
 
+  var CAT_TURNO_G = ["Abertura do Malote","Andamento da Aplicação","Fechamento do Malote"];
   escolas.forEach(function(e, ei) {
-    html+='<div style="margin-bottom:24px;">';
+    var fotos = e.fotos || [];
+    html+='<div style="margin-bottom:28px;">';
     html+='<div style="'+PC+'background:'+corP+';color:#fff;padding:10px 18px;border-radius:6px 6px 0 0;">'
       +'<strong style="font-size:13px;">'+(ei+1)+'. '+e.nome+'</strong>'
       +'</div>';
-    if (e.foto_url) {
-      html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;padding:16px 20px;background:#fff;">'
-        +'<p style="margin-bottom:10px;color:#444;">Fotos disponíveis no Google Drive:</p>'
-        +'<a href="'+e.foto_url+'" target="_blank" style="'+PC+'display:inline-block;background:'+corR+';color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">📁 Ver Fotos no Google Drive</a>'
-        +'<p style="margin-top:10px;font-size:11px;color:#888;">Categorias: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>'
-        +'</div>';
+    html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;padding:16px 20px;background:#fff;">';
+    if (fotos.length > 0) {
+      var fotosSinal = fotos.filter(function(f){ return f.categoria === "Sinalização da Escola"; });
+      var fotosComTurno = fotos.filter(function(f){ return f.categoria !== "Sinalização da Escola"; });
+      var turnosFoto = [];
+      fotosComTurno.forEach(function(f){ if(f.turno && turnosFoto.indexOf(f.turno)<0) turnosFoto.push(f.turno); });
+      if (fotosSinal.length > 0) {
+        html+='<div style="margin-bottom:14px;">'
+          +'<div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Sinalização da Escola</div>'
+          +'<div style="display:flex;flex-wrap:wrap;gap:8px;">';
+        fotosSinal.forEach(function(f){
+          html+='<img src="'+f.thumbUrl+'" alt="Sinalização" style="width:180px;height:135px;object-fit:cover;border-radius:4px;border:1px solid #ddd;">';
+        });
+        html+='</div></div>';
+      }
+      turnosFoto.forEach(function(turno){
+        var corTurno = turno==="Manhã" ? "#1F3A6E" : "#CF3432";
+        html+='<div style="'+PC+'background:'+corTurno+';color:#fff;font-size:11px;font-weight:700;padding:5px 10px;border-radius:4px;margin-bottom:8px;margin-top:10px;">'+turno+'</div>';
+        CAT_TURNO_G.forEach(function(cat){
+          var imgs = fotosComTurno.filter(function(f){ return f.turno===turno && f.categoria===cat; });
+          if(imgs.length===0) return;
+          html+='<div style="margin-bottom:12px;">'
+            +'<div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">'+cat+'</div>'
+            +'<div style="display:flex;flex-wrap:wrap;gap:8px;">';
+          imgs.forEach(function(f){
+            html+='<img src="'+f.thumbUrl+'" alt="'+cat+'" style="width:180px;height:135px;object-fit:cover;border-radius:4px;border:1px solid #ddd;">';
+          });
+          html+='</div></div>';
+        });
+      });
     } else {
-      html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;padding:16px 20px;background:#fff;">'
-        +'<p style="color:#999;font-style:italic;">[ Fotos a serem inseridas a partir do formulário individual do local ]</p>'
-        +'<p style="font-size:11px;color:#aaa;margin-top:6px;">Categorias: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>'
-        +'</div>';
+      html+='<p style="color:#999;font-style:italic;">[ Nenhuma foto registrada para este local ]</p>'
+        +'<p style="font-size:11px;color:#aaa;margin-top:6px;">Categorias esperadas: Sinalização da Escola &nbsp;|&nbsp; Abertura do Malote &nbsp;|&nbsp; Andamento da Aplicação &nbsp;|&nbsp; Fechamento do Malote</p>';
     }
-    html+='</div>';
+    html+='</div></div>';
   });
 
   html+='</div>'; // fim pb sec5 fotos
