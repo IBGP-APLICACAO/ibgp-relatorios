@@ -1135,26 +1135,44 @@ function abrirRelatorioImprimivel(dados) {
       );
     }
 
-    // Registro Fotográfico
+    // Registro Fotográfico — sempre por último
     const fotos = e.fotos || [];
     if (fotos.length > 0) {
-      // Agrupa por categoria
-      const catMap = {};
-      fotos.forEach(function(f) {
-        const cat = f.categoria || "Foto";
-        if (!catMap[cat]) catMap[cat] = [];
-        catMap[cat].push(f);
-      });
+      const CAT_TURNO = ["Abertura do Malote", "Andamento da Aplicação", "Fechamento do Malote"];
+      const fotosSinal  = fotos.filter(function(f){ return f.categoria === "Sinalização da Escola"; });
+      const fotosComTurno = fotos.filter(function(f){ return f.categoria !== "Sinalização da Escola"; });
+      const turnosFoto = [...new Set(fotosComTurno.map(function(f){ return f.turno||""; }).filter(Boolean))];
+
       let fHtml = "";
-      Object.keys(catMap).forEach(function(cat) {
-        fHtml += `<div style="margin-bottom:14px;">
-          <div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">${cat}</div>
+
+      // Sinalização — aparece uma única vez
+      if (fotosSinal.length > 0) {
+        fHtml += `<div style="margin-bottom:16px;">
+          <div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Sinalização da Escola</div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;">`;
-        catMap[cat].forEach(function(f) {
-          fHtml += `<img src="${f.thumbUrl}" alt="${cat}" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;width:180px;height:135px;object-fit:cover;border-radius:4px;border:1px solid #ddd;">`;
+        fotosSinal.forEach(function(f){
+          fHtml += `<img src="${f.thumbUrl}" alt="Sinalização" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;width:180px;height:135px;object-fit:cover;border-radius:4px;border:1px solid #ddd;">`;
         });
         fHtml += `</div></div>`;
+      }
+
+      // Fotos por turno (Abertura, Andamento, Fechamento)
+      turnosFoto.forEach(function(turno) {
+        const corT2 = turno === "Manhã" ? corM : corT;
+        fHtml += `<div style="margin-bottom:4px;padding:5px 10px;background:${corT2};color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:4px;">${turno}</div>`;
+        CAT_TURNO.forEach(function(cat) {
+          const imgs = fotosComTurno.filter(function(f){ return f.turno===turno && f.categoria===cat; });
+          if (imgs.length === 0) return;
+          fHtml += `<div style="margin-bottom:14px;margin-top:8px;">
+            <div style="font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">${cat}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">`;
+          imgs.forEach(function(f){
+            fHtml += `<img src="${f.thumbUrl}" alt="${cat}" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;width:180px;height:135px;object-fit:cover;border-radius:4px;border:1px solid #ddd;">`;
+          });
+          fHtml += `</div></div>`;
+        });
       });
+
       html += secao("Registro Fotográfico", corH, fHtml);
     } else {
       html += secao("Registro Fotográfico", corH,
