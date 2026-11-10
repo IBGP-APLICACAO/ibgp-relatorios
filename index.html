@@ -170,6 +170,9 @@
   </div>
 
   <!-- TURNO MANHÃ -->
+  <!-- Seções de turnos geradas dinamicamente por renderTurnoSections() -->
+  <div id="secTurnos"></div>
+
   <div class="hidden" id="secManha">
 
     <div class="card">
@@ -468,7 +471,9 @@ function onCertameChange(){
 
   // Reseta escola
   sel.innerHTML = '<option value="">— Selecione seu local de aplicação —</option>';
-  ["rowEscola","rowIdent2","rowApoioNome","cardComissao","secManha","secTarde","cardFotos","cardObs","divBtn"]
+  document.getElementById("secTurnos").innerHTML = "";
+  window._turnosAtivos = [];
+  ["rowEscola","rowIdent2","rowApoioNome","cardComissao","cardFotos","cardObs","divBtn"]
     .forEach(id => { const el = document.getElementById(id); if(el) el.classList.add("hidden"); });
 
   fetch("dados/" + info.id + ".json")
@@ -492,24 +497,20 @@ function toggleApoio(){
 function onEscolaChange(){
   const idx = sel.value;
   if(idx === "" || !CONCURSO){
-    ["rowIdent2","rowApoioNome","cardComissao","secManha","secTarde","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+    document.getElementById("secTurnos").innerHTML = "";
+    window._turnosAtivos = [];
+    ["rowIdent2","rowApoioNome","cardComissao","cardFotos","cardObs","divBtn"].forEach(id=>document.getElementById(id).classList.add("hidden"));
     return;
   }
   const escola = CONCURSO.escolas[parseInt(idx)];
   document.getElementById("inputCoord").value = escola.coord_local;
   document.getElementById("rowIdent2").classList.remove("hidden");
 
-  const hasManha = escola.cargos.some(c=>c.turno==="Manhã");
-  const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
-
-  document.getElementById("secManha").classList.toggle("hidden", !hasManha);
-  document.getElementById("secTarde").classList.toggle("hidden", !haTarde);
-
-  if(hasManha) renderStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã"));
-  if(haTarde)  renderStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde"));
+  const turnosUnicos = [...new Set(escola.cargos.map(c=>c.turno).filter(Boolean))];
+  window._turnosAtivos = turnosUnicos;
+  renderTurnoSections(escola, turnosUnicos);
 
   document.getElementById("cardComissao").classList.remove("hidden");
-  const turnosUnicos = [...new Set(escola.cargos.map(c=>c.turno).filter(Boolean))];
   renderFotosCategorias(turnosUnicos);
   document.getElementById("cardFotos").classList.remove("hidden");
   document.getElementById("cardObs").classList.remove("hidden");
@@ -529,7 +530,9 @@ function alterarEscola(){
   document.getElementById("btnAlterar").style.display = "none";
   // Reseta form
   sel.value = "";
-  ["rowIdent2","rowApoioNome","cardComissao","secManha","secTarde","cardFotos","cardObs","divBtn"]
+  document.getElementById("secTurnos").innerHTML = "";
+  window._turnosAtivos = [];
+  ["rowIdent2","rowApoioNome","cardComissao","cardFotos","cardObs","divBtn"]
     .forEach(id => document.getElementById(id).classList.add("hidden"));
 }
 
@@ -953,6 +956,143 @@ function coletarCorrecaoEntries(listId){
 }
 
 // ════════════════════════════════════════════════════════════════
+//  GERAÇÃO DINÂMICA DE SEÇÕES POR TURNO
+// ════════════════════════════════════════════════════════════════
+var TURNO_CORES = ["#1F3A6E","#CF3432","#1E6B3B","#6A0DAD","#B45309"];
+window._turnosAtivos = [];
+
+function sufFromTurno(turno){
+  // "Manhã" → "Manha", "Tarde" → "Tarde", "Noite" → "Noite" (sem acentos/espaços)
+  return turno.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g,"_").replace(/[^a-zA-Z0-9_]/g,"");
+}
+
+function gerarBlocoOcorrencias(suf){
+  var p = suf; // prefix
+  return `
+      <div class="ocorr-block">
+        <h4>Ocorrências em sala</h4>
+        <div class="radio-row"><label><input type="radio" name="${p}_ocorr_sala" value="Não" checked onchange="toggleOcorrEntries('${p}_ocorr_sala','${p}_ocorr_sala_wrap')"> Não</label><label><input type="radio" name="${p}_ocorr_sala" value="Sim" onchange="toggleOcorrEntries('${p}_ocorr_sala','${p}_ocorr_sala_wrap')"> Sim</label></div>
+        <div id="${p}_ocorr_sala_wrap" class="hidden">
+          <div id="${p}_ocorr_sala_items"></div>
+          <button type="button" class="add-btn" onclick="addOcorrItem('${p}_ocorr_sala_items','${p}')">+ Adicionar ocorrência</button>
+        </div>
+      </div>
+      <div class="ocorr-block">
+        <h4>Prova condicional</h4>
+        <div class="radio-row"><label><input type="radio" name="${p}_cond" value="Não" checked onchange="toggleOcorrEntries('${p}_cond','${p}_cond_wrap')"> Não</label><label><input type="radio" name="${p}_cond" value="Sim" onchange="toggleOcorrEntries('${p}_cond','${p}_cond_wrap')"> Sim</label></div>
+        <div id="${p}_cond_wrap" class="hidden">
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="${p}_cond_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição" oninput="buscarPorInscricao(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('${p}_cond_entries')">+ Adicionar</button>
+        </div>
+      </div>
+      <div class="ocorr-block">
+        <h4>Toque de celular</h4>
+        <div class="radio-row"><label><input type="radio" name="${p}_toque" value="Não" checked onchange="toggleOcorrEntries('${p}_toque','${p}_toque_wrap')"> Não</label><label><input type="radio" name="${p}_toque" value="Sim" onchange="toggleOcorrEntries('${p}_toque','${p}_toque_wrap')"> Sim</label></div>
+        <div id="${p}_toque_wrap" class="hidden">
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="${p}_toque_entries"></div>
+          <button type="button" class="add-btn" onclick="addToqueEntry('${p}_toque_entries')">+ Adicionar</button>
+        </div>
+      </div>
+      <div class="ocorr-block">
+        <h4>Declaração de comparecimento</h4>
+        <div class="radio-row"><label><input type="radio" name="${p}_decl" value="Não" checked onchange="toggleOcorrEntries('${p}_decl','${p}_decl_wrap')"> Não</label><label><input type="radio" name="${p}_decl" value="Sim" onchange="toggleOcorrEntries('${p}_decl','${p}_decl_wrap')"> Sim</label></div>
+        <div id="${p}_decl_wrap" class="hidden">
+          <div class="entry-header"><span>Nº Inscrição</span><span>Nome do Candidato</span><span>Sala</span></div>
+          <div id="${p}_decl_entries">
+            <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addEntry('${p}_decl_entries')">+ Adicionar</button>
+        </div>
+      </div>
+      <div class="ocorr-block">
+        <h4>Correção de dados</h4>
+        <div class="radio-row"><label><input type="radio" name="${p}_corr" value="Não" checked onchange="toggleOcorrEntries('${p}_corr','${p}_corr_wrap')"> Não</label><label><input type="radio" name="${p}_corr" value="Sim" onchange="toggleOcorrEntries('${p}_corr','${p}_corr_wrap')"> Sim</label></div>
+        <div id="${p}_corr_wrap" class="hidden">
+          <div id="${p}_corr_entries">
+            <div class="corr-entry">
+              <div class="corr-row1"><input type="text" placeholder="Nº Inscrição" oninput="buscarPorInscricaoCorr(this)"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <div class="corr-row2"><select><option value="">Campo a corrigir...</option><option value="Nome">Nome</option><option value="Data de Nascimento">Data de Nascimento</option></select><input type="text" placeholder="Dado correto (conforme candidato)"></div>
+            </div>
+          </div>
+          <button type="button" class="add-btn" onclick="addCorrecaoEntry('${p}_corr_entries')">+ Adicionar</button>
+        </div>
+      </div>`;
+}
+
+function gerarSecaoTurno(turno, suf, cor){
+  var p = suf;
+  return `
+  <div id="sec_${p}" data-turno="${turno}">
+    <div class="card">
+      <div class="card-title" style="background:${cor};">Turno ${turno} — Horários</div>
+      <div class="horarios-grid">
+        <div class="form-group"><label>Chegada da equipe</label><input type="time" id="${p}_chegada"></div>
+        <div class="form-group"><label>Abertura do portão</label><input type="time" id="${p}_ab_portao"></div>
+        <div class="form-group"><label>Abertura do malote</label><input type="time" id="${p}_ab_malote"></div>
+        <div class="form-group"><label>Distribuição dos pacotes</label><input type="time" id="${p}_distrib"></div>
+        <div class="form-group"><label>Fechamento do portão</label><input type="time" id="${p}_fch_portao"></div>
+        <div class="form-group"><label>Início da aplicação</label><input type="time" id="${p}_inicio"></div>
+        <div class="form-group"><label>Encerramento</label><input type="time" id="${p}_encerr"></div>
+        <div class="form-group"><label>Fechamento do malote</label><input type="time" id="${p}_fch_malote"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="background:${cor};">Turno ${turno} — Testemunhas</div>
+      <p class="sec-label" style="border-top:none;padding-top:0;">Abertura do Malote</p>
+      <table class="test-table">
+        <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
+        <tbody>
+          <tr><td><input type="text" id="${p}_t1_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="${p}_t1_ab_malote_cpf" placeholder="000.000.000-00" oninput="buscarTestemunha(this)"></td></tr>
+          <tr><td><input type="text" id="${p}_t2_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="${p}_t2_ab_malote_cpf" placeholder="000.000.000-00" oninput="buscarTestemunha(this)"></td></tr>
+          <tr><td><input type="text" id="${p}_t3_ab_malote_nome" placeholder="Nome"></td><td><input type="text" id="${p}_t3_ab_malote_cpf" placeholder="000.000.000-00" oninput="buscarTestemunha(this)"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title" style="background:${cor};">Turno ${turno} — Estatística por Cargo</div>
+      <div class="aviso">Inscritos pré-preenchidos com a alocação prevista. Corrija se necessário.</div>
+      <div style="overflow-x:auto;"><table class="stat-table" id="tabela_${p}">
+        <thead><tr><th style="width:70px;text-align:center;">Sala</th><th>Cargo / Função</th><th>Inscritos</th><th>Presentes</th><th>Ausentes</th><th style="color:#CF3432;">% Ausentes</th><th>Inclusões</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="background:${cor};">Turno ${turno} — Ocorrências</div>
+      ${gerarBlocoOcorrencias(p)}
+    </div>
+    <div class="card">
+      <div class="card-title" style="background:${cor};">Turno ${turno} — Testemunhas — Fechamento do Malote</div>
+      <table class="test-table">
+        <thead><tr><th>Nome Completo da Testemunha</th><th class="cpf-col">CPF</th></tr></thead>
+        <tbody>
+          <tr><td><input type="text" id="${p}_t1_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="${p}_t1_fch_malote_cpf" placeholder="000.000.000-00" oninput="buscarTestemunha(this)"></td></tr>
+          <tr><td><input type="text" id="${p}_t2_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="${p}_t2_fch_malote_cpf" placeholder="000.000.000-00" oninput="buscarTestemunha(this)"></td></tr>
+          <tr><td><input type="text" id="${p}_t3_fch_malote_nome" placeholder="Nome"></td><td><input type="text" id="${p}_t3_fch_malote_cpf" placeholder="000.000.000-00" oninput="buscarTestemunha(this)"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div><!-- /sec_${p} -->`;
+}
+
+function renderTurnoSections(escola, turnos){
+  var container = document.getElementById("secTurnos");
+  container.innerHTML = "";
+  turnos.forEach(function(turno, idx){
+    var suf = sufFromTurno(turno);
+    var cor = TURNO_CORES[idx % TURNO_CORES.length];
+    container.innerHTML += gerarSecaoTurno(turno, suf, cor);
+  });
+  turnos.forEach(function(turno){
+    var suf = sufFromTurno(turno);
+    renderStat("tabela_"+suf, escola.cargos.filter(function(c){ return c.turno===turno; }));
+  });
+}
+
+// ════════════════════════════════════════════════════════════════
 //  FOTOS
 // ════════════════════════════════════════════════════════════════
 let fotosMap = {};
@@ -1077,39 +1217,21 @@ function validar(){
     }
   }
 
-  const hasManha = !document.getElementById('secManha').classList.contains('hidden');
-  const haTarde  = !document.getElementById('secTarde').classList.contains('hidden');
-
-  // ── Horários ──
-  if(hasManha){
-    ['m_chegada','m_ab_portao','m_ab_malote','m_distrib','m_fch_portao','m_inicio','m_encerr','m_fch_malote']
-      .forEach(id => checar(document.getElementById(id), 'Horários — Manhã'));
-  }
-  if(haTarde){
-    ['t_chegada','t_ab_portao','t_ab_malote','t_distrib','t_fch_portao','t_inicio','t_encerr','t_fch_malote']
-      .forEach(id => checar(document.getElementById(id), 'Horários — Tarde'));
-  }
-
-  // ── Testemunhas ──
-  if(hasManha){
-    for(let i=1;i<=3;i++){
-      checar(document.getElementById(`m_t${i}_ab_malote_nome`),  'Testemunhas Abertura Malote — Manhã');
-      checar(document.getElementById(`m_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote — Manhã');
+  // ── Horários e Testemunhas — loop dinâmico por turno ──
+  (window._turnosAtivos||[]).forEach(function(turno){
+    var suf = sufFromTurno(turno);
+    ['_chegada','_ab_portao','_ab_malote','_distrib','_fch_portao','_inicio','_encerr','_fch_malote']
+      .forEach(function(h){ checar(document.getElementById(suf+h), 'Horários — '+turno); });
+    for(var i=1;i<=3;i++){
+      checar(document.getElementById(suf+'_t'+i+'_ab_malote_nome'),  'Testemunhas Abertura — '+turno);
+      checar(document.getElementById(suf+'_t'+i+'_fch_malote_nome'), 'Testemunhas Fechamento — '+turno);
     }
-  }
-  if(haTarde){
-    for(let i=1;i<=3;i++){
-      checar(document.getElementById(`t_t${i}_ab_malote_nome`),  'Testemunhas Abertura Malote — Tarde');
-      checar(document.getElementById(`t_t${i}_fch_malote_nome`), 'Testemunhas Fechamento Malote — Tarde');
-    }
-  }
+  });
 
   // ── Estatística (pres / aus / incl) ──
   document.querySelectorAll('[data-obrig]').forEach(el => {
-    const inManha = !!el.closest('#secManha');
-    const inTarde = !!el.closest('#secTarde');
-    if(inManha && hasManha) checar(el, 'Estatística — Manhã');
-    if(inTarde && haTarde)  checar(el, 'Estatística — Tarde');
+    const sec = el.closest('[data-turno]');
+    if(sec) checar(el, 'Estatística — '+(sec.dataset.turno||''));
   });
 
   if(secoes.length > 0){
@@ -1131,8 +1253,6 @@ async function enviar(){
   if(idx === ""){ alert("Selecione uma escola."); return; }
   if(!CONCURSO || !CONCURSO.escolas){ alert("Certame não carregado. Recarregue a página e tente novamente."); return; }
   const escola = CONCURSO.escolas[parseInt(idx)];
-  const hasManha = escola.cargos.some(c=>c.turno==="Manhã");
-  const haTarde  = escola.cargos.some(c=>c.turno==="Tarde");
 
   const payload = {
     escola:      escola.nome,
@@ -1148,64 +1268,41 @@ async function enviar(){
     enviado_em:  new Date().toLocaleString("pt-BR"),
     obs:         getTxt("textObs"),
 
-    manha: !hasManha ? null : {
-      horarios: {
-        chegada:    getTxt("m_chegada"),    ab_portao:  getTxt("m_ab_portao"),
-        fch_portao: getTxt("m_fch_portao"), distrib:    getTxt("m_distrib"),
-        inicio:     getTxt("m_inicio"),     encerr:     getTxt("m_encerr"),
-        fch_malote: getTxt("m_fch_malote"), ab_malote:  getTxt("m_ab_malote"),
-      },
-      testemunhas: {
-        ab_malote: [
-          {nome:getTxt("m_t1_ab_malote_nome"), cpf:getTxt("m_t1_ab_malote_cpf")},
-          {nome:getTxt("m_t2_ab_malote_nome"), cpf:getTxt("m_t2_ab_malote_cpf")},
-          {nome:getTxt("m_t3_ab_malote_nome"), cpf:getTxt("m_t3_ab_malote_cpf")},
-        ],
-        fch_malote: [
-          {nome:getTxt("m_t1_fch_malote_nome"), cpf:getTxt("m_t1_fch_malote_cpf")},
-          {nome:getTxt("m_t2_fch_malote_nome"), cpf:getTxt("m_t2_fch_malote_cpf")},
-          {nome:getTxt("m_t3_fch_malote_nome"), cpf:getTxt("m_t3_fch_malote_cpf")},
-        ],
-      },
-      estatistica: coletarStat("tabelaManha", escola.cargos.filter(c=>c.turno==="Manhã")),
-      ocorrencias: {
-        sala:  {resp:getRad("m_ocorr_sala"), tipos:coletarTiposOcorr("m_ocorr")},
-        cond:  {resp:getRad("m_cond"),       candidatos:coletarEntries("m_cond_entries")},
-        toque: {resp:getRad("m_toque"),      candidatos:coletarToqueEntries("m_toque_entries")},
-        decl:  {resp:getRad("m_decl"),       candidatos:coletarEntries("m_decl_entries")},
-        corr:  {resp:getRad("m_corr"),       candidatos:coletarCorrecaoEntries("m_corr_entries")},
-      },
-    },
-
-    tarde: !haTarde ? null : {
-      horarios: {
-        chegada:    getTxt("t_chegada"),    ab_portao:  getTxt("t_ab_portao"),
-        fch_portao: getTxt("t_fch_portao"), distrib:    getTxt("t_distrib"),
-        inicio:     getTxt("t_inicio"),     encerr:     getTxt("t_encerr"),
-        fch_malote: getTxt("t_fch_malote"), ab_malote:  getTxt("t_ab_malote"),
-      },
-      testemunhas: {
-        ab_malote: [
-          {nome:getTxt("t_t1_ab_malote_nome"), cpf:getTxt("t_t1_ab_malote_cpf")},
-          {nome:getTxt("t_t2_ab_malote_nome"), cpf:getTxt("t_t2_ab_malote_cpf")},
-          {nome:getTxt("t_t3_ab_malote_nome"), cpf:getTxt("t_t3_ab_malote_cpf")},
-        ],
-        fch_malote: [
-          {nome:getTxt("t_t1_fch_malote_nome"), cpf:getTxt("t_t1_fch_malote_cpf")},
-          {nome:getTxt("t_t2_fch_malote_nome"), cpf:getTxt("t_t2_fch_malote_cpf")},
-          {nome:getTxt("t_t3_fch_malote_nome"), cpf:getTxt("t_t3_fch_malote_cpf")},
-        ],
-      },
-      estatistica: coletarStat("tabelaTarde", escola.cargos.filter(c=>c.turno==="Tarde")),
-      ocorrencias: {
-        sala:  {resp:getRad("t_ocorr_sala"), tipos:coletarTiposOcorr("t_ocorr")},
-        cond:  {resp:getRad("t_cond"),       candidatos:coletarEntries("t_cond_entries")},
-        toque: {resp:getRad("t_toque"),      candidatos:coletarToqueEntries("t_toque_entries")},
-        decl:  {resp:getRad("t_decl"),       candidatos:coletarEntries("t_decl_entries")},
-        corr:  {resp:getRad("t_corr"),       candidatos:coletarCorrecaoEntries("t_corr_entries")},
-      },
-    },
   };
+
+  // Coleta dados de cada turno dinamicamente
+  payload.turnos = {};
+  (window._turnosAtivos||[]).forEach(function(turno){
+    var p = sufFromTurno(turno);
+    payload.turnos[turno] = {
+      horarios: {
+        chegada:    getTxt(p+"_chegada"),    ab_portao:  getTxt(p+"_ab_portao"),
+        fch_portao: getTxt(p+"_fch_portao"), distrib:    getTxt(p+"_distrib"),
+        inicio:     getTxt(p+"_inicio"),     encerr:     getTxt(p+"_encerr"),
+        fch_malote: getTxt(p+"_fch_malote"), ab_malote:  getTxt(p+"_ab_malote"),
+      },
+      testemunhas: {
+        ab_malote: [
+          {nome:getTxt(p+"_t1_ab_malote_nome"), cpf:getTxt(p+"_t1_ab_malote_cpf")},
+          {nome:getTxt(p+"_t2_ab_malote_nome"), cpf:getTxt(p+"_t2_ab_malote_cpf")},
+          {nome:getTxt(p+"_t3_ab_malote_nome"), cpf:getTxt(p+"_t3_ab_malote_cpf")},
+        ],
+        fch_malote: [
+          {nome:getTxt(p+"_t1_fch_malote_nome"), cpf:getTxt(p+"_t1_fch_malote_cpf")},
+          {nome:getTxt(p+"_t2_fch_malote_nome"), cpf:getTxt(p+"_t2_fch_malote_cpf")},
+          {nome:getTxt(p+"_t3_fch_malote_nome"), cpf:getTxt(p+"_t3_fch_malote_cpf")},
+        ],
+      },
+      estatistica: coletarStat("tabela_"+p, escola.cargos.filter(function(c){ return c.turno===turno; })),
+      ocorrencias: {
+        sala:  {resp:getRad(p+"_ocorr_sala"), tipos:coletarTiposOcorr(p+"_ocorr")},
+        cond:  {resp:getRad(p+"_cond"),       candidatos:coletarEntries(p+"_cond_entries")},
+        toque: {resp:getRad(p+"_toque"),      candidatos:coletarToqueEntries(p+"_toque_entries")},
+        decl:  {resp:getRad(p+"_decl"),       candidatos:coletarEntries(p+"_decl_entries")},
+        corr:  {resp:getRad(p+"_corr"),       candidatos:coletarCorrecaoEntries(p+"_corr_entries")},
+      },
+    };
+  });
 
   btn.disabled = true; btn.textContent = "Comprimindo fotos...";
 
@@ -1214,17 +1311,6 @@ async function enviar(){
   } catch(e) {
     btn.disabled = false; btn.textContent = "Enviar Formulário";
     alert("Erro ao processar fotos: " + e.message); return;
-  }
-
-  // ── Converte {manha, tarde} → {turnos} que o backend espera ──
-  payload.turnos = {};
-  if (payload.manha !== undefined) {
-    payload.turnos["Manhã"] = payload.manha;
-    delete payload.manha;
-  }
-  if (payload.tarde !== undefined) {
-    payload.turnos["Tarde"] = payload.tarde;
-    delete payload.tarde;
   }
 
   btn.textContent = "Enviando...";
@@ -1243,7 +1329,9 @@ async function enviar(){
   await new Promise(r => setTimeout(r, 2000));
 
   document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
-  ["cardIdent","secManha","secTarde","cardFotos","cardComissao","cardObs","divBtn"].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.add("hidden"); });
+  document.getElementById("secTurnos").innerHTML = "";
+  window._turnosAtivos = [];
+  ["cardIdent","cardFotos","cardComissao","cardObs","divBtn"].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.add("hidden"); });
   const cs = document.getElementById("cardSucesso");
   cs.classList.remove("hidden");
   cs.scrollIntoView({behavior:"smooth", block:"center"});
