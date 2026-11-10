@@ -1135,11 +1135,10 @@ function abrirRelatorioImprimivel(dados) {
           <th style="background:${cor};">Candidato</th>
           <th style="background:${cor};">Sala</th>
           <th style="background:${cor};">Campo</th>
-          <th style="background:${cor};">Dado Incorreto</th>
           <th style="background:${cor};">Dado Correto</th>
         </tr></thead><tbody>`;
         corrTurno.forEach(function(c, i){
-          oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.sala||"—"}</td><td>${c.campo||"—"}</td><td>${c.dadoIncorreto||"—"}</td><td>${c.dadoCorreto||"—"}</td></tr>`;
+          oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.sala||"—"}</td><td>${c.campo||"—"}</td><td>${c.dadoCorreto||"—"}</td></tr>`;
         });
         oHtml += "</tbody></table>";
       }
