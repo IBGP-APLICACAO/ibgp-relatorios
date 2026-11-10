@@ -967,16 +967,18 @@ function sufFromTurno(turno){
 }
 
 function sortTurnos(arr) {
-  // Ordena por dia da semana (Sábado antes de Domingo) e por período (Manhã antes de Tarde)
-  var DIAS = ["Segunda","Terca","Terça","Quarta","Quinta","Sexta","Sabado","Sábado","Domingo"];
+  // Normaliza string: sem acentos, maiúsculo
+  function norm(s) { return s.normalize("NFD").replace(/[̀-ͯ]/g,"").toUpperCase(); }
+  var DIAS_N = ["SEGUNDA","TERCA","QUARTA","QUINTA","SEXTA","SABADO","DOMINGO"];
   function diaIdx(t) {
-    for (var i = 0; i < DIAS.length; i++) {
-      if (t.includes(DIAS[i])) return i;
+    var u = norm(t);
+    for (var i = 0; i < DIAS_N.length; i++) {
+      if (u.includes(DIAS_N[i])) return i;
     }
     return -1; // sem prefixo de dia → vem primeiro
   }
   function periodoIdx(t) {
-    var u = t.toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+    var u = norm(t);
     if (u.includes("MANH") || u.includes("MAT")) return 0;
     if (u.includes("TARD") || u.includes("VESP")) return 1;
     if (u.includes("NOIT") || u.includes("NOTU")) return 2;
