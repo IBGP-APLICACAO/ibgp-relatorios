@@ -1229,23 +1229,24 @@ async function enviar(){
 
   btn.textContent = "Enviando...";
 
-  try {
-    const fetchPromise = fetch(CONCURSO?.script_url || SCRIPT_URL, {
-      method:"POST", mode:"no-cors",
-      headers:{"Content-Type":"text/plain"},
-      body: JSON.stringify(payload)
-    });
-    const timeoutPromise = new Promise((_,r) => setTimeout(() => r(new Error("Timeout: servidor demorou mais de 30s")), 30000));
-    await Promise.race([fetchPromise, timeoutPromise]);
-    document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
-    ["cardIdent","secManha","secTarde","cardFotos","cardComissao","cardObs","divBtn"].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.add("hidden"); });
-    const cs = document.getElementById("cardSucesso");
-    cs.classList.remove("hidden");
-    cs.scrollIntoView({behavior:"smooth", block:"center"});
-  } catch(e) {
-    btn.disabled = false; btn.textContent = "Enviar Formulário";
-    alert("Erro ao enviar: " + e.message + "\n\nVerifique sua conexão e tente novamente.");
-  }
+  // Fire-and-forget: com mode:"no-cors" a resposta é sempre opaca e não pode ser
+  // lida. Disparamos o request e mostramos sucesso após 2s — o servidor (GAS)
+  // processa fotos, planilhas e e-mail em background (até 6 min).
+  fetch(CONCURSO?.script_url || SCRIPT_URL, {
+    method:"POST", mode:"no-cors",
+    headers:{"Content-Type":"text/plain"},
+    body: JSON.stringify(payload)
+  }).catch(function(){
+    // Silencioso: erros de rede após o dispatch não chegam com no-cors
+  });
+
+  await new Promise(r => setTimeout(r, 2000));
+
+  document.getElementById("nomeEscolaSucesso").textContent = escola.nome;
+  ["cardIdent","secManha","secTarde","cardFotos","cardComissao","cardObs","divBtn"].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.add("hidden"); });
+  const cs = document.getElementById("cardSucesso");
+  cs.classList.remove("hidden");
+  cs.scrollIntoView({behavior:"smooth", block:"center"});
   } catch(e) {
     if(btn){ btn.disabled = false; btn.textContent = "Enviar Formulário"; }
     alert("Erro inesperado: " + e.message);
