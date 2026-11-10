@@ -506,7 +506,7 @@ function onEscolaChange(){
   document.getElementById("inputCoord").value = escola.coord_local;
   document.getElementById("rowIdent2").classList.remove("hidden");
 
-  const turnosUnicos = [...new Set(escola.cargos.map(c=>c.turno).filter(Boolean))];
+  const turnosUnicos = sortTurnos([...new Set(escola.cargos.map(c=>c.turno).filter(Boolean))]);
   window._turnosAtivos = turnosUnicos;
   renderTurnoSections(escola, turnosUnicos);
 
@@ -962,8 +962,35 @@ var TURNO_CORES = ["#1F3A6E","#CF3432","#1E6B3B","#6A0DAD","#B45309"];
 window._turnosAtivos = [];
 
 function sufFromTurno(turno){
-  // "Manhã" → "Manha", "Tarde" → "Tarde", "Noite" → "Noite" (sem acentos/espaços)
+  // "Manhã" → "Manha", "Sábado Tarde" → "Sabado_Tarde" (sem acentos/espaços)
   return turno.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g,"_").replace(/[^a-zA-Z0-9_]/g,"");
+}
+
+function sortTurnos(arr) {
+  // Ordena por dia da semana (Sábado antes de Domingo) e por período (Manhã antes de Tarde)
+  var DIAS = ["Segunda","Terca","Terça","Quarta","Quinta","Sexta","Sabado","Sábado","Domingo"];
+  function diaIdx(t) {
+    for (var i = 0; i < DIAS.length; i++) {
+      if (t.includes(DIAS[i])) return i;
+    }
+    return -1; // sem prefixo de dia → vem primeiro
+  }
+  function periodoIdx(t) {
+    var u = t.toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+    if (u.includes("MANH") || u.includes("MAT")) return 0;
+    if (u.includes("TARD") || u.includes("VESP")) return 1;
+    if (u.includes("NOIT") || u.includes("NOTU")) return 2;
+    return 99;
+  }
+  return arr.slice().sort(function(a, b) {
+    var da = diaIdx(a), db = diaIdx(b);
+    if (da !== db) {
+      if (da === -1) return -1;
+      if (db === -1) return 1;
+      return da - db;
+    }
+    return periodoIdx(a) - periodoIdx(b);
+  });
 }
 
 function gerarBlocoOcorrencias(suf){
