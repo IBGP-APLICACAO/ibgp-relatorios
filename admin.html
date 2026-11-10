@@ -1225,7 +1225,7 @@ function abrirRelatorioGeral(dados, meta, win) {
 
   // ── Cálculos globais ──
   var totI=0, totP=0, totA=0, totIn=0, totSalas=0;
-  var cargosMap = {};
+  var cargosMap = {}, cargosTurnoMap = {};
   escolas.forEach(function(e) {
     totSalas += Number(e.salas)||0;
     var eI=0, eP=0, eA=0, eIn=0;
@@ -1238,6 +1238,9 @@ function abrirRelatorioGeral(dados, meta, win) {
       var cargo = (r.cargo||"").replace(/^\d+\s*[-—]\s*/,'').trim();
       if(!cargosMap[cargo]) cargosMap[cargo]={inscr:0,pres:0,aus:0,incl:0};
       cargosMap[cargo].inscr+=ins; cargosMap[cargo].pres+=pre; cargosMap[cargo].aus+=aus; cargosMap[cargo].incl+=inc;
+      // índice por turno
+      var trn=r.turno||"";
+      if(trn){ if(!cargosTurnoMap[trn]) cargosTurnoMap[trn]={}; if(!cargosTurnoMap[trn][cargo]) cargosTurnoMap[trn][cargo]={inscr:0,pres:0,aus:0,incl:0}; cargosTurnoMap[trn][cargo].inscr+=ins; cargosTurnoMap[trn][cargo].pres+=pre; cargosTurnoMap[trn][cargo].aus+=aus; cargosTurnoMap[trn][cargo].incl+=inc; }
     });
     e._tot = {ins:eI, pre:eP, aus:eA, inc:eIn};
     e._cargoMaiorAus = melhorCargo;
@@ -1251,6 +1254,8 @@ function abrirRelatorioGeral(dados, meta, win) {
   var cargosArr=Object.keys(cargosMap).map(function(nome){return Object.assign({nome:nome},cargosMap[nome]);});
   var top5Inscr=cargosArr.filter(function(c){return c.inscr>0;}).sort(function(a,b){return b.inscr-a.inscr;}).slice(0,5);
   var top5Aus=cargosArr.filter(function(c){return c.inscr>0;}).sort(function(a,b){return b.aus/b.inscr-a.aus/a.inscr;}).slice(0,5);
+  var turnosGlobais=Object.keys(cargosTurnoMap); // ['Manhã','Tarde'] ou ['Manhã'] etc.
+  var multiTurnoGlobal=turnosGlobais.length>1;
 
   var titulo   = meta.titulo   || conc["Título do Concurso"] || "";
   var edital   = meta.edital   || conc["Edital"] || "";
@@ -1270,7 +1275,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   function tdZ(i,extra){ return td(i%2?'#F5F7FC':'#fff',extra); }
   function secH(num,t){ return '<h2 style="font-size:15px;font-weight:700;color:'+corP+';border-bottom:3px solid '+corR+';padding-bottom:10px;margin:36px 0 18px;letter-spacing:.3px;">'+num+'. '+t+'</h2>'; }
   function infoCell(l,v){ return '<div style="padding:4px 0;"><span style="display:block;color:#aaa;font-size:9px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;">'+l+'</span><span style="color:#fff;font-size:12px;font-weight:600;">'+(v||"—")+'</span></div>'; }
-  function indCard(v,l){ return '<td style="'+PC+'background:#fff;padding:20px 14px;text-align:center;border:1px solid #D8DEEC;width:25%;"><div style="'+PC+'font-size:30px;font-weight:700;color:'+corP+';line-height:1;">'+v+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#777;margin-top:8px;line-height:1.3;">'+l+'</div></td>'; }
+  function indCard(v,l,bg){ var b=bg||corP; return '<td style="'+PC+'background:'+b+'!important;padding:20px 14px;text-align:center;border:1px solid #fff;width:25%;"><div style="'+PC+'font-size:30px;font-weight:700;color:#fff;line-height:1;">'+v+'</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,0.75);margin-top:8px;line-height:1.3;">'+l+'</div></td>'; }
   function totalRow(cols){ return '<tr>'+cols.map(function(c){ var attr=c[2]?' '+c[2]:''; return '<td'+attr+' style="'+PC+'background:'+corE+'!important;color:#fff!important;padding:10px 12px;font-weight:700;font-size:12px;'+(c[1]||'')+'">'+(c[0])+'</td>'; }).join('')+'</tr>'; }
 
   // ── HTML ──
@@ -1325,9 +1330,9 @@ function abrirRelatorioGeral(dados, meta, win) {
 
   // Indicadores Globais (tabela 2×4 como no Word)
   html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Indicadores Globais</p>';
-  html+='<div class="card" style="margin-bottom:28px;"><table><tbody>'
-    +'<tr>'+indCard(n,"Locais de Aplicação")+indCard(nCargos,"Cargos")+indCard(totSalas,"Salas Utilizadas")+indCard(totI,"Candidatos Inscritos")+'</tr>'
-    +'<tr>'+indCard(totP,"Candidatos Presentes")+indCard(totA,"Candidatos Ausentes")+indCard(pctPres,"Taxa de Presença")+indCard(pctAus,"Taxa de Ausência")+'</tr>'
+  html+='<div class="card" style="margin-bottom:28px;overflow:hidden;"><table><tbody>'
+    +'<tr>'+indCard(n,"Locais de Aplicação","#1F3A6E")+indCard(nCargos,"Cargos","#2563EB")+indCard(totSalas,"Salas Utilizadas","#0E7490")+indCard(totI,"Candidatos Inscritos","#065F46")+'</tr>'
+    +'<tr>'+indCard(totP,"Candidatos Presentes","#166534")+indCard(totA,"Candidatos Ausentes","#CF3432")+indCard(pctPres,"Taxa de Presença","#7C3AED")+indCard(pctAus,"Taxa de Ausência","#B45309")+'</tr>'
     +'</tbody></table></div>';
 
   // Top 5 cargos (inscritos)
@@ -1391,23 +1396,24 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+='<div class="card"><table><thead><tr>'
     +'<th '+thS("width:40px;text-align:center;")+'>#</th>'
     +'<th '+thS()+'>Local de Aplicação</th>'
+    +'<th '+thS()+'>Turno(s)</th>'
     +'<th '+thS()+'>Data</th>'
     +'<th '+thS("text-align:center;")+'>Salas</th>'
     +'<th '+thS()+'>Coord. Local</th>'
     +'</tr></thead><tbody>';
   escolas.forEach(function(e,i){
-    html+='<tr><td '+tdZ(i,"text-align:center;font-weight:700;")+'>'+(i+1)+'</td><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i)+'>'+dataProva+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"—")+'</td><td '+tdZ(i)+'>'+(e.coord_local||"—")+'</td></tr>';
+    html+='<tr><td '+tdZ(i,"text-align:center;font-weight:700;")+'>'+(i+1)+'</td><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i)+'>'+(e.turno||"—")+'</td><td '+tdZ(i)+'>'+dataProva+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"—")+'</td><td '+tdZ(i)+'>'+(e.coord_local||"—")+'</td></tr>';
   });
-  html+=totalRow([["TOTAL — "+n+(n===1?" LOCAL":" LOCAIS"),"font-weight:700;","colspan='2'"],
+  html+=totalRow([["TOTAL — "+n+(n===1?" LOCAL":" LOCAIS"),"font-weight:700;","colspan='3'"],
     [dataProva,""],
     [totSalas,"text-align:center;"],
     [n+(n===1?" coordenador":" coordenadores"),""]
   ]);
   html+='</tbody></table></div></div>';
 
-  // ── 4. QUADRO CONSOLIDADO POR CARGO (sem quebra — continua na mesma área) ──
+  // ── 4. QUADRO CONSOLIDADO POR CARGO ──
   html+=secH("4","Quadro Consolidado por Cargo");
-  html+='<p>Consolidação dos '+nCargos+' '+(nCargos===1?"cargo":"cargos")+' do certame. Linhas com taxa de ausência igual ou superior a 50% são destacadas em vermelho.</p>';
+  html+='<p>Consolidação dos '+nCargos+' '+(nCargos===1?"cargo":"cargos")+' do certame'+(multiTurnoGlobal?" — agrupados por turno":"")+'.</p>';
   html+='<div class="card"><table><thead><tr>'
     +'<th '+thS("width:36px;text-align:center;")+'>#</th>'
     +'<th '+thS()+'>Cargo / Função</th>'
@@ -1418,60 +1424,93 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'<th '+thS("text-align:center;")+'>% Aus.</th>'
     +'</tr></thead><tbody>';
   var tCI=0,tCP=0,tCA=0,tCIn=0;
-  cargosArr.slice().sort(function(a,b){return a.nome.localeCompare(b.nome,"pt");}).forEach(function(c,i){
-    tCI+=c.inscr; tCP+=c.pres; tCA+=c.aus; tCIn+=c.incl;
-    var pA=c.inscr>0?c.aus/c.inscr:0, hi=pA>=0.5;
-    var bg=hi?"#FFEBEE":(i%2?"#F5F7FC":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
-    var s=PC+'background:'+bg+'!important;color:'+tc+';padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;';
-    html+='<tr>'
-      +'<td style="'+s+'text-align:center;font-weight:600;">'+(i+1)+'</td>'
-      +'<td style="'+s+'">'+c.nome+'</td>'
-      +'<td style="'+s+'text-align:center;">'+c.inscr+'</td>'
-      +'<td style="'+s+'text-align:center;">'+c.pres+'</td>'
-      +'<td style="'+s+'text-align:center;">'+c.aus+'</td>'
-      +'<td style="'+s+'text-align:center;">'+c.incl+'</td>'
-      +'<td style="'+s+'text-align:center;font-weight:'+(hi?"700":"400")+';">'+(pA*100).toFixed(1)+'%</td>'
-      +'</tr>';
-  });
+  if(multiTurnoGlobal){
+    var rowIdx4=0;
+    turnosGlobais.forEach(function(trn){
+      var corTrn=trn==="Manhã"?corM:corT;
+      html+='<tr><td colspan="7" style="'+PC+'background:'+corTrn+'!important;color:#fff;padding:7px 12px;font-size:11px;font-weight:700;letter-spacing:.3px;">'+trn+'</td></tr>';
+      var trnCargos=Object.keys(cargosTurnoMap[trn]).sort(function(a,b){return a.localeCompare(b,"pt");});
+      trnCargos.forEach(function(cargo){
+        var c=cargosTurnoMap[trn][cargo]; var i=rowIdx4++;
+        tCI+=c.inscr; tCP+=c.pres; tCA+=c.aus; tCIn+=c.incl;
+        var pA=c.inscr>0?c.aus/c.inscr:0, hi=pA>=0.5;
+        var bg=hi?"#FFEBEE":(i%2?"#F5F7FC":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
+        var s=PC+'background:'+bg+'!important;color:'+tc+';padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;';
+        html+='<tr><td style="'+s+'text-align:center;font-weight:600;">'+(i+1)+'</td><td style="'+s+'">'+cargo+'</td><td style="'+s+'text-align:center;">'+c.inscr+'</td><td style="'+s+'text-align:center;">'+c.pres+'</td><td style="'+s+'text-align:center;">'+c.aus+'</td><td style="'+s+'text-align:center;">'+c.incl+'</td><td style="'+s+'text-align:center;font-weight:'+(hi?"700":"400")+';">'+(pA*100).toFixed(1)+'%</td></tr>';
+      });
+    });
+  } else {
+    cargosArr.slice().sort(function(a,b){return a.nome.localeCompare(b.nome,"pt");}).forEach(function(c,i){
+      tCI+=c.inscr; tCP+=c.pres; tCA+=c.aus; tCIn+=c.incl;
+      var pA=c.inscr>0?c.aus/c.inscr:0, hi=pA>=0.5;
+      var bg=hi?"#FFEBEE":(i%2?"#F5F7FC":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
+      var s=PC+'background:'+bg+'!important;color:'+tc+';padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;';
+      html+='<tr><td style="'+s+'text-align:center;font-weight:600;">'+(i+1)+'</td><td style="'+s+'">'+c.nome+'</td><td style="'+s+'text-align:center;">'+c.inscr+'</td><td style="'+s+'text-align:center;">'+c.pres+'</td><td style="'+s+'text-align:center;">'+c.aus+'</td><td style="'+s+'text-align:center;">'+c.incl+'</td><td style="'+s+'text-align:center;font-weight:'+(hi?"700":"400")+';">'+(pA*100).toFixed(1)+'%</td></tr>';
+    });
+  }
   html+=totalRow([["TOTAL — "+nCargos+(nCargos===1?" CARGO":" CARGOS"),"","colspan='2'"],
-    [tCI,"text-align:center;"],
-    [tCP,"text-align:center;"],
-    [tCA,"text-align:center;"],
-    [tCIn,"text-align:center;"],
-    [pct(tCA,tCI),"text-align:center;"]
+    [tCI,"text-align:center;"],[tCP,"text-align:center;"],[tCA,"text-align:center;"],[tCIn,"text-align:center;"],[pct(tCA,tCI),"text-align:center;"]
   ]);
   html+='</tbody></table></div></div>';
 
-  // ── 5. RESULTADO POR LOCAL (sem quebra — continua na mesma área) ──
+  // ── 5. RESULTADO POR LOCAL ──
   html+=secH("5","Resultado por Local");
-  html+='<p>Resultado consolidado por local de aplicação: salas utilizadas, quantitativos, taxa de ausência, ocorrências e cargo com maior taxa de ausência.</p>';
+  html+='<p>Resultado consolidado por local'+(multiTurnoGlobal?" — quando há mais de um turno, os quantitativos são detalhados por turno":"")+'.</p>';
   html+='<div class="card"><table><thead><tr>'
     +'<th '+thS("width:36px;text-align:center;")+'>#</th>'
     +'<th '+thS()+'>Local</th>'
+    +(multiTurnoGlobal?'<th '+thS()+'>'+'Turno</th>':'')
     +'<th '+thS("text-align:center;")+'>Salas</th>'
     +'<th '+thS("text-align:center;")+'>Prev.</th>'
     +'<th '+thS("text-align:center;")+'>Pres.</th>'
     +'<th '+thS("text-align:center;")+'>Aus.</th>'
     +'<th '+thS("text-align:center;")+'>% Aus.</th>'
     +'<th '+thS("text-align:center;")+'>Ocorr.</th>'
-    +'<th '+thS()+'>Cargo c/ Maior Aus.</th>'
     +'</tr></thead><tbody>';
+  var colSpanRes=multiTurnoGlobal?8:7;
   escolas.forEach(function(e,i){
     var t=e._tot||{ins:0,pre:0,aus:0};
-    var mc=e._cargoMaiorAus;
-    var mcStr=mc?(mc.cargo||"").replace(/^\d+\s*[-—]\s*/,"").trim()+" ("+pct(Number(mc.aus)||0,Number(mc.inscr)||1)+")":"—";
     var ocorrStr=e._hasOcorr?'<span style="'+PC+'background:#FFEBEE!important;color:#B71C1C;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;">Sim</span>':'<span style="color:#888;font-size:11px;">Não</span>';
-    html+='<tr><td '+tdZ(i,"text-align:center;font-weight:600;")+'>'+(i+1)+'</td><td '+tdZ(i)+'>'+e.nome+'</td><td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"—")+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.ins+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.pre+'</td><td '+tdZ(i,"text-align:center;")+'>'+t.aus+'</td><td '+tdZ(i,"text-align:center;")+'>'+pct(t.aus,t.ins)+'</td><td '+tdZ(i,"text-align:center;")+'>'+ocorrStr+'</td><td '+tdZ(i)+'>'+mcStr+'</td></tr>';
+    var eRows=e.resultados||[];
+    var eTurnos=[...new Set(eRows.map(function(r){return r.turno||"";}).filter(Boolean))];
+    var eMulti=eTurnos.length>1;
+    if(eMulti){
+      // Linha do local sem dados de turno
+      html+='<tr><td '+tdZ(i,"text-align:center;font-weight:600;")+'>'+(i+1)+'</td><td '+tdZ(i)+' colspan="'+(colSpanRes-1)+'" style="'+PC+'background:'+(i%2?"#F5F7FC":"#fff")+'!important;padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;font-weight:600;">'+e.nome+'</td></tr>';
+      eTurnos.forEach(function(trn){
+        var corTrn=trn==="Manhã"?corM:corT;
+        var trnRows=eRows.filter(function(r){return (r.turno||"")==trn;});
+        var tI=0,tP=0,tA=0;
+        trnRows.forEach(function(r){tI+=Number(r.inscr)||0;tP+=Number(r.pres)||0;tA+=Number(r.aus)||0;});
+        html+='<tr>'
+          +'<td style="'+PC+'background:'+corTrn+'!important;color:#fff;padding:7px 12px;font-size:11px;font-weight:700;text-align:center;">↳</td>'
+          +'<td style="'+PC+'background:'+corTrn+'!important;color:#fff;padding:7px 12px;font-size:11px;font-weight:700;padding-left:16px;">'+trn+'</td>'
+          +(multiTurnoGlobal?'<td style="'+PC+'background:'+corTrn+'!important;padding:7px 12px;"></td>':'')
+          +'<td style="'+PC+'background:'+corTrn+'!important;color:#fff;padding:7px 12px;font-size:11px;text-align:center;">'+(e.salas||"—")+'</td>'
+          +'<td style="'+PC+'background:'+corTrn+'!important;color:#fff;padding:7px 12px;font-size:11px;text-align:center;">'+tI+'</td>'
+          +'<td style="'+PC+'background:'+corTrn+'!important;color:#fff;padding:7px 12px;font-size:11px;text-align:center;">'+tP+'</td>'
+          +'<td style="'+PC+'background:'+corTrn+'!important;color:#fff;padding:7px 12px;font-size:11px;text-align:center;">'+tA+'</td>'
+          +'<td style="'+PC+'background:'+corTrn+'!important;color:#fff;padding:7px 12px;font-size:11px;text-align:center;">'+pct(tA,tI)+'</td>'
+          +'<td style="'+PC+'background:'+corTrn+'!important;padding:7px 12px;">'+ocorrStr+'</td>'
+          +'</tr>';
+      });
+    } else {
+      html+='<tr>'
+        +'<td '+tdZ(i,"text-align:center;font-weight:600;")+'>'+(i+1)+'</td>'
+        +'<td '+tdZ(i)+'>'+e.nome+'</td>'
+        +(multiTurnoGlobal?'<td '+tdZ(i)+'>'+(eTurnos[0]||"—")+'</td>':'')
+        +'<td '+tdZ(i,"text-align:center;")+'>'+(e.salas||"—")+'</td>'
+        +'<td '+tdZ(i,"text-align:center;")+'>'+t.ins+'</td>'
+        +'<td '+tdZ(i,"text-align:center;")+'>'+t.pre+'</td>'
+        +'<td '+tdZ(i,"text-align:center;")+'>'+t.aus+'</td>'
+        +'<td '+tdZ(i,"text-align:center;")+'>'+pct(t.aus,t.ins)+'</td>'
+        +'<td '+tdZ(i,"text-align:center;")+'>'+ocorrStr+'</td>'
+        +'</tr>';
+    }
   });
   html+=totalRow([
-    ["TOTAL — "+n+(n===1?" LOCAL":" LOCAIS"),"","colspan='2'"],
-    [totSalas,"text-align:center;"],
-    [totI,"text-align:center;"],
-    [totP,"text-align:center;"],
-    [totA,"text-align:center;"],
-    [pct(totA,totI),"text-align:center;"],
-    ["",""],
-    ["",""]
+    ["TOTAL — "+n+(n===1?" LOCAL":" LOCAIS"),"","colspan='"+(multiTurnoGlobal?3:2)+"'"],
+    [totSalas,"text-align:center;"],[totI,"text-align:center;"],[totP,"text-align:center;"],[totA,"text-align:center;"],[pct(totA,totI),"text-align:center;"],["",""]
   ]);
   html+='</tbody></table></div></div>';
 
@@ -1493,10 +1532,32 @@ function abrirRelatorioGeral(dados, meta, win) {
       +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Coordenador Logístico</span><span style="font-size:12px;">'+coordLog+'</span></div>'
       +'<div><span style="font-size:9px;color:#AAC4E8;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:2px;">Coord. Local</span><span style="font-size:12px;">'+(e.coord_local||"—")+'</span></div>'
       +'</div>';
-    // Tabela de resultados
+    // Tabela de resultados — agrupada por turno se houver mais de um
     var rows=e.resultados||[];
     var eCI=0,eCP=0,eCA=0,eCIn=0;
+    var turnosRes=[...new Set(rows.map(function(r){return r.turno||"";}).filter(Boolean))];
+    var multiTurno=turnosRes.length>1;
+    function renderRowsDetalhe(filteredRows,startIdx){
+      filteredRows.forEach(function(r,ri){
+        var i=startIdx+ri;
+        var ins=Number(r.inscr)||0,pre=Number(r.pres)||0,aus=Number(r.aus)||0,inc=Number(r.incl)||0;
+        eCI+=ins; eCP+=pre; eCA+=aus; eCIn+=inc;
+        var pA=ins>0?aus/ins:0, hi=pA>=0.5;
+        var bg=hi?"#FFEBEE":(i%2?"#F5F7FC":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
+        var s=PC+'background:'+bg+'!important;color:'+tc+';padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;';
+        html+='<tr>'
+          +'<td style="'+s+'text-align:center;font-weight:600;">'+(r.sala||"—")+'</td>'
+          +'<td style="'+s+'">'+(r.cargo||"").replace(/^\d+\s*[-—]\s*/,"").trim()+'</td>'
+          +'<td style="'+s+'text-align:center;">'+ins+'</td>'
+          +'<td style="'+s+'text-align:center;">'+pre+'</td>'
+          +'<td style="'+s+'text-align:center;">'+aus+'</td>'
+          +'<td style="'+s+'text-align:center;">'+inc+'</td>'
+          +'<td style="'+s+'text-align:center;font-weight:'+(hi?"700":"400")+';">'+(pA*100).toFixed(1)+'%</td>'
+          +'</tr>';
+      });
+    }
     html+='<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 6px 6px;overflow:hidden;"><table><thead><tr>'
+      +'<th '+thS("text-align:center;width:50px;")+'>Sala</th>'
       +'<th '+thS()+'>Cargo / Função</th>'
       +'<th '+thS("text-align:center;")+'>Previstos</th>'
       +'<th '+thS("text-align:center;")+'>Presentes</th>'
@@ -1504,32 +1565,27 @@ function abrirRelatorioGeral(dados, meta, win) {
       +'<th '+thS("text-align:center;")+'>Inclusão</th>'
       +'<th '+thS("text-align:center;")+'>% Ausência</th>'
       +'</tr></thead><tbody>';
-    rows.forEach(function(r,i){
-      var ins=Number(r.inscr)||0,pre=Number(r.pres)||0,aus=Number(r.aus)||0,inc=Number(r.incl)||0;
-      eCI+=ins; eCP+=pre; eCA+=aus; eCIn+=inc;
-      var pA=ins>0?aus/ins:0, hi=pA>=0.5;
-      var bg=hi?"#FFEBEE":(i%2?"#F5F7FC":"#fff"), tc=hi?"#B71C1C":"#2C2C2C";
-      var s=PC+'background:'+bg+'!important;color:'+tc+';padding:10px 12px;border-bottom:1px solid #E8E8E8;font-size:12px;';
-      html+='<tr>'
-        +'<td style="'+s+'">'+(r.cargo||"").replace(/^\d+\s*[-—]\s*/,"").trim()+'</td>'
-        +'<td style="'+s+'text-align:center;">'+ins+'</td>'
-        +'<td style="'+s+'text-align:center;">'+pre+'</td>'
-        +'<td style="'+s+'text-align:center;">'+aus+'</td>'
-        +'<td style="'+s+'text-align:center;">'+inc+'</td>'
-        +'<td style="'+s+'text-align:center;font-weight:'+(hi?"700":"400")+';">'+(pA*100).toFixed(1)+'%</td>'
-        +'</tr>';
-    });
     if(rows.length===0){
-      html+='<tr><td colspan="6" '+td()+' style="text-align:center;color:#999;padding:16px;">Nenhum resultado registrado</td></tr>';
+      html+='<tr><td colspan="7" '+td()+' style="text-align:center;color:#999;padding:16px;">Nenhum resultado registrado</td></tr>';
+    } else if(multiTurno){
+      var rowIdx=0;
+      turnosRes.forEach(function(turno){
+        var corTurno=turno==="Manhã"?corM:corT;
+        html+='<tr><td colspan="7" style="'+PC+'background:'+corTurno+'!important;color:#fff;padding:7px 12px;font-size:11px;font-weight:700;letter-spacing:.3px;">'+turno+'</td></tr>';
+        var turnoRows=rows.filter(function(r){return (r.turno||"")==turno;});
+        renderRowsDetalhe(turnoRows,rowIdx);
+        rowIdx+=turnoRows.length;
+      });
     } else {
-      html+=totalRow([["TOTAL",""],
-        [eCI,"text-align:center;"],
-        [eCP,"text-align:center;"],
-        [eCA,"text-align:center;"],
-        [eCIn,"text-align:center;"],
-        [pct(eCA,eCI),"text-align:center;"]
-      ]);
+      renderRowsDetalhe(rows,0);
     }
+    html+=totalRow([["TOTAL","","colspan='2'"],
+      [eCI,"text-align:center;"],
+      [eCP,"text-align:center;"],
+      [eCA,"text-align:center;"],
+      [eCIn,"text-align:center;"],
+      [pct(eCA,eCI),"text-align:center;"]
+    ]);
     html+='</tbody></table></div>';
     html+='</div>'; // fim local
   });
