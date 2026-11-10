@@ -1111,7 +1111,8 @@ function abrirRelatorioImprimivel(dados) {
       const cor = o.turno==="Manhã" ? corM : corT;
       const cands = (e.candidatos||[]).filter(c=>c.turno===o.turno);
       let oHtml = grid2("Ocorrências em sala", o.sala, "Prova condicional", o.cond) +
-                  grid2("Toque de celular", o.toque, "Declaração de comparecimento", o.decl);
+                  grid2("Toque de celular", o.toque, "Declaração de comparecimento", o.decl) +
+                  grid2("Correção de dados", o.corr||"Não", "", "");
       if (cands.length > 0) {
         oHtml += `<table style="margin-top:12px;"><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
           <th style="background:${cor};">Tipo</th>
@@ -1122,6 +1123,23 @@ function abrirRelatorioImprimivel(dados) {
         </tr></thead><tbody>`;
         cands.forEach(function(c, i){
           oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.tipo}</td><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.sala||"—"}</td><td>${c.desc||"—"}</td></tr>`;
+        });
+        oHtml += "</tbody></table>";
+      }
+      // Correções de dados (do CANDIDATOS)
+      const corrTurno = (e.correcoes||[]).filter(function(c){ return c.turno===o.turno; });
+      if (corrTurno.length > 0) {
+        oHtml += `<div style="margin-top:14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#666;margin-bottom:4px;">Correção de Dados Cadastrais</div>
+          <table style="width:100%;"><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
+          <th style="background:${cor};">Inscrição</th>
+          <th style="background:${cor};">Candidato</th>
+          <th style="background:${cor};">Sala</th>
+          <th style="background:${cor};">Campo</th>
+          <th style="background:${cor};">Dado Incorreto</th>
+          <th style="background:${cor};">Dado Correto</th>
+        </tr></thead><tbody>`;
+        corrTurno.forEach(function(c, i){
+          oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.sala||"—"}</td><td>${c.campo||"—"}</td><td>${c.dadoIncorreto||"—"}</td><td>${c.dadoCorreto||"—"}</td></tr>`;
         });
         oHtml += "</tbody></table>";
       }
@@ -1244,7 +1262,7 @@ function abrirRelatorioGeral(dados, meta, win) {
     });
     e._tot = {ins:eI, pre:eP, aus:eA, inc:eIn};
     e._cargoMaiorAus = melhorCargo;
-    e._hasOcorr = (e.ocorrencias||[]).some(function(o){ return Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0; });
+    e._hasOcorr = (e.ocorrencias||[]).some(function(o){ return Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0||o.corr==="Sim"; }) || (e.correcoes||[]).length>0;
   });
 
   function pct(a,b){ return b>0?(a/b*100).toFixed(1)+"%":"—"; }

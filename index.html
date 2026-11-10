@@ -77,6 +77,11 @@
     @media(max-width:600px){ .entry-row { grid-template-columns: 1fr 1fr; } }
     .entry-row input { font-size: 12px; padding: 6px 8px; }
     .entry-header { display: grid; grid-template-columns: 130px 1fr 90px; gap: 8px; margin-bottom: 4px; font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .4px; }
+    .corr-entry { border: 1px solid #EEE; border-radius: 4px; padding: 8px; margin-bottom: 8px; }
+    .corr-row1 { display: grid; grid-template-columns: 130px 1fr 90px; gap: 8px; margin-bottom: 6px; }
+    .corr-row2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .corr-entry select, .corr-row2 input { font-size: 12px; padding: 6px 8px; border: 1px solid #CCC; border-radius: 4px; width: 100%; box-sizing: border-box; }
+    @media(max-width:600px){ .corr-row1, .corr-row2 { grid-template-columns: 1fr 1fr; } }
     .entry-sala-block { border-left: 3px solid #ddd; padding-left: 10px; margin-bottom: 12px; }
     .entry-sala-block textarea { margin-top: 6px; font-size: 12px; padding: 6px 8px; }
     .entry-toque-block { border-left: 3px solid #ff9800; padding-left: 10px; margin-bottom: 12px; }
@@ -244,6 +249,19 @@
           <button type="button" class="add-btn" onclick="addEntry('m_decl_entries')">+ Adicionar</button>
         </div>
       </div>
+      <div class="ocorr-block">
+        <h4>Correção de dados</h4>
+        <div class="radio-row"><label><input type="radio" name="m_corr" value="Não" checked onchange="toggleOcorrEntries('m_corr','m_corr_wrap')"> Não</label><label><input type="radio" name="m_corr" value="Sim" onchange="toggleOcorrEntries('m_corr','m_corr_wrap')"> Sim</label></div>
+        <div id="m_corr_wrap" class="hidden">
+          <div id="m_corr_entries">
+            <div class="corr-entry">
+              <div class="corr-row1"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <div class="corr-row2"><select><option value="">Campo a corrigir...</option><option value="Nome">Nome</option><option value="Data de Nascimento">Data de Nascimento</option></select><input type="text" placeholder="Dado incorreto (na base)"><input type="text" placeholder="Dado correto (conforme candidato)"></div>
+            </div>
+          </div>
+          <button type="button" class="add-btn" onclick="addCorrecaoEntry('m_corr_entries')">+ Adicionar</button>
+        </div>
+      </div>
     </div>
 
     <div class="card">
@@ -338,6 +356,19 @@
             <div class="entry-row"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
           </div>
           <button type="button" class="add-btn" onclick="addEntry('t_decl_entries')">+ Adicionar</button>
+        </div>
+      </div>
+      <div class="ocorr-block">
+        <h4>Correção de dados</h4>
+        <div class="radio-row"><label><input type="radio" name="t_corr" value="Não" checked onchange="toggleOcorrEntries('t_corr','t_corr_wrap')"> Não</label><label><input type="radio" name="t_corr" value="Sim" onchange="toggleOcorrEntries('t_corr','t_corr_wrap')"> Sim</label></div>
+        <div id="t_corr_wrap" class="hidden">
+          <div id="t_corr_entries">
+            <div class="corr-entry">
+              <div class="corr-row1"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>
+              <div class="corr-row2"><select><option value="">Campo a corrigir...</option><option value="Nome">Nome</option><option value="Data de Nascimento">Data de Nascimento</option></select><input type="text" placeholder="Dado incorreto (na base)"><input type="text" placeholder="Dado correto (conforme candidato)"></div>
+            </div>
+          </div>
+          <button type="button" class="add-btn" onclick="addCorrecaoEntry('t_corr_entries')">+ Adicionar</button>
         </div>
       </div>
     </div>
@@ -874,6 +905,33 @@ function coletarEntries(listId){
   }).filter(e=>e.inscricao||e.candidato||e.sala);
 }
 
+function addCorrecaoEntry(listId){
+  var list = document.getElementById(listId);
+  var div = document.createElement("div");
+  div.className = "corr-entry";
+  div.innerHTML = '<div class="corr-row1"><input type="text" placeholder="Nº Inscrição"><input type="text" placeholder="Nome do Candidato"><input type="text" placeholder="Sala"></div>'
+    +'<div class="corr-row2"><select><option value="">Campo a corrigir...</option><option value="Nome">Nome</option><option value="Data de Nascimento">Data de Nascimento</option></select><input type="text" placeholder="Dado incorreto (na base)"><input type="text" placeholder="Dado correto (conforme candidato)"></div>';
+  list.appendChild(div);
+}
+
+function coletarCorrecaoEntries(listId){
+  var list = document.getElementById(listId);
+  if(!list) return [];
+  return Array.from(list.querySelectorAll('.corr-entry')).map(function(div){
+    var row1 = div.querySelectorAll('.corr-row1 input');
+    var row2sel = div.querySelector('.corr-row2 select');
+    var row2ins = div.querySelectorAll('.corr-row2 input');
+    return {
+      inscricao:    row1[0] ? row1[0].value.trim() : "",
+      candidato:    row1[1] ? row1[1].value.trim() : "",
+      sala:         row1[2] ? row1[2].value.trim() : "",
+      campo:        row2sel ? row2sel.value.trim() : "",
+      dadoIncorreto: row2ins[0] ? row2ins[0].value.trim() : "",
+      dadoCorreto:  row2ins[1] ? row2ins[1].value.trim() : ""
+    };
+  }).filter(function(e){ return e.inscricao||e.candidato||e.campo; });
+}
+
 // ════════════════════════════════════════════════════════════════
 //  FOTOS
 // ════════════════════════════════════════════════════════════════
@@ -1095,6 +1153,7 @@ async function enviar(){
         cond:  {resp:getRad("m_cond"),       candidatos:coletarEntries("m_cond_entries")},
         toque: {resp:getRad("m_toque"),      candidatos:coletarToqueEntries("m_toque_entries")},
         decl:  {resp:getRad("m_decl"),       candidatos:coletarEntries("m_decl_entries")},
+        corr:  {resp:getRad("m_corr"),       candidatos:coletarCorrecaoEntries("m_corr_entries")},
       },
     },
 
@@ -1123,6 +1182,7 @@ async function enviar(){
         cond:  {resp:getRad("t_cond"),       candidatos:coletarEntries("t_cond_entries")},
         toque: {resp:getRad("t_toque"),      candidatos:coletarToqueEntries("t_toque_entries")},
         decl:  {resp:getRad("t_decl"),       candidatos:coletarEntries("t_decl_entries")},
+        corr:  {resp:getRad("t_corr"),       candidatos:coletarCorrecaoEntries("t_corr_entries")},
       },
     },
   };
