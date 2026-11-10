@@ -617,12 +617,40 @@ function processarPlanilha(wb, nomeArquivo) {
 
   // ── Detecta índices de coluna dinamicamente pelo cabeçalho ──
   const header = linhas[0].map(h => String(h||"").trim().toUpperCase());
-  const iEscola = header.indexOf("ESCOLA") !== -1 ? header.indexOf("ESCOLA") : 13;
-  const iSala   = header.indexOf("SALA")   !== -1 ? header.indexOf("SALA")   : 10;
-  const iTurno  = header.indexOf("TURNO")  !== -1 ? header.indexOf("TURNO")  : 9;
-  const iCargo  = header.indexOf("CARGO")  !== -1 ? header.indexOf("CARGO")  : 7;
+  const iEscola    = header.indexOf("ESCOLA")     !== -1 ? header.indexOf("ESCOLA")     : 13;
+  const iSala      = header.indexOf("SALA")       !== -1 ? header.indexOf("SALA")       : 10;
+  const iTurno     = header.indexOf("TURNO")      !== -1 ? header.indexOf("TURNO")      : 9;
+  const iCargo     = header.indexOf("CARGO")      !== -1 ? header.indexOf("CARGO")      : 7;
+  const iDataProva = header.indexOf("DATA PROVA") !== -1 ? header.indexOf("DATA PROVA") : 8;
   const iCoordEsc  = header.indexOf("ESCOLA_COORD")  !== -1 ? header.indexOf("ESCOLA_COORD")  : -1;
   const iCoordNome = header.indexOf("COORDENADOR")   !== -1 ? header.indexOf("COORDENADOR")   : -1;
+
+  // ── Helpers de turno a partir da planilha ──
+  const DIAS_PT_SEMANA = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+  function diaNomeXLSX(dataStr) {
+    if (!dataStr) return "";
+    const p = dataStr.trim().split("/");
+    if (p.length === 3) {
+      const d = new Date(Number(p[2]), Number(p[1])-1, Number(p[0]));
+      if (!isNaN(d.getTime())) return DIAS_PT_SEMANA[d.getDay()];
+    }
+    return "";
+  }
+  function periodoNome(raw) {
+    const u = (raw||"").toUpperCase().trim();
+    if (u.includes("MANH")) return "Manhã";
+    if (u.includes("TARD")) return "Tarde";
+    if (u.includes("NOIT")) return "Noite";
+    return raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase();
+  }
+
+  // Pré-passo: detecta se há mais de uma data de prova (concurso multi-dia)
+  const datasUnicas = new Set();
+  for (let i = 1; i < linhas.length; i++) {
+    const d = String(linhas[i][iDataProva] || "").trim();
+    if (d) datasUnicas.add(d);
+  }
+  const multiDia = datasUnicas.size > 1;
 
   // ── Mapa de coordenadores (se coluna existir na planilha) ──
   const coordMap = {};
@@ -641,14 +669,18 @@ function processarPlanilha(wb, nomeArquivo) {
     const r = linhas[i];
     const escola = String(r[iEscola] || "").trim();
     if (!escola) continue;
-    const sala  = String(r[iSala]  || "").trim();
-    const turno = String(r[iTurno] || "").trim();
-    const cargo = String(r[iCargo] || "").trim();
-    if (!sala || !turno || !cargo) continue;
+    const sala      = String(r[iSala]      || "").trim();
+    const turnoRaw  = String(r[iTurno]     || "").trim();
+    const dataStr   = String(r[iDataProva] || "").trim();
+    const cargo     = String(r[iCargo]     || "").trim();
+    if (!sala || !turnoRaw || !cargo) continue;
+
+    const periodo      = periodoNome(turnoRaw);
+    const turnoDisplay = multiDia ? (diaNomeXLSX(dataStr) + " " + periodo) : periodo;
 
     if (!escMap[escola]) escMap[escola] = {cargosMap:{}, candidatos:0};
     escMap[escola].candidatos++;
-    const key = `${sala}|${turno}|${cargo}`;
+    const key = `${sala}|${turnoDisplay}|${cargo}`;
     escMap[escola].cargosMap[key] = (escMap[escola].cargosMap[key] || 0) + 1;
   }
 
@@ -656,7 +688,7 @@ function processarPlanilha(wb, nomeArquivo) {
   const escolas = Object.keys(escMap).map(nome => {
     const cargos = Object.entries(escMap[nome].cargosMap).map(([key, inscr]) => {
       const [sala, turno, cargo] = key.split("|");
-      return { sala, turno: normalizarTurno(turno), cargo, inscr };
+      return { sala, turno, cargo, inscr }; // turno já é o nome de exibição
     });
     cargos.sort((a, b) => {
       const na = parseInt(a.sala.replace(/\D/g,"")) || 0;
