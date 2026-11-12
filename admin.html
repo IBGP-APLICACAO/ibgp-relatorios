@@ -1120,6 +1120,7 @@ function abrirRelatorioImprimivel(dados) {
       body{background:#fff;padding:12px;}
       .no-print{display:none!important;}
       .page-break{page-break-before:always;}
+      .rpt-hdr-ind{display:table-header-group!important;}
     }
   </style></head><body>`;
 
@@ -1131,10 +1132,10 @@ function abrirRelatorioImprimivel(dados) {
 
   // Por escola
   escolas.forEach(function(e, ei) {
-    html += `<div class="${ei > 0 ? 'page-break' : ''}" style="display:table;width:100%;table-layout:fixed;">`;
+    html += `<table class="${ei > 0 ? 'page-break' : ''}" style="width:100%;border-collapse:collapse;border-spacing:0;table-layout:fixed;">`;
 
-    // Cabeçalho que repete em todas as páginas impressas (table-header-group)
-    html += `<div style="display:table-header-group;">
+    // Cabeçalho que repete em todas as páginas impressas (thead nativo)
+    html += `<thead class="rpt-hdr-ind"><tr><th style="padding:0;font-weight:normal;">
       <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#2C2C2C;padding:10px 20px;">
         <p style="color:#CF3432;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">IBGP — Relatório de Aplicação de Prova</p>
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
@@ -1143,10 +1144,10 @@ function abrirRelatorioImprimivel(dados) {
         </div>
       </div>
       <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;height:3px;background:#CF3432;margin-bottom:12px;"></div>
-    </div>`;
+    </th></tr></thead>`;
 
-    // Conteúdo em table-row-group para o header repetir
-    html += `<div style="display:table-row-group;">`;
+    // Conteúdo em tbody para o thead repetir em cada página
+    html += `<tbody><tr><td style="padding:0;vertical-align:top;">`;
 
     // Identificação (sem obs)
     html += secao("Identificação", corH,
@@ -1350,8 +1351,8 @@ function abrirRelatorioImprimivel(dados) {
       IBGP — Sistema de Aplicação de Provas
     </div>`;
 
-    html += "</div>"; // fim table-row-group
-    html += "</div>"; // fim escola (table)
+    html += "</td></tr></tbody>"; // fim tbody
+    html += "</table>"; // fim escola (table)
   });
 
   html += "</body></html>";
@@ -1521,7 +1522,7 @@ function abrirRelatorioGeral(dados, meta, win) {
 
   // Texto resumo
   var pctPres=pct2(totP,totI), pctAus=pct2(totA,totI);
-  html+='<div class="card" style="padding:24px 28px;">'
+  html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corP+';">'
     +'<p>A aplicação foi conduzida simultaneamente em <strong>'+n+'</strong> '+(n===1?"local":"locais")+', totalizando <strong>'+totSalas+'</strong> salas. Foram registrados <strong>'+totI+'</strong> candidatos inscritos, <strong>'+totP+'</strong> presentes ('+pctPres+') e <strong>'+totA+'</strong> ausentes ('+pctAus+').</p>'
     +'</div>';
 
