@@ -1456,10 +1456,29 @@ function abrirRelatorioGeral(dados, meta, win) {
 
   // ── 1. APRESENTAÇÃO ──
   html+=secH("1","Apresentação");
+  // Coleta horários padrão do 1º turno registrado por qualquer escola
+  var _h1 = (function(){
+    for(var _ei=0;_ei<escolas.length;_ei++){
+      var _hor=escolas[_ei].horarios;
+      if(_hor&&_hor.length>0) return _hor[0];
+    }
+    return {};
+  })();
+  var _hAbrPort = _h1.ab_portao  || conc["Hr Abertura do Portão"]   || "";
+  var _hFchPort = _h1.fch_portao || conc["Hr Fechamento do Portão"] || "";
+  var _hInicio  = _h1.inicio     || conc["Hr Início da Prova"]      || "";
+  var _reunStr  = _h1.chegada    || "";
+  function _hrLi(label, val){ return val?'<li style="margin-bottom:6px;"><span style="display:inline-block;min-width:200px;font-weight:700;color:#2C2C2C;">'+label+':</span><span style="color:#1F3A6E;font-weight:700;">'+val+'</span></li>':''; }
   html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corP+';">'
     +'<p>Este relatório consolida as informações de <strong>'+n+(n===1?" local":" locais")+'</strong> de aplicação das provas objetivas do <strong>'+titulo+'</strong> — '+edital+', realizadas em '+dataProva+', turno'+(Object.keys(turnosSet).length>1?"s":"")+" "+turnosStr+'.</p>'
     +'<p>'+(n===1?"O local dispõe":"Os "+n+" locais dispõem")+' de relatório técnico individual, arquivado separadamente. Os quantitativos de candidatos inscritos, presentes e ausentes apresentados neste documento têm como fonte autoritativa a base de leitura do IBGP, totalizando <strong>'+nCargos+(nCargos===1?" cargo":" cargos")+'</strong> distribuídos em <strong>'+totSalas+' salas</strong> de prova.</p>'
-    +'<p>Em todos os locais a aplicação transcorreu conforme o cronograma definido no edital. Os procedimentos padronizados do IBGP foram aplicados integralmente, incluindo controle de acesso, distribuição de provas, identificação de candidatos e encerramento com lacre de malotes.</p>'
+    +'<p style="font-weight:700;color:#2C2C2C;margin-bottom:8px;">Horários padrão da aplicação:</p>'
+    +'<ul style="list-style:none;padding:0;margin:0;font-size:13px;">'
+    +_hrLi("Reunião",_reunStr)
+    +_hrLi("Abertura do Portão",_hAbrPort)
+    +_hrLi("Fechamento do Portão",_hFchPort)
+    +_hrLi("Início das Provas",_hInicio)
+    +'</ul>'
     +'</div>';
 
   // ── 2. RESUMO EXECUTIVO (2ª página) ──
