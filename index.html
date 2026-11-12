@@ -130,6 +130,14 @@
         <label>Coordenação Local</label>
         <input type="text" id="inputCoord" placeholder="Nome completo">
       </div>
+      <div class="form-group" style="flex:2;">
+        <label>Coordenador(a) Pedagógico(a) <span style="font-size:11px;color:#999;">(IBGP)</span></label>
+        <input type="text" id="inputCoordPed" placeholder="Nome completo">
+      </div>
+      <div class="form-group" style="flex:2;">
+        <label>Coordenador(a) Logístico(a) <span style="font-size:11px;color:#999;">(IBGP)</span></label>
+        <input type="text" id="inputCoordLog" placeholder="Nome completo">
+      </div>
       <div class="form-group">
         <label>Houve apoio?</label>
         <div class="radio-row" style="margin-top:8px;">
@@ -1291,9 +1299,11 @@ async function enviar(){
   const escola = CONCURSO.escolas[parseInt(idx)];
 
   const payload = {
-    escola:      escola.nome,
-    coord_local: getTxt("inputCoord"),
-    salas:       escola.salas,
+    escola:            escola.nome,
+    coord_local:       getTxt("inputCoord"),
+    coord_pedagogico:  getTxt("inputCoordPed"),
+    coord_logistico:   getTxt("inputCoordLog"),
+    salas:             escola.salas,
     houve_apoio:   getRad("apoio"),
     nome_apoio:    Array.from(document.querySelectorAll('#apoio_entries input')).map(i=>i.value.trim()).filter(v=>v).join("; "),
     houve_comissao: getRad("comissao"),

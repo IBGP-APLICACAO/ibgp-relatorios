@@ -1352,7 +1352,6 @@ function abrirIndividualPorIdx(i) {
 // ── Relatório Técnico Consolidado (Geral) ────────────────────────────
 function abrirRelatorioGeral(dados, meta, win) {
   if (!win) win = window.open("", "_blank");
-  win.document.open(); // reseta documento (remove tela de carregamento)
   var conc = dados.concurso || {};
   var escolas = dados.escolas || [];
 
@@ -1418,9 +1417,19 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'table{width:100%;border-collapse:collapse;}'
     +'.card{background:#fff;border-radius:6px;border:1px solid #DDE3EE;margin-bottom:24px;overflow:hidden;}'
     +'.no-print{display:flex;}'
+    +'.print-header{display:none;}'
     +'p{line-height:1.8;color:#444;font-size:13px;margin-bottom:12px;}'
-    +'@media print{body{background:#fff;padding:14px;}.no-print{display:none!important;}.pb{page-break-before:always;}}'
-    +'</style></head><body>';
+    +'@media print{'
+    +'body{background:#fff;padding:14px;padding-top:60px;}.no-print{display:none!important;}.pb{page-break-before:always;}'
+    +'.print-header{'+PC+'display:block!important;position:fixed;top:0;left:0;right:0;z-index:9999;background:#2C2C2C;padding:7px 20px;border-bottom:3px solid #CF3432;}'
+    +'}'
+    +'</style></head><body>'
+    +'<div class="print-header" style="'+PC+'background:#2C2C2C;padding:7px 20px;border-bottom:3px solid #CF3432;">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;">'
+    +'<span style="color:#CF3432;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">IBGP — Relatório Técnico Consolidado</span>'
+    +'<span style="color:#bbb;font-size:9px;">'+titulo+' &bull; '+edital+' &bull; '+dataProva+'</span>'
+    +'</div>'
+    +'</div>';
 
   // Barra (só tela)
   html+='<div class="no-print" style="'+PC+'background:'+corP+';padding:12px 20px;margin-bottom:20px;border-radius:8px;align-items:center;justify-content:flex-end;">'
@@ -1777,8 +1786,10 @@ function abrirRelatorioGeral(dados, meta, win) {
 
   html+='</div>'; // fim pb sec5 fotos
   html+='</body></html>';
-  win.document.write(html);
-  win.document.close();
+  var _blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  var _blobUrl = URL.createObjectURL(_blob);
+  win.location.assign(_blobUrl);
+  setTimeout(function(){ URL.revokeObjectURL(_blobUrl); }, 60000);
 }
 </script>
 </body>
