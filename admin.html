@@ -1475,13 +1475,6 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corP+';">'
     +'<p>Este relatório consolida as informações de <strong>'+n+(n===1?" local":" locais")+'</strong> de aplicação das provas objetivas do <strong>'+titulo+'</strong> — '+edital+', realizadas em '+dataProva+', turno'+(Object.keys(turnosSet).length>1?"s":"")+" "+turnosStr+'.</p>'
     +'<p>'+(n===1?"O local dispõe":"Os "+n+" locais dispõem")+' de relatório técnico individual, arquivado separadamente. Os quantitativos de candidatos inscritos, presentes e ausentes apresentados neste documento têm como fonte autoritativa a base de leitura do IBGP, totalizando <strong>'+nCargos+(nCargos===1?" cargo":" cargos")+'</strong> distribuídos em <strong>'+totSalas+' salas</strong> de prova.</p>'
-    +'<p style="font-weight:700;color:#2C2C2C;margin-bottom:8px;">Horários padrão da aplicação:</p>'
-    +'<ul style="list-style:none;padding:0;margin:0;font-size:13px;">'
-    +_hrLi("Reunião",_reunStr)
-    +_hrLi("Abertura do Portão",_hAbrPort)
-    +_hrLi("Fechamento do Portão",_hFchPort)
-    +_hrLi("Início das Provas",_hInicio)
-    +'</ul>'
     +'</div>';
 
   // ── 2. RESUMO EXECUTIVO (2ª página) ──
@@ -1538,14 +1531,17 @@ function abrirRelatorioGeral(dados, meta, win) {
 
   // Procedimentos Padronizados
   html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Procedimentos Padronizados — Aplicados em Todos os Locais</p>';
-  html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corR+';">'
+  html+='<div class="card" style="padding:16px 28px;border-left:5px solid '+corR+';">'
+    +'<table style="width:100%;border-collapse:collapse;margin-bottom:16px;">'
+    +'<tbody>'
+    +(_reunStr  ? '<tr><td style="font-weight:700;padding:5px 0;width:220px;">Reunião da equipe:</td><td style="color:'+corP+';font-weight:700;">'+_reunStr+'</td></tr>' : '')
+    +(_hAbrPort ? '<tr><td style="font-weight:700;padding:5px 0;">Abertura do Portão:</td><td style="color:'+corP+';font-weight:700;">'+_hAbrPort+'</td></tr>' : '')
+    +(_hFchPort ? '<tr><td style="font-weight:700;padding:5px 0;">Fechamento do Portão:</td><td style="color:'+corP+';font-weight:700;">'+_hFchPort+'</td></tr>' : '')
+    +(_hInicio  ? '<tr><td style="font-weight:700;padding:5px 0;">Início das Provas:</td><td style="color:'+corP+';font-weight:700;">'+_hInicio+'</td></tr>' : '')
+    +'</tbody></table>'
     +'<ol style="padding-left:20px;font-size:13px;line-height:2.2;color:#333;">'
-    +'<li>Reunião de alinhamento com a equipe: 05h50 às 06h45.</li>'
-    +'<li>Abertura do portão às 07h00, com conferência de documentos e lista de presença da equipe.</li>'
     +'<li>Abertura dos malotes de provas com testemunhas e registro fotográfico.</li>'
-    +'<li>Distribuição dos pacotes de provas às 07h30, com capa virada para a carteira.</li>'
-    +'<li>Fechamento do portão pontualmente às 08h00, com lavratura do Termo de Fechamento.</li>'
-    +'<li>Início das provas às 08h30, conforme cronograma do edital.</li>'
+    +'<li>Distribuição dos pacotes de provas com capa virada para a carteira.</li>'
     +'<li>Identificação dos candidatos mediante documento oficial com foto.</li>'
     +'<li>Proibição e recolhimento de dispositivos eletrônicos antes do início.</li>'
     +'<li>Aplicação de prova condicional com protocolo e registro em formulário.</li>'
