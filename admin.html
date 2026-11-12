@@ -1217,44 +1217,78 @@ function abrirRelatorioImprimivel(dados) {
       html += secao("Estatística por Cargo — " + turno, cor, tabela);
     });
 
-    // Ocorrências por turno
-    (e.ocorrencias||[]).forEach(function(o) {
-      const cor = corDoTurno(o.turno);
-      const cands = (e.candidatos||[]).filter(c=>c.turno===o.turno);
-      let oHtml = grid2("Ocorrências em sala", o.sala, "Prova condicional", o.cond) +
-                  grid2("Toque de celular", o.toque, "Declaração de comparecimento", o.decl) +
-                  grid2("Correção de dados", o.corr||"Não", "", "");
-      if (cands.length > 0) {
-        oHtml += `<table style="margin-top:12px;"><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
+    // Ocorrências por turno — contagem por tipo + detalhes de candidatos
+    var turnosOcorr = [...new Set([
+      ...(e.ocorrencias||[]).map(o=>o.turno),
+      ...(e.candidatos||[]).map(c=>c.turno),
+      ...(e.correcoes||[]).map(c=>c.turno)
+    ].filter(Boolean))];
+    turnosOcorr = sortTurnos(turnosOcorr);
+    turnosOcorr.forEach(function(turno) {
+      const cor = corDoTurno(turno);
+      const o = (e.ocorrencias||[]).find(function(x){ return x.turno===turno; }) || {};
+      const candsT = (e.candidatos||[]).filter(c=>c.turno===turno);
+      const corrT  = (e.correcoes||[]).filter(c=>c.turno===turno);
+      // Monta contagem por tipo
+      var TIPO_LABEL = {
+        "Ocorrências em sala":"Ocorrências em sala",
+        "Prova condicional":"Prova condicional",
+        "Toque de celular":"Toque de celular",
+        "Declaração de comparecimento":"Declaração de comparecimento"
+      };
+      var linhas = [];
+      Object.keys(TIPO_LABEL).forEach(function(tipo) {
+        var qtd = candsT.filter(c=>c.tipo===tipo).length;
+        // Fallback: se qtd=0 mas o campo da aba OCORRÊNCIAS diz "Sim", registra 1
+        var campo = {
+          "Ocorrências em sala": o.sala,
+          "Prova condicional": o.cond,
+          "Toque de celular": o.toque,
+          "Declaração de comparecimento": o.decl
+        }[tipo];
+        if (qtd === 0 && campo === "Sim") qtd = 1;
+        if (qtd > 0 || campo === "Sim") linhas.push({tipo: TIPO_LABEL[tipo], qtd: qtd||1});
+      });
+      if (corrT.length > 0) linhas.push({tipo:"Correção de Dados Cadastrais", qtd: corrT.length});
+      if (linhas.length === 0 && candsT.length === 0) return; // sem ocorrências — pula
+      var oHtml = `<table><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
+        <th style="background:${cor};">Tipo de Ocorrência</th>
+        <th style="background:${cor};text-align:center;width:100px;">Quantidade</th>
+      </tr></thead><tbody>`;
+      linhas.forEach(function(l,i){ oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${l.tipo}</td><td style="text-align:center;font-weight:700;">${l.qtd}</td></tr>`; });
+      // Detalhe dos candidatos (sem obs)
+      if (candsT.length > 0) {
+        oHtml += `<tr><td colspan="2" style="padding-top:14px;padding-bottom:4px;">
+          <strong style="font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#666;">Candidatos envolvidos</strong></td></tr>`;
+        oHtml += `</tbody></table><table style="margin-top:4px;"><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
           <th style="background:${cor};">Tipo</th>
           <th style="background:${cor};">Inscrição</th>
           <th style="background:${cor};">Candidato</th>
           <th style="background:${cor};">Sala</th>
-          <th style="background:${cor};">Descrição / Observação</th>
+          <th style="background:${cor};">Descrição</th>
         </tr></thead><tbody>`;
-        cands.forEach(function(c, i){
-          var descObs = [c.desc, c.obs].filter(Boolean).join(' — ') || "—";
-          oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.tipo}</td><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.sala||"—"}</td><td>${descObs}</td></tr>`;
+        candsT.forEach(function(c,i){
+          var descSemObs = (c.desc||"").split(" | Obs:")[0] || "—";
+          oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.tipo}</td><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.sala||"—"}</td><td>${descSemObs}</td></tr>`;
         });
         oHtml += "</tbody></table>";
+      } else {
+        oHtml += "</tbody></table>";
       }
-      // Correções de dados (do CANDIDATOS)
-      const corrTurno = (e.correcoes||[]).filter(function(c){ return c.turno===o.turno; });
-      if (corrTurno.length > 0) {
+      // Correção de Dados
+      if (corrT.length > 0) {
         oHtml += `<div style="margin-top:14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#666;margin-bottom:4px;">Correção de Dados Cadastrais</div>
-          <table style="width:100%;"><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
+          <table><thead><tr style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:${cor};">
           <th style="background:${cor};">Inscrição</th>
           <th style="background:${cor};">Candidato</th>
           <th style="background:${cor};">Sala</th>
           <th style="background:${cor};">Campo</th>
           <th style="background:${cor};">Dado Correto</th>
         </tr></thead><tbody>`;
-        corrTurno.forEach(function(c, i){
-          oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.sala||"—"}</td><td>${c.campo||"—"}</td><td>${c.dadoCorreto||"—"}</td></tr>`;
-        });
+        corrT.forEach(function(c,i){ oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.sala||"—"}</td><td>${c.campo||"—"}</td><td>${c.dadoCorreto||"—"}</td></tr>`; });
         oHtml += "</tbody></table>";
       }
-      html += secao("Ocorrências — " + o.turno, cor, oHtml);
+      html += secao("Ocorrências — " + turno, cor, oHtml);
     });
 
     // Observações — ao final
