@@ -1134,13 +1134,13 @@ function renderFotosCategorias(turnosUnicos){
   const PALETA = ["#1F3A6E","#CF3432","#6A0DAD","#1E6B3B"];
   const cats = [];
   // Foto de sinalização — sem turno específico
-  cats.push({id:'fc_sinal', label:'📌 Sinalização do Local', turno:'', categoria:'Sinalização', cor:'#393939'});
+  cats.push({id:'fc_sinal', label:'📌 Sinalização do Local', turno:'', categoria:'Sinalização da Escola', cor:'#393939'});
   turnosUnicos.forEach(function(turno, idx){
     const cor = PALETA[idx % PALETA.length];
     const suf = turno.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
-    cats.push({id:'fc_aplic_'+suf,  label:'📝 Aplicação — '+turno,            turno, categoria:'Aplicação',           cor});
-    cats.push({id:'fc_abm_'+suf,    label:'📦 Abertura do Malote — '+turno,   turno, categoria:'Abertura do Malote',  cor});
-    cats.push({id:'fc_fchm_'+suf,   label:'📦 Fechamento do Malote — '+turno, turno, categoria:'Fechamento do Malote',cor});
+    cats.push({id:'fc_aplic_'+suf,  label:'📝 Andamento da Aplicação — '+turno, turno, categoria:'Andamento da Aplicação', cor});
+    cats.push({id:'fc_abm_'+suf,    label:'📦 Abertura do Malote — '+turno,     turno, categoria:'Abertura do Malote',     cor});
+    cats.push({id:'fc_fchm_'+suf,   label:'📦 Fechamento do Malote — '+turno,   turno, categoria:'Fechamento do Malote',   cor});
   });
 
   fotasCats = cats;

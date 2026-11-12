@@ -1131,15 +1131,22 @@ function abrirRelatorioImprimivel(dados) {
 
   // Por escola
   escolas.forEach(function(e, ei) {
-    html += `<div class="${ei > 0 ? 'page-break' : ''}">`;
+    html += `<div class="${ei > 0 ? 'page-break' : ''}" style="display:table;width:100%;table-layout:fixed;">`;
 
-    // Cabeçalho da escola
-    html += `<div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#2C2C2C;padding:16px 20px;border-radius:8px 8px 0 0;">
-      <p style="color:#CF3432;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">IBGP — Relatório de Aplicação de Prova</p>
-      <h1 style="color:#fff;font-size:17px;margin:0 0 4px;">${e.nome || "—"}</h1>
-      <p style="color:#bbb;font-size:11px;">${conc["Título do Concurso"]||""} &bull; ${conc["Data da Prova"]||""} &bull; ${conc["Edital"]||""}</p>
-    </div>
-    <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;height:4px;background:#CF3432;margin-bottom:16px;border-radius:0 0 4px 4px;"></div>`;
+    // Cabeçalho que repete em todas as páginas impressas (table-header-group)
+    html += `<div style="display:table-header-group;">
+      <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;background:#2C2C2C;padding:10px 20px;">
+        <p style="color:#CF3432;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;">IBGP — Relatório de Aplicação de Prova</p>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <strong style="color:#fff;font-size:14px;">${e.nome || "—"}</strong>
+          <span style="color:#bbb;font-size:10px;">${conc["Título do Concurso"]||""} &bull; ${conc["Data da Prova"]||""} &bull; ${conc["Edital"]||""}</span>
+        </div>
+      </div>
+      <div style="-webkit-print-color-adjust:exact;print-color-adjust:exact;height:3px;background:#CF3432;margin-bottom:12px;"></div>
+    </div>`;
+
+    // Conteúdo em table-row-group para o header repetir
+    html += `<div style="display:table-row-group;">`;
 
     // Identificação (sem obs)
     html += secao("Identificação", corH,
@@ -1257,7 +1264,8 @@ function abrirRelatorioImprimivel(dados) {
     }
 
     // Registro Fotográfico — sempre por último
-    const fotos = e.fotos || [];
+    const CAT_ALIAS = {"Sinalização":"Sinalização da Escola","Aplicação":"Andamento da Aplicação"};
+    const fotos = (e.fotos||[]).map(function(f){ return Object.assign({},f,{categoria:CAT_ALIAS[f.categoria]||f.categoria}); });
     if (fotos.length > 0) {
       const CAT_TURNO = ["Abertura do Malote", "Andamento da Aplicação", "Fechamento do Malote"];
       const fotosSinal  = fotos.filter(function(f){ return f.categoria === "Sinalização da Escola"; });
@@ -1307,12 +1315,15 @@ function abrirRelatorioImprimivel(dados) {
       IBGP — Sistema de Aplicação de Provas
     </div>`;
 
-    html += "</div>"; // fim escola
+    html += "</div>"; // fim table-row-group
+    html += "</div>"; // fim escola (table)
   });
 
   html += "</body></html>";
-  win.document.write(html);
-  win.document.close();
+  const _blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+  const _blobUrl = URL.createObjectURL(_blob);
+  win.location.assign(_blobUrl);
+  setTimeout(function(){ URL.revokeObjectURL(_blobUrl); }, 60000);
 }
 
 // ── Cache para relatórios individuais ────────────────────────────────
@@ -1719,8 +1730,9 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+='<p>Imagens coletadas pelos coordenadores locais durante a aplicação, documentando: Sinalização da Escola, Abertura do Malote, Andamento da Aplicação e Fechamento do Malote.</p>';
 
   var CAT_TURNO_G = ["Abertura do Malote","Andamento da Aplicação","Fechamento do Malote"];
+  var CAT_ALIAS_G = {"Sinalização":"Sinalização da Escola","Aplicação":"Andamento da Aplicação"};
   escolas.forEach(function(e, ei) {
-    var fotos = e.fotos || [];
+    var fotos = (e.fotos||[]).map(function(f){ return Object.assign({},f,{categoria:CAT_ALIAS_G[f.categoria]||f.categoria}); });
     html+='<div style="margin-bottom:28px;">';
     html+='<div style="'+PC+'background:'+corP+';color:#fff;padding:10px 18px;border-radius:6px 6px 0 0;">'
       +'<strong style="font-size:13px;">'+(ei+1)+'. '+e.nome+'</strong>'
