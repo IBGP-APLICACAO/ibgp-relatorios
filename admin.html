@@ -1452,26 +1452,29 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'td,th{word-break:normal;overflow-wrap:break-word;}'
     +'.card{background:#fff;border-radius:6px;border:1px solid #DDE3EE;margin-bottom:24px;overflow:hidden;}'
     +'.no-print{display:flex;}'
-    +'.phdr{display:none;}'
+    +'.rpt-hdr{display:none;}'
+    +'.pbsp{display:none;}'
     +'p{line-height:1.8;color:#444;font-size:13px;margin-bottom:12px;}'
     +'@media print{'
-    +'body{background:#fff;padding:14px;padding-top:68px;}'
+    +'body{background:#fff;padding:14px;}'
     +'.no-print{display:none!important;}'
     +'.pb{page-break-before:always;}'
+    +'.pbsp{display:none!important;}'
     +'tr{page-break-inside:avoid;break-inside:avoid;}'
     +'h2{page-break-after:avoid;break-after:avoid;}'
-    +'.phdr{display:flex!important;position:fixed;top:0;left:0;right:0;z-index:9999;'
-    +'background:transparent;padding:8px 20px 10px;'
-    +'justify-content:space-between;align-items:center;'
-    +'border-bottom:none;}'
+    +'.rpt-hdr{display:table-header-group!important;}'
     +'}'
     +'</style></head><body>'
-    +'<div class="phdr">'
+    +'<table style="width:100%;border-collapse:collapse;border-spacing:0;table-layout:fixed;">'
+    +'<thead class="rpt-hdr"><tr><th style="'+PC+'padding:8px 20px 10px;border-bottom:1px solid #ddd;text-align:left;font-weight:normal;">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;">'
     +'<img src="https://ibgp-aplicacao.github.io/ibgp-relatorios/ibgp-logo.png" style="height:40px;object-fit:contain;" alt="IBGP">'
     +'<div style="text-align:right;">'
     +'<div style="'+PC+'font-size:11px;font-weight:700;color:#2C2C2C;text-transform:uppercase;letter-spacing:.3px;">'+titulo+'</div>'
     +'<div style="'+PC+'font-size:10px;color:#555;margin-top:2px;">'+edital+' &nbsp;|&nbsp; '+dataProva+'</div>'
-    +'</div></div>';
+    +'</div></div>'
+    +'</th></tr></thead>'
+    +'<tbody><tr><td style="padding:0;vertical-align:top;">';
 
   // Barra (só tela)
   html+='<div class="no-print" style="'+PC+'background:'+corP+';padding:12px 20px;margin-bottom:20px;border-radius:8px;align-items:center;justify-content:flex-end;">'
@@ -1514,7 +1517,7 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'</div>';
 
   // ── 2. RESUMO EXECUTIVO (2ª página) ──
-  html+='<div class="pb">';
+  html+='<div class="pb"><div class="pbsp"></div>';
   html+=secH("2","Resumo Executivo");
 
   // Texto resumo
@@ -1585,7 +1588,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+='</div>'; // fecha div pb da seção 2
 
   // ── 3. LOCAIS DE APLICAÇÃO (3ª página) ──
-  html+='<div class="pb">';
+  html+='<div class="pb"><div class="pbsp"></div>';
   html+=secH("3","Locais de Aplicação");
   html+='<p>A tabela abaixo lista os '+n+' '+(n===1?"local":"locais")+' de aplicação das provas, com o número de salas utilizadas e a coordenação local responsável.</p>';
   html+='<div class="card"><table><thead><tr>'
@@ -1712,7 +1715,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+='</div>'; // fecha div pb da seção 3
 
   // ── 5. DETALHAMENTO OPERACIONAL POR LOCAL (nova página) ──
-  html+='<div class="pb">';
+  html+='<div class="pb"><div class="pbsp"></div>';
   html+=secH("5","Detalhamento Operacional por Local");
   html+='<p>Para cada local são apresentadas as informações operacionais e os quantitativos por cargo.</p>';
 
@@ -1827,35 +1830,6 @@ function abrirRelatorioGeral(dados, meta, win) {
         +'</tr></thead><tbody>';
       linhas.forEach(function(l,i){ html+='<tr><td '+tdZ(i)+'>'+l.tipo+'</td><td '+tdZ(i,"text-align:center;font-weight:700;")+'>'+l.qtd+'</td></tr>'; });
       html+='</tbody></table>';
-      // Detalhe dos candidatos
-      if (candsT.length > 0) {
-        html+='<div style="margin-top:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#666;margin-bottom:4px;">Candidatos envolvidos</div>'
-          +'<table><thead><tr>'
-          +'<th '+thS()+'>Tipo</th>'
-          +'<th '+thS()+'>Inscrição</th>'
-          +'<th '+thS()+'>Candidato</th>'
-          +'<th '+thS()+'>Sala</th>'
-          +'<th '+thS()+'>Descrição</th>'
-          +'</tr></thead><tbody>';
-        candsT.forEach(function(c,i){
-          var descSemObs = (c.desc||"").split(" | Obs:")[0] || "—";
-          html+='<tr><td '+tdZ(i)+'>'+c.tipo+'</td><td '+tdZ(i)+'>'+( c.inscricao||"—")+'</td><td '+tdZ(i)+'>'+( c.candidato||"—")+'</td><td '+tdZ(i)+'>'+( c.sala||"—")+'</td><td '+tdZ(i)+'>'+descSemObs+'</td></tr>';
-        });
-        html+='</tbody></table>';
-      }
-      // Correção de dados
-      if (corrT.length > 0) {
-        html+='<div style="margin-top:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#666;margin-bottom:4px;">Correção de Dados Cadastrais</div>'
-          +'<table><thead><tr>'
-          +'<th '+thS()+'>Inscrição</th>'
-          +'<th '+thS()+'>Candidato</th>'
-          +'<th '+thS()+'>Sala</th>'
-          +'<th '+thS()+'>Campo</th>'
-          +'<th '+thS()+'>Dado Correto</th>'
-          +'</tr></thead><tbody>';
-        corrT.forEach(function(c,i){ html+='<tr><td '+tdZ(i)+'>'+( c.inscricao||"—")+'</td><td '+tdZ(i)+'>'+( c.candidato||"—")+'</td><td '+tdZ(i)+'>'+( c.sala||"—")+'</td><td '+tdZ(i)+'>'+( c.campo||"—")+'</td><td '+tdZ(i)+'>'+( c.dadoCorreto||"—")+'</td></tr>'; });
-        html+='</tbody></table>';
-      }
       html+='</div></div>'; // fecha padding-div e seção de ocorrências
     });
 
@@ -1865,7 +1839,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+='</div>'; // fim div pb detalhamento
 
   // ── 6. REGISTRO FOTOGRÁFICO POR LOCAL ──
-  html+='<div class="pb">';
+  html+='<div class="pb"><div class="pbsp"></div>';
   html+=secH("6","Registro Fotográfico por Local");
   html+='<p>Imagens coletadas pelos coordenadores locais durante a aplicação, documentando: Sinalização da Escola, Abertura do Malote, Andamento da Aplicação e Fechamento do Malote.</p>';
 
@@ -1915,6 +1889,7 @@ function abrirRelatorioGeral(dados, meta, win) {
   });
 
   html+='</div>'; // fim pb sec5 fotos
+  html+='</td></tr></tbody></table>';
   html+='</body></html>';
   var _blob = new Blob([html], {type:'text/html;charset=utf-8'});
   var _blobUrl = URL.createObjectURL(_blob);
