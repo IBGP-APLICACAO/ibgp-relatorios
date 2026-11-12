@@ -1525,7 +1525,8 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'<p>A aplicação foi conduzida simultaneamente em <strong>'+n+'</strong> '+(n===1?"local":"locais")+', totalizando <strong>'+totSalas+'</strong> salas. Foram registrados <strong>'+totI+'</strong> candidatos inscritos, <strong>'+totP+'</strong> presentes ('+pctPres+') e <strong>'+totA+'</strong> ausentes ('+pctAus+').</p>'
     +'</div>';
 
-  // Indicadores Globais (tabela 2×4 como no Word)
+  // Indicadores Globais — sempre na 2ª página
+  html+='<div class="pb"><div class="pbsp"></div>';
   html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Indicadores Globais</p>';
   html+='<div class="card" style="margin-bottom:28px;overflow:hidden;"><table><tbody>'
     +'<tr>'+indCard(n,"Locais de Aplicação","#1F3A6E")+indCard(nCargos,"Cargos","#2563EB")+indCard(totSalas,"Salas Utilizadas","#0E7490")+indCard(totI,"Candidatos Inscritos","#065F46")+'</tr>'
@@ -1566,8 +1567,10 @@ function abrirRelatorioGeral(dados, meta, win) {
     html+='<tr><td colspan="4" '+td()+' style="text-align:center;color:#999;">Dados insuficientes</td></tr>';
   }
   html+='</tbody></table></div>';
+  html+='</div>'; // fecha div pb página 2 (indicadores + tops)
 
-  // Procedimentos Padronizados — sempre em 1 página (não quebra)
+  // ── PÁGINA 3: Procedimentos + Locais ──
+  html+='<div class="pb"><div class="pbsp"></div>';
   html+='<div style="page-break-inside:avoid;break-inside:avoid;">';
   html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Procedimentos Padronizados — Aplicados em Todos os Locais</p>';
   html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corR+';">'
@@ -1586,9 +1589,7 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'</ol></div>';
   html+='</div>'; // fecha div page-break-inside:avoid dos procedimentos
 
-
-  // ── 3. LOCAIS DE APLICAÇÃO (3ª página) ──
-  html+='<div class="pb"><div class="pbsp"></div>';
+  // ── 3. LOCAIS DE APLICAÇÃO (mesma página 3) ──
   html+=secH("3","Locais de Aplicação");
   html+='<p>A tabela abaixo lista os '+n+' '+(n===1?"local":"locais")+' de aplicação das provas, com o número de salas utilizadas e a coordenação local responsável.</p>';
   html+='<div class="card"><table><thead><tr>'
@@ -1607,7 +1608,11 @@ function abrirRelatorioGeral(dados, meta, win) {
     [totSalas,"text-align:center;"],
     [n+(n===1?" coordenador":" coordenadores"),""]
   ]);
-  html+='</tbody></table></div></div>';
+  html+='</tbody></table></div>';
+  html+='</div>'; // fecha div pb página 3 (procedimentos + locais)
+
+  // ── PÁGINA 4: Quadro por Cargo + Resultado ──
+  html+='<div class="pb"><div class="pbsp"></div>';
 
   // ── 4. QUADRO CONSOLIDADO POR CARGO ──
   html+=secH("4","Quadro Consolidado por Cargo");
@@ -1750,7 +1755,7 @@ function abrirRelatorioGeral(dados, meta, win) {
     html+='</div>';
   });
 
-  html+='</div>'; // fecha div pb da seção 3
+  html+='</div>'; // fecha div pb página 4 (cargo + resultado)
 
   // ── 6. DETALHAMENTO OPERACIONAL POR LOCAL (nova página) ──
   html+='<div class="pb"><div class="pbsp"></div>';
