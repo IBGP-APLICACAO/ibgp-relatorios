@@ -63,13 +63,6 @@
     "script_url": "https://script.google.com/macros/s/AKfycbyg-BmHUIqNUBCetADjFrL0STPhaHRgJupOL8p8wNWRzBlCz2axHNNBGhZ8W9FtqI_pDg/exec"
   },
   {
-    "id": "tombos-2026-09-25",
-    "titulo": "PROCESSO SELETIVO PÚBLICO DO MUNICÍPIO DE TOMBOS/MG",
-    "edital": "Edital nº 02/2026",
-    "data": "25 de setembro de 2026",
-    "script_url": "https://script.google.com/macros/s/AKfycbypBkaj3E0VcD-b_t5s8nep1rXJVjUxcXjAKgxKNEoXNFg2e5h9FKXjk48Vhqrv__fUPw/exec"
-  },
-  {
     "id": "faria-lemos-2026-09-25",
     "titulo": "PROCESSO SELETIVO PÚBLICO DO MUNICÍPIO DE FARIA LEMOS/MG",
     "edital": "Edital nº 02/2026",
@@ -103,5 +96,12 @@
     "edital": "Edital nº 01/2026",
     "data": "31 de outubro de 2026",
     "script_url": "https://script.google.com/macros/s/AKfycbwS8t6Z6iy50QNhtnJRx7cVnp2S-6j5Yw6ZaeKBuxuBJ3Zoqaglpau3IHeJmOhaWjopZw/exec"
+  },
+  {
+    "id": "tombos-2026-09-25",
+    "titulo": "PROCESSO SELETIVO PÚBLICO DO MUNICÍPIO DE TOMBOS/MG",
+    "edital": "Edital nº 02/2026",
+    "data": "25 de setembro de 2026",
+    "script_url": "https://script.google.com/macros/s/AKfycbypBkaj3E0VcD-b_t5s8nep1rXJVjUxcXjAKgxKNEoXNFg2e5h9FKXjk48Vhqrv__fUPw/exec"
   }
 ]
