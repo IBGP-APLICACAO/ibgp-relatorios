@@ -627,15 +627,36 @@ function processarPlanilha(wb, nomeArquivo) {
 
   // ── Helpers de turno a partir da planilha ──
   const DIAS_PT_SEMANA = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
-  function diaNomeXLSX(dataStr) {
-    if (!dataStr) return "";
-    const p = dataStr.trim().split("/");
+
+  // Converte valor de célula de data (Date object, serial, ou "DD/MM/YYYY") em objeto Date
+  function celToDate(val) {
+    if (!val) return null;
+    if (val instanceof Date) return val;
+    const s = String(val).trim();
+    // formato "DD/MM/YYYY"
+    const p = s.split("/");
     if (p.length === 3) {
       const d = new Date(Number(p[2]), Number(p[1])-1, Number(p[0]));
-      if (!isNaN(d.getTime())) return DIAS_PT_SEMANA[d.getDay()];
+      if (!isNaN(d.getTime())) return d;
     }
-    return "";
+    // outros formatos
+    const d2 = new Date(s);
+    return isNaN(d2.getTime()) ? null : d2;
   }
+
+  function diaNomeXLSX(val) {
+    const d = celToDate(val);
+    if (!d) return "";
+    return DIAS_PT_SEMANA[d.getDay()];
+  }
+
+  // Chave canônica de data para detectar multi-dia
+  function dataKeyXLSX(val) {
+    const d = celToDate(val);
+    if (!d) return "";
+    return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+  }
+
   function periodoNome(raw) {
     const u = (raw||"").toUpperCase().trim();
     if (u.includes("MANH")) return "Manhã";
@@ -647,8 +668,8 @@ function processarPlanilha(wb, nomeArquivo) {
   // Pré-passo: detecta se há mais de uma data de prova (concurso multi-dia)
   const datasUnicas = new Set();
   for (let i = 1; i < linhas.length; i++) {
-    const d = String(linhas[i][iDataProva] || "").trim();
-    if (d) datasUnicas.add(d);
+    const k = dataKeyXLSX(linhas[i][iDataProva]);
+    if (k) datasUnicas.add(k);
   }
   const multiDia = datasUnicas.size > 1;
 
@@ -669,14 +690,14 @@ function processarPlanilha(wb, nomeArquivo) {
     const r = linhas[i];
     const escola = String(r[iEscola] || "").trim();
     if (!escola) continue;
-    const sala      = String(r[iSala]      || "").trim();
-    const turnoRaw  = String(r[iTurno]     || "").trim();
-    const dataStr   = String(r[iDataProva] || "").trim();
-    const cargo     = String(r[iCargo]     || "").trim();
+    const sala      = String(r[iSala]  || "").trim();
+    const turnoRaw  = String(r[iTurno] || "").trim();
+    const dataVal   = r[iDataProva];          // Date object ou string — não converter!
+    const cargo     = String(r[iCargo] || "").trim();
     if (!sala || !turnoRaw || !cargo) continue;
 
     const periodo      = periodoNome(turnoRaw);
-    const turnoDisplay = multiDia ? (diaNomeXLSX(dataStr) + " " + periodo) : periodo;
+    const turnoDisplay = multiDia ? (diaNomeXLSX(dataVal) + " " + periodo) : periodo;
 
     if (!escMap[escola]) escMap[escola] = {cargosMap:{}, candidatos:0};
     escMap[escola].candidatos++;
