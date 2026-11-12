@@ -1410,7 +1410,7 @@ function abrirRelatorioGeral(dados, meta, win) {
     });
     e._tot = {ins:eI, pre:eP, aus:eA, inc:eIn};
     e._cargoMaiorAus = melhorCargo;
-    e._hasOcorr = (e.ocorrencias||[]).some(function(o){ return Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0||o.corr==="Sim"; }) || (e.correcoes||[]).length>0;
+    e._hasOcorr = (e.ocorrencias||[]).some(function(o){ return o.sala==="Sim"||o.cond==="Sim"||o.toque==="Sim"||o.decl==="Sim"||o.corr==="Sim"||Number(o.sala)>0||Number(o.cond)>0||Number(o.toque)>0||Number(o.decl)>0; }) || (e.correcoes||[]).length>0 || (e.candidatos||[]).length>0;
   });
 
   function pct(a,b){ return b>0?(a/b*100).toFixed(1)+"%":"—"; }
@@ -1782,6 +1782,83 @@ function abrirRelatorioGeral(dados, meta, win) {
       [pct(eCA,eCI),"text-align:center;"]
     ]);
     html+='</tbody></table></div>';
+
+    // ── Ocorrências por turno ──
+    var turnosOcorr = [...new Set([
+      ...(e.ocorrencias||[]).map(function(o){return o.turno;}),
+      ...(e.candidatos||[]).map(function(c){return c.turno;}),
+      ...(e.correcoes||[]).map(function(c){return c.turno;})
+    ].filter(Boolean))];
+    turnosOcorr = sortTurnos(turnosOcorr);
+    turnosOcorr.forEach(function(turno) {
+      var corTOcorr = corDoTurno(turno);
+      var oRec = (e.ocorrencias||[]).find(function(x){ return x.turno===turno; }) || {};
+      var candsT = (e.candidatos||[]).filter(function(c){ return c.turno===turno; });
+      var corrT  = (e.correcoes||[]).filter(function(c){ return c.turno===turno; });
+      var TIPO_LABEL_G = {
+        "Ocorrências em sala":"Ocorrências em sala",
+        "Prova condicional":"Prova condicional",
+        "Toque de celular":"Toque de celular",
+        "Declaração de comparecimento":"Declaração de comparecimento"
+      };
+      var linhas = [];
+      Object.keys(TIPO_LABEL_G).forEach(function(tipo) {
+        var qtd = candsT.filter(function(c){ return c.tipo===tipo; }).length;
+        var campoMap = {
+          "Ocorrências em sala": oRec.sala,
+          "Prova condicional": oRec.cond,
+          "Toque de celular": oRec.toque,
+          "Declaração de comparecimento": oRec.decl
+        };
+        var campo = campoMap[tipo];
+        if (qtd === 0 && campo === "Sim") qtd = 1;
+        if (qtd > 0 || campo === "Sim") linhas.push({tipo: TIPO_LABEL_G[tipo], qtd: qtd||1});
+      });
+      if (corrT.length > 0) linhas.push({tipo:"Correção de Dados Cadastrais", qtd: corrT.length});
+      if (linhas.length === 0 && candsT.length === 0) return;
+      // Cabeçalho da seção de ocorrências
+      html+='<div style="margin-top:16px;">'
+        +'<div style="'+PC+'background:'+corTOcorr+';color:#fff;padding:7px 14px;border-radius:4px 4px 0 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Ocorrências — '+turno+'</div>'
+        +'<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 4px 4px;overflow:hidden;padding:12px 14px;">';
+      // Tabela de contagem
+      html+='<table style="margin-bottom:0;"><thead><tr>'
+        +'<th '+thS()+'>Tipo de Ocorrência</th>'
+        +'<th '+thS("text-align:center;width:100px;")+'>Quantidade</th>'
+        +'</tr></thead><tbody>';
+      linhas.forEach(function(l,i){ html+='<tr><td '+tdZ(i)+'>'+l.tipo+'</td><td '+tdZ(i,"text-align:center;font-weight:700;")+'>'+l.qtd+'</td></tr>'; });
+      html+='</tbody></table>';
+      // Detalhe dos candidatos
+      if (candsT.length > 0) {
+        html+='<div style="margin-top:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#666;margin-bottom:4px;">Candidatos envolvidos</div>'
+          +'<table><thead><tr>'
+          +'<th '+thS()+'>Tipo</th>'
+          +'<th '+thS()+'>Inscrição</th>'
+          +'<th '+thS()+'>Candidato</th>'
+          +'<th '+thS()+'>Sala</th>'
+          +'<th '+thS()+'>Descrição</th>'
+          +'</tr></thead><tbody>';
+        candsT.forEach(function(c,i){
+          var descSemObs = (c.desc||"").split(" | Obs:")[0] || "—";
+          html+='<tr><td '+tdZ(i)+'>'+c.tipo+'</td><td '+tdZ(i)+'>'+( c.inscricao||"—")+'</td><td '+tdZ(i)+'>'+( c.candidato||"—")+'</td><td '+tdZ(i)+'>'+( c.sala||"—")+'</td><td '+tdZ(i)+'>'+descSemObs+'</td></tr>';
+        });
+        html+='</tbody></table>';
+      }
+      // Correção de dados
+      if (corrT.length > 0) {
+        html+='<div style="margin-top:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#666;margin-bottom:4px;">Correção de Dados Cadastrais</div>'
+          +'<table><thead><tr>'
+          +'<th '+thS()+'>Inscrição</th>'
+          +'<th '+thS()+'>Candidato</th>'
+          +'<th '+thS()+'>Sala</th>'
+          +'<th '+thS()+'>Campo</th>'
+          +'<th '+thS()+'>Dado Correto</th>'
+          +'</tr></thead><tbody>';
+        corrT.forEach(function(c,i){ html+='<tr><td '+tdZ(i)+'>'+( c.inscricao||"—")+'</td><td '+tdZ(i)+'>'+( c.candidato||"—")+'</td><td '+tdZ(i)+'>'+( c.sala||"—")+'</td><td '+tdZ(i)+'>'+( c.campo||"—")+'</td><td '+tdZ(i)+'>'+( c.dadoCorreto||"—")+'</td></tr>'; });
+        html+='</tbody></table>';
+      }
+      html+='</div></div>'; // fecha padding-div e seção de ocorrências
+    });
+
     html+='</div>'; // fim local
   });
 
