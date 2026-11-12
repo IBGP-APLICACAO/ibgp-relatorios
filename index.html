@@ -733,15 +733,15 @@ function addOcorrItem(listId, prefix){
     '<option value="outros">Outros</option>' +
     '</select>' +
     '<div class="ocorr-fields hidden" data-tipo="folha_falt" style="margin-top:6px;">'+ENTRY+'</div>' +
-    '<div class="ocorr-fields hidden" data-tipo="banheiro" style="margin-top:6px;">'+ENTRY+'</div>' +
+    '<div class="ocorr-fields hidden" data-tipo="banheiro" style="margin-top:6px;">'+ENTRY+'<textarea rows="2" placeholder="Observação / motivo da saída antes do sigilo..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea></div>' +
     '<div class="ocorr-fields hidden" data-tipo="fiscal_cand" style="margin-top:6px;">'+ENTRY+'</div>' +
     '<div class="ocorr-fields hidden" data-tipo="cand_fiscal" style="margin-top:6px;">'+ENTRY+'</div>' +
     '<div class="ocorr-fields hidden" data-tipo="test_fiscal" style="margin-top:6px;">'+ENTRY+'</div>' +
-    '<div class="ocorr-fields hidden" data-tipo="cond_esp" style="margin-top:6px;"><div style="margin-bottom:6px;"><label style="font-size:12px;font-weight:600;">Nome da ata reserva:</label><input type="text" placeholder="Nome da ata reserva" style="display:block;width:100%;margin-top:3px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div>'+ENTRY+'</div>' +
+    '<div class="ocorr-fields hidden" data-tipo="cond_esp" style="margin-top:6px;"><div style="margin-bottom:6px;"><label style="font-size:12px;font-weight:600;">Nome da ata reserva:</label><input type="text" placeholder="Nome da ata reserva" style="display:block;width:100%;margin-top:3px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div>'+ENTRY+'<textarea rows="2" placeholder="Observação / motivo da condição especial..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea></div>' +
     '<div class="ocorr-fields hidden" data-tipo="folha_imp" style="margin-top:6px;"><div style="font-size:12px;color:#333;margin-bottom:6px;"><strong>Utilizou folha de resposta reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_imp_r_'+uid+'" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_imp_r_'+uid+'" value="Não"> Não</label></div>'+ENTRY+'</div>' +
     '<div class="ocorr-fields hidden" data-tipo="folha_erro" style="margin-top:6px;"><div style="font-size:11px;font-weight:700;color:#7A1A1A;margin-bottom:4px;text-transform:uppercase;">Candidato correto</div>'+ENTRY+'<div style="font-size:11px;font-weight:700;color:#7A1A1A;margin:6px 0 4px;text-transform:uppercase;">Candidato incorreto (utilizou a folha)</div>'+ENTRY+'<div style="margin-top:8px;font-size:12px;color:#333;"><strong>Utilizou folha reserva?</strong><label style="margin-left:10px;cursor:pointer;"><input type="radio" name="folha_r_'+uid+'" value="Sim"> Sim</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="folha_r_'+uid+'" value="Não"> Não</label></div></div>' +
     '<div class="ocorr-fields hidden" data-tipo="errata" style="margin-top:6px;"><div style="display:flex;gap:8px;margin-bottom:6px;"><input type="text" placeholder="Questão(ões)" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Cargo" style="flex:2;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div><textarea rows="2" placeholder="Descrição da errata..." style="width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea></div>' +
-    '<div class="ocorr-fields hidden" data-tipo="pacote_danif" style="margin-top:6px;"><div style="display:flex;gap:8px;"><input type="text" placeholder="Nº do novo pacote" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Sala" style="width:80px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div></div>' +
+    '<div class="ocorr-fields hidden" data-tipo="pacote_danif" style="margin-top:6px;"><div style="display:flex;gap:8px;margin-bottom:6px;"><input type="text" placeholder="Nº do novo pacote" style="flex:1;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"><input type="text" placeholder="Sala" style="width:80px;padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;"></div><textarea rows="2" placeholder="Observação / motivo do pacote danificado..." style="width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea></div>' +
     '<div class="ocorr-fields hidden" data-tipo="outros" style="margin-top:6px;"><div style="font-size:12px;color:#555;margin-bottom:6px;">Tipo:<label style="margin-left:8px;cursor:pointer;"><input type="radio" name="ou_'+uid+'" value="sala" checked onchange="toggleOutrosCand(this)"> Sala toda</label><label style="margin-left:8px;cursor:pointer;"><input type="radio" name="ou_'+uid+'" value="cand" onchange="toggleOutrosCand(this)"> Candidato específico</label></div><div class="outros-cand-fields" style="display:none;">'+ENTRY+'</div><textarea rows="2" placeholder="Descreva a ocorrência..." style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;resize:vertical;"></textarea></div>';
   list.appendChild(wrap);
 }
@@ -763,13 +763,17 @@ function coletarTiposOcorr(prefix){
       return {inscricao:(ins[0]?.value||'').trim(), candidato:(ins[1]?.value||'').trim(), sala:(ins[2]?.value||'').trim()};
     }
     const item = {tipo};
-    const simples = ['folha_falt','banheiro','fiscal_cand','cand_fiscal','test_fiscal'];
+    const simples = ['folha_falt','fiscal_cand','cand_fiscal','test_fiscal'];
     if(simples.includes(tipo)){
       Object.assign(item, eR(0));
+    } else if(tipo === 'banheiro'){
+      Object.assign(item, eR(0));
+      item.obs = fields.querySelector('textarea')?.value.trim()||'';
     } else if(tipo === 'cond_esp'){
       const ataIn = fields.querySelector('input[placeholder="Nome da ata reserva"]');
       item.ata_reserva = ataIn ? ataIn.value.trim() : '';
       Object.assign(item, eR(0));
+      item.obs = fields.querySelector('textarea')?.value.trim()||'';
     } else if(tipo === 'folha_imp'){
       const r = fields.querySelector('input[type="radio"]:checked');
       item.folha_reserva = r ? r.value : '';
@@ -788,6 +792,7 @@ function coletarTiposOcorr(prefix){
       const ins = fields.querySelectorAll('input[type="text"]');
       item.novo_pacote = ins[0]?.value.trim()||'';
       item.sala = ins[1]?.value.trim()||'';
+      item.obs = fields.querySelector('textarea')?.value.trim()||'';
     } else if(tipo === 'outros'){
       const r = fields.querySelector('input[type="radio"]:checked');
       item.escopo = r ? r.value : 'sala';
@@ -1138,6 +1143,8 @@ function renderFotosCategorias(turnosUnicos){
   turnosUnicos.forEach(function(turno, idx){
     const cor = PALETA[idx % PALETA.length];
     const suf = turno.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+    cats.push({id:'fc_abp_'+suf,    label:'🚪 Abertura do Portão — '+turno,     turno, categoria:'Abertura do Portão',     cor});
+    cats.push({id:'fc_fchp_'+suf,   label:'🚪 Fechamento do Portão — '+turno,   turno, categoria:'Fechamento do Portão',   cor});
     cats.push({id:'fc_aplic_'+suf,  label:'📝 Andamento da Aplicação — '+turno, turno, categoria:'Andamento da Aplicação', cor});
     cats.push({id:'fc_abm_'+suf,    label:'📦 Abertura do Malote — '+turno,     turno, categoria:'Abertura do Malote',     cor});
     cats.push({id:'fc_fchm_'+suf,   label:'📦 Fechamento do Malote — '+turno,   turno, categoria:'Fechamento do Malote',   cor});

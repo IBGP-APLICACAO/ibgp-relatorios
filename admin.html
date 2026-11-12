@@ -1230,10 +1230,11 @@ function abrirRelatorioImprimivel(dados) {
           <th style="background:${cor};">Inscrição</th>
           <th style="background:${cor};">Candidato</th>
           <th style="background:${cor};">Sala</th>
-          <th style="background:${cor};">Descrição</th>
+          <th style="background:${cor};">Descrição / Observação</th>
         </tr></thead><tbody>`;
         cands.forEach(function(c, i){
-          oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.tipo}</td><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.sala||"—"}</td><td>${c.desc||"—"}</td></tr>`;
+          var descObs = [c.desc, c.obs].filter(Boolean).join(' — ') || "—";
+          oHtml+=`<tr class="${i%2===1?'alt':''}"><td>${c.tipo}</td><td>${c.inscricao||"—"}</td><td>${c.candidato||"—"}</td><td>${c.sala||"—"}</td><td>${descObs}</td></tr>`;
         });
         oHtml += "</tbody></table>";
       }
@@ -1267,7 +1268,7 @@ function abrirRelatorioImprimivel(dados) {
     const CAT_ALIAS = {"Sinalização":"Sinalização da Escola","Aplicação":"Andamento da Aplicação"};
     const fotos = (e.fotos||[]).map(function(f){ return Object.assign({},f,{categoria:CAT_ALIAS[f.categoria]||f.categoria}); });
     if (fotos.length > 0) {
-      const CAT_TURNO = ["Abertura do Malote", "Andamento da Aplicação", "Fechamento do Malote"];
+      const CAT_TURNO = ["Abertura do Portão", "Fechamento do Portão", "Andamento da Aplicação", "Abertura do Malote", "Fechamento do Malote"];
       const fotosSinal  = fotos.filter(function(f){ return f.categoria === "Sinalização da Escola"; });
       const fotosComTurno = fotos.filter(function(f){ return f.categoria !== "Sinalização da Escola"; });
       const turnosFoto = [...new Set(fotosComTurno.map(function(f){ return f.turno||""; }).filter(Boolean))];
@@ -1729,8 +1730,8 @@ function abrirRelatorioGeral(dados, meta, win) {
   html+=secH("6","Registro Fotográfico por Local");
   html+='<p>Imagens coletadas pelos coordenadores locais durante a aplicação, documentando: Sinalização da Escola, Abertura do Malote, Andamento da Aplicação e Fechamento do Malote.</p>';
 
-  var CAT_TURNO_G = ["Abertura do Malote","Andamento da Aplicação","Fechamento do Malote"];
-  var CAT_ALIAS_G = {"Sinalização":"Sinalização da Escola","Aplicação":"Andamento da Aplicação"};
+  var CAT_TURNO_G = ["Abertura do Portão","Fechamento do Portão","Andamento da Aplicação","Abertura do Malote","Fechamento do Malote"];
+  var CAT_ALIAS_G = {"Sinalização":"Sinalização da Escola","Aplicação":"Andamento da Aplicação","Abertura Portão":"Abertura do Portão","Fechamento Portão":"Fechamento do Portão"};
   escolas.forEach(function(e, ei) {
     var fotos = (e.fotos||[]).map(function(f){ return Object.assign({},f,{categoria:CAT_ALIAS_G[f.categoria]||f.categoria}); });
     html+='<div style="margin-bottom:28px;">';
