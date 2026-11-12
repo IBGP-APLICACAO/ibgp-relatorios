@@ -1568,7 +1568,8 @@ function abrirRelatorioGeral(dados, meta, win) {
   }
   html+='</tbody></table></div>';
 
-  // Procedimentos Padronizados
+  // Procedimentos Padronizados — sempre em 1 página (não quebra)
+  html+='<div style="page-break-inside:avoid;break-inside:avoid;">';
   html+='<p style="font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Procedimentos Padronizados — Aplicados em Todos os Locais</p>';
   html+='<div class="card" style="padding:24px 28px;border-left:5px solid '+corR+';">'
     +'<ol style="padding-left:20px;font-size:13px;line-height:2.2;color:#333;">'
@@ -1584,6 +1585,7 @@ function abrirRelatorioGeral(dados, meta, win) {
     +'<li>Fechamento e lacre dos malotes com folhas de respostas, sob testemunho dos coordenadores locais.</li>'
     +'<li>Encaminhamento de formulários, atas e malotes à coordenação logística.</li>'
     +'</ol></div>';
+  html+='</div>'; // fecha div page-break-inside:avoid dos procedimentos
 
   html+='</div>'; // fecha div pb da seção 2
 
@@ -1712,11 +1714,49 @@ function abrirRelatorioGeral(dados, meta, win) {
   ]);
   html+='</tbody></table></div></div>';
 
+  // ── Ocorrências por local (dentro da seção 5) ──
+  escolas.forEach(function(e) {
+    if (!e._hasOcorr) return;
+    var turnosOcorrS5 = sortTurnos([...new Set([
+      ...(e.ocorrencias||[]).map(function(o){return o.turno;}),
+      ...(e.candidatos||[]).map(function(c){return c.turno;}),
+      ...(e.correcoes||[]).map(function(c){return c.turno;})
+    ].filter(Boolean))]);
+    if (turnosOcorrS5.length === 0) return;
+    html+='<div style="page-break-inside:avoid;break-inside:avoid;margin-top:12px;">';
+    if (escolas.length > 1) html+='<div style="font-size:12px;font-weight:700;color:'+corP+';margin:12px 0 6px;">'+e.nome+'</div>';
+    turnosOcorrS5.forEach(function(turno) {
+      var corTOcorrS5 = corDoTurno(turno);
+      var oRecS5 = (e.ocorrencias||[]).find(function(x){ return x.turno===turno; }) || {};
+      var candsTurnoS5 = (e.candidatos||[]).filter(function(c){ return c.turno===turno; });
+      var corrTurnoS5  = (e.correcoes||[]).filter(function(c){ return c.turno===turno; });
+      var linhasS5 = [];
+      var TIPO_LABEL_S5 = {"Ocorrências em sala":"Ocorrências em sala","Prova condicional":"Prova condicional","Toque de celular":"Toque de celular","Declaração de comparecimento":"Declaração de comparecimento"};
+      Object.keys(TIPO_LABEL_S5).forEach(function(tipo) {
+        var qtd = candsTurnoS5.filter(function(c){ return c.tipo===tipo; }).length;
+        var campo = {"Ocorrências em sala":oRecS5.sala,"Prova condicional":oRecS5.cond,"Toque de celular":oRecS5.toque,"Declaração de comparecimento":oRecS5.decl}[tipo];
+        if (qtd === 0 && campo === "Sim") qtd = 1;
+        if (qtd > 0 || campo === "Sim") linhasS5.push({tipo:TIPO_LABEL_S5[tipo], qtd:qtd||1});
+      });
+      if (corrTurnoS5.length > 0) linhasS5.push({tipo:"Correção de Dados Cadastrais", qtd:corrTurnoS5.length});
+      if (linhasS5.length === 0 && candsTurnoS5.length === 0) return;
+      html+='<div style="margin-top:8px;"><div style="'+PC+'background:'+corTOcorrS5+';color:#fff;padding:7px 14px;border-radius:4px 4px 0 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Ocorrências — '+turno+'</div>'
+        +'<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 4px 4px;overflow:hidden;">'
+        +'<table style="margin:0;"><thead><tr>'
+        +'<th '+thS()+'>Tipo de Ocorrência</th>'
+        +'<th '+thS("text-align:center;width:100px;")+'>Quantidade</th>'
+        +'</tr></thead><tbody>';
+      linhasS5.forEach(function(l,i){ html+='<tr><td '+tdZ(i)+'>'+l.tipo+'</td><td '+tdZ(i,"text-align:center;font-weight:700;")+'>'+l.qtd+'</td></tr>'; });
+      html+='</tbody></table></div></div>';
+    });
+    html+='</div>';
+  });
+
   html+='</div>'; // fecha div pb da seção 3
 
-  // ── 5. DETALHAMENTO OPERACIONAL POR LOCAL (nova página) ──
+  // ── 6. DETALHAMENTO OPERACIONAL POR LOCAL (nova página) ──
   html+='<div class="pb"><div class="pbsp"></div>';
-  html+=secH("5","Detalhamento Operacional por Local");
+  html+=secH("6","Detalhamento Operacional por Local");
   html+='<p>Para cada local são apresentadas as informações operacionais e os quantitativos por cargo.</p>';
 
   escolas.forEach(function(e,ei){
@@ -1786,61 +1826,14 @@ function abrirRelatorioGeral(dados, meta, win) {
     ]);
     html+='</tbody></table></div>';
 
-    // ── Ocorrências por turno ──
-    var turnosOcorr = [...new Set([
-      ...(e.ocorrencias||[]).map(function(o){return o.turno;}),
-      ...(e.candidatos||[]).map(function(c){return c.turno;}),
-      ...(e.correcoes||[]).map(function(c){return c.turno;})
-    ].filter(Boolean))];
-    turnosOcorr = sortTurnos(turnosOcorr);
-    turnosOcorr.forEach(function(turno) {
-      var corTOcorr = corDoTurno(turno);
-      var oRec = (e.ocorrencias||[]).find(function(x){ return x.turno===turno; }) || {};
-      var candsT = (e.candidatos||[]).filter(function(c){ return c.turno===turno; });
-      var corrT  = (e.correcoes||[]).filter(function(c){ return c.turno===turno; });
-      var TIPO_LABEL_G = {
-        "Ocorrências em sala":"Ocorrências em sala",
-        "Prova condicional":"Prova condicional",
-        "Toque de celular":"Toque de celular",
-        "Declaração de comparecimento":"Declaração de comparecimento"
-      };
-      var linhas = [];
-      Object.keys(TIPO_LABEL_G).forEach(function(tipo) {
-        var qtd = candsT.filter(function(c){ return c.tipo===tipo; }).length;
-        var campoMap = {
-          "Ocorrências em sala": oRec.sala,
-          "Prova condicional": oRec.cond,
-          "Toque de celular": oRec.toque,
-          "Declaração de comparecimento": oRec.decl
-        };
-        var campo = campoMap[tipo];
-        if (qtd === 0 && campo === "Sim") qtd = 1;
-        if (qtd > 0 || campo === "Sim") linhas.push({tipo: TIPO_LABEL_G[tipo], qtd: qtd||1});
-      });
-      if (corrT.length > 0) linhas.push({tipo:"Correção de Dados Cadastrais", qtd: corrT.length});
-      if (linhas.length === 0 && candsT.length === 0) return;
-      // Cabeçalho da seção de ocorrências
-      html+='<div style="margin-top:16px;">'
-        +'<div style="'+PC+'background:'+corTOcorr+';color:#fff;padding:7px 14px;border-radius:4px 4px 0 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Ocorrências — '+turno+'</div>'
-        +'<div style="border:1px solid #DDE3EE;border-top:none;border-radius:0 0 4px 4px;overflow:hidden;padding:12px 14px;">';
-      // Tabela de contagem
-      html+='<table style="margin-bottom:0;"><thead><tr>'
-        +'<th '+thS()+'>Tipo de Ocorrência</th>'
-        +'<th '+thS("text-align:center;width:100px;")+'>Quantidade</th>'
-        +'</tr></thead><tbody>';
-      linhas.forEach(function(l,i){ html+='<tr><td '+tdZ(i)+'>'+l.tipo+'</td><td '+tdZ(i,"text-align:center;font-weight:700;")+'>'+l.qtd+'</td></tr>'; });
-      html+='</tbody></table>';
-      html+='</div></div>'; // fecha padding-div e seção de ocorrências
-    });
-
     html+='</div>'; // fim local
   });
 
   html+='</div>'; // fim div pb detalhamento
 
-  // ── 6. REGISTRO FOTOGRÁFICO POR LOCAL ──
+  // ── 7. REGISTRO FOTOGRÁFICO POR LOCAL ──
   html+='<div class="pb"><div class="pbsp"></div>';
-  html+=secH("6","Registro Fotográfico por Local");
+  html+=secH("7","Registro Fotográfico por Local");
   html+='<p>Imagens coletadas pelos coordenadores locais durante a aplicação, documentando: Sinalização da Escola, Abertura do Malote, Andamento da Aplicação e Fechamento do Malote.</p>';
 
   var CAT_TURNO_G = ["Abertura do Portão","Fechamento do Portão","Andamento da Aplicação","Abertura do Malote","Fechamento do Malote"];
