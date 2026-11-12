@@ -49,13 +49,6 @@
     "script_url": "https://script.google.com/macros/s/AKfycbyqH6TPvlvmscpfvXDzfVeGMwX4y6CUJn8FOVWIRYH2C8Oi1rs9sGjuYgTgkT1yRRZb/exec"
   },
   {
-    "id": "capitao-andrade-2026-10-10",
-    "titulo": "PROCESSO SELETIVO PÚBLICO DO MUNICÍPIO DE CAPITÃO ANDRADE/MG",
-    "edital": "Edital nº 02/2026",
-    "data": "10 de outubro de 2026",
-    "script_url": "https://script.google.com/macros/s/AKfycbxVc4ElsC1DPXU2nwkUADwp8KoJx_QWjPbQ2a9YCk0wvM54xc1ayLz_QF-GaSj00xY7/exec"
-  },
-  {
     "id": "paracatu-2026-10-10",
     "titulo": "CONCURSO PÚBLICO DO MUNICÍPIO DE PARACATU/MG",
     "edital": "Edital nº 02/2026",
@@ -103,5 +96,12 @@
     "edital": "Edital nº 02/2026",
     "data": "10 de outubro de 2026",
     "script_url": "https://script.google.com/macros/s/AKfycbxLVXbcNVoTI9dtvBc0ByXABVja9QEaqUf29N4hgYXCWCYAG8xMB4MmNfXa5kklJo08fw/exec"
+  },
+  {
+    "id": "capitao-andrade-2026-10-10",
+    "titulo": "PROCESSO SELETIVO PÚBLICO DO MUNICÍPIO DE CAPITÃO ANDRADE/MG",
+    "edital": "Edital nº 02/2026",
+    "data": "10 de outubro de 2026",
+    "script_url": "https://script.google.com/macros/s/AKfycbxVc4ElsC1DPXU2nwkUADwp8KoJx_QWjPbQ2a9YCk0wvM54xc1ayLz_QF-GaSj00xY7/exec"
   }
 ]
